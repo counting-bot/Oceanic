@@ -6,17 +6,14 @@ import Member from "./Member";
 import GuildScheduledEvent from "./GuildScheduledEvent";
 import ThreadChannel from "./ThreadChannel";
 import type User from "./User";
-import type VoiceChannel from "./VoiceChannel";
 import type ClientApplication from "./ClientApplication";
 import type TextChannel from "./TextChannel";
 import type CategoryChannel from "./CategoryChannel";
 import Integration from "./Integration";
 import AutoModerationRule from "./AutoModerationRule";
 import Permission from "./Permission";
-import VoiceState from "./VoiceState";
 import StageInstance from "./StageInstance";
 import Channel from "./Channel";
-import type StageChannel from "./StageChannel";
 import type GuildTemplate from "./GuildTemplate";
 import type GuildPreview from "./GuildPreview";
 import type Invite from "./Invite";
@@ -30,8 +27,7 @@ import type {
     MFALevels,
     PremiumTiers,
     VerificationLevels,
-    GuildChannelTypesWithoutThreads,
-    GatewayOPCodes
+    GuildChannelTypesWithoutThreads
 } from "../Constants";
 import { AllPermissions, Permissions } from "../Constants";
 import * as Routes from "../util/Routes";
@@ -54,13 +50,11 @@ import type {
     CreateEmojiOptions,
     CreateRoleOptions,
     EditCurrentMemberOptions,
-    EditCurrentUserVoiceStateOptions,
     EditEmojiOptions,
     EditGuildOptions,
     EditMemberOptions,
     EditRoleOptions,
     EditRolePositionsEntry,
-    EditUserVoiceStateOptions,
     EditWelcomeScreenOptions,
     GetBansOptions,
     GetMembersOptions,
@@ -98,25 +92,17 @@ import type {
 import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
 import type { AuditLog, GetAuditLogOptions } from "../types/audit-log";
 import type { CreateTemplateOptions, EditGuildTemplateOptions } from "../types/guild-template";
-import type { JoinVoiceChannelOptions, RawVoiceState, VoiceRegion } from "../types/voice";
 import type { JSONGuild } from "../types/json";
 import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway";
 import type Shard from "../gateway/Shard";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-line
 import Collection from "../util/Collection";
-import type { DiscordGatewayAdapterCreator, DiscordGatewayAdapterLibraryMethods, DiscordGatewayAdapterImplementerMethods, VoiceConnection } from "@discordjs/voice";
 
 /** Represents a Discord server. */
 export default class Guild extends Base {
     private _clientMember?: Member;
     private _shard?: Shard;
-    /** This guild's afk voice channel. */
-    afkChannel?: VoiceChannel | null;
-    /** The ID of this guild's afk voice channel. */
-    afkChannelID: string | null;
-    /** The seconds after which voice users will be moved to the afk channel. */
-    afkTimeout: number;
     /** The application that created this guild, if applicable. */
     application?: ClientApplication | null;
     /** The ID of the application that created this guild, if applicable. */
@@ -217,8 +203,6 @@ export default class Guild extends Base {
     vanityURLCode: string | null;
     /** The [verification level](https://discord.com/developers/docs/resources/guild#guild-object-verification-level) of this guild. */
     verificationLevel: VerificationLevels;
-    /** The voice states of members in voice channels. */
-    voiceStates: TypedCollection<string, RawVoiceState, VoiceState>;
     /** The welcome screen configuration. Only present in guilds with the `WELCOME_SCREEN_ENABLED` feature. */
     welcomeScreen?: WelcomeScreen;
     /** The channel the widget will generate an invite to, or `null` if set to no invite. */
@@ -230,8 +214,6 @@ export default class Guild extends Base {
     constructor(data: RawGuild, client: Client) {
         super(data.id, client);
         this._shard = this.client.guildShardMap[this.id] !== undefined ? this.client.shards.get(this.client.guildShardMap[this.id]) : undefined;
-        this.afkChannelID = null;
-        this.afkTimeout = 0;
         this.applicationID = data.application_id;
         this.autoModerationRules = new TypedCollection(AutoModerationRule, client);
         this.banner = null;
@@ -270,7 +252,6 @@ export default class Guild extends Base {
         this.unavailable = !!data.unavailable;
         this.vanityURLCode = data.vanity_url_code;
         this.verificationLevel = data.verification_level;
-        this.voiceStates = new TypedCollection(VoiceState, client);
         this.widgetChannelID = data.widget_channel_id === null ? null : data.widget_channel_id!;
         for (const role of data.roles) {
             this.roles.update(role, data.id);
@@ -355,35 +336,6 @@ export default class Guild extends Base {
 
             }
         }
-
-
-        if (data.voice_states) {
-            for (const voiceState of data.voice_states) {
-                if (!this.members.has(voiceState.user_id) || !voiceState.channel_id) {
-                    continue;
-                }
-                voiceState.guild_id = this.id;
-                this.voiceStates.update({ ...voiceState, id: voiceState.user_id });
-                const channel = this.channels.get(voiceState.channel_id) as VoiceChannel | StageChannel;
-                const member = this.members.update({ id: voiceState.user_id, deaf: voiceState.deaf, mute: voiceState.mute }, this.id);
-                if (this._clientMember) {
-                    this._clientMember["update"]({ deaf: voiceState.deaf, mute: voiceState.mute });
-                }
-                if (channel && "voiceMembers" in channel) {
-                    channel.voiceMembers.add(member);
-                }
-                if (client.shards.options.seedVoiceConnections && voiceState.user_id === client.user.id && !this.client.getVoiceConnection(this.id)) {
-                    this.client.joinVoiceChannel({
-                        guildID:             this.id,
-                        channelID:           voiceState.channel_id,
-                        selfDeaf:            voiceState.self_deaf,
-                        selfMute:            voiceState.self_mute,
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        voiceAdapterCreator: this.voiceAdapterCreator
-                    });
-                }
-            }
-        }
     }
 
     private toggleFeature(feature: GuildFeature, enable: boolean, reason?: string): Promise<Guild> {
@@ -418,13 +370,6 @@ export default class Guild extends Base {
     }
 
     protected override update(data: Partial<RawGuild>): void {
-        if (data.afk_channel_id !== undefined) {
-            this.afkChannel = data.afk_channel_id === null ? null : this.client.getChannel<VoiceChannel>(data.afk_channel_id);
-            this.afkChannelID = data.afk_channel_id;
-        }
-        if (data.afk_timeout !== undefined) {
-            this.afkTimeout = data.afk_timeout;
-        }
         if (data.application_id !== undefined) {
             this.application = this.client["_application"] && data.application_id === null ? null : (this.client.application.id === data.application_id ? this.client.application : undefined);
             this.applicationID = data.application_id;
@@ -576,26 +521,6 @@ export default class Guild extends Base {
             throw new Error(`${this.constructor.name}#shard is not present if the guild was received via REST, or you do not have the GUILDS intent.`);
         }
         return this._shard;
-    }
-
-    /** The voice adapter creator for this guild that can be used with [@discordjs/voice](https://discord.js.org/#/docs/voice/main/general/welcome) to play audio in voice and stage channels. */
-    get voiceAdapterCreator(): DiscordGatewayAdapterCreator {
-        if (!this._shard) {
-            throw new Error(`Cannot use ${this.constructor.name}.voiceAdapterCreator if the guild was received via REST, or you do not have the GUILDS intent as this guild does not belong to any Shard.`);
-        }
-
-        return (methods: DiscordGatewayAdapterLibraryMethods): DiscordGatewayAdapterImplementerMethods => {
-            this.client.voiceAdapters.set(this.id, methods);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return {
-                sendPayload: (payload: { d: unknown; op: GatewayOPCodes; }): true => {
-                    this.shard.send(payload.op, payload.d);
-
-                    return true;
-                },
-                destroy: () => this.client.voiceAdapters.delete(this.id)
-            };
-        };
     }
 
     /**
@@ -838,13 +763,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Edit the current member's voice state in this guild. `channelID` is required, and the current member must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state-caveats) for more information.
-     * @param options The options for editing the voice state.
-     */
-    async editCurrentUserVoiceState(options: EditCurrentUserVoiceStateOptions): Promise<void> {
-        return this.client.rest.guilds.editCurrentUserVoiceState(this.id, options);
-    }
-    /**
      * Edit an existing emoji in this guild.
      * @param options The options for editing the emoji.
      */
@@ -908,15 +826,6 @@ export default class Guild extends Base {
      */
     async editTemplate(code: string, options: EditGuildTemplateOptions): Promise<GuildTemplate> {
         return this.client.rest.guilds.editTemplate(this.id, code, options);
-    }
-
-    /**
-     * Edit a guild member's voice state. `channelID` is required, and the user must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-user-voice-state) for more information.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the voice state.
-     */
-    async editUserVoiceState(memberID: string, options: EditUserVoiceStateOptions): Promise<void> {
-        return this.client.rest.guilds.editUserVoiceState(this.id, memberID, options);
     }
 
     /**
@@ -1144,13 +1053,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get the list of usable voice regions for this guild. This will return VIP servers when the guild is VIP-enabled.
-     */
-    async getVoiceRegions(): Promise<Array<VoiceRegion>> {
-        return this.client.rest.guilds.getVoiceRegions(this.id);
-    }
-
-    /**
      * Get the webhooks in this guild.
      */
     async getWebhooks(): Promise<Array<Webhook>> {
@@ -1203,29 +1105,10 @@ export default class Guild extends Base {
     }
 
     /**
-     * Join a voice or stage channel.
-     * @param options The options to join the channel with.
-     */
-    joinChannel(options: Omit<JoinVoiceChannelOptions, "guildID" | "voiceAdapterCreator">): VoiceConnection {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        return this.client.joinVoiceChannel({
-            ...options,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            voiceAdapterCreator: this.voiceAdapterCreator,
-            guildID:             this.id
-        });
-    }
-
-    /**
      * Leave this guild.
      */
     async leave(): Promise<void> {
         return this.client.rest.users.leaveGuild(this.id);
-    }
-
-    /** Leave the connected voice or stage channel on this guild. */
-    leaveChannel(): void {
-        return this.client.leaveVoiceChannel(this.id);
     }
 
     /**
@@ -1318,8 +1201,6 @@ export default class Guild extends Base {
     override toJSON(): JSONGuild {
         return {
             ...super.toJSON(),
-            afkChannelID:                this.afkChannelID,
-            afkTimeout:                  this.afkTimeout,
             application:                 this.applicationID ?? undefined,
             approximateMemberCount:      this.approximateMemberCount,
             approximatePresenceCount:    this.approximatePresenceCount,
@@ -1363,7 +1244,6 @@ export default class Guild extends Base {
             unavailable:                 this.unavailable,
             vanityURLCode:               this.vanityURLCode,
             verificationLevel:           this.verificationLevel,
-            voiceStates:                 this.voiceStates.map(state => state.toJSON()),
             welcomeScreen:               this.welcomeScreen,
             widgetChannelID:             this.widgetChannelID,
             widgetEnabled:               this.widgetEnabled

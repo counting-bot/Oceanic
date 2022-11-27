@@ -33,8 +33,7 @@ import type {
     JSONStageInstance,
     JSONTextChannel,
     JSONUser,
-    JSONVoiceChannel,
-    JSONVoiceState
+    JSONVoiceChannel
 } from "./json";
 import type { GuildApplicationCommandPermissions } from "./application-commands";
 import type {
@@ -209,14 +208,6 @@ export interface ClientEvents {
     unavailableGuildCreate: [guild: UnavailableGuild];
     /** @event Emitted when a user is updated. */
     userUpdate: [user: User, oldUser: JSONUser | null];
-    /** @event Emitted when a user joins a voice channel. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceChannelJoin: [member: Member, channel: VoiceChannel | StageChannel | Uncached];
-    /** @event Emitted when a user leaves a voice channel. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceChannelLeave: [member: Member, channel: VoiceChannel | StageChannel | Uncached];
-    /** @event Emitted when a user switches voice channels. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceChannelSwitch: [member: Member, channel: VoiceChannel | StageChannel | Uncached, oldChannel: VoiceChannel | StageChannel | Uncached | null];
-    /** @event Emitted when a user's voice state is updated. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceStateUpdate: [member: Member, oldState: JSONVoiceState | null];
     /** @event Emitted with various warning information. */
     warn: [info: string, shard?: number];
     /** @event Emitted when a guild's webhooks are updated. Requires the `GUILD_WEBHOOKS` intent. */

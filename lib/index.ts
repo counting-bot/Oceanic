@@ -69,5 +69,4 @@ export { default as UncaughtError } from "./util/UncaughtError";
 export { default as User } from "./structures/User";
 export { default as Util } from "./util/Util";
 export { default as VoiceChannel } from "./structures/VoiceChannel";
-export { default as VoiceState } from "./structures/VoiceState";
 export { default as Webhook } from "./structures/Webhook";

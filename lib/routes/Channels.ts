@@ -49,7 +49,6 @@ import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChan
 import type PublicThreadChannel from "../structures/PublicThreadChannel";
 import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
 import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type { VoiceRegion } from "../types/voice";
 import Channel from "../structures/Channel";
 import type RESTManager from "../rest/RESTManager";
 import type PrivateChannel from "../structures/PrivateChannel";
@@ -767,14 +766,6 @@ export default class Channels {
             joinTimestamp: new Date(d.join_timestamp),
             userID:        d.user_id
         })));
-    }
-
-    /** @deprecated Get the list of usable voice regions. Moved to `misc`. */
-    async getVoiceRegions(): Promise<Array<VoiceRegion>> {
-        return this.#manager.authRequest<Array<VoiceRegion>>({
-            method: "GET",
-            path:   Routes.VOICE_REGIONS
-        });
     }
 
     /**

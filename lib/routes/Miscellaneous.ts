@@ -2,7 +2,6 @@
 import * as Routes from "../util/Routes";
 import type RESTManager from "../rest/RESTManager";
 import type { RawSticker, RawStickerPack, Sticker, StickerPack } from "../types/guilds";
-import type { VoiceRegion } from "../types/voice";
 
 /** Methods that don't fit anywhere else. */
 export default class Miscellaneous {
@@ -38,15 +37,5 @@ export default class Miscellaneous {
             method: "GET",
             path:   Routes.STICKER(stickerID)
         }).then(data => this.#manager.client.util.convertSticker(data));
-    }
-
-    /**
-     * Get the list of usable voice regions.
-     */
-    async getVoiceRegions(): Promise<Array<VoiceRegion>> {
-        return this.#manager.authRequest<Array<VoiceRegion>>({
-            method: "GET",
-            path:   Routes.VOICE_REGIONS
-        });
     }
 }

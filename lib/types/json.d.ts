@@ -237,8 +237,6 @@ export interface JSONGroupChannel extends JSONChannel {
     type: ChannelTypes.GROUP_DM;
 }
 export interface JSONGuild extends JSONBase {
-    afkChannelID: string | null;
-    afkTimeout: number;
     application?: string;
     approximateMemberCount?: number;
     approximatePresenceCount?: number;
@@ -282,7 +280,6 @@ export interface JSONGuild extends JSONBase {
     unavailable: boolean;
     vanityURLCode: string | null;
     verificationLevel: VerificationLevels;
-    voiceStates: Array<JSONVoiceState>;
     welcomeScreen?: WelcomeScreen;
     widgetChannelID: string | null;
     widgetEnabled?: boolean;
@@ -567,23 +564,8 @@ export interface JSONVoiceChannel extends JSONGuildChannel {
     type: ChannelTypes.GUILD_VOICE;
     userLimit: number;
     videoQualityMode: VideoQualityModes;
-    voiceMembers: Array<string>;
 }
-export interface JSONVoiceState extends JSONBase {
-    channelID: string | null;
-    deaf: boolean;
-    guildID?: string;
-    member?: JSONMember;
-    mute: boolean;
-    requestToSpeakTimestamp: number | null;
-    selfDeaf: boolean;
-    selfMute: boolean;
-    selfStream: boolean;
-    selfVideo: boolean;
-    sessionID: string;
-    suppress: boolean;
-    user?: JSONUser;
-}
+
 export interface JSONWebhook extends JSONBase {
     applicationID: string | null;
     avatar: string | null;

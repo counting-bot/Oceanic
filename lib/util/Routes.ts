@@ -44,7 +44,6 @@ export const GUILD_VANITY_URL            = (guildID: string) => `/guilds/${guild
 export const GUILD_WIDGET_IMAGE          = (guildID: string) => `/guilds/${guildID}/widget.png` as const;
 export const GUILD_WIDGET_JSON           = (guildID: string) => `/guilds/${guildID}/widget.json` as const;
 export const GUILD_WELCOME_SCREEN        = (guildID: string) => `/guilds/${guildID}/welcome-screen` as const;
-export const GUILD_VOICE_STATE           = (guildID: string, userID: string) => `/guilds/${guildID}/voice-states/${userID}` as const;
 export const GUILD_STICKER			     = (guildID: string, stickerID: string) => `/guilds/${guildID}/stickers/${stickerID}` as const;
 export const GUILD_STICKERS			     = (guildID: string) => `/guilds/${guildID}/stickers` as const;
 
@@ -72,8 +71,6 @@ export const CHANNEL_THREAD_MEMBER                   = (channelID: string, userI
 export const CHANNEL_THREAD_MEMBERS                  = (channelID: string) => `/channels/${channelID}/thread-members` as const;
 export const CHANNEL_TYPING                          = (channelID: string) => `/channels/${channelID}/typing` as const;
 export const GROUP_RECIPIENT                         = (channelID: string, userID: string) => `/channels/${channelID}/recipients/${userID}` as const;
-export const VOICE_REGIONS                             = "/voice/regions" as const;
-export const GUILD_VOICE_REGIONS                     = (guildID: string) => `/guilds/${guildID}/regions` as const;
 export const INVITE                                  = (code: string) => `/invites/${code}` as const;
 
 // OAuth

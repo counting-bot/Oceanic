@@ -35,8 +35,6 @@ import type {
     WelcomeScreen,
     EditWelcomeScreenOptions,
     GetVanityURLResponse,
-    EditUserVoiceStateOptions,
-    EditCurrentUserVoiceStateOptions,
     CreateChannelReturn,
     CreateChannelOptions,
     EditMFALevelOptions,
@@ -73,7 +71,6 @@ import type {
     RawThreadMember
 } from "../types/channels";
 import Role from "../structures/Role";
-import type { VoiceRegion } from "../types/voice";
 import Invite from "../structures/Invite";
 import Integration from "../structures/Integration";
 import AutoModerationRule from "../structures/AutoModerationRule";
@@ -677,23 +674,6 @@ export default class Guilds {
     }
 
     /**
-     * Edit the current member's voice state in a guild. `channelID` is required, and the current member must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state-caveats) for more information.
-     * @param id The ID of the guild.
-     * @param options The options for editing the voice state.
-     */
-    async editCurrentUserVoiceState(id: string, options: EditCurrentUserVoiceStateOptions): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "PATCH",
-            path:   Routes.GUILD_VOICE_STATE(id, "@me"),
-            json:   {
-                channel_id:                 options.channelID,
-                suppress:                   options.suppress,
-                request_to_speak_timestamp: options.requestToSpeakTimestamp
-            }
-        });
-    }
-
-    /**
      * Edit an existing emoji.
      * @param id The ID of the guild the emoji is in.
      * @param options The options for editing the emoji.
@@ -874,23 +854,6 @@ export default class Guilds {
                 name:        options.name
             }
         }).then(data => new GuildTemplate(data, this.#manager.client));
-    }
-
-    /**
-     * Edit a guild member's voice state. `channelID` is required, and the user must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-user-voice-state) for more information.
-     * @param id The ID of the guild.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the voice state.
-     */
-    async editUserVoiceState(id: string, memberID: string, options: EditUserVoiceStateOptions): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "PATCH",
-            path:   Routes.GUILD_VOICE_STATE(id, memberID),
-            json:   {
-                channel_id: options.channelID,
-                suppress:   options.suppress
-            }
-        });
     }
 
     /**
@@ -1393,17 +1356,6 @@ export default class Guilds {
         return this.#manager.authRequest<GetVanityURLResponse>({
             method: "GET",
             path:   Routes.GUILD_VANITY_URL(id)
-        });
-    }
-
-    /**
-     * Get the list of usable voice regions for a guild. This will return VIP servers when the guild is VIP-enabled.
-     * @param id The ID of the guild.
-     */
-    async getVoiceRegions(id: string): Promise<Array<VoiceRegion>> {
-        return this.#manager.authRequest<Array<VoiceRegion>>({
-            method: "GET",
-            path:   Routes.GUILD_VOICE_REGIONS(id)
         });
     }
 

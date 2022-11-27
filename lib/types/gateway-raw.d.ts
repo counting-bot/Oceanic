@@ -17,7 +17,6 @@ import type { RawGuildApplicationCommandPermissions } from "./application-comman
 import type { RawAutoModerationRule } from "./auto-moderation";
 import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels";
 import type { RawScheduledEvent } from "./scheduled-events";
-import type { RawVoiceState } from "./voice";
 import type { RawInteraction } from "./interactions";
 import type { GatewayOPCodes, InviteTargetTypes } from "../Constants";
 
@@ -461,11 +460,6 @@ export interface UserUpdatePacket extends BaseDispatchPacket {
     t: "USER_UPDATE";
 }
 
-export interface VoiceStateUpdate extends BaseDispatchPacket {
-    d: RawVoiceState;
-    t: "VOICE_STATE_UPDATE";
-}
-
 export interface VoiceServerUpdate extends BaseDispatchPacket {
     d: {
         endpoint: string | null;
@@ -515,4 +509,4 @@ GuildScheduledEventCreatePacket | GuildScheduledEventDeletePacket | GuildSchedul
 IntegrationCreatePacket | IntegrationDeletePacket | IntegrationUpdatePacket |
 InviteCreatePacket | InviteDeletePacket |
 MessageCreatePacket | MessageDeletePacket | MessageDeleteBulkPacket | MessageUpdatePacket | MessageReactionAddPacket | MessageReactionRemovePacket | MessageReactionRemoveAllPacket | MessageReactionRemoveEmojiPacket |
-TypingStartPacket | UserUpdatePacket | VoiceStateUpdate | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket | StageInstanceCreatePacket | StageInstanceDeletePacket | StageInstanceUpdatePacket;
+TypingStartPacket | UserUpdatePacket | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket | StageInstanceCreatePacket | StageInstanceDeletePacket | StageInstanceUpdatePacket;

@@ -100,11 +100,6 @@ interface GatewayOptions {
      */
     reconnectDelay?: ReconnectDelayFunction;
     /**
-     * If existing voice connections should be populated. This will disconnect connections from other sessions.
-     * @defaultValue false
-     */
-    seedVoiceConnections?: boolean;
-    /**
      * An array of shard IDs to run for this client. Mutually exclusive with `firstShardID` & `lastShardID`.
      * @defaultValue based on `firstShardID` & `lastShardID`
      */
@@ -113,7 +108,7 @@ interface GatewayOptions {
     ws?: WSClientOptions;
 }
 
-export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOptions, "autoReconnect" | "compress" | "connectionTimeout" | "firstShardID" | "getAllUsers" | "guildCreateTimeout" | "largeThreshold" | "lastShardID" | "maxReconnectAttempts" | "maxResumeAttempts" | "reconnectDelay" | "seedVoiceConnections" | "shardIDs" | "ws">> {
+export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOptions, "autoReconnect" | "compress" | "connectionTimeout" | "firstShardID" | "getAllUsers" | "guildCreateTimeout" | "largeThreshold" | "lastShardID" | "maxReconnectAttempts" | "maxResumeAttempts" | "reconnectDelay" | "shardIDs" | "ws">> {
     concurrency: number;
     connectionProperties: Required<GatewayOptions["connectionProperties"]>;
     intents: number;
@@ -231,13 +226,6 @@ export interface ClientStatus {
     desktop?: string;
     mobile?: string;
     web?: string;
-}
-
-export interface UpdateVoiceStateOptions {
-    /** If the client should be self deafened. */
-    selfDeaf?: boolean;
-    /** If the client should be self muted. */
-    selfMute?: boolean;
 }
 
 export interface RawAutoModerationActionExecution {

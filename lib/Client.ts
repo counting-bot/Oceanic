@@ -18,18 +18,6 @@ import UnavailableGuild from "./structures/UnavailableGuild";
 import type ExtendedUser from "./structures/ExtendedUser";
 import Util from "./util/Util";
 import type { ClientEvents } from "./types/events";
-import type { JoinVoiceChannelOptions } from "./types/voice";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import type { DiscordGatewayAdapterLibraryMethods,VoiceConnection } from "@discordjs/voice";
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-let DiscordJSVoice: typeof import("@discordjs/voice") | undefined;
-try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, unicorn/prefer-module
-    DiscordJSVoice = require("@discordjs/voice");
-} catch {}
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -58,7 +46,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
     unavailableGuilds: TypedCollection<string, RawUnavailableGuild, UnavailableGuild>;
     users: TypedCollection<string, RawUser, User>;
     util: Util;
-    voiceAdapters: Map<string, DiscordGatewayAdapterLibraryMethods>;
     /**
      * @constructor
      * @param options The options to create the client with.
@@ -85,7 +72,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
             defaultImageSize:          options?.defaultImageSize ?? 4096,
             disableMemberLimitScaling: options?.disableMemberLimitScaling ?? false
         };
-        this.voiceAdapters = new Map();
         this.channelGuildMap = {};
         this.groupChannels = new TypedCollection(GroupChannel, this, 10);
         this.guilds = new TypedCollection(Guild, this);
@@ -120,15 +106,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
         } else {
             return this._user;
         }
-    }
-
-    /** The active voice connections of this client. */
-    get voiceConnections(): Map<string, VoiceConnection> {
-        if (!DiscordJSVoice) {
-            throw new Error("Voice is only supported with @discordjs/voice installed.");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-        return DiscordJSVoice.getVoiceConnections();
     }
 
     /** Connect the client to Discord. */
@@ -222,46 +199,5 @@ export default class Client extends TypedEmitter<ClientEvents> {
             return this.guilds.get(this.threadGuildMap[id])?.threads.get(id) as T;
         }
         return (this.privateChannels.get(id) ?? this.groupChannels.get(id)) as T;
-    }
-
-    /**
-     * Get a voice connection.
-     * @param guildID The ID of the guild the voice channel belongs to.
-     */
-    getVoiceConnection(guildID: string): VoiceConnection | undefined {
-        if (!DiscordJSVoice) {
-            throw new Error("Voice is only supported with @discordjs/voice installed.");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        return DiscordJSVoice.getVoiceConnection(guildID);
-    }
-
-    /**
-     * Join a voice channel.
-     * @param options The options to join the channel with.
-     * */
-    joinVoiceChannel(options: JoinVoiceChannelOptions): VoiceConnection {
-        if (!DiscordJSVoice) {
-            throw new Error("Voice is only supported with @discordjs/voice installed.");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-        return DiscordJSVoice.joinVoiceChannel({
-            channelId:      options.channelID,
-            guildId:        options.guildID,
-            debug:          options.debug,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            adapterCreator: options.voiceAdapterCreator,
-            selfDeaf:       options.selfDeaf,
-            selfMute:       options.selfMute
-        });
-    }
-
-    /**
-     * Leave a voice channel.
-     * @param guildID The ID of the guild the voice channel belongs to.
-     */
-    leaveVoiceChannel(guildID: string): void {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-        return this.getVoiceConnection(guildID)?.destroy();
     }
 }

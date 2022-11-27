@@ -13,7 +13,6 @@ import {
 import type {
     UpdatePresenceOptions,
     RequestGuildMembersOptions,
-    UpdateVoiceStateOptions,
     PresenceUpdate,
     SendStatuses,
     BotActivity,
@@ -27,7 +26,6 @@ import type { RawOAuthUser, RawUser } from "../types/users";
 import type { RawGuild } from "../types/guilds";
 import ExtendedUser from "../structures/ExtendedUser";
 import AutoModerationRule from "../structures/AutoModerationRule";
-import Channel from "../structures/Channel";
 import type {
     AnyGuildChannelWithoutThreads,
     AnyTextChannel,
@@ -42,8 +40,6 @@ import type {
 } from "../types/channels";
 import type TextChannel from "../structures/TextChannel";
 import type { JSONAnnouncementThreadChannel } from "../types/json";
-import VoiceChannel from "../structures/VoiceChannel";
-import StageChannel from "../structures/StageChannel";
 import GuildScheduledEvent from "../structures/GuildScheduledEvent";
 import Invite from "../structures/Invite";
 import Message from "../structures/Message";
@@ -56,7 +52,6 @@ import type { ShardEvents } from "../types/events";
 import type PublicThreadChannel from "../structures/PublicThreadChannel";
 import Role from "../structures/Role";
 import Integration from "../structures/Integration";
-import VoiceState from "../structures/VoiceState";
 import type { Data } from "ws";
 import WebSocket from "ws";
 import type Pako from "pako";
@@ -315,12 +310,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 }
                 const guild = this.client.guilds.get(packet.d.guild_id);
                 const channel = this.client.util.updateChannel<AnyGuildChannelWithoutThreads>(packet.d);
-                if (channel instanceof VoiceChannel || channel instanceof StageChannel) {
-                    for (const [,member] of channel.voiceMembers) {
-                        channel.voiceMembers.delete(member.id);
-                        this.client.emit("voiceChannelLeave", member, channel);
-                    }
-                }
                 guild?.channels.delete(packet.d.id);
                 this.client.emit("channelDelete", channel);
                 break;
@@ -371,7 +360,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
 
             case "GUILD_DELETE": {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                this.client.voiceAdapters.get(packet.d.id)?.destroy();
                 delete this.client.guildShardMap[packet.d.id];
                 const guild = this.client.guilds.get(packet.d.id);
                 if (guild?.channels) {
@@ -1095,55 +1083,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "VOICE_STATE_UPDATE": {
-                if (packet.d.guild_id && packet.d.session_id && packet.d.user_id === this.client.user.id) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                    this.client.voiceAdapters.get(packet.d.guild_id)?.onVoiceStateUpdate(packet.d as never);
-                }
-                // @TODO voice states without guilds?
-                if (!packet.d.guild_id || !packet.d.member) {
-                    break;
-                }
-                packet.d.self_stream = !!packet.d.self_stream;
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const member = this.client.util.updateMember(packet.d.guild_id, packet.d.user_id, packet.d.member);
-
-                const oldState = member.voiceState?.toJSON() ?? null;
-                const state = guild?.voiceStates.update({ ...packet.d, id: member.id }) ?? new VoiceState(packet.d, this.client);
-                member["update"]({ deaf: state.deaf, mute: state.mute });
-
-                if (oldState?.channelID !== state.channelID) {
-                    const oldChannel = oldState?.channelID ? this.client.getChannel<VoiceChannel | StageChannel>(oldState.channelID) ?? { id: oldState.channelID } : null;
-                    const newChannel = state.channel === null ? null : state.channel ?? { id: state.channelID! };
-
-                    if (newChannel instanceof Channel) {
-                        newChannel.voiceMembers.add(member);
-                    }
-                    if (oldChannel instanceof Channel) {
-                        oldChannel.voiceMembers.delete(member.id);
-                    }
-                    if (oldChannel && newChannel) {
-                        this.client.emit("voiceChannelSwitch", member, newChannel, oldChannel);
-                    } else if (newChannel) {
-                        this.client.emit("voiceChannelJoin", member, newChannel);
-                    } else if (oldChannel) {
-                        this.client.emit("voiceChannelLeave", member, oldChannel);
-                    }
-                }
-
-                if (JSON.stringify(oldState) !== JSON.stringify(state.toJSON())) {
-                    this.client.emit("voiceStateUpdate", member, oldState);
-                }
-
-                break;
-            }
-
-            case "VOICE_SERVER_UPDATE": {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                this.client.voiceAdapters.get(packet.d.guild_id)?.onVoiceServerUpdate(packet.d);
-                break;
-            }
-
             case "WEBHOOKS_UPDATE": {
                 this.client.emit("webhooksUpdate", this.client.guilds.get(packet.d.guild_id) ?? { id: packet.d.guild_id }, this.client.getChannel<AnyGuildChannelWithoutThreads>(packet.d.channel_id) ?? { id: packet.d.channel_id });
                 break;
@@ -1494,7 +1433,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     hardReset(): void {
         this.reset();
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        for (const [,voiceAdapter] of this.client.voiceAdapters) voiceAdapter.destroy();
         this.sequence = 0;
         this.sessionID = null;
         this.reconnectInterval = 1000;
@@ -1654,20 +1592,5 @@ export default class Shard extends TypedEmitter<ShardEvents> {
 
     override toString(): string {
         return Base.prototype.toString.call(this);
-    }
-
-    /**
-     * Update the voice state of this shard.
-     * @param guildID The ID of the guild to update the voice state of.
-     * @param channelID The ID of the voice channel to join. Null to disconnect.
-     * @param options The options for updating the voice state.
-     */
-    updateVoiceState(guildID: string, channelID: string | null, options?: UpdateVoiceStateOptions): void {
-        this.send(GatewayOPCodes.VOICE_STATE_UPDATE, {
-            channel_id: channelID,
-            guild_id:   guildID,
-            self_deaf:  options?.selfDeaf ?? false,
-            self_mute:  options?.selfMute ?? false
-        });
     }
 }

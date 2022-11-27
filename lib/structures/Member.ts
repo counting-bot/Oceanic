@@ -3,13 +3,11 @@ import Base from "./Base";
 import type User from "./User";
 import type Guild from "./Guild";
 import type Permission from "./Permission";
-import type VoiceState from "./VoiceState";
 import type { ImageFormat } from "../Constants";
 import type Client from "../Client";
 import type {
     CreateBanOptions,
     EditMemberOptions,
-    EditUserVoiceStateOptions,
     RawMember,
     RESTMember,
     Presence
@@ -160,10 +158,6 @@ export default class Member extends Base {
     get username(): string {
         return this.user.username;
     }
-    /** The voice state of this member. */
-    get voiceState(): VoiceState | null {
-        return this.guild.voiceStates.get(this.id) ?? null;
-    }
 
     /**
      * Add a role to this member.
@@ -196,14 +190,6 @@ export default class Member extends Base {
      */
     async edit(options: EditMemberOptions): Promise<Member> {
         return this.client.rest.guilds.editMember(this.guildID, this.id, options);
-    }
-
-    /**
-     * Edit this guild member's voice state. `channelID` is required, and the user must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-user-voice-state) for more information.
-     * @param options The options for editing the voice state.
-     */
-    async editVoiceState(options: EditUserVoiceStateOptions): Promise<void> {
-        return this.client.rest.guilds.editUserVoiceState(this.guildID, this.id, options);
     }
 
     /**

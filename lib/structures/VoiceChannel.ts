@@ -2,13 +2,12 @@
 import GuildChannel from "./GuildChannel";
 import PermissionOverwrite from "./PermissionOverwrite";
 import Message from "./Message";
-import Member from "./Member";
+import type Member from "./Member";
 import type CategoryChannel from "./CategoryChannel";
 import Permission from "./Permission";
 import type Invite from "./Invite";
 import type User from "./User";
 import type Webhook from "./Webhook";
-import type { JoinVoiceChannelOptions } from "../types/voice";
 import type { ChannelTypes, VideoQualityModes } from "../Constants";
 import { AllPermissions, Permissions } from "../Constants";
 import type Client from "../Client";
@@ -26,11 +25,8 @@ import type {
     RawVoiceChannel,
     PurgeOptions
 } from "../types/channels";
-import type { RawMember } from "../types/guilds";
 import type { JSONVoiceChannel } from "../types/json";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import type { VoiceConnection } from "@discordjs/voice";
 
 /** Represents a guild voice channel. */
 export default class VoiceChannel extends GuildChannel {
@@ -57,7 +53,6 @@ export default class VoiceChannel extends GuildChannel {
     userLimit: number;
     /** The [video quality mode](https://discord.com/developers/docs/resources/channel#channel-object-video-quality-modes) of this channel. */
     videoQualityMode: VideoQualityModes;
-    voiceMembers: TypedCollection<string, RawMember, Member, [guildID: string]>;
     constructor(data: RawVoiceChannel, client: Client) {
         super(data, client);
         this.bitrate = data.bitrate;
@@ -69,7 +64,6 @@ export default class VoiceChannel extends GuildChannel {
         this.rtcRegion = data.rtc_region;
         this.topic = data.topic;
         this.videoQualityMode = data.video_quality_mode;
-        this.voiceMembers = new TypedCollection(Member, client);
         this.userLimit = data.user_limit;
         this.update(data);
     }
@@ -252,26 +246,6 @@ export default class VoiceChannel extends GuildChannel {
     }
 
     /**
-     * Join this voice channel.
-     * @param options The options to join the channel with.
-     */
-    join(options: Omit<JoinVoiceChannelOptions, "guildID" | "channelID" | "voiceAdapterCreator">): VoiceConnection {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        return this.client.joinVoiceChannel({
-            ...options,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            voiceAdapterCreator: this.guild.voiceAdapterCreator,
-            guildID:             this.guildID,
-            channelID:           this.id
-        });
-    }
-
-    /** Leave this voice channel. */
-    leave(): void {
-        return this.client.leaveVoiceChannel(this.guildID);
-    }
-
-    /**
      * Get the permissions of a member.
      * @param member The member to get the permissions of.  If providing an ID, the member must be cached.
      */
@@ -343,8 +317,7 @@ export default class VoiceChannel extends GuildChannel {
             topic:                this.topic,
             userLimit:            this.userLimit,
             type:                 this.type,
-            videoQualityMode:     this.videoQualityMode,
-            voiceMembers:         this.voiceMembers.map(member => member.id)
+            videoQualityMode:     this.videoQualityMode
         };
     }
 

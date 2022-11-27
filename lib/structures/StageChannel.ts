@@ -1,7 +1,7 @@
 /** @module StageChannel */
 import GuildChannel from "./GuildChannel";
 import PermissionOverwrite from "./PermissionOverwrite";
-import Member from "./Member";
+import type Member from "./Member";
 import type CategoryChannel from "./CategoryChannel";
 import Permission from "./Permission";
 import type Invite from "./Invite";
@@ -18,11 +18,8 @@ import type {
     RawStageChannel
 } from "../types/channels";
 import type { JSONStageChannel } from "../types/json";
-import type { RawMember } from "../types/guilds";
-import type { JoinVoiceChannelOptions } from "../types/voice";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import type { VoiceConnection } from "@discordjs/voice";
 
 /** Represents a guild stage channel. */
 export default class StageChannel extends GuildChannel {
@@ -37,7 +34,6 @@ export default class StageChannel extends GuildChannel {
     /** The topic of the channel. */
     topic: string | null;
     declare type: ChannelTypes.GUILD_STAGE_VOICE;
-    voiceMembers: TypedCollection<string, RawMember, Member, [guildID: string]>;
     constructor(data: RawStageChannel, client: Client) {
         super(data, client);
         this.bitrate = data.bitrate;
@@ -45,7 +41,6 @@ export default class StageChannel extends GuildChannel {
         this.position = data.position;
         this.rtcRegion = data.rtc_region;
         this.topic = data.topic;
-        this.voiceMembers = new TypedCollection(Member, client);
         this.update(data);
     }
 
@@ -104,26 +99,6 @@ export default class StageChannel extends GuildChannel {
      */
     async editPermission(overwriteID: string, options: EditPermissionOptions): Promise<void> {
         return this.client.rest.channels.editPermission(this.id, overwriteID, options);
-    }
-
-    /**
-     * Join this stage channel.
-     * @param options The options to join the channel with.
-     */
-    join(options: Omit<JoinVoiceChannelOptions, "guildID" | "channelID" | "voiceAdapterCreator">): VoiceConnection {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        return this.client.joinVoiceChannel({
-            ...options,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            voiceAdapterCreator: this.guild.voiceAdapterCreator,
-            guildID:             this.guildID,
-            channelID:           this.id
-        });
-    }
-
-    /** Leave this stage channel. */
-    leave(): void {
-        return this.client.leaveVoiceChannel(this.guildID);
     }
 
     /**

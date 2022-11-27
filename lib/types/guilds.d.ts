@@ -12,7 +12,6 @@ import type {
 } from "./channels";
 import type { RawScheduledEvent } from "./scheduled-events";
 import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway";
-import type { RawVoiceState } from "./voice";
 import { File } from "./request-handler";
 import type {
     ChannelTypes,
@@ -42,7 +41,7 @@ import type AnnouncementChannel from "../structures/AnnouncementChannel";
 import type StageChannel from "../structures/StageChannel";
 
 // channels, guild_scheduled_events, joined_at, large, member_count, members, presences,
-// stage_instances, threads, unavailable, voice_states - all gateway only
+// stage_instances, threads, unavailable - all gateway only
 export interface RawGuild {
     afk_channel_id: string | null;
     afk_timeout: number;
@@ -93,7 +92,6 @@ export interface RawGuild {
     unavailable?: false;
     vanity_url_code: string | null;
     verification_level: VerificationLevels;
-    voice_states: Array<RawVoiceState>;
     welcome_screen?: RawWelcomeScreen;
     widget_channel_id?: string | null;
     widget_enabled?: boolean;
@@ -603,20 +601,6 @@ export interface EditWelcomeScreenOptions extends WelcomeScreen {
     enabled?: boolean;
     /** The reason for editing the welcome screen. */
     reason?: string;
-}
-
-export interface EditUserVoiceStateOptions {
-    /** The ID of the stage channel the member is in. */
-    channelID: string;
-    /** If the user should be suppressed. */
-    suppress?: boolean;
-}
-
-export interface EditCurrentUserVoiceStateOptions extends Omit<EditUserVoiceStateOptions, "channelID"> {
-    /** The ID of the stage channel the member is in. */
-    channelID?: string;
-    /** The timestamp of when the member should be able to speak. */
-    requestToSpeakTimestamp?: string | null;
 }
 
 export interface RawUnavailableGuild {
