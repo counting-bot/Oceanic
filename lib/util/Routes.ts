@@ -18,7 +18,6 @@ export const GUILD_AUTOMOD_RULE          = (guildID: string, autoModerationRuleI
 export const GUILD_AUTOMOD_RULES         = (guildID: string) => `/guilds/${guildID}/auto-moderation/rules` as const;
 export const GUILD_EMOJI                 = (guildID: string, emojiID: string) => `/guilds/${guildID}/emojis/${emojiID}` as const;
 export const GUILD_EMOJIS                = (guildID: string) => `/guilds/${guildID}/emojis` as const;
-export const GUILD_AUDIT_LOG             = (guildID: string) => `/guilds/${guildID}/audit-logs` as const;
 export const GUILD_SCHEDULED_EVENT       = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}` as const;
 export const GUILD_SCHEDULED_EVENTS      = (guildID: string) => `/guilds/${guildID}/scheduled-events` as const;
 export const GUILD_SCHEDULED_EVENT_USERS = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}/users` as const;

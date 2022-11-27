@@ -47,8 +47,6 @@ import type {
 import * as Routes from "../util/Routes";
 import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
 import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
-import type { AuditLog, GetAuditLogOptions, RawAuditLog } from "../types/audit-log";
-import Webhook from "../structures/Webhook";
 import GuildTemplate from "../structures/GuildTemplate";
 import type { CreateGuildFromTemplateOptions, CreateTemplateOptions, EditGuildTemplateOptions, RawGuildTemplate } from "../types/guild-template";
 import GuildPreview from "../structures/GuildPreview";
@@ -65,12 +63,10 @@ import Role from "../structures/Role";
 import Invite from "../structures/Invite";
 import Integration from "../structures/Integration";
 import AutoModerationRule from "../structures/AutoModerationRule";
-import AuditLogEntry from "../structures/AuditLogEntry";
 import type RESTManager from "../rest/RESTManager";
 import Guild from "../structures/Guild";
 import type Member from "../structures/Member";
 import type { Uncached } from "../types/shared";
-import ApplicationCommand from "../structures/ApplicationCommand";
 import { File, FormData } from "undici";
 
 /** Various methods for interacting with guilds. */
@@ -872,41 +868,6 @@ export default class Guilds {
                 userID:        member.user_id
             })),
             threads: data.threads.map(rawThread => this.#manager.client.util.updateThread(rawThread))
-        }));
-    }
-
-    /**
-     * Get a guild's audit log.
-     * @param id The ID of the guild.
-     * @param options The options for getting the audit logs.
-     */
-    async getAuditLog(id: string, options?: GetAuditLogOptions): Promise<AuditLog> {
-        const guild = this.#manager.client.guilds.get(id);
-        const query = new URLSearchParams();
-        if (options?.actionType !== undefined) {
-            query.set("action_type", options.actionType.toString());
-        }
-        if (options?.before !== undefined) {
-            query.set("before", options.before);
-        }
-        if (options?.limit !== undefined) {
-            query.set("limit", options.limit.toString());
-        }
-        if (options?.userID !== undefined) {
-            query.set("user_id", options.userID);
-        }
-        return this.#manager.authRequest<RawAuditLog>({
-            method: "GET",
-            path:   Routes.GUILD_AUDIT_LOG(id),
-            query
-        }).then(data => ({
-            applicationCommands:  data.application_commands.map(command => new ApplicationCommand(command, this.#manager.client)),
-            autoModerationRules:  data.auto_moderation_rules.map(rule => guild ? guild.autoModerationRules.update(rule) : new AutoModerationRule(rule, this.#manager.client)),
-            entries:              data.audit_log_entries.map(entry => new AuditLogEntry(entry, this.#manager.client)),
-            integrations:         data.integrations.map(integration => guild ? guild.integrations.update(integration, id) : new Integration(integration, this.#manager.client, id)),
-            threads:              data.threads.map(rawThread => this.#manager.client.util.updateThread(rawThread)),
-            users:                data.users.map(user => this.#manager.client.users.update(user)),
-            webhooks:             data.webhooks.map(webhook => new Webhook(webhook, this.#manager.client))
         }));
     }
 

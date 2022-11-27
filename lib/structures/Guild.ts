@@ -82,7 +82,6 @@ import type {
     EditStickerOptions
 } from "../types/guilds";
 import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
-import type { AuditLog, GetAuditLogOptions } from "../types/audit-log";
 import type { CreateTemplateOptions, EditGuildTemplateOptions } from "../types/guild-template";
 import type { JSONGuild } from "../types/json";
 import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway";
@@ -846,14 +845,6 @@ export default class Guild extends Base {
      */
     async getActiveThreads(): Promise<GetActiveThreadsResponse> {
         return this.client.rest.guilds.getActiveThreads(this.id);
-    }
-
-    /**
-     * Get this guild's audit log.
-     * @param options The options for the audit log.
-     */
-    async getAuditLog(options?: GetAuditLogOptions): Promise<AuditLog> {
-        return this.client.rest.guilds.getAuditLog(this.id, options);
     }
 
     /**

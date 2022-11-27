@@ -6,7 +6,6 @@ const AnnouncementThreadChannel = (await import("./dist/lib/structures/Announcem
 const Application = (await import("./dist/lib/structures/Application.js")).default.default;
 const ApplicationCommand = (await import("./dist/lib/structures/ApplicationCommand.js")).default.default;
 const Attachment = (await import("./dist/lib/structures/Attachment.js")).default.default;
-const AuditLogEntry = (await import("./dist/lib/structures/AuditLogEntry.js")).default.default;
 const AutocompleteInteraction = (await import("./dist/lib/structures/AutocompleteInteraction.js")).default.default;
 const AutoModerationRule = (await import("./dist/lib/structures/AutoModerationRule.js")).default.default;
 const Base = (await import("./dist/lib/structures/Base.js")).default.default;
@@ -77,7 +76,6 @@ export {
     Application,
     ApplicationCommand,
     Attachment,
-    AuditLogEntry,
     AutocompleteInteraction,
     AutoModerationRule,
     Base,
