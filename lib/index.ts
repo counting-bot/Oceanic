@@ -8,7 +8,6 @@ export { default as Application } from "./structures/Application";
 export { default as ApplicationCommand } from "./structures/ApplicationCommand";
 export { default as Attachment } from "./structures/Attachment";
 export { default as AutocompleteInteraction } from "./structures/AutocompleteInteraction";
-export { default as AutoModerationRule } from "./structures/AutoModerationRule";
 export { default as Base } from "./structures/Base";
 export { default as Bucket } from "./rest/Bucket";
 export { default as CategoryChannel } from "./structures/CategoryChannel";

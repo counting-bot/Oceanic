@@ -7,7 +7,6 @@ const Application = (await import("./dist/lib/structures/Application.js")).defau
 const ApplicationCommand = (await import("./dist/lib/structures/ApplicationCommand.js")).default.default;
 const Attachment = (await import("./dist/lib/structures/Attachment.js")).default.default;
 const AutocompleteInteraction = (await import("./dist/lib/structures/AutocompleteInteraction.js")).default.default;
-const AutoModerationRule = (await import("./dist/lib/structures/AutoModerationRule.js")).default.default;
 const Base = (await import("./dist/lib/structures/Base.js")).default.default;
 const Bucket = (await import("./dist/lib/rest/Bucket.js")).default.default;
 const CategoryChannel = (await import("./dist/lib/structures/CategoryChannel.js")).default.default;
@@ -77,7 +76,6 @@ export {
     ApplicationCommand,
     Attachment,
     AutocompleteInteraction,
-    AutoModerationRule,
     Base,
     Bucket,
     CategoryChannel,

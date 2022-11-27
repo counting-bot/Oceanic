@@ -9,7 +9,6 @@ import type {
     MessageComponentSelectMenuInteractionData,
     ModalSubmitInteractionData
 } from "./interactions";
-import type { AutoModerationAction, TriggerMetadata } from "./auto-moderation";
 import type {
     GuildEmoji,
     IntegrationAccount,
@@ -36,8 +35,6 @@ import type {
 } from "./channels";
 import type {
     ApplicationCommandTypes,
-    AutoModerationEventTypes,
-    AutoModerationTriggerTypes,
     ChannelTypes,
     DefaultMessageNotificationLevels,
     ExplicitContentFilterLevels,
@@ -128,18 +125,6 @@ export interface JSONAutocompleteInteraction extends JSONInteraction {
     member?: JSONMember;
     type: InteractionTypes.APPLICATION_COMMAND_AUTOCOMPLETE;
     user: JSONUser;
-}
-export interface JSONAutoModerationRule extends JSONBase {
-    actions: Array<AutoModerationAction>;
-    creatorID: string;
-    enabled: boolean;
-    eventType: AutoModerationEventTypes;
-    exemptChannels: Array<string>;
-    exemptRoles: Array<string>;
-    guildID: string;
-    name: string;
-    triggerMetadata: TriggerMetadata;
-    triggerType: AutoModerationTriggerTypes;
 }
 export interface JSONBase {
     createdAt: number;
@@ -236,7 +221,6 @@ export interface JSONGuild extends JSONBase {
     application?: string;
     approximateMemberCount?: number;
     approximatePresenceCount?: number;
-    autoModerationRules: Array<JSONAutoModerationRule>;
     banner: string | null;
     channels: Array<string>;
     defaultMessageNotifications: DefaultMessageNotificationLevels;

@@ -45,7 +45,6 @@ import type {
     EditStickerOptions
 } from "../types/guilds";
 import * as Routes from "../util/Routes";
-import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
 import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
 import GuildTemplate from "../structures/GuildTemplate";
 import type { CreateGuildFromTemplateOptions, CreateTemplateOptions, EditGuildTemplateOptions, RawGuildTemplate } from "../types/guild-template";
@@ -62,7 +61,6 @@ import type {
 import Role from "../structures/Role";
 import Invite from "../structures/Invite";
 import Integration from "../structures/Integration";
-import AutoModerationRule from "../structures/AutoModerationRule";
 import type RESTManager from "../rest/RESTManager";
 import Guild from "../structures/Guild";
 import type Member from "../structures/Member";
@@ -166,44 +164,6 @@ export default class Guilds {
                 verification_level:            options.verificationLevel
             }
         }).then(data => new Guild(data, this.#manager.client));
-    }
-
-    /**
-     * Create an auto moderation rule for a guild.
-     * @param id The ID of the guild.
-     * @param options The options for creating the rule.
-     */
-    async createAutoModerationRule(id: string, options: CreateAutoModerationRuleOptions): Promise<AutoModerationRule> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawAutoModerationRule>({
-            method: "POST",
-            path:   Routes.GUILD_AUTOMOD_RULES(id),
-            json:   {
-                actions: options.actions.map(a => ({
-                    metadata: {
-                        channel_id:       a.metadata.channelID,
-                        duration_seconds: a.metadata.durationSeconds
-                    },
-                    type: a.type
-                })),
-                event_type:       options.eventType,
-                exempt_channels:  options.exemptChannels,
-                exempt_roles:     options.exemptRoles,
-                name:             options.name,
-                trigger_metadata: !options.triggerMetadata ? undefined : {
-                    allow_list:          options.triggerMetadata.allowList,
-                    keyword_filter:      options.triggerMetadata.keywordFilter,
-                    mention_total_limit: options.triggerMetadata.mentionTotalLimit,
-                    presets:             options.triggerMetadata.presets,
-                    regex_patterns:      options.triggerMetadata.regexPatterns
-                },
-                trigger_type: options.triggerType
-            },
-            reason
-        }).then(data => this.#manager.client.guilds.get(id)?.autoModerationRules.update(data) ?? new AutoModerationRule(data, this.#manager.client));
     }
 
     /**
@@ -407,20 +367,6 @@ export default class Guilds {
     }
 
     /**
-     * Delete an auto moderation rule.
-     * @param id The ID of the guild.
-     * @param ruleID The ID of the rule to delete.
-     * @param reason The reason for deleting the rule.
-     */
-    async deleteAutoModerationRule(id: string, ruleID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_AUTOMOD_RULE(id, ruleID),
-            reason
-        });
-    }
-
-    /**
      * Delete an emoji.
      * @param id The ID of the guild.
      * @param emojiID The ID of the emoji.
@@ -539,44 +485,6 @@ export default class Guilds {
             },
             reason
         }).then(data => this.#manager.client.guilds.has(id) ? this.#manager.client.guilds.update(data) : new Guild(data, this.#manager.client));
-    }
-
-    /**
-     * Edit an existing auto moderation rule.
-     * @param id The ID of the guild.
-     * @param ruleID The ID of the rule to edit.
-     * @param options The options for editing the rule.
-     */
-    async editAutoModerationRule(id: string, ruleID: string, options: EditAutoModerationRuleOptions): Promise<AutoModerationRule> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawAutoModerationRule>({
-            method: "PATCH",
-            path:   Routes.GUILD_AUTOMOD_RULE(id, ruleID),
-            json:   {
-                actions: options.actions?.map(a => ({
-                    metadata: {
-                        channel_id:       a.metadata.channelID,
-                        duration_seconds: a.metadata.durationSeconds
-                    },
-                    type: a.type
-                })),
-                event_type:       options.eventType,
-                exempt_channels:  options.exemptChannels,
-                exempt_roles:     options.exemptRoles,
-                name:             options.name,
-                trigger_metadata: !options.triggerMetadata ? undefined : {
-                    allow_list:          options.triggerMetadata.allowList,
-                    keyword_filter:      options.triggerMetadata.keywordFilter,
-                    mention_total_limit: options.triggerMetadata.mentionTotalLimit,
-                    presets:             options.triggerMetadata.presets,
-                    regex_patterns:      options.triggerMetadata.regexPatterns
-                }
-            },
-            reason
-        }).then(data =>  this.#manager.client.guilds.get(id)?.autoModerationRules.update(data) ?? new AutoModerationRule(data, this.#manager.client));
     }
 
     /**
@@ -869,29 +777,6 @@ export default class Guilds {
             })),
             threads: data.threads.map(rawThread => this.#manager.client.util.updateThread(rawThread))
         }));
-    }
-
-    /**
-     * Get an auto moderation rule for a guild.
-     * @param id The ID of the guild.
-     * @param ruleID The ID of the rule to get.
-     */
-    async getAutoModerationRule(id: string, ruleID: string): Promise<AutoModerationRule> {
-        return this.#manager.authRequest<RawAutoModerationRule>({
-            method: "GET",
-            path:   Routes.GUILD_AUTOMOD_RULE(id, ruleID)
-        }).then(data => this.#manager.client.guilds.get(id)?.autoModerationRules.update(data) ?? new AutoModerationRule(data, this.#manager.client));
-    }
-
-    /**
-     * Get the auto moderation rules for a guild.
-     * @param id The ID of the guild.
-     */
-    async getAutoModerationRules(id: string): Promise<Array<AutoModerationRule>> {
-        return this.#manager.authRequest<Array<RawAutoModerationRule>>({
-            method: "GET",
-            path:   Routes.GUILD_AUTOMOD_RULES(id)
-        }).then(data => data.map(rule => this.#manager.client.guilds.get(id)?.autoModerationRules.update(rule) ?? new AutoModerationRule(rule, this.#manager.client)));
     }
 
     /**

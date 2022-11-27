@@ -9,7 +9,6 @@ import type ClientApplication from "./ClientApplication";
 import type TextChannel from "./TextChannel";
 import type CategoryChannel from "./CategoryChannel";
 import Integration from "./Integration";
-import AutoModerationRule from "./AutoModerationRule";
 import Permission from "./Permission";
 import StageInstance from "./StageInstance";
 import Channel from "./Channel";
@@ -81,7 +80,6 @@ import type {
     Sticker,
     EditStickerOptions
 } from "../types/guilds";
-import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
 import type { CreateTemplateOptions, EditGuildTemplateOptions } from "../types/guild-template";
 import type { JSONGuild } from "../types/json";
 import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway";
@@ -102,8 +100,6 @@ export default class Guild extends Base {
     approximateMemberCount?: number;
     /** The approximate number of non-offline members in this guild (if retrieved with counts). */
     approximatePresenceCount?: number;
-    /** The auto moderation rules in this guild. */
-    autoModerationRules: TypedCollection<string, RawAutoModerationRule, AutoModerationRule>;
     /** The hash of this guild's banner. */
     banner: string | null;
     /** The channels in this guild. */
@@ -204,7 +200,6 @@ export default class Guild extends Base {
         super(data.id, client);
         this._shard = this.client.guildShardMap[this.id] !== undefined ? this.client.shards.get(this.client.guildShardMap[this.id]) : undefined;
         this.applicationID = data.application_id;
-        this.autoModerationRules = new TypedCollection(AutoModerationRule, client);
         this.banner = null;
         this.channels = new TypedCollection(GuildChannel, client) as TypedCollection<string, RawGuildChannel, AnyGuildChannelWithoutThreads>;
         this.defaultMessageNotifications = data.default_message_notifications;
@@ -550,14 +545,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create an auto moderation rule for this guild.
-     * @param options The options for the rule.
-     */
-    async createAutoModerationRule(options: CreateAutoModerationRuleOptions): Promise<AutoModerationRule> {
-        return this.client.rest.guilds.createAutoModerationRule(this.id, options);
-    }
-
-    /**
      * Create a bon for a user.
      * @param userID The ID of the user.
      * @param options The options for creating the bon.
@@ -611,15 +598,6 @@ export default class Guild extends Base {
      */
     async delete(): Promise<void> {
         return this.client.rest.guilds.delete(this.id);
-    }
-
-    /**
-     * Delete an auto moderation rule in this guild.
-     * @param ruleID The ID of the rule to delete.
-     * @param reason The reason for deleting the rule.
-     */
-    async deleteAutoModerationRule(ruleID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteAutoModerationRule(this.id, ruleID, reason);
     }
 
     /**
@@ -706,15 +684,6 @@ export default class Guild extends Base {
      */
     async edit(options: EditGuildOptions): Promise<Guild> {
         return this.client.rest.guilds.edit(this.id, options);
-    }
-
-    /**
-     * Edit an existing auto moderation rule in this guild.
-     * @param ruleID The ID of the rule to edit.
-     * @param options The options for editing the rule.
-     */
-    async editAutoModerationRule(ruleID: string, options: EditAutoModerationRuleOptions): Promise<AutoModerationRule> {
-        return this.client.rest.guilds.editAutoModerationRule(this.id, ruleID, options);
     }
 
     /**
@@ -845,21 +814,6 @@ export default class Guild extends Base {
      */
     async getActiveThreads(): Promise<GetActiveThreadsResponse> {
         return this.client.rest.guilds.getActiveThreads(this.id);
-    }
-
-    /**
-     * Get an auto moderation rule for this guild.
-     * @param ruleID The ID of the rule to get.
-     */
-    async getAutoModerationRule(ruleID: string): Promise<AutoModerationRule> {
-        return this.client.rest.guilds.getAutoModerationRule(this.id, ruleID);
-    }
-
-    /**
-     * Get the auto moderation rules for this guild.
-     */
-    async getAutoModerationRules(): Promise<Array<AutoModerationRule>> {
-        return this.client.rest.guilds.getAutoModerationRules(this.id);
     }
 
     /**
@@ -1133,7 +1087,6 @@ export default class Guild extends Base {
             application:                 this.applicationID ?? undefined,
             approximateMemberCount:      this.approximateMemberCount,
             approximatePresenceCount:    this.approximatePresenceCount,
-            autoModerationRules:         this.autoModerationRules.map(rule => rule.toJSON()),
             banner:                      this.banner,
             channels:                    this.channels.map(channel => channel.id),
             defaultMessageNotifications: this.defaultMessageNotifications,

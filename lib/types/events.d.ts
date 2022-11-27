@@ -12,13 +12,11 @@ import type {
     UncachedThreadMember
 } from "./channels";
 import type { RawRequest } from "./request-handler";
-import type { AutoModerationActionExecution, DeletedPrivateChannel } from "./gateway";
 import type { AnyDispatchPacket } from "./gateway-raw";
 import type { Uncached } from "./shared";
 import type {
     JSONAnnouncementChannel,
     JSONAnnouncementThreadChannel,
-    JSONAutoModerationRule,
     JSONCategoryChannel,
     JSONForumChannel,
     JSONGuild,
@@ -45,7 +43,6 @@ import type {
 import type { AnyInteractionGateway } from "./interactions";
 import type Guild from "../structures/Guild";
 import type UnavailableGuild from "../structures/UnavailableGuild";
-import type AutoModerationRule from "../structures/AutoModerationRule";
 import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
 import type PublicThreadChannel from "../structures/PublicThreadChannel";
 import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
@@ -68,14 +65,6 @@ import ForumChannel from "../structures/ForumChannel";
 export interface ClientEvents {
     /** @event Emitted when an application command's permissions are updated. */
     applicationCommandPermissionsUpdate: [guild: Guild | Uncached, permissions: GuildApplicationCommandPermissions];
-    /** @event Emitted when an auto moderation action is executed. Requires the `AUTO_MODERATION_EXECUTION` intent. */
-    autoModerationActionExecution: [guild: Guild | Uncached, channel: AnyGuildTextChannel | Uncached | null, user: User | Uncached, executionOptions: AutoModerationActionExecution];
-    /** @event Emitted when an auto moderation rule is created. Requires the `AUTO_MODERATION_CONFIGURATION` intent. */
-    autoModerationRuleCreate: [rule: AutoModerationRule];
-    /** @event Emitted when an auto moderation rule is deleted. Requires the `AUTO_MODERATION_CONFIGURATION` intent. */
-    autoModerationRuleDelete: [rule: AutoModerationRule];
-    /** @event Emitted when an auto moderation rule is updated. Requires the `AUTO_MODERATION_CONFIGURATION` intent. */
-    autoModerationRuleUpdate: [rule: AutoModerationRule, oldRule: JSONAutoModerationRule | null];
     /** @event Emitted when a channel is created. Requires the `GUILDS` intent. */
     channelCreate: [channel: AnyGuildChannelWithoutThreads];
     /** @event Emitted when channel is deleted. Requires the `GUILDS` intent. */

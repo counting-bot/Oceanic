@@ -12,9 +12,8 @@ import type {
 } from "./guilds";
 import type { RawClientApplication, RawPartialApplication } from "./oauth";
 import type { RawExtendedUser, RawUser } from "./users";
-import type { PresenceUpdate, RawAutoModerationActionExecution, RawDeletedPrivateChannel } from "./gateway";
+import type { PresenceUpdate, RawDeletedPrivateChannel } from "./gateway";
 import type { RawGuildApplicationCommandPermissions } from "./application-commands";
-import type { RawAutoModerationRule } from "./auto-moderation";
 import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels";
 import type { RawInteraction } from "./interactions";
 import type { GatewayOPCodes, InviteTargetTypes } from "../Constants";
@@ -97,26 +96,6 @@ export interface GuildUpdatePacket extends BaseDispatchPacket {
 export interface ApplicationCommandPermissionsUpdatePacket extends BaseDispatchPacket {
     d: RawGuildApplicationCommandPermissions;
     t: "APPLICATION_COMMAND_PERMISSIONS_UPDATE";
-}
-
-export interface AutoModerationRuleCreatePacket extends BaseDispatchPacket {
-    d: RawAutoModerationRule;
-    t: "AUTO_MODERATION_RULE_CREATE";
-}
-
-export interface AutoModerationRuleDeletePacket extends BaseDispatchPacket {
-    d: RawAutoModerationRule;
-    t: "AUTO_MODERATION_RULE_DELETE";
-}
-
-export interface AutoModerationRuleUpdatePacket extends BaseDispatchPacket {
-    d: RawAutoModerationRule;
-    t: "AUTO_MODERATION_RULE_UPDATE";
-}
-
-export interface AutoModerationActionExecutionPacket extends BaseDispatchPacket {
-    d: RawAutoModerationActionExecution;
-    t: "AUTO_MODERATION_ACTION_EXECUTION";
 }
 
 export interface ChannelCreatePacket extends BaseDispatchPacket {
@@ -465,7 +444,6 @@ export interface StageInstanceUpdatePacket extends BaseDispatchPacket {
 
 export type AnyDispatchPacket = PresenceUpdatePacket | ReadyPacket | ResumedPacket |
 GuildCreatePacket | GuildDeletePacket | GuildUpdatePacket | ApplicationCommandPermissionsUpdatePacket |
-AutoModerationRuleCreatePacket | AutoModerationRuleDeletePacket | AutoModerationRuleUpdatePacket | AutoModerationActionExecutionPacket |
 ChannelCreatePacket | ChannelDeletePacket | ChannelUpdatePacket | ChannelPinsUpdatePacket |
 ThreadCreatePacket | ThreadDeletePacket | ThreadUpdatePacket | ThreadListSyncPacket | ThreadMemberUpdatePacket | ThreadMembersUpdatePacket |
 GuildBanAddPacket | GuildBanRemovePacket | GuildEmojisUpdatePacket | GuildStickersUpdatePacket | GuildIntegrationsUpdatePacket |

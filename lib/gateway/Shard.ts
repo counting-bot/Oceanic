@@ -25,7 +25,6 @@ import ClientApplication from "../structures/ClientApplication";
 import type { RawOAuthUser, RawUser } from "../types/users";
 import type { RawGuild } from "../types/guilds";
 import ExtendedUser from "../structures/ExtendedUser";
-import AutoModerationRule from "../structures/AutoModerationRule";
 import type {
     AnyGuildChannelWithoutThreads,
     AnyTextChannel,
@@ -234,58 +233,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                     id:            packet.d.id,
                     permissions:   packet.d.permissions
                 });
-                break;
-            }
-
-            case "AUTO_MODERATION_ACTION_EXECUTION": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const channel = this.client.getChannel(packet.d.channel_id ?? "");
-                this.client.emit(
-                    "autoModerationActionExecution",
-                    guild ?? { id: packet.d.guild_id },
-                    packet.d.channel_id === undefined ? null : channel ?? { id: packet.d.channel_id },
-                    this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id },
-                    {
-                        action: {
-                            metadata: {
-                                channelID:       packet.d.action.metadata.channel_id,
-                                durationSeconds: packet.d.action.metadata.duration_seconds
-                            },
-                            type: packet.d.action.type
-                        },
-                        alertSystemMessageID: packet.d.alert_system_message_id,
-                        content:              packet.d.content,
-                        matchedContent:       packet.d.matched_content,
-                        matchedKeyword:       packet.d.matched_keyword,
-                        messageID:            packet.d.message_id,
-                        rule:                 guild?.autoModerationRules.get(packet.d.rule_id),
-                        ruleID:               packet.d.rule_id,
-                        ruleTriggerType:      packet.d.rule_trigger_type
-                    }
-                );
-                break;
-            }
-
-            case "AUTO_MODERATION_RULE_CREATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const rule = guild?.autoModerationRules.update(packet.d) ?? new AutoModerationRule(packet.d, this.client);
-                this.client.emit("autoModerationRuleCreate", rule);
-                break;
-            }
-
-            case "AUTO_MODERATION_RULE_DELETE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const rule = guild?.autoModerationRules.update(packet.d) ?? new AutoModerationRule(packet.d, this.client);
-                guild?.autoModerationRules.delete(packet.d.id);
-                this.client.emit("autoModerationRuleDelete", rule);
-                break;
-            }
-
-            case "AUTO_MODERATION_RULE_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const oldRule = guild?.autoModerationRules.get(packet.d.id)?.toJSON() ?? null;
-                const rule = guild?.autoModerationRules.update(packet.d) ?? new AutoModerationRule(packet.d, this.client);
-                this.client.emit("autoModerationRuleUpdate", rule, oldRule);
                 break;
             }
 

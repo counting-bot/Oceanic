@@ -14,8 +14,6 @@ export const GUILD                       = (userID: string) => `/guilds/${userID
 export const GUILDS                      = "/guilds" as const;
 export const GUILD_BANS                  = (guildID: string) => `/guilds/${guildID}/bans` as const;
 export const GUILD_BAN                   = (guildID: string, userID: string) => `/guilds/${guildID}/bans/${userID}` as const;
-export const GUILD_AUTOMOD_RULE          = (guildID: string, autoModerationRuleID: string) => `/guilds/${guildID}/auto-moderation/rules/${autoModerationRuleID}` as const;
-export const GUILD_AUTOMOD_RULES         = (guildID: string) => `/guilds/${guildID}/auto-moderation/rules` as const;
 export const GUILD_EMOJI                 = (guildID: string, emojiID: string) => `/guilds/${guildID}/emojis/${emojiID}` as const;
 export const GUILD_EMOJIS                = (guildID: string) => `/guilds/${guildID}/emojis` as const;
 export const GUILD_SCHEDULED_EVENT       = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}` as const;
