@@ -26,7 +26,6 @@ export { default as GatewayError } from "./gateway/GatewayError";
 export { default as GroupChannel } from "./structures/GroupChannel";
 export { default as Guild } from "./structures/Guild";
 export { default as GuildChannel } from "./structures/GuildChannel";
-export { default as GuildPreview } from "./structures/GuildPreview";
 export { default as Integration } from "./structures/Integration";
 export { default as InteractionResolvedChannel } from "./structures/InteractionResolvedChannel";
 export { default as InteractionOptionsWrapper } from "./util/InteractionOptionsWrapper";

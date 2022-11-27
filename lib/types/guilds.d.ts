@@ -263,20 +263,6 @@ export interface EditEmojiOptions {
     roles?: Array<string> | null;
 }
 
-export interface RawGuildPreview {
-    approximate_member_count: number;
-    approximate_presence_count: number;
-    description: string | null;
-    discovery_splash: string | null;
-    emojis: Array<RawGuildEmoji>;
-    features: Array<GuildFeature>;
-    icon: string | null;
-    id: string;
-    name: string;
-    splash: string | null;
-    stickers: Array<RawSticker>;
-}
-
 export interface CreateGuildOptions {
     /** The ID of the AFK voice channel. */
     afkChannelID?: string;

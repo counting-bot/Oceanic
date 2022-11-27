@@ -14,7 +14,6 @@ import type {
     IntegrationAccount,
     RawGuild,
     RoleTags,
-    RawSticker,
     WelcomeScreen,
     Sticker,
     Presence
@@ -268,18 +267,6 @@ export interface JSONGuildChannel extends JSONChannel {
     name: string;
     parentID: string | null;
     type: GuildChannelTypes;
-}
-export interface JSONGuildPreview extends JSONBase {
-    approximateMemberCount: number;
-    approximatePresenceCount: number;
-    description: string | null;
-    discoverySplash: string | null;
-    emojis: Array<GuildEmoji>;
-    features: Array<GuildFeature>;
-    icon: string | null;
-    name: string;
-    splash: string | null;
-    stickers: Array<RawSticker>;
 }
 export interface JSONIntegration extends JSONBase {
     account: IntegrationAccount;

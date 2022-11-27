@@ -12,7 +12,6 @@ import Integration from "./Integration";
 import Permission from "./Permission";
 import StageInstance from "./StageInstance";
 import Channel from "./Channel";
-import type GuildPreview from "./GuildPreview";
 import type Invite from "./Invite";
 import type Webhook from "./Webhook";
 import type {
@@ -855,13 +854,6 @@ export default class Guild extends Base {
      */
     async getMembers(options?: GetMembersOptions): Promise<Array<Member>> {
         return this.client.rest.guilds.getMembers(this.id, options);
-    }
-
-    /**
-     * Get a preview of this guild.
-     */
-    async getPreview(): Promise<GuildPreview> {
-        return this.client.rest.guilds.getPreview(this.id);
     }
 
     /**

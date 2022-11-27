@@ -8,7 +8,6 @@ import type {
     ModifyChannelPositionsEntry,
     RawGuild,
     RawGuildEmoji,
-    RawGuildPreview,
     GetActiveThreadsResponse,
     GetMembersOptions,
     SearchMembersOptions,
@@ -46,7 +45,6 @@ import type {
 } from "../types/guilds";
 import * as Routes from "../util/Routes";
 import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
-import GuildPreview from "../structures/GuildPreview";
 import type {
     AnyGuildChannelWithoutThreads,
     InviteChannel,
@@ -880,17 +878,6 @@ export default class Guilds {
             path:   Routes.GUILD_MEMBERS(id),
             query
         }).then(data => data.map(d => this.#manager.client.util.updateMember(id, d.user.id, d)));
-    }
-
-    /**
-     * Get a preview of a guild. If the client is not already in this guild, the guild must be lurkable.
-     * @param id The ID of the guild.
-     */
-    async getPreview(id: string): Promise<GuildPreview> {
-        return this.#manager.authRequest<RawGuildPreview>({
-            method: "GET",
-            path:   Routes.GUILD_PREVIEW(id)
-        }).then(data => new GuildPreview(data, this.#manager.client));
     }
 
     /**
