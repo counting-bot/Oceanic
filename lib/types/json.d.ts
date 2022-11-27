@@ -281,18 +281,6 @@ export interface JSONGuildPreview extends JSONBase {
     splash: string | null;
     stickers: Array<RawSticker>;
 }
-export interface JSONGuildTemplate {
-    code: string;
-    createdAt: number;
-    creator: JSONUser;
-    description: string | null;
-    isDirty: boolean | null;
-    name: string;
-    serializedSourceGuild: Partial<RawGuild>;
-    sourceGuildID: string;
-    updatedAt: number;
-    usageCount: number;
-}
 export interface JSONIntegration extends JSONBase {
     account: IntegrationAccount;
     application?: JSONPartialApplication;

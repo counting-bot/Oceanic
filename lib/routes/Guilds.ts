@@ -46,8 +46,6 @@ import type {
 } from "../types/guilds";
 import * as Routes from "../util/Routes";
 import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
-import GuildTemplate from "../structures/GuildTemplate";
-import type { CreateGuildFromTemplateOptions, CreateTemplateOptions, EditGuildTemplateOptions, RawGuildTemplate } from "../types/guild-template";
 import GuildPreview from "../structures/GuildPreview";
 import type {
     AnyGuildChannelWithoutThreads,
@@ -257,27 +255,6 @@ export default class Guilds {
     }
 
     /**
-     * Create a guild from a template. This can only be used by bots in less than 10 guilds.
-     *
-     * Note: This does NOT add the guild to the client's cache.
-     * @param code The code of the template to use.
-     * @param options The options for creating the guild.
-     */
-    async createFromTemplate(code: string, options: CreateGuildFromTemplateOptions): Promise<Guild> {
-        if (options.icon) {
-            options.icon = this.#manager.client.util._convertImage(options.icon, "icon");
-        }
-        return this.#manager.authRequest<RawGuild>({
-            method: "POST",
-            path:   Routes.GUILD_TEMPLATE_CODE(code),
-            json:   {
-                icon: options.icon,
-                name: options.name
-            }
-        }).then(data => new Guild(data, this.#manager.client));
-    }
-
-    /**
      * Create a role.
      * @param id The ID of the guild.
      * @param options The options for creating the role.
@@ -337,22 +314,6 @@ export default class Guilds {
             form,
             reason: options.reason
         }).then(data => this.#manager.client.util.convertSticker(data));
-    }
-
-    /**
-     * Create a guild template.
-     * @param id The ID of the guild to create a template from.
-     * @param options The options for creating the template.
-     */
-    async createTemplate(id: string, options: CreateTemplateOptions): Promise<GuildTemplate> {
-        return this.#manager.authRequest<RawGuildTemplate>({
-            method: "POST",
-            path:   Routes.GUILD_TEMPLATES(id),
-            json:   {
-                description: options.description,
-                name:        options.name
-            }
-        }).then(data => new GuildTemplate(data, this.#manager.client));
     }
 
     /**
@@ -419,18 +380,6 @@ export default class Guilds {
             method: "DELETE",
             path:   Routes.GUILD_STICKER(id, stickerID),
             reason
-        });
-    }
-
-    /**
-     * Delete a template.
-     * @param id The ID of the guild.
-     * @param code The code of the template.
-     */
-    async deleteTemplate(id: string, code: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_TEMPLATE(id, code)
         });
     }
 
@@ -654,24 +603,6 @@ export default class Guilds {
             },
             reason: options.reason
         }).then(data => this.#manager.client.util.convertSticker(data));
-    }
-
-    /**
-     * Edit a guild template.
-     * @param id The ID of the guild.
-     * @param code The code of the template.
-     * @param options The options for editing the template.
-     */
-    async editTemplate(id: string, code: string, options: EditGuildTemplateOptions): Promise<GuildTemplate> {
-        return this.#manager.authRequest<RawGuildTemplate>({
-            method: "POST",
-            path:   Routes.GUILD_TEMPLATE(id, code),
-            json:   {
-                code,
-                description: options.description,
-                name:        options.name
-            }
-        }).then(data => new GuildTemplate(data, this.#manager.client));
     }
 
     /**
@@ -1018,28 +949,6 @@ export default class Guilds {
     }
 
     /**
-     * Get a guild template.
-     * @param code The code of the template to get.
-     */
-    async getTemplate(code: string): Promise<GuildTemplate> {
-        return this.#manager.authRequest<RawGuildTemplate>({
-            method: "GET",
-            path:   Routes.GUILD_TEMPLATE_CODE(code)
-        }).then(data => new GuildTemplate(data, this.#manager.client));
-    }
-
-    /**
-     * Get a guild's templates.
-     * @param id The ID of the guild.
-     */
-    async getTemplates(id: string): Promise<Array<GuildTemplate>> {
-        return this.#manager.authRequest<Array<RawGuildTemplate>>({
-            method: "GET",
-            path:   Routes.GUILD_TEMPLATES(id)
-        }).then(data => data.map(d => new GuildTemplate(d, this.#manager.client)));
-    }
-
-    /**
      * Get the vanity url of a guild.
      * @param id The ID of the guild.
      */
@@ -1197,17 +1106,5 @@ export default class Guilds {
             path:   Routes.GUILD_SEARCH_MEMBERS(id),
             query
         }).then(data => data.map(d => this.#manager.client.util.updateMember(id, d.user.id, d)));
-    }
-
-    /**
-     * Sync a guild template.
-     * @param id The ID of the guild.
-     * @param code The code of the template to sync.
-     */
-    async syncTemplate(id: string, code: string): Promise<GuildTemplate> {
-        return this.#manager.authRequest<RawGuildTemplate>({
-            method: "POST",
-            path:   Routes.GUILD_TEMPLATE(id, code)
-        }).then(data => new GuildTemplate(data, this.#manager.client));
     }
 }

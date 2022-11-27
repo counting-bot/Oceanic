@@ -12,7 +12,6 @@ import Integration from "./Integration";
 import Permission from "./Permission";
 import StageInstance from "./StageInstance";
 import Channel from "./Channel";
-import type GuildTemplate from "./GuildTemplate";
 import type GuildPreview from "./GuildPreview";
 import type Invite from "./Invite";
 import type Webhook from "./Webhook";
@@ -80,7 +79,6 @@ import type {
     Sticker,
     EditStickerOptions
 } from "../types/guilds";
-import type { CreateTemplateOptions, EditGuildTemplateOptions } from "../types/guild-template";
 import type { JSONGuild } from "../types/json";
 import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway";
 import type Shard from "../gateway/Shard";
@@ -586,14 +584,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create a guild template.
-     * @param options The options for creating the template.
-     */
-    async createTemplate(options: CreateTemplateOptions): Promise<GuildTemplate> {
-        return this.client.rest.guilds.createTemplate(this.id, options);
-    }
-
-    /**
      * Delete this guild.
      */
     async delete(): Promise<void> {
@@ -634,14 +624,6 @@ export default class Guild extends Base {
      */
     async deleteSticker(stickerID: string, reason?: string): Promise<void> {
         return this.client.rest.guilds.deleteSticker(this.id, stickerID, reason);
-    }
-
-    /**
-     * Delete a template.
-     * @param code The code of the template.
-     */
-    async deleteTemplate(code: string): Promise<void> {
-        return this.client.rest.guilds.deleteTemplate(this.id, code);
     }
 
     /**
@@ -749,15 +731,6 @@ export default class Guild extends Base {
      */
     async editSticker(stickerID: string, options: EditStickerOptions): Promise<Sticker> {
         return this.client.rest.guilds.editSticker(this.id, stickerID, options);
-    }
-
-    /**
-     * Edit a template.
-     * @param code The code of the template.
-     * @param options The options for editing the template.
-     */
-    async editTemplate(code: string, options: EditGuildTemplateOptions): Promise<GuildTemplate> {
-        return this.client.rest.guilds.editTemplate(this.id, code, options);
     }
 
     /**
@@ -922,13 +895,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get this guild's templates.
-     */
-    async getTemplates(): Promise<Array<GuildTemplate>> {
-        return this.client.rest.guilds.getTemplates(this.id);
-    }
-
-    /**
      * Get the vanity url of this guild.
      */
     async getVanityURL(): Promise<GetVanityURLResponse>{
@@ -1071,14 +1037,6 @@ export default class Guild extends Base {
      */
     splashURL(format?: ImageFormat, size?: number): string | null {
         return this.splash === null ? null : this.client.util.formatImage(Routes.GUILD_SPLASH(this.id, this.splash), format, size);
-    }
-
-    /**
-     * Sync a guild template.
-     * @param code The code of the template to sync.
-     */
-    async syncTemplate(code: string): Promise<GuildTemplate> {
-        return this.client.rest.guilds.syncTemplate(this.id, code);
     }
 
     override toJSON(): JSONGuild {

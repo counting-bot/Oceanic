@@ -19,9 +19,6 @@ export const GUILD_EMOJIS                = (guildID: string) => `/guilds/${guild
 export const GUILD_SCHEDULED_EVENT       = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}` as const;
 export const GUILD_SCHEDULED_EVENTS      = (guildID: string) => `/guilds/${guildID}/scheduled-events` as const;
 export const GUILD_SCHEDULED_EVENT_USERS = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}/users` as const;
-export const GUILD_TEMPLATE_CODE         = (code: string) => `/guilds/templates/${code}` as const;
-export const GUILD_TEMPLATE              = (guildID: string, templateID: string) => `/guilds/${guildID}/templates/${templateID}` as const;
-export const GUILD_TEMPLATES             = (guildID: string) => `/guilds/${guildID}/templates` as const;
 export const GUILD_PREVIEW               = (guildID: string) => `/guilds/${guildID}/preview` as const;
 export const GUILD_CHANNELS              = (guildID: string) => `/guilds/${guildID}/channels` as const;
 export const GUILD_ACTIVE_THREADS        = (guildID: string) => `/guilds/${guildID}/threads/active` as const;
