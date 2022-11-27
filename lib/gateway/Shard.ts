@@ -40,7 +40,6 @@ import type {
 } from "../types/channels";
 import type TextChannel from "../structures/TextChannel";
 import type { JSONAnnouncementThreadChannel } from "../types/json";
-import GuildScheduledEvent from "../structures/GuildScheduledEvent";
 import Invite from "../structures/Invite";
 import Message from "../structures/Message";
 import StageInstance from "../structures/StageInstance";
@@ -515,51 +514,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 const oldRole = guild?.roles.get(packet.d.role.id)?.toJSON() ?? null;
                 const role = guild?.roles.update(packet.d.role, packet.d.guild_id) ?? new Role(packet.d.role, this.client, packet.d.guild_id);
                 this.client.emit("guildRoleUpdate", role, oldRole);
-                break;
-            }
-
-            case "GUILD_SCHEDULED_EVENT_CREATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const event = guild?.scheduledEvents.update(packet.d) ?? new GuildScheduledEvent(packet.d, this.client);
-                this.client.emit("guildScheduledEventCreate", event);
-                break;
-            }
-
-            case "GUILD_SCHEDULED_EVENT_DELETE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const event = guild?.scheduledEvents.update(packet.d) ?? new GuildScheduledEvent(packet.d, this.client);
-                guild?.scheduledEvents.delete(packet.d.id);
-                this.client.emit("guildScheduledEventDelete", event);
-                break;
-            }
-
-            case "GUILD_SCHEDULED_EVENT_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id)!;
-                const oldEvent = guild?.scheduledEvents.get(packet.d.id)?.toJSON() ?? null;
-                const event = guild?.scheduledEvents.update(packet.d) ?? new GuildScheduledEvent(packet.d, this.client);
-                this.client.emit("guildScheduledEventUpdate", event, oldEvent);
-                break;
-            }
-
-            case "GUILD_SCHEDULED_EVENT_USER_ADD": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const event = guild?.scheduledEvents.get(packet.d.guild_scheduled_event_id);
-                if (event?.userCount) {
-                    event.userCount++;
-                }
-                const user = this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
-                this.client.emit("guildScheduledEventUserAdd", event ?? { id: packet.d.guild_scheduled_event_id }, user ?? { id: packet.d.user_id });
-                break;
-            }
-
-            case "GUILD_SCHEDULED_EVENT_USER_REMOVE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const event = guild?.scheduledEvents.get(packet.d.guild_scheduled_event_id);
-                if (event?.userCount) {
-                    event.userCount--;
-                }
-                const user = this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
-                this.client.emit("guildScheduledEventUserRemove", event ?? { id: packet.d.guild_scheduled_event_id }, user ?? { id: packet.d.user_id });
                 break;
             }
 

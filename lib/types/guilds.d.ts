@@ -10,7 +10,6 @@ import type {
     ForumEmoji,
     ForumTag
 } from "./channels";
-import type { RawScheduledEvent } from "./scheduled-events";
 import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway";
 import { File } from "./request-handler";
 import type {
@@ -40,7 +39,7 @@ import type CategoryChannel from "../structures/CategoryChannel";
 import type AnnouncementChannel from "../structures/AnnouncementChannel";
 import type StageChannel from "../structures/StageChannel";
 
-// channels, guild_scheduled_events, joined_at, large, member_count, members, presences,
+// channels, joined_at, large, member_count, members, presences,
 // stage_instances, threads, unavailable - all gateway only
 export interface RawGuild {
     afk_channel_id: string | null;
@@ -56,7 +55,6 @@ export interface RawGuild {
     emojis: Array<RawGuildEmoji>;
     explicit_content_filter: ExplicitContentFilterLevels;
     features: Array<GuildFeature>;
-    guild_scheduled_events: Array<RawScheduledEvent>;
     icon: string | null;
     icon_hash?: string | null;
     id: string;
@@ -621,7 +619,6 @@ export interface RawStageInstance {
     /** @deprecated */
     discoverable_disabled: boolean;
     guild_id: string;
-    guild_scheduled_event_id: string | null;
     id: string;
     privacy_level: StageInstancePrivacyLevels;
     topic: string;

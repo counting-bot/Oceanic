@@ -16,7 +16,6 @@ import type { PresenceUpdate, RawAutoModerationActionExecution, RawDeletedPrivat
 import type { RawGuildApplicationCommandPermissions } from "./application-commands";
 import type { RawAutoModerationRule } from "./auto-moderation";
 import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels";
-import type { RawScheduledEvent } from "./scheduled-events";
 import type { RawInteraction } from "./interactions";
 import type { GatewayOPCodes, InviteTargetTypes } from "../Constants";
 
@@ -291,39 +290,6 @@ export interface GuildRoleUpdatePacket extends BaseDispatchPacket {
     t: "GUILD_ROLE_UPDATE";
 }
 
-export interface GuildScheduledEventCreatePacket extends BaseDispatchPacket {
-    d: RawScheduledEvent;
-    t: "GUILD_SCHEDULED_EVENT_CREATE";
-}
-
-export interface GuildScheduledEventDeletePacket extends BaseDispatchPacket {
-    d: RawScheduledEvent;
-    t: "GUILD_SCHEDULED_EVENT_DELETE";
-}
-
-export interface GuildScheduledEventUpdatePacket extends BaseDispatchPacket {
-    d: RawScheduledEvent;
-    t: "GUILD_SCHEDULED_EVENT_UPDATE";
-}
-
-export interface GuildScheduledEventUserAddPacket extends BaseDispatchPacket {
-    d: {
-        guild_id: string;
-        guild_scheduled_event_id: string;
-        user_id: string;
-    };
-    t: "GUILD_SCHEDULED_EVENT_USER_ADD";
-}
-
-export interface GuildScheduledEventUserRemovePacket extends BaseDispatchPacket {
-    d: {
-        guild_id: string;
-        guild_scheduled_event_id: string;
-        user_id: string;
-    };
-    t: "GUILD_SCHEDULED_EVENT_USER_REMOVE";
-}
-
 export interface IntegrationCreatePacket extends BaseDispatchPacket {
     d: RawIntegration & { guild_id: string; };
     t: "INTEGRATION_CREATE";
@@ -505,7 +471,6 @@ ThreadCreatePacket | ThreadDeletePacket | ThreadUpdatePacket | ThreadListSyncPac
 GuildBanAddPacket | GuildBanRemovePacket | GuildEmojisUpdatePacket | GuildStickersUpdatePacket | GuildIntegrationsUpdatePacket |
 GuildMemberAddPacket | GuildMemberRemovePacket | GuildMemberUpdatePacket | GuildMembersChunkPacket |
 GuildRoleCreatePacket | GuildRoleDeletePacket | GuildRoleUpdatePacket |
-GuildScheduledEventCreatePacket | GuildScheduledEventDeletePacket | GuildScheduledEventUpdatePacket | GuildScheduledEventUserAddPacket | GuildScheduledEventUserRemovePacket |
 IntegrationCreatePacket | IntegrationDeletePacket | IntegrationUpdatePacket |
 InviteCreatePacket | InviteDeletePacket |
 MessageCreatePacket | MessageDeletePacket | MessageDeleteBulkPacket | MessageUpdatePacket | MessageReactionAddPacket | MessageReactionRemovePacket | MessageReactionRemoveAllPacket | MessageReactionRemoveEmojiPacket |

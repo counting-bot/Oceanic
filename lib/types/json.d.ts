@@ -34,7 +34,6 @@ import type {
     MessageActionRow,
     Embed
 } from "./channels";
-import type { ScheduledEventEntityMetadata } from "./scheduled-events";
 import type {
     ApplicationCommandTypes,
     AutoModerationEventTypes,
@@ -55,9 +54,6 @@ import type {
     PremiumTiers,
     PrivateChannelTypes,
     RESTMethod,
-    GuildScheduledEventEntityTypes,
-    GuildScheduledEventPrivacyLevels,
-    GuildScheduledEventStatuses,
     TextChannelTypes,
     ThreadAutoArchiveDuration,
     ThreadChannelTypes,
@@ -270,7 +266,6 @@ export interface JSONGuild extends JSONBase {
     region?: string | null;
     roles: Array<JSONRole>;
     rulesChannelID: string | null;
-    scheduledEvents: Array<JSONScheduledEvent>;
     splash: string | null;
     stageInstances: Array<JSONStageInstance>;
     stickers?: Array<Sticker>;
@@ -345,7 +340,6 @@ export interface JSONInvite {
     createdAt?: number;
     expiresAt?: number;
     guildID?: string;
-    guildScheduledEvent?: JSONScheduledEvent;
     inviter?: string;
     maxAge?: number;
     maxUses?: number;
@@ -475,22 +469,6 @@ export interface JSONRole extends JSONBase {
     tags: RoleTags;
     unicodeEmoji: string | null;
 }
-export interface JSONScheduledEvent extends JSONBase {
-    channelID: string | null;
-    creator?: JSONUser;
-    description?: string | null;
-    entityID: string | null;
-    entityMetadata: ScheduledEventEntityMetadata | null;
-    entityType: GuildScheduledEventEntityTypes;
-    guildID: string;
-    image?: string | null;
-    name: string;
-    privacyLevel: GuildScheduledEventPrivacyLevels;
-    scheduledEndTime: number | null;
-    scheduledStartTime: number;
-    status: GuildScheduledEventStatuses;
-    userCount?: number;
-}
 export interface JSONStageChannel extends JSONGuildChannel {
     bitrate: number;
     permissionOverwrites: Array<JSONPermissionOverwrite>;
@@ -504,7 +482,6 @@ export interface JSONStageInstance extends JSONBase {
     discoverableDisabled: boolean;
     guildID: string;
     privacyLevel: StageInstancePrivacyLevels;
-    scheduledEventID: string | null;
     topic: string;
 }
 export interface JSONTeam extends JSONBase {

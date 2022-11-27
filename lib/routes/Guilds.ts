@@ -48,16 +48,7 @@ import * as Routes from "../util/Routes";
 import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
 import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
 import type { AuditLog, GetAuditLogOptions, RawAuditLog } from "../types/audit-log";
-import GuildScheduledEvent from "../structures/GuildScheduledEvent";
 import Webhook from "../structures/Webhook";
-import type {
-    CreateScheduledEventOptions,
-    EditScheduledEventOptions,
-    GetScheduledEventUsersOptions,
-    RawScheduledEvent,
-    RawScheduledEventUser,
-    ScheduledEventUser
-} from "../types/scheduled-events";
 import GuildTemplate from "../structures/GuildTemplate";
 import type { CreateGuildFromTemplateOptions, CreateTemplateOptions, EditGuildTemplateOptions, RawGuildTemplate } from "../types/guild-template";
 import GuildPreview from "../structures/GuildPreview";
@@ -360,37 +351,6 @@ export default class Guilds {
     }
 
     /**
-     * Create a scheduled event in a guild.
-     * @param id The ID of the guild.
-     * @param options The options for creating the scheduled event.
-     */
-    async createScheduledEvent(id: string, options: CreateScheduledEventOptions): Promise<GuildScheduledEvent> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        if (options.image) {
-            options.image = this.#manager.client.util._convertImage(options.image, "image");
-        }
-        return this.#manager.authRequest<RawScheduledEvent>({
-            method: "POST",
-            path:   Routes.GUILD_SCHEDULED_EVENTS(id),
-            json:   {
-                channel_id:           options.channelID,
-                description:          options.description,
-                entity_metadata:      !options.entityMetadata ? undefined : { location: options.entityMetadata.location },
-                entity_type:          options.entityType,
-                image:                options.image,
-                name:                 options.name,
-                privacy_level:        options.privacyLevel,
-                scheduled_end_time:   options.scheduledEndTime,
-                scheduled_start_time: options.scheduledStartTime
-            },
-            reason
-        }).then(data => this.#manager.client.guilds.get(id)?.scheduledEvents.update(data) ?? new GuildScheduledEvent(data, this.#manager.client));
-    }
-
-    /**
      * Create a sticker.
      * @param id The ID of the guild.
      * @param options The options for creating the sticker.
@@ -502,20 +462,6 @@ export default class Guilds {
         await this.#manager.authRequest<null>({
             method: "DELETE",
             path:   Routes.GUILD_ROLE(id, roleID),
-            reason
-        });
-    }
-
-    /**
-     * Delete a scheduled event.
-     * @param id The ID of the guild.
-     * @param eventID The ID of the scheduled event.
-     * @param reason The reason for deleting the scheduled event. Discord's docs do not explicitly state a reason can be provided, so it may not be used.
-     */
-    async deleteScheduledEvent(id: string, eventID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_SCHEDULED_EVENT(id, eventID),
             reason
         });
     }
@@ -789,38 +735,6 @@ export default class Guilds {
     }
 
     /**
-     * Edit an existing scheduled event in a guild.
-     * @param id The ID of the guild.
-     * @param options The options for editing the scheduled event.
-     */
-    async editScheduledEvent(id: string, options: EditScheduledEventOptions): Promise<GuildScheduledEvent> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        if (options.image) {
-            options.image = this.#manager.client.util._convertImage(options.image, "image");
-        }
-        return this.#manager.authRequest<RawScheduledEvent>({
-            method: "POST",
-            path:   Routes.GUILD_SCHEDULED_EVENTS(id),
-            json:   {
-                channel_id:           options.channelID,
-                description:          options.description,
-                entity_metadata:      !options.entityMetadata ? undefined : { location: options.entityMetadata.location },
-                entity_type:          options.entityType,
-                image:                options.image,
-                name:                 options.name,
-                privacy_level:        options.privacyLevel,
-                status:               options.status,
-                scheduled_end_time:   options.scheduledEndTime,
-                scheduled_start_time: options.scheduledStartTime
-            },
-            reason
-        }).then(data => this.#manager.client.guilds.get(id)?.scheduledEvents.update(data) ?? new GuildScheduledEvent(data, this.#manager.client));
-    }
-
-    /**
      * Edit a sticker.
      * @param id The ID of the guild.
      * @param options The options for editing the sticker.
@@ -989,7 +903,6 @@ export default class Guilds {
             applicationCommands:  data.application_commands.map(command => new ApplicationCommand(command, this.#manager.client)),
             autoModerationRules:  data.auto_moderation_rules.map(rule => guild ? guild.autoModerationRules.update(rule) : new AutoModerationRule(rule, this.#manager.client)),
             entries:              data.audit_log_entries.map(entry => new AuditLogEntry(entry, this.#manager.client)),
-            guildScheduledEvents: data.guild_scheduled_events.map(event => guild ? guild.scheduledEvents.update(event) : new GuildScheduledEvent(event, this.#manager.client)),
             integrations:         data.integrations.map(integration => guild ? guild.integrations.update(integration, id) : new Integration(integration, this.#manager.client, id)),
             threads:              data.threads.map(rawThread => this.#manager.client.util.updateThread(rawThread)),
             users:                data.users.map(user => this.#manager.client.users.update(user)),
@@ -1233,74 +1146,6 @@ export default class Guilds {
             method: "GET",
             path:   Routes.GUILD_ROLES(id)
         }).then(data => data.map(role => guild ? guild.roles.update(role, id) : new Role(role, this.#manager.client, id)));
-    }
-
-    /**
-     * Get a scheduled event.
-     * @param id The ID of the guild.
-     * @param eventID The ID of the scheduled event to get.
-     * @param withUserCount If the number of users subscribed to the event should be included.
-     */
-    async getScheduledEvent(id: string, eventID: string, withUserCount?: number): Promise<GuildScheduledEvent> {
-        const query = new URLSearchParams();
-        if (withUserCount !== undefined) {
-            query.set("with_user_count", withUserCount.toString());
-        }
-        return this.#manager.authRequest<RawScheduledEvent>({
-            method: "GET",
-            path:   Routes.GUILD_SCHEDULED_EVENT(id, eventID),
-            query
-        }).then(data => this.#manager.client.guilds.get(id)?.scheduledEvents.update(data) ?? new GuildScheduledEvent(data, this.#manager.client));
-    }
-
-    /**
-     * Get the users subscribed to a scheduled event.
-     * @param id The ID of the guild.
-     * @param eventID The ID of the scheduled event.
-     * @param options The options for getting the users.
-     */
-    async getScheduledEventUsers(id: string, eventID: string, options?: GetScheduledEventUsersOptions): Promise<Array<ScheduledEventUser>> {
-        const guild = this.#manager.client.guilds.get(id);
-        const query = new URLSearchParams();
-        if (options?.after !== undefined) {
-            query.set("after", options.after);
-        }
-        if (options?.before !== undefined) {
-            query.set("before", options.before);
-        }
-        if (options?.limit !== undefined) {
-            query.set("limit", options.limit.toString());
-        }
-        if (options?.withMember !== undefined) {
-            query.set("with_member", options.withMember.toString());
-        }
-        return this.#manager.authRequest<Array<RawScheduledEventUser>>({
-            method: "GET",
-            path:   Routes.GUILD_SCHEDULED_EVENT_USERS(id, eventID)
-        }).then(data => data.map(d => ({
-            guildScheduledEvent:   guild?.scheduledEvents.get(d.guild_scheduled_event_id),
-            guildScheduledEventID: d.guild_scheduled_event_id,
-            user:                  this.#manager.client.users.update(d.user),
-            member:                d.member ? this.#manager.client.util.updateMember(id, d.member.user!.id, d.member) : undefined
-        })));
-    }
-
-    /**
-     * Get a guild's scheduled events.
-     * @param id The ID of the guild.
-     * @param withUserCount If the number of users subscribed to the event should be included.
-     */
-    async getScheduledEvents(id: string, withUserCount?: number): Promise<Array<GuildScheduledEvent>> {
-        const guild = this.#manager.client.guilds.get(id);
-        const query = new URLSearchParams();
-        if (withUserCount !== undefined) {
-            query.set("with_user_count", withUserCount.toString());
-        }
-        return this.#manager.authRequest<Array<RawScheduledEvent>>({
-            method: "GET",
-            path:   Routes.GUILD_SCHEDULED_EVENTS(id),
-            query
-        }).then(data => data.map(d => guild?.scheduledEvents.update(d) ?? new GuildScheduledEvent(d, this.#manager.client)));
     }
 
     /**

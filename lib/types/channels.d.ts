@@ -3,7 +3,6 @@ import type { PartialEmoji, PartialGuild, RawMember } from "./guilds";
 import type { RawApplication, RawPartialApplication } from "./oauth";
 import type { RawUser, RawUserWithMember } from "./users";
 import type { File } from "./request-handler";
-import type { RawScheduledEvent } from "./scheduled-events";
 import { type  Uncached } from "./shared";
 import type {
     ButtonStyles,
@@ -750,7 +749,6 @@ export interface RawInvite {
     code: string;
     expires_at?: string;
     guild?: PartialGuild;
-    guild_scheduled_event?: RawScheduledEvent;
     inviter?: RawUser;
     /** @deprecated */
     stage_instance?: RawInviteStageInstance;
@@ -857,8 +855,6 @@ export interface ArchivedThreads<T extends AnnouncementThreadChannel | PublicThr
 }
 
 export interface GetInviteOptions {
-    /** The id of the guild scheduled event to include with the invite. */
-    guildScheduledEventID?: string;
     /** If the invite should contain approximate member counts. */
     withCounts?: boolean;
     /** If the invite should contain expiration data.  */

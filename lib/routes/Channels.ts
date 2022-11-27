@@ -483,9 +483,6 @@ export default class Channels {
     async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithExpirationOptions): Promise<Invite<"withMetadata" | "withExpiration", T>>;
     async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options?: GetInviteOptions): Promise<Invite<never, T>> {
         const query = new URLSearchParams();
-        if (options?.guildScheduledEventID !== undefined) {
-            query.set("guild_scheduled_event_id", options.guildScheduledEventID);
-        }
         if (options?.withCounts !== undefined) {
             query.set("with_counts", options.withCounts.toString());
         }

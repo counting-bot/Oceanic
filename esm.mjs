@@ -27,7 +27,6 @@ const GroupChannel = (await import("./dist/lib/structures/GroupChannel.js")).def
 const Guild = (await import("./dist/lib/structures/Guild.js")).default.default;
 const GuildChannel = (await import("./dist/lib/structures/GuildChannel.js")).default.default;
 const GuildPreview = (await import("./dist/lib/structures/GuildPreview.js")).default.default;
-const GuildScheduledEvent = (await import("./dist/lib/structures/GuildScheduledEvent.js")).default.default;
 const GuildTemplate = (await import("./dist/lib/structures/GuildTemplate.js")).default.default;
 const Integration = (await import("./dist/lib/structures/Integration.js")).default.default;
 const InteractionResolvedChannel = (await import("./dist/lib/structures/InteractionResolvedChannel.js")).default.default;
@@ -99,7 +98,6 @@ export {
     Guild,
     GuildChannel,
     GuildPreview,
-    GuildScheduledEvent,
     GuildTemplate,
     Integration,
     InteractionResolvedChannel,

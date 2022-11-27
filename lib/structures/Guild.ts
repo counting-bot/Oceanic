@@ -3,7 +3,6 @@ import Role from "./Role";
 import Base from "./Base";
 import GuildChannel from "./GuildChannel";
 import Member from "./Member";
-import GuildScheduledEvent from "./GuildScheduledEvent";
 import ThreadChannel from "./ThreadChannel";
 import type User from "./User";
 import type ClientApplication from "./ClientApplication";
@@ -82,13 +81,6 @@ import type {
     Sticker,
     EditStickerOptions
 } from "../types/guilds";
-import type {
-    CreateScheduledEventOptions,
-    EditScheduledEventOptions,
-    GetScheduledEventUsersOptions,
-    RawScheduledEvent,
-    ScheduledEventUser
-} from "../types/scheduled-events";
 import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
 import type { AuditLog, GetAuditLogOptions } from "../types/audit-log";
 import type { CreateTemplateOptions, EditGuildTemplateOptions } from "../types/guild-template";
@@ -181,8 +173,6 @@ export default class Guild extends Base {
     rulesChannel?: TextChannel | null;
     /** The id of the channel where rules/guidelines are displayed. Only present in guilds with the `COMMUNITY` feature. */
     rulesChannelID: string | null;
-    /** The scheduled events in this guild. */
-    scheduledEvents: TypedCollection<string, RawScheduledEvent, GuildScheduledEvent>;
     /** The invite splash hash of this guild. */
     splash: string | null;
     /** The stage instances in this guild. */
@@ -242,7 +232,6 @@ export default class Guild extends Base {
         this.publicUpdatesChannelID = null;
         this.roles = new TypedCollection(Role, client);
         this.rulesChannelID = null;
-        this.scheduledEvents = new TypedCollection(GuildScheduledEvent, client);
         this.splash = null;
         this.stageInstances = new TypedCollection(StageInstance, client);
         this.stickers = [];
@@ -603,14 +592,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create a scheduled event in this guild.
-     * @param options The options for creating the scheduled event.
-     */
-    async createScheduledEvent(options: CreateScheduledEventOptions): Promise<GuildScheduledEvent> {
-        return this.client.rest.guilds.createScheduledEvent(this.id, options);
-    }
-
-    /**
      * Create a sticker.
      * @param options The options for creating the sticker.
      */
@@ -667,15 +648,6 @@ export default class Guild extends Base {
      */
     async deleteRole(roleID: string, reason?: string): Promise<void> {
         return this.client.rest.guilds.deleteRole(this.id, roleID, reason);
-    }
-
-    /**
-     * Delete a scheduled event.
-     * @param eventID The ID of the scheduled event.
-     * @param reason The reason for deleting the scheduled event. Discord's docs do not explicitly state a reason can be provided, so it may not be used.
-     */
-    async deleteScheduledEvent(eventID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteScheduledEvent(this.id, eventID, reason);
     }
 
     /**
@@ -801,14 +773,6 @@ export default class Guild extends Base {
      */
     async editRolePositions(options: Array<EditRolePositionsEntry>, reason?: string): Promise<Array<Role>> {
         return this.client.rest.guilds.editRolePositions(this.id, options, reason);
-    }
-
-    /**
-     * Edit an existing scheduled event in this guild.
-     * @param options The options for editing the scheduled event.
-     */
-    async editScheduledEvent(options: EditScheduledEventOptions): Promise<GuildScheduledEvent> {
-        return this.client.rest.guilds.editScheduledEvent(this.id, options);
     }
 
     /**
@@ -995,32 +959,6 @@ export default class Guild extends Base {
      */
     async getRoles(): Promise<Array<Role>> {
         return this.client.rest.guilds.getRoles(this.id);
-    }
-
-    /**
-     * Get a scheduled event.
-     * @param eventID The ID of the scheduled event to get.
-     * @param withUserCount If the number of users subscribed to the event should be included.
-     */
-    async getScheduledEvent(eventID: string, withUserCount?: number): Promise<GuildScheduledEvent> {
-        return this.client.rest.guilds.getScheduledEvent(this.id, eventID, withUserCount);
-    }
-
-    /**
-     * Get the users subscribed to a scheduled event.
-     * @param eventID The ID of the scheduled event to get the users of.
-     * @param options The options for getting the users.
-     */
-    async getScheduledEventUsers(eventID: string, options?: GetScheduledEventUsersOptions): Promise<Array<ScheduledEventUser>> {
-        return this.client.rest.guilds.getScheduledEventUsers(this.id, eventID, options);
-    }
-
-    /**
-     * Get this guild's scheduled events
-     * @param withUserCount If the number of users subscribed to the event should be included.
-     */
-    async getScheduledEvents(withUserCount?: number): Promise<Array<GuildScheduledEvent>> {
-        return this.client.rest.guilds.getScheduledEvents(this.id, withUserCount);
     }
 
     /**
@@ -1234,7 +1172,6 @@ export default class Guild extends Base {
             region:                      this.region,
             roles:                       this.roles.map(role => role.toJSON()),
             rulesChannelID:              this.rulesChannelID,
-            scheduledEvents:             this.scheduledEvents.map(event => event.toJSON()),
             splash:                      this.splash,
             stageInstances:              this.stageInstances.map(instance => instance.toJSON()),
             stickers:                    this.stickers,

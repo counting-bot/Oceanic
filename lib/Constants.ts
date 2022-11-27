@@ -547,23 +547,6 @@ export enum InviteTargetTypes {
     EMBEDDED_APPLICATION = 2,
 }
 
-export enum GuildScheduledEventPrivacyLevels {
-    GUILD_ONLY = 2
-}
-
-export enum GuildScheduledEventStatuses {
-    SCHEDULED = 1,
-    ACTIVE    = 2,
-    COMPLETED = 3,
-    CANCELED = 4
-}
-
-export enum GuildScheduledEventEntityTypes {
-    STAGE_INSTANCE = 1,
-    VOICE          = 2,
-    EXTERNAL       = 3
-}
-
 export enum StageInstancePrivacyLevels {
     /** @deprecated */
     PUBLIC     = 1,

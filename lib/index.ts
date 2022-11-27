@@ -29,7 +29,6 @@ export { default as GroupChannel } from "./structures/GroupChannel";
 export { default as Guild } from "./structures/Guild";
 export { default as GuildChannel } from "./structures/GuildChannel";
 export { default as GuildPreview } from "./structures/GuildPreview";
-export { default as GuildScheduledEvent } from "./structures/GuildScheduledEvent";
 export { default as GuildTemplate } from "./structures/GuildTemplate";
 export { default as Integration } from "./structures/Integration";
 export { default as InteractionResolvedChannel } from "./structures/InteractionResolvedChannel";
