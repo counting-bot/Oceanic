@@ -11,7 +11,7 @@
       "ES2021",
       "ES2022"
     ],
-    "module": "CommonJS",
+    "module": "ES6",
     "target": "ES2022",
     "inlineSourceMap": true,
     "importHelpers": true,
