@@ -17,7 +17,6 @@
         "lint:fix": "eslint lib --ext .ts --fix",
         "prepublishOnly": "node scripts/build",
         "test:build": "npm run prepublishOnly",
-        "test:esm": "node --no-warnings --no-deprecation --experimental-specifier-resolution=node esm.mjs",
         "test:docs": "npm i --no-save --ignore-scripts typedoc typedoc-plugin-extras typedoc-plugin-rename-defaults && node scripts/doc-test.js && npx --yes typedoc"
     },
     "repository": {
@@ -58,7 +57,7 @@
     },
     "dependencies": {
         "tslib": "^2.4.1",
-        "undici": "^5.12.0",
+        "undici": "^5.13.0",
         "ws": "^8.11.0"
     },
     "engines": {

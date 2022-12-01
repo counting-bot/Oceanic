@@ -1,6 +1,5 @@
 /** @module Types/Index */
 export * from "./application-commands";
-export * from "./auto-moderation";
 export * from "./channels";
 export * from "./client";
 export * from "./events";
@@ -12,5 +11,4 @@ export * from "./oauth";
 export * from "./request-handler";
 export * from "./shared";
 export * from "./users";
-export * from "./voice";
 export * from "./webhooks";

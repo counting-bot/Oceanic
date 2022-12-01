@@ -13,6 +13,7 @@ import type {
 } from "./channels";
 import type { RawRequest } from "./request-handler";
 import type { AnyDispatchPacket } from "./gateway-raw";
+import type { DeletedPrivateChannel } from "./gateway";
 import type { Uncached } from "./shared";
 import type {
     JSONAnnouncementChannel,
