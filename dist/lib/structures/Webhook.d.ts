@@ -1,15 +1,15 @@
 /** @module Webhook */
-import Base from "./Base";
-import type User from "./User";
-import type Message from "./Message";
-import type Guild from "./Guild";
-import type ClientApplication from "./ClientApplication";
-import type Client from "../Client";
-import type { ImageFormat, WebhookTypes } from "../Constants";
-import type { AnyGuildTextChannel, RawChannel } from "../types/channels";
-import type { RawGuild } from "../types/guilds";
-import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions, RawWebhook } from "../types/webhooks";
-import type { JSONWebhook } from "../types/json";
+import Base from "./Base.js";
+import type User from "./User.js";
+import type Message from "./Message.js";
+import type Guild from "./Guild.js";
+import type ClientApplication from "./ClientApplication.js";
+import type Client from "../Client.js";
+import type { ImageFormat, WebhookTypes } from "../Constants.js";
+import type { AnyGuildTextChannel, RawChannel } from "../types/channels.js";
+import type { RawGuild } from "../types/guilds.js";
+import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions, RawWebhook } from "../types/webhooks.js";
+import type { JSONWebhook } from "../types/json.js";
 /** Represents a webhook. */
 export default class Webhook extends Base {
     private _cachedChannel?;

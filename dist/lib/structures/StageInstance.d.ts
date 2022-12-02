@@ -1,11 +1,11 @@
 /** @module StageInstance */
-import Base from "./Base";
-import type StageChannel from "./StageChannel";
-import type Guild from "./Guild";
-import type Client from "../Client";
-import type { StageInstancePrivacyLevels } from "../Constants";
-import type { JSONStageInstance } from "../types/json";
-import type { RawStageInstance } from "../types/guilds";
+import Base from "./Base.js";
+import type StageChannel from "./StageChannel.js";
+import type Guild from "./Guild.js";
+import type Client from "../Client.js";
+import type { StageInstancePrivacyLevels } from "../Constants.js";
+import type { JSONStageInstance } from "../types/json.js";
+import type { RawStageInstance } from "../types/guilds.js";
 /** Represents a stage instance. */
 export default class StageInstance extends Base {
     private _cachedChannel?;

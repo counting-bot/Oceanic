@@ -1,8 +1,8 @@
 /** @module RequestHandler */
-import SequentialBucket from "./SequentialBucket";
-import type RESTManager from "./RESTManager";
-import type { LatencyRef, RequestHandlerInstanceOptions, RequestOptions } from "../types/request-handler";
-import type { RESTOptions } from "../types/client";
+import SequentialBucket from "./SequentialBucket.js";
+import type RESTManager from "./RESTManager.js";
+import type { LatencyRef, RequestHandlerInstanceOptions, RequestOptions } from "../types/request-handler.js";
+import type { RESTOptions } from "../types/client.js";
 /**
  * Latency & ratelimit related things lovingly borrowed from eris
  * https://github.com/abalabahaha/eris/blob/dev/lib/rest/RequestHandler.js (eb403730855714eafa36c541dbe2cb84c9979158)

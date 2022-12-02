@@ -1,15 +1,15 @@
 /// <reference types="node" />
 /** @module Routes/Guilds */
-import type { CreateEmojiOptions, CreateGuildOptions, EditEmojiOptions, EditGuildOptions, GuildEmoji, ModifyChannelPositionsEntry, GetActiveThreadsResponse, GetMembersOptions, SearchMembersOptions, AddMemberOptions, EditMemberOptions, EditCurrentMemberOptions, GetBansOptions, Ban, CreateBanOptions, CreateRoleOptions, EditRolePositionsEntry, EditRoleOptions, GetPruneCountOptions, BeginPruneOptions, WidgetSettings, RawWidget, Widget, WidgetImageStyle, WelcomeScreen, EditWelcomeScreenOptions, GetVanityURLResponse, CreateChannelReturn, CreateChannelOptions, EditMFALevelOptions, Sticker, CreateStickerOptions, EditStickerOptions } from "../types/guilds";
-import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
-import type { AnyGuildChannelWithoutThreads, InviteChannel, PartialInviteChannel } from "../types/channels";
-import Role from "../structures/Role";
-import Invite from "../structures/Invite";
-import Integration from "../structures/Integration";
-import type RESTManager from "../rest/RESTManager";
-import Guild from "../structures/Guild";
-import type Member from "../structures/Member";
-import type { Uncached } from "../types/shared";
+import type { CreateEmojiOptions, CreateGuildOptions, EditEmojiOptions, EditGuildOptions, GuildEmoji, ModifyChannelPositionsEntry, GetActiveThreadsResponse, GetMembersOptions, SearchMembersOptions, AddMemberOptions, EditMemberOptions, EditCurrentMemberOptions, GetBansOptions, Ban, CreateBanOptions, CreateRoleOptions, EditRolePositionsEntry, EditRoleOptions, GetPruneCountOptions, BeginPruneOptions, WidgetSettings, RawWidget, Widget, WidgetImageStyle, WelcomeScreen, EditWelcomeScreenOptions, GetVanityURLResponse, CreateChannelReturn, CreateChannelOptions, EditMFALevelOptions, Sticker, CreateStickerOptions, EditStickerOptions } from "../types/guilds.js";
+import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants.js";
+import type { AnyGuildChannelWithoutThreads, InviteChannel, PartialInviteChannel } from "../types/channels.js";
+import Role from "../structures/Role.js";
+import Invite from "../structures/Invite.js";
+import Integration from "../structures/Integration.js";
+import type RESTManager from "../rest/RESTManager.js";
+import Guild from "../structures/Guild.js";
+import type Member from "../structures/Member.js";
+import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with guilds. */
 export default class Guilds {
     #private;

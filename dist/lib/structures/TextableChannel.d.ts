@@ -1,22 +1,22 @@
 /** @module TextableChannel */
-import GuildChannel from "./GuildChannel";
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type TextChannel from "./TextChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import Message from "./Message";
-import type Invite from "./Invite";
-import type PublicThreadChannel from "./PublicThreadChannel";
-import type AnnouncementThreadChannel from "./AnnouncementThreadChannel";
-import type CategoryChannel from "./CategoryChannel";
-import type Member from "./Member";
-import Permission from "./Permission";
-import type User from "./User";
-import type Webhook from "./Webhook";
-import type { ThreadAutoArchiveDuration } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
-import type { CreateInviteOptions, CreateMessageOptions, EditGuildChannelOptions, EditMessageOptions, EditPermissionOptions, GetArchivedThreadsOptions, GetChannelMessagesOptions, GetReactionsOptions, RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel, StartThreadFromMessageOptions, StartThreadWithoutMessageOptions, ArchivedThreads, PurgeOptions } from "../types/channels";
-import type { JSONTextableChannel } from "../types/json";
+import GuildChannel from "./GuildChannel.js";
+import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type TextChannel from "./TextChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import Message from "./Message.js";
+import type Invite from "./Invite.js";
+import type PublicThreadChannel from "./PublicThreadChannel.js";
+import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import type Member from "./Member.js";
+import Permission from "./Permission.js";
+import type User from "./User.js";
+import type Webhook from "./Webhook.js";
+import type { ThreadAutoArchiveDuration } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
+import type { CreateInviteOptions, CreateMessageOptions, EditGuildChannelOptions, EditMessageOptions, EditPermissionOptions, GetArchivedThreadsOptions, GetChannelMessagesOptions, GetReactionsOptions, RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel, StartThreadFromMessageOptions, StartThreadWithoutMessageOptions, ArchivedThreads, PurgeOptions } from "../types/channels.js";
+import type { JSONTextableChannel } from "../types/json.js";
 /** Represents a guild textable channel. */
 export default class TextableChannel<T extends TextChannel | AnnouncementChannel = TextChannel | AnnouncementChannel> extends GuildChannel {
     /** The default auto archive duration for threads created in this channel. */

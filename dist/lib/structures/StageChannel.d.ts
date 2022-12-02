@@ -1,15 +1,15 @@
 /** @module StageChannel */
-import GuildChannel from "./GuildChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import type Member from "./Member";
-import type CategoryChannel from "./CategoryChannel";
-import Permission from "./Permission";
-import type Invite from "./Invite";
-import type { ChannelTypes } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
-import type { CreateInviteOptions, EditPermissionOptions, EditStageChannelOptions, InviteInfoTypes, RawOverwrite, RawStageChannel } from "../types/channels";
-import type { JSONStageChannel } from "../types/json";
+import GuildChannel from "./GuildChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import type Member from "./Member.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Permission from "./Permission.js";
+import type Invite from "./Invite.js";
+import type { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
+import type { CreateInviteOptions, EditPermissionOptions, EditStageChannelOptions, InviteInfoTypes, RawOverwrite, RawStageChannel } from "../types/channels.js";
+import type { JSONStageChannel } from "../types/json.js";
 /** Represents a guild stage channel. */
 export default class StageChannel extends GuildChannel {
     /** The bitrate of the stage channel. */

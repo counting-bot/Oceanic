@@ -1,17 +1,17 @@
 /** @module Routes/Channels */
-import type { AddGroupRecipientOptions, AnyChannel, AnyTextChannelWithoutGroup, ArchivedThreads, CreateInviteOptions, CreateMessageOptions, EditChannelOptions, EditMessageOptions, EditPermissionOptions, FollowedChannel, GetChannelMessagesOptions, GetArchivedThreadsOptions, GetReactionsOptions, InviteChannel, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions, GetInviteWithCountsAndExpirationOptions, GetInviteWithCountsOptions, GetInviteWithExpirationOptions, GetInviteWithNoneOptions, InviteInfoTypes, AnyEditableChannel, PartialInviteChannel, PurgeOptions, AnyGuildTextChannel } from "../types/channels";
-import Message from "../structures/Message";
-import type { CreateGroupChannelOptions } from "../types/users";
-import Invite from "../structures/Invite";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
-import type PublicThreadChannel from "../structures/PublicThreadChannel";
-import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type RESTManager from "../rest/RESTManager";
-import type PrivateChannel from "../structures/PrivateChannel";
-import type GroupChannel from "../structures/GroupChannel";
-import type User from "../structures/User";
-import type { Uncached } from "../types/shared";
+import type { AddGroupRecipientOptions, AnyChannel, AnyTextChannelWithoutGroup, ArchivedThreads, CreateInviteOptions, CreateMessageOptions, EditChannelOptions, EditMessageOptions, EditPermissionOptions, FollowedChannel, GetChannelMessagesOptions, GetArchivedThreadsOptions, GetReactionsOptions, InviteChannel, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions, GetInviteWithCountsAndExpirationOptions, GetInviteWithCountsOptions, GetInviteWithExpirationOptions, GetInviteWithNoneOptions, InviteInfoTypes, AnyEditableChannel, PartialInviteChannel, PurgeOptions, AnyGuildTextChannel } from "../types/channels.js";
+import Message from "../structures/Message.js";
+import type { CreateGroupChannelOptions } from "../types/users.js";
+import Invite from "../structures/Invite.js";
+import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel.js";
+import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
+import type PrivateThreadChannel from "../structures/PrivateThreadChannel.js";
+import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type PrivateChannel from "../structures/PrivateChannel.js";
+import type GroupChannel from "../structures/GroupChannel.js";
+import type User from "../structures/User.js";
+import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with channels. */
 export default class Channels {
     #private;

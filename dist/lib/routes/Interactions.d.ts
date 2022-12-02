@@ -1,9 +1,9 @@
 /** @module Routes/Interactions */
-import type { InteractionContent, InteractionResponse } from "../types/interactions";
-import type RESTManager from "../rest/RESTManager";
-import type Message from "../structures/Message";
-import type { AnyTextChannelWithoutGroup } from "../types/channels";
-import type { Uncached } from "../types/shared";
+import type { InteractionContent, InteractionResponse } from "../types/interactions.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type Message from "../structures/Message.js";
+import type { AnyTextChannelWithoutGroup } from "../types/channels.js";
+import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with interactions. */
 export default class Interactions {
     #private;

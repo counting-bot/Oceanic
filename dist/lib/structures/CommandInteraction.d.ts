@@ -1,17 +1,17 @@
 /** @module CommandInteraction */
-import Interaction from "./Interaction";
-import Member from "./Member";
-import Message from "./Message";
-import User from "./User";
-import type Guild from "./Guild";
-import Permission from "./Permission";
-import type PrivateChannel from "./PrivateChannel";
-import type { InteractionTypes } from "../Constants";
-import type { ApplicationCommandInteractionData, InteractionContent, ModalData, RawApplicationCommandInteraction } from "../types/interactions";
-import type Client from "../Client";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
-import type { JSONCommandInteraction } from "../types/json";
-import type { Uncached } from "../types/shared";
+import Interaction from "./Interaction.js";
+import Member from "./Member.js";
+import Message from "./Message.js";
+import User from "./User.js";
+import type Guild from "./Guild.js";
+import Permission from "./Permission.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import type { InteractionTypes } from "../Constants.js";
+import type { ApplicationCommandInteractionData, InteractionContent, ModalData, RawApplicationCommandInteraction } from "../types/interactions.js";
+import type Client from "../Client.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
+import type { JSONCommandInteraction } from "../types/json.js";
+import type { Uncached } from "../types/shared.js";
 /** Represents a command interaction. */
 export default class CommandInteraction<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {
     private _cachedChannel;

@@ -1,6 +1,6 @@
-import type { AnyApplicationCommand, ApplicationCommandOptionConversion, CreateApplicationCommandOptions, EditApplicationCommandOptions, EditApplicationCommandPermissionsOptions, RESTGuildApplicationCommandPermissions, CreateGuildApplicationCommandOptions, EditGuildApplicationCommandOptions, GetApplicationCommandOptions } from "../types/application-commands";
-import ApplicationCommand from "../structures/ApplicationCommand";
-import type RESTManager from "../rest/RESTManager";
+import type { AnyApplicationCommand, ApplicationCommandOptionConversion, CreateApplicationCommandOptions, EditApplicationCommandOptions, EditApplicationCommandPermissionsOptions, RESTGuildApplicationCommandPermissions, CreateGuildApplicationCommandOptions, EditGuildApplicationCommandOptions, GetApplicationCommandOptions } from "../types/application-commands.js";
+import ApplicationCommand from "../structures/ApplicationCommand.js";
+import type RESTManager from "../rest/RESTManager.js";
 /** Various methods for interacting with application commands. */
 export default class ApplicationCommands {
     #private;

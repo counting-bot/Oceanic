@@ -1,23 +1,23 @@
 /** @module Message */
-import Base from "./Base";
-import Attachment from "./Attachment";
-import User from "./User";
-import type Guild from "./Guild";
-import type Member from "./Member";
-import PartialApplication from "./PartialApplication";
-import type ClientApplication from "./ClientApplication";
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type AnnouncementThreadChannel from "./AnnouncementThreadChannel";
-import type PublicThreadChannel from "./PublicThreadChannel";
-import type TextChannel from "./TextChannel";
-import type PrivateChannel from "./PrivateChannel";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
-import { MessageTypes } from "../Constants";
-import type { Uncached } from "../types/shared";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, EditMessageOptions, Embed, GetReactionsOptions, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, MessageActionRow, AnyThreadChannel } from "../types/channels";
-import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks";
-import type { JSONMessage } from "../types/json";
+import Base from "./Base.js";
+import Attachment from "./Attachment.js";
+import User from "./User.js";
+import type Guild from "./Guild.js";
+import type Member from "./Member.js";
+import PartialApplication from "./PartialApplication.js";
+import type ClientApplication from "./ClientApplication.js";
+import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
+import type PublicThreadChannel from "./PublicThreadChannel.js";
+import type TextChannel from "./TextChannel.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
+import { MessageTypes } from "../Constants.js";
+import type { Uncached } from "../types/shared.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, EditMessageOptions, Embed, GetReactionsOptions, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, MessageActionRow, AnyThreadChannel } from "../types/channels.js";
+import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks.js";
+import type { JSONMessage } from "../types/json.js";
 /** Represents a message. */
 export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Base {
     private _cachedChannel;

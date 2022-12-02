@@ -1,10 +1,10 @@
 /** @module Interaction */
-import Base from "./Base";
-import type ClientApplication from "./ClientApplication";
-import type Client from "../Client";
-import type { AnyInteraction, AnyRawInteraction, RawInteraction } from "../types/interactions";
-import { InteractionTypes } from "../Constants";
-import type { JSONInteraction } from "../types/json";
+import Base from "./Base.js";
+import type ClientApplication from "./ClientApplication.js";
+import type Client from "../Client.js";
+import type { AnyInteraction, AnyRawInteraction, RawInteraction } from "../types/interactions.js";
+import { InteractionTypes } from "../Constants.js";
+import type { JSONInteraction } from "../types/json.js";
 /** Represents an interaction. */
 export default class Interaction extends Base {
     /** If this interaction has been acknowledged. */

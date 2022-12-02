@@ -1,26 +1,26 @@
 /// <reference types="node" />
 /** @module Guild */
-import Role from "./Role";
-import Base from "./Base";
-import Member from "./Member";
-import type User from "./User";
-import type ClientApplication from "./ClientApplication";
-import type TextChannel from "./TextChannel";
-import type CategoryChannel from "./CategoryChannel";
-import Integration from "./Integration";
-import Permission from "./Permission";
-import StageInstance from "./StageInstance";
-import type Invite from "./Invite";
-import type Webhook from "./Webhook";
-import type { DefaultMessageNotificationLevels, ExplicitContentFilterLevels, GuildFeature, GuildNSFWLevels, ImageFormat, MFALevels, PremiumTiers, VerificationLevels, GuildChannelTypesWithoutThreads } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
-import type { AnyGuildChannel, AnyGuildChannelWithoutThreads, AnyGuildTextChannel, AnyThreadChannel, InviteChannel, RawGuildChannel, RawThreadChannel } from "../types/channels";
-import type { AddMemberOptions, BeginPruneOptions, CreateBanOptions, CreateChannelOptions, CreateEmojiOptions, CreateRoleOptions, EditCurrentMemberOptions, EditEmojiOptions, EditGuildOptions, EditMemberOptions, EditRoleOptions, EditRolePositionsEntry, EditWelcomeScreenOptions, GetBansOptions, GetMembersOptions, GetPruneCountOptions, GuildEmoji, ModifyChannelPositionsEntry, RawGuild, RawMember, RawRole, SearchMembersOptions, WelcomeScreen, WidgetImageStyle, WidgetSettings, RawIntegration, CreateChannelReturn, Widget, GetActiveThreadsResponse, Ban, GetVanityURLResponse, RawWidget, RawStageInstance, EditMFALevelOptions, RESTMember, CreateStickerOptions, Sticker, EditStickerOptions } from "../types/guilds";
-import type { JSONGuild } from "../types/json";
-import type { RequestGuildMembersOptions } from "../types/gateway";
-import type Shard from "../gateway/Shard";
-import Collection from "../util/Collection";
+import Role from "./Role.js";
+import Base from "./Base.js";
+import Member from "./Member.js";
+import type User from "./User.js";
+import type ClientApplication from "./ClientApplication.js";
+import type TextChannel from "./TextChannel.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Integration from "./Integration.js";
+import Permission from "./Permission.js";
+import StageInstance from "./StageInstance.js";
+import type Invite from "./Invite.js";
+import type Webhook from "./Webhook.js";
+import type { DefaultMessageNotificationLevels, ExplicitContentFilterLevels, GuildFeature, GuildNSFWLevels, ImageFormat, MFALevels, PremiumTiers, VerificationLevels, GuildChannelTypesWithoutThreads } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
+import type { AnyGuildChannel, AnyGuildChannelWithoutThreads, AnyGuildTextChannel, AnyThreadChannel, InviteChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
+import type { AddMemberOptions, BeginPruneOptions, CreateBanOptions, CreateChannelOptions, CreateEmojiOptions, CreateRoleOptions, EditCurrentMemberOptions, EditEmojiOptions, EditGuildOptions, EditMemberOptions, EditRoleOptions, EditRolePositionsEntry, EditWelcomeScreenOptions, GetBansOptions, GetMembersOptions, GetPruneCountOptions, GuildEmoji, ModifyChannelPositionsEntry, RawGuild, RawMember, RawRole, SearchMembersOptions, WelcomeScreen, WidgetImageStyle, WidgetSettings, RawIntegration, CreateChannelReturn, Widget, GetActiveThreadsResponse, Ban, GetVanityURLResponse, RawWidget, RawStageInstance, EditMFALevelOptions, RESTMember, CreateStickerOptions, Sticker, EditStickerOptions } from "../types/guilds.js";
+import type { JSONGuild } from "../types/json.js";
+import type { RequestGuildMembersOptions } from "../types/gateway.js";
+import type Shard from "../gateway/Shard.js";
+import Collection from "../util/Collection.js";
 /** Represents a Discord server. */
 export default class Guild extends Base {
     private _clientMember?;

@@ -1,10 +1,10 @@
 /** @module Routes/Webhooks */
-import type { CreateWebhookOptions, DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, EditWebhookTokenOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions } from "../types/webhooks";
-import type { AnyTextChannelWithoutGroup } from "../types/channels";
-import Webhook from "../structures/Webhook";
-import Message from "../structures/Message";
-import type RESTManager from "../rest/RESTManager";
-import type { Uncached } from "../types/shared";
+import type { CreateWebhookOptions, DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, EditWebhookTokenOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions } from "../types/webhooks.js";
+import type { AnyTextChannelWithoutGroup } from "../types/channels.js";
+import Webhook from "../structures/Webhook.js";
+import Message from "../structures/Message.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with webhooks. */
 export default class Webhooks {
     #private;

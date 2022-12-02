@@ -1,7 +1,7 @@
 /// <reference types="node" />
 /** @module Base */
-import type Client from "../Client";
-import type { JSONBase } from "../types/json";
+import type Client from "../Client.js";
+import type { JSONBase } from "../types/json.js";
 import { inspect } from "node:util";
 /** A base class which most other classes extend. */
 export default abstract class Base {

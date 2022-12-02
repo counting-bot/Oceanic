@@ -1,10 +1,10 @@
 /** @module OAuthHelper */
-import type RESTManager from "./RESTManager";
-import Application from "../structures/Application";
-import type { AuthorizationInformation, Connection, OAuthURLOptions, RevokeTokenOptions } from "../types/oauth";
-import Member from "../structures/Member";
-import OAuthGuild from "../structures/OAuthGuild";
-import ExtendedUser from "../structures/ExtendedUser";
+import type RESTManager from "./RESTManager.js";
+import Application from "../structures/Application.js";
+import type { AuthorizationInformation, Connection, OAuthURLOptions, RevokeTokenOptions } from "../types/oauth.js";
+import Member from "../structures/Member.js";
+import OAuthGuild from "../structures/OAuthGuild.js";
+import ExtendedUser from "../structures/ExtendedUser.js";
 /** A helper to make using authenticated oauth requests without needing a new client instance. */
 export default class OAuthHelper {
     #private;

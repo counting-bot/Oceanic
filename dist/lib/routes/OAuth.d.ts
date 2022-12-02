@@ -1,11 +1,11 @@
 /** @module Routes/OAuth */
-import type { AuthorizationInformation, ClientCredentialsTokenOptions, ClientCredentialsTokenResponse, Connection, ExchangeCodeOptions, ExchangeCodeResponse, OAuthURLOptions, RefreshTokenOptions, RefreshTokenResponse, RevokeTokenOptions, GetCurrentGuildsOptions } from "../types/oauth";
-import Application from "../structures/Application";
-import Member from "../structures/Member";
-import type RESTManager from "../rest/RESTManager";
-import OAuthHelper from "../rest/OAuthHelper";
-import OAuthGuild from "../structures/OAuthGuild";
-import ExtendedUser from "../structures/ExtendedUser";
+import type { AuthorizationInformation, ClientCredentialsTokenOptions, ClientCredentialsTokenResponse, Connection, ExchangeCodeOptions, ExchangeCodeResponse, OAuthURLOptions, RefreshTokenOptions, RefreshTokenResponse, RevokeTokenOptions, GetCurrentGuildsOptions } from "../types/oauth.js";
+import Application from "../structures/Application.js";
+import Member from "../structures/Member.js";
+import type RESTManager from "../rest/RESTManager.js";
+import OAuthHelper from "../rest/OAuthHelper.js";
+import OAuthGuild from "../structures/OAuthGuild.js";
+import ExtendedUser from "../structures/ExtendedUser.js";
 /** Various methods for interacting with oauth. */
 export default class OAuth {
     #private;

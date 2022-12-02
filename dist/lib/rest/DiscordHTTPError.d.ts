@@ -1,6 +1,6 @@
 /** @module DiscordHTTPError */
-import type { RESTMethod } from "../Constants";
-import type { JSONDiscordHTTPError } from "../types/json";
+import type { RESTMethod } from "../Constants.js";
+import type { JSONDiscordHTTPError } from "../types/json.js";
 import type { Headers, Response } from "undici";
 /** An HTTP error received from Discord. */
 export default class DiscordHTTPError extends Error {

@@ -1,8 +1,9 @@
+/** @module Constants */
 export declare const GATEWAY_VERSION = 10;
 export declare const REST_VERSION = 10;
 export declare const BASE_URL = "https://discord.com";
 export declare const API_URL: string;
-export declare const VERSION: string;
+export declare const VERSION = "1.3.1";
 export declare const USER_AGENT: string;
 export declare const MIN_IMAGE_SIZE = 64;
 export declare const MAX_IMAGE_SIZE = 4096;

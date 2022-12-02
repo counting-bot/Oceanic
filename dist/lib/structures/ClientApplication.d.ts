@@ -1,11 +1,11 @@
 /** @module ClientApplication */
-import Base from "./Base";
-import type ApplicationCommand from "./ApplicationCommand";
-import type Client from "../Client";
-import type { RawClientApplication } from "../types/oauth";
-import type { AnyApplicationCommand, ApplicationCommandOptionConversion, CreateApplicationCommandOptions, CreateGuildApplicationCommandOptions, EditApplicationCommandOptions, EditApplicationCommandPermissionsOptions, EditGuildApplicationCommandOptions, GetApplicationCommandOptions, RESTGuildApplicationCommandPermissions } from "../types/application-commands";
-import type { JSONClientApplication } from "../types/json";
-import type { ApplicationCommandTypes } from "../Constants";
+import Base from "./Base.js";
+import type ApplicationCommand from "./ApplicationCommand.js";
+import type Client from "../Client.js";
+import type { RawClientApplication } from "../types/oauth.js";
+import type { AnyApplicationCommand, ApplicationCommandOptionConversion, CreateApplicationCommandOptions, CreateGuildApplicationCommandOptions, EditApplicationCommandOptions, EditApplicationCommandPermissionsOptions, EditGuildApplicationCommandOptions, GetApplicationCommandOptions, RESTGuildApplicationCommandPermissions } from "../types/application-commands.js";
+import type { JSONClientApplication } from "../types/json.js";
+import type { ApplicationCommandTypes } from "../Constants.js";
 /** A representation of the authorized client's application (typically received via gateway). */
 export default class ClientApplication extends Base {
     /** This application's [public flags](https://discord.com/developers/docs/resources/application#application-object-application-flags). */

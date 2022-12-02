@@ -1,11 +1,11 @@
 /// <reference types="node" />
-import type Client from "../Client";
-import TypedEmitter from "../util/TypedEmitter";
-import Bucket from "../rest/Bucket";
-import { GatewayOPCodes } from "../Constants";
-import type { UpdatePresenceOptions, RequestGuildMembersOptions, SendStatuses, BotActivity, ShardStatus } from "../types/gateway";
-import type Member from "../structures/Member";
-import type { ShardEvents } from "../types/events";
+import type Client from "../Client.js";
+import TypedEmitter from "../util/TypedEmitter.js";
+import Bucket from "../rest/Bucket.js";
+import { GatewayOPCodes } from "../Constants.js";
+import type { UpdatePresenceOptions, RequestGuildMembersOptions, SendStatuses, BotActivity, ShardStatus } from "../types/gateway.js";
+import type Member from "../structures/Member.js";
+import type { ShardEvents } from "../types/events.js";
 import WebSocket from "ws";
 import { inspect } from "node:util";
 /** Represents a gateway connection to Discord. See {@link Events~ShardEvents | Shard Events} for a list of events. */

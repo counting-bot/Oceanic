@@ -1,14 +1,14 @@
 /** @module GuildChannel */
-import Channel from "./Channel";
-import type Guild from "./Guild";
-import type CategoryChannel from "./CategoryChannel";
-import type TextChannel from "./TextChannel";
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type ForumChannel from "./ForumChannel";
-import type { GuildChannelTypes } from "../Constants";
-import type Client from "../Client";
-import type { AnyGuildChannel, EditGuildChannelOptions, RawGuildChannel } from "../types/channels";
-import type { JSONGuildChannel } from "../types/json";
+import Channel from "./Channel.js";
+import type Guild from "./Guild.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import type TextChannel from "./TextChannel.js";
+import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type ForumChannel from "./ForumChannel.js";
+import type { GuildChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
+import type { AnyGuildChannel, EditGuildChannelOptions, RawGuildChannel } from "../types/channels.js";
+import type { JSONGuildChannel } from "../types/json.js";
 /** Represents a guild channel. */
 export default class GuildChannel extends Channel {
     private _cachedGuild?;

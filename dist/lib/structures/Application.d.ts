@@ -1,12 +1,12 @@
 /** @module Application */
-import type User from "./User";
-import Team from "./Team";
-import ClientApplication from "./ClientApplication";
-import type Guild from "./Guild";
-import type Client from "../Client";
-import type { InstallParams, RESTApplication } from "../types/oauth";
-import type { ImageFormat } from "../Constants";
-import type { JSONApplication } from "../types/json";
+import type User from "./User.js";
+import Team from "./Team.js";
+import ClientApplication from "./ClientApplication.js";
+import type Guild from "./Guild.js";
+import type Client from "../Client.js";
+import type { InstallParams, RESTApplication } from "../types/oauth.js";
+import type { ImageFormat } from "../Constants.js";
+import type { JSONApplication } from "../types/json.js";
 /** Represents an oauth application. */
 export default class Application extends ClientApplication {
     private _cachedGuild?;

@@ -1,5 +1,5 @@
-import type RESTManager from "../rest/RESTManager";
-import type { Sticker, StickerPack } from "../types/guilds";
+import type RESTManager from "../rest/RESTManager.js";
+import type { Sticker, StickerPack } from "../types/guilds.js";
 /** Methods that don't fit anywhere else. */
 export default class Miscellaneous {
     #private;
