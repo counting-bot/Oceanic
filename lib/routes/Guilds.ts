@@ -42,9 +42,9 @@ import type {
     Sticker,
     CreateStickerOptions,
     EditStickerOptions
-} from "../types/guilds";
-import * as Routes from "../util/Routes";
-import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants";
+} from "../types/guilds.js";
+import * as Routes from "../util/Routes.js";
+import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants.js";
 import type {
     AnyGuildChannelWithoutThreads,
     InviteChannel,
@@ -53,14 +53,14 @@ import type {
     RawInvite,
     RawThreadChannel,
     RawThreadMember
-} from "../types/channels";
-import Role from "../structures/Role";
-import Invite from "../structures/Invite";
-import Integration from "../structures/Integration";
-import type RESTManager from "../rest/RESTManager";
-import Guild from "../structures/Guild";
-import type Member from "../structures/Member";
-import type { Uncached } from "../types/shared";
+} from "../types/channels.js";
+import Role from "../structures/Role.js";
+import Invite from "../structures/Invite.js";
+import Integration from "../structures/Integration.js";
+import type RESTManager from "../rest/RESTManager.js";
+import Guild from "../structures/Guild.js";
+import type Member from "../structures/Member.js";
+import type { Uncached } from "../types/shared.js";
 import { File, FormData } from "undici";
 
 /** Various methods for interacting with guilds. */

@@ -1,17 +1,17 @@
 /** @module VoiceChannel */
-import GuildChannel from "./GuildChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import Message from "./Message";
-import type Member from "./Member";
-import type CategoryChannel from "./CategoryChannel";
-import Permission from "./Permission";
-import type Invite from "./Invite";
-import type User from "./User";
-import type Webhook from "./Webhook";
-import type { ChannelTypes, VideoQualityModes } from "../Constants";
-import { AllPermissions, Permissions } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
+import GuildChannel from "./GuildChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import Message from "./Message.js";
+import type Member from "./Member.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Permission from "./Permission.js";
+import type Invite from "./Invite.js";
+import type User from "./User.js";
+import type Webhook from "./Webhook.js";
+import type { ChannelTypes, VideoQualityModes } from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     CreateInviteOptions,
     CreateMessageOptions,
@@ -24,8 +24,8 @@ import type {
     RawOverwrite,
     RawVoiceChannel,
     PurgeOptions
-} from "../types/channels";
-import type { JSONVoiceChannel } from "../types/json";
+} from "../types/channels.js";
+import type { JSONVoiceChannel } from "../types/json.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
 /** Represents a guild voice channel. */

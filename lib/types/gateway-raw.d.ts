@@ -9,14 +9,14 @@ import type {
     RawStageInstance,
     RawUnavailableGuild,
     RawSticker
-} from "./guilds";
-import type { RawClientApplication, RawPartialApplication } from "./oauth";
-import type { RawExtendedUser, RawUser } from "./users";
-import type { PresenceUpdate, RawDeletedPrivateChannel } from "./gateway";
-import type { RawGuildApplicationCommandPermissions } from "./application-commands";
-import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels";
-import type { RawInteraction } from "./interactions";
-import type { GatewayOPCodes, InviteTargetTypes } from "../Constants";
+} from "./guilds.js";
+import type { RawClientApplication, RawPartialApplication } from "./oauth.js";
+import type { RawExtendedUser, RawUser } from "./users.js";
+import type { PresenceUpdate, RawDeletedPrivateChannel } from "./gateway.js";
+import type { RawGuildApplicationCommandPermissions } from "./application-commands.js";
+import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels.js";
+import type { RawInteraction } from "./interactions.js";
+import type { GatewayOPCodes, InviteTargetTypes } from "../Constants.js";
 
 export type AnyReceivePacket = AnyDispatchPacket | HeartbeatPacket | ReconnectPacket | InvalidSessionPacket | HelloPacket | HeartbeatAckPacket;
 export interface RawPacket {

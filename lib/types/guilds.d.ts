@@ -1,5 +1,5 @@
 /** @module Types/Guilds */
-import type { RawUser } from "./users";
+import type { RawUser } from "./users.js";
 import type {
     AnyThreadChannel,
     OverwriteOptions,
@@ -9,9 +9,9 @@ import type {
     ThreadMember,
     ForumEmoji,
     ForumTag
-} from "./channels";
-import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway";
-import { File } from "./request-handler";
+} from "./channels.js";
+import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway.js";
+import { File } from "./request-handler.js";
 import type {
     ChannelTypes,
     DefaultMessageNotificationLevels,
@@ -30,14 +30,14 @@ import type {
     VerificationLevels,
     VideoQualityModes,
     SortOrderTypes
-} from "../Constants";
-import type User from "../structures/User";
-import type Integration from "../structures/Integration";
-import type TextChannel from "../structures/TextChannel";
-import type VoiceChannel from "../structures/VoiceChannel";
-import type CategoryChannel from "../structures/CategoryChannel";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type StageChannel from "../structures/StageChannel";
+} from "../Constants.js";
+import type User from "../structures/User.js";
+import type Integration from "../structures/Integration.js";
+import type TextChannel from "../structures/TextChannel.js";
+import type VoiceChannel from "../structures/VoiceChannel.js";
+import type CategoryChannel from "../structures/CategoryChannel.js";
+import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
+import type StageChannel from "../structures/StageChannel.js";
 
 // channels, joined_at, large, member_count, members, presences,
 // stage_instances, threads, unavailable - all gateway only

@@ -1,6 +1,6 @@
 /** @module Types/Gateway */
-import type { RawUser } from "./users";
-import type { ActivityTypes, ChannelTypes, IntentNames } from "../Constants";
+import type { RawUser } from "./users.js";
+import type { ActivityTypes, ChannelTypes, IntentNames } from "../Constants.js";
 import type { ClientOptions as WSClientOptions } from "ws";
 
 export type ReconnectDelayFunction = (lastDelay: number, attempts: number) => number;

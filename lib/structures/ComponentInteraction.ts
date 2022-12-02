@@ -1,15 +1,15 @@
 /** @module ComponentInteraction */
-import Interaction from "./Interaction";
-import Message from "./Message";
-import type Guild from "./Guild";
-import Member from "./Member";
-import Permission from "./Permission";
-import GuildChannel from "./GuildChannel";
-import type PrivateChannel from "./PrivateChannel";
-import Role from "./Role";
-import User from "./User";
-import InteractionResolvedChannel from "./InteractionResolvedChannel";
-import type Client from "../Client";
+import Interaction from "./Interaction.js";
+import Message from "./Message.js";
+import type Guild from "./Guild.js";
+import Member from "./Member.js";
+import Permission from "./Permission.js";
+import GuildChannel from "./GuildChannel.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import Role from "./Role.js";
+import User from "./User.js";
+import InteractionResolvedChannel from "./InteractionResolvedChannel.js";
+import type Client from "../Client.js";
 import type {
     InteractionContent,
     MessageComponentButtonInteractionData,
@@ -17,16 +17,16 @@ import type {
     MessageComponentSelectMenuInteractionData,
     ModalData,
     RawMessageComponentInteraction
-} from "../types/interactions";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
-import type { JSONComponentInteraction } from "../types/json";
-import type { Uncached } from "../types/shared";
-import type { RawUser } from "../types/users";
-import type { RawMember } from "../types/guilds";
-import type { InteractionTypes } from "../Constants";
-import { ComponentTypes, InteractionResponseTypes, SelectMenuTypes } from "../Constants";
-import SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper";
-import TypedCollection from "../util/TypedCollection";
+} from "../types/interactions.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
+import type { JSONComponentInteraction } from "../types/json.js";
+import type { Uncached } from "../types/shared.js";
+import type { RawUser } from "../types/users.js";
+import type { RawMember } from "../types/guilds.js";
+import type { InteractionTypes } from "../Constants.js";
+import { ComponentTypes, InteractionResponseTypes, SelectMenuTypes } from "../Constants.js";
+import SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper.js";
+import TypedCollection from "../util/TypedCollection.js";
 
 /** Represents a component interaction. */
 export default class ComponentInteraction<V extends ComponentTypes.BUTTON | SelectMenuTypes = ComponentTypes.BUTTON | SelectMenuTypes, T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {

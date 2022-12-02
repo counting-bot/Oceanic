@@ -1,9 +1,9 @@
 /** @module Types/Channels */
-import type { PartialEmoji, PartialGuild, RawMember } from "./guilds";
-import type { RawApplication, RawPartialApplication } from "./oauth";
-import type { RawUser, RawUserWithMember } from "./users";
-import type { File } from "./request-handler";
-import { type  Uncached } from "./shared";
+import type { PartialEmoji, PartialGuild, RawMember } from "./guilds.js";
+import type { RawApplication, RawPartialApplication } from "./oauth.js";
+import type { RawUser, RawUserWithMember } from "./users.js";
+import type { File } from "./request-handler.js";
+import { type  Uncached } from "./shared.js";
 import type {
     ButtonStyles,
     ChannelTypes,
@@ -21,23 +21,23 @@ import type {
     ThreadAutoArchiveDuration,
     ThreadChannelTypes,
     VideoQualityModes
-} from "../Constants";
-import type CategoryChannel from "../structures/CategoryChannel";
-import type GroupChannel from "../structures/GroupChannel";
-import type Member from "../structures/Member";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
-import type PrivateChannel from "../structures/PrivateChannel";
-import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import type PublicThreadChannel from "../structures/PublicThreadChannel";
-import type StageChannel from "../structures/StageChannel";
-import type TextChannel from "../structures/TextChannel";
-import type User from "../structures/User";
-import type VoiceChannel from "../structures/VoiceChannel";
-import type ForumChannel from "../structures/ForumChannel";
-import type Message from "../structures/Message";
-import Guild from "../structures/Guild";
-import Invite from "../structures/Invite";
+} from "../Constants.js";
+import type CategoryChannel from "../structures/CategoryChannel.js";
+import type GroupChannel from "../structures/GroupChannel.js";
+import type Member from "../structures/Member.js";
+import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
+import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel.js";
+import type PrivateChannel from "../structures/PrivateChannel.js";
+import type PrivateThreadChannel from "../structures/PrivateThreadChannel.js";
+import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
+import type StageChannel from "../structures/StageChannel.js";
+import type TextChannel from "../structures/TextChannel.js";
+import type User from "../structures/User.js";
+import type VoiceChannel from "../structures/VoiceChannel.js";
+import type ForumChannel from "../structures/ForumChannel.js";
+import type Message from "../structures/Message.js";
+import Guild from "../structures/Guild.js";
+import Invite from "../structures/Invite.js";
 
 export interface RawChannel {
     application_id?: string;

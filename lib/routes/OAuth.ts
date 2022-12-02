@@ -17,19 +17,19 @@ import type {
     RESTApplication,
     RevokeTokenOptions,
     GetCurrentGuildsOptions
-} from "../types/oauth";
-import type { RawOAuthGuild, RESTMember } from "../types/guilds";
-import * as Routes from "../util/Routes";
-import Application from "../structures/Application";
-import PartialApplication from "../structures/PartialApplication";
-import Member from "../structures/Member";
-import Webhook from "../structures/Webhook";
-import Integration from "../structures/Integration";
-import type RESTManager from "../rest/RESTManager";
-import OAuthHelper from "../rest/OAuthHelper";
-import OAuthGuild from "../structures/OAuthGuild";
-import ExtendedUser from "../structures/ExtendedUser";
-import type { RawOAuthUser } from "../types";
+} from "../types/oauth.js";
+import type { RawOAuthGuild, RESTMember } from "../types/guilds.js";
+import * as Routes from "../util/Routes.js";
+import Application from "../structures/Application.js";
+import PartialApplication from "../structures/PartialApplication.js";
+import Member from "../structures/Member.js";
+import Webhook from "../structures/Webhook.js";
+import Integration from "../structures/Integration.js";
+import type RESTManager from "../rest/RESTManager.js";
+import OAuthHelper from "../rest/OAuthHelper.js";
+import OAuthGuild from "../structures/OAuthGuild.js";
+import ExtendedUser from "../structures/ExtendedUser.js";
+import type { RawOAuthUser } from "../types/users.js";
 import { FormData } from "undici";
 
 /** Various methods for interacting with oauth. */

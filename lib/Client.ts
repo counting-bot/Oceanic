@@ -1,31 +1,23 @@
 /** @module Client */
-import { GATEWAY_VERSION } from "./Constants";
-import RESTManager from "./rest/RESTManager";
-import TypedCollection from "./util/TypedCollection";
-import PrivateChannel from "./structures/PrivateChannel";
-import GroupChannel from "./structures/GroupChannel";
-import User from "./structures/User";
-import Guild from "./structures/Guild";
-import type { AnyChannel, RawGroupChannel, RawPrivateChannel } from "./types/channels";
-import type { RawGuild, RawUnavailableGuild } from "./types/guilds";
-import type { RawUser } from "./types/users";
-import type {  ClientInstanceOptions, ClientOptions } from "./types/client";
-import TypedEmitter from "./util/TypedEmitter";
-import type ClientApplication from "./structures/ClientApplication";
-import ShardManager from "./gateway/ShardManager";
-import type { BotActivity, GetBotGatewayResponse, SendStatuses } from "./types/gateway";
-import UnavailableGuild from "./structures/UnavailableGuild";
-import type ExtendedUser from "./structures/ExtendedUser";
-import Util from "./util/Util";
-import type { ClientEvents } from "./types/events";
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-let Erlpack: typeof import("erlpack") | undefined;
-try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, unicorn/prefer-module
-    Erlpack = require("erlpack");
-} catch {}
+import { GATEWAY_VERSION } from "./Constants.js";
+import RESTManager from "./rest/RESTManager.js";
+import TypedCollection from "./util/TypedCollection.js";
+import PrivateChannel from "./structures/PrivateChannel.js";
+import GroupChannel from "./structures/GroupChannel.js";
+import User from "./structures/User.js";
+import Guild from "./structures/Guild.js";
+import type { AnyChannel, RawGroupChannel, RawPrivateChannel } from "./types/channels.js";
+import type { RawGuild, RawUnavailableGuild } from "./types/guilds.js";
+import type { RawUser } from "./types/users.js";
+import type {  ClientInstanceOptions, ClientOptions } from "./types/client.js";
+import TypedEmitter from "./util/TypedEmitter.js";
+import type ClientApplication from "./structures/ClientApplication.js";
+import ShardManager from "./gateway/ShardManager.js";
+import type { BotActivity, GetBotGatewayResponse, SendStatuses } from "./types/gateway.js";
+import UnavailableGuild from "./structures/UnavailableGuild.js";
+import type ExtendedUser from "./structures/ExtendedUser.js";
+import Util from "./util/Util.js";
+import type { ClientEvents } from "./types/events.js";
 
 /** The primary class for interfacing with Discord. See {@link Events~ClientEvents | Client Events} for a list of events. */
 export default class Client extends TypedEmitter<ClientEvents> {
@@ -130,7 +122,7 @@ export default class Client extends TypedEmitter<ClientEvents> {
         if (!url.endsWith("/")) {
             url += "/";
         }
-        this.gatewayURL = `${url}?v=${GATEWAY_VERSION}&encoding=${Erlpack ? "etf" : "json"}`;
+        this.gatewayURL = `${url}?v=${GATEWAY_VERSION}&encoding=json`;
         if (this.shards.options.compress) {
             this.gatewayURL += "&compress=zlib-stream";
         }

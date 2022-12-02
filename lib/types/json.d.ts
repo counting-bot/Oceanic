@@ -1,14 +1,14 @@
 /** @module Types/JSON */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import type { InstallParams, TeamMember } from "./oauth";
-import type { ApplicationCommandOptions, LocaleMap } from "./application-commands";
+import type { InstallParams, TeamMember } from "./oauth.js";
+import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
 import type {
     ApplicationCommandInteractionData,
     AutocompleteInteractionData,
     MessageComponentButtonInteractionData,
     MessageComponentSelectMenuInteractionData,
     ModalSubmitInteractionData
-} from "./interactions";
+} from "./interactions.js";
 import type {
     GuildEmoji,
     IntegrationAccount,
@@ -17,7 +17,7 @@ import type {
     WelcomeScreen,
     Sticker,
     Presence
-} from "./guilds";
+} from "./guilds.js";
 import type {
     ChannelMention,
     MessageActivity,
@@ -31,7 +31,7 @@ import type {
     ForumEmoji,
     MessageActionRow,
     Embed
-} from "./channels";
+} from "./channels.js";
 import type {
     ApplicationCommandTypes,
     ChannelTypes,
@@ -58,7 +58,7 @@ import type {
     WebhookTypes,
     SortOrderTypes,
     StageInstancePrivacyLevels
-} from "../Constants";
+} from "../Constants.js";
 
 export interface JSONAnnouncementChannel extends JSONTextableChannel {
     rateLimitPerUser: 0;

@@ -1,18 +1,18 @@
 /** @module Member */
-import Base from "./Base";
-import type User from "./User";
-import type Guild from "./Guild";
-import type Permission from "./Permission";
-import type { ImageFormat } from "../Constants";
-import type Client from "../Client";
+import Base from "./Base.js";
+import type User from "./User.js";
+import type Guild from "./Guild.js";
+import type Permission from "./Permission.js";
+import type { ImageFormat } from "../Constants.js";
+import type Client from "../Client.js";
 import type {
     CreateBanOptions,
     EditMemberOptions,
     RawMember,
     RESTMember,
     Presence
-} from "../types/guilds";
-import type { JSONMember } from "../types/json";
+} from "../types/guilds.js";
+import type { JSONMember } from "../types/json.js";
 
 /** Represents a member of a guild. */
 export default class Member extends Base {

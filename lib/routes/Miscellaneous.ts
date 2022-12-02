@@ -1,7 +1,7 @@
 /** @module Routes/Miscellaneous */
-import * as Routes from "../util/Routes";
-import type RESTManager from "../rest/RESTManager";
-import type { RawSticker, RawStickerPack, Sticker, StickerPack } from "../types/guilds";
+import * as Routes from "../util/Routes.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type { RawSticker, RawStickerPack, Sticker, StickerPack } from "../types/guilds.js";
 
 /** Methods that don't fit anywhere else. */
 export default class Miscellaneous {

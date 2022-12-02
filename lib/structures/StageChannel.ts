@@ -1,14 +1,14 @@
 /** @module StageChannel */
-import GuildChannel from "./GuildChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import type Member from "./Member";
-import type CategoryChannel from "./CategoryChannel";
-import Permission from "./Permission";
-import type Invite from "./Invite";
-import type { ChannelTypes } from "../Constants";
-import { AllPermissions, Permissions } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
+import GuildChannel from "./GuildChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import type Member from "./Member.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Permission from "./Permission.js";
+import type Invite from "./Invite.js";
+import type { ChannelTypes } from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     CreateInviteOptions,
     EditPermissionOptions,
@@ -16,8 +16,8 @@ import type {
     InviteInfoTypes,
     RawOverwrite,
     RawStageChannel
-} from "../types/channels";
-import type { JSONStageChannel } from "../types/json";
+} from "../types/channels.js";
+import type { JSONStageChannel } from "../types/json.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 

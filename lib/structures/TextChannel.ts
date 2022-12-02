@@ -1,11 +1,11 @@
 /** @module TextChannel */
-import TextableChannel from "./TextableChannel";
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type PublicThreadChannel from "./PublicThreadChannel";
-import type PrivateThreadChannel from "./PrivateThreadChannel";
-import ThreadChannel from "./ThreadChannel";
-import type { ChannelTypes } from "../Constants";
-import type Client from "../Client";
+import TextableChannel from "./TextableChannel.js";
+import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type PublicThreadChannel from "./PublicThreadChannel.js";
+import type PrivateThreadChannel from "./PrivateThreadChannel.js";
+import ThreadChannel from "./ThreadChannel.js";
+import type { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
 import type {
     ArchivedThreads,
     EditTextChannelOptions,
@@ -14,9 +14,9 @@ import type {
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
     RawTextChannel
-} from "../types/channels";
-import type { JSONTextChannel } from "../types/json";
-import TypedCollection from "../util/TypedCollection";
+} from "../types/channels.js";
+import type { JSONTextChannel } from "../types/json.js";
+import TypedCollection from "../util/TypedCollection.js";
 
 /** Represents a guild text channel. */
 export default class TextChannel extends TextableChannel<TextChannel> {

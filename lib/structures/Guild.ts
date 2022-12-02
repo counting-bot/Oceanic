@@ -1,19 +1,19 @@
 /** @module Guild */
-import Role from "./Role";
-import Base from "./Base";
-import GuildChannel from "./GuildChannel";
-import Member from "./Member";
-import ThreadChannel from "./ThreadChannel";
-import type User from "./User";
-import type ClientApplication from "./ClientApplication";
-import type TextChannel from "./TextChannel";
-import type CategoryChannel from "./CategoryChannel";
-import Integration from "./Integration";
-import Permission from "./Permission";
-import StageInstance from "./StageInstance";
-import Channel from "./Channel";
-import type Invite from "./Invite";
-import type Webhook from "./Webhook";
+import Role from "./Role.js";
+import Base from "./Base.js";
+import GuildChannel from "./GuildChannel.js";
+import Member from "./Member.js";
+import ThreadChannel from "./ThreadChannel.js";
+import type User from "./User.js";
+import type ClientApplication from "./ClientApplication.js";
+import type TextChannel from "./TextChannel.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Integration from "./Integration.js";
+import Permission from "./Permission.js";
+import StageInstance from "./StageInstance.js";
+import Channel from "./Channel.js";
+import type Invite from "./Invite.js";
+import type Webhook from "./Webhook.js";
 import type {
     DefaultMessageNotificationLevels,
     ExplicitContentFilterLevels,
@@ -24,11 +24,11 @@ import type {
     PremiumTiers,
     VerificationLevels,
     GuildChannelTypesWithoutThreads
-} from "../Constants";
-import { AllPermissions, Permissions } from "../Constants";
-import * as Routes from "../util/Routes";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
+} from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
+import * as Routes from "../util/Routes.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     AnyGuildChannel,
     AnyGuildChannelWithoutThreads,
@@ -37,7 +37,7 @@ import type {
     InviteChannel,
     RawGuildChannel,
     RawThreadChannel
-} from "../types/channels";
+} from "../types/channels.js";
 import type {
     AddMemberOptions,
     BeginPruneOptions,
@@ -77,13 +77,13 @@ import type {
     CreateStickerOptions,
     Sticker,
     EditStickerOptions
-} from "../types/guilds";
-import type { JSONGuild } from "../types/json";
-import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway";
-import type Shard from "../gateway/Shard";
+} from "../types/guilds.js";
+import type { JSONGuild } from "../types/json.js";
+import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway.js";
+import type Shard from "../gateway/Shard.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-line
-import Collection from "../util/Collection";
+import Collection from "../util/Collection.js";
 
 /** Represents a Discord server. */
 export default class Guild extends Base {
