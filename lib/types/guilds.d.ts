@@ -23,7 +23,6 @@ import type {
     IntegrationType,
     MFALevels,
     PremiumTiers,
-    StageInstancePrivacyLevels,
     StickerFormatTypes,
     StickerTypes,
     ThreadAutoArchiveDuration,
@@ -32,25 +31,15 @@ import type {
     SortOrderTypes,
     ForumLayoutTypes
 } from "../Constants";
-import type User from "../structures/User";
-import type Integration from "../structures/Integration";
-import type TextChannel from "../structures/TextChannel";
-import type VoiceChannel from "../structures/VoiceChannel";
-import type CategoryChannel from "../structures/CategoryChannel";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type StageChannel from "../structures/StageChannel";
-    SortOrderTypes
-} from "../Constants.js";
 import type User from "../structures/User.js";
 import type Integration from "../structures/Integration.js";
 import type TextChannel from "../structures/TextChannel.js";
 import type VoiceChannel from "../structures/VoiceChannel.js";
 import type CategoryChannel from "../structures/CategoryChannel.js";
 import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
-import type StageChannel from "../structures/StageChannel.js";
 
 // channels, joined_at, large, member_count, members, presences,
-// stage_instances, threads, unavailable - all gateway only
+// threads, unavailable - all gateway only
 export interface RawGuild {
     afk_channel_id: string | null;
     afk_timeout: number;
@@ -72,7 +61,6 @@ export interface RawGuild {
     large: boolean;
     max_members?: number;
     max_presences?: number;
-    max_stage_video_channel_users?: number;
     max_video_channel_users?: number;
     member_count: number;
     members: Array<RawMember>;
@@ -92,7 +80,6 @@ export interface RawGuild {
     roles: Array<RawRole>;
     rules_channel_id: string | null;
     splash: string | null;
-    stage_instances: Array<RawStageInstance>;
     stickers?: Array<RawSticker>;
     system_channel_flags: number;
     system_channel_id: string | null;
@@ -348,8 +335,6 @@ export interface EditGuildOptions {
 export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads = GuildChannelTypesWithoutThreads> {
     /** [Forum] The {@link Types/Channels.ForumTag | tags} available in the channel. */
     availableTags?: Array<Omit<ForumTag, "id">> | null;
-    /** [Stage, Voice] The bitrate of the channel. Minimum 8000. */
-    bitrate?: number | null;
     /** [Announcement, Text] The default auto archive duration for the channel. */
     defaultAutoArchiveDuration?: ThreadAutoArchiveDuration | null;
     /** [Forum] The default forum layout used to display threads. */
@@ -372,8 +357,6 @@ export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads 
     rateLimitPerUser?: number | null;
     /** The reason for creating the channel. */
     reason?: string;
-    /** [Stage, Voice] The voice region for the channel. */
-    rtcRegion?: string | null;
     /** [Announcement, Forum, Text, Voice] The topic of the channel. In forum channels, this is the `Guidelines` section. */
     topic?: string | null;
     /** The [type](https://discord.com/developers/docs/resources/channel#channel-object-channel-types) of channel to create. */
@@ -388,15 +371,13 @@ export type CreateTextChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GU
 export type CreateVoiceChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_VOICE>, "defaultAutoArchiveDuration" | "topic">;
 export type CreateCategoryChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_CATEGORY>, "defaultAutoArchiveDuration" | "nsfw" | "parentID" | "rtcRegion" | "topic" | "userLimit" | "videoQualityMode">;
 export type CreateAnnouncementChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_ANNOUNCEMENT>, "rtcRegion" | "userLimit" | "videoQualityMode">;
-export type CreateStageChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_STAGE_VOICE>, "defaultAutoArchiveDuration" | "nsfw" | "rtcRegion" | "topic" | "userLimit" | "videoQualityMode">;
 
 export type CreateChannelReturn<T extends GuildChannelTypesWithoutThreads> =
     T extends ChannelTypes.GUILD_TEXT ? TextChannel :
         T extends ChannelTypes.GUILD_VOICE ? VoiceChannel :
             T extends ChannelTypes.GUILD_CATEGORY ? CategoryChannel :
                 T extends ChannelTypes.GUILD_ANNOUNCEMENT ? AnnouncementChannel :
-                    T extends ChannelTypes.GUILD_STAGE_VOICE ? StageChannel :
-                        never;
+                    never;
 
 export interface CreateRoleOptions {
     /** The color of the role. */

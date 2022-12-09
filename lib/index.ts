@@ -2,8 +2,6 @@ export * from "./types/index.js";
 // Channel and Interaction MUST be at the top due to circular imports
 export { default as Channel } from "./structures/Channel.js";
 export { default as Interaction } from "./structures/Interaction.js";
-export { default as AnnouncementChannel } from "./structures/AnnouncementChannel.js";
-export { default as AnnouncementThreadChannel } from "./structures/AnnouncementThreadChannel.js";
 export { default as Application } from "./structures/Application.js";
 export { default as ApplicationCommand } from "./structures/ApplicationCommand.js";
 export { default as Attachment } from "./structures/Attachment.js";
@@ -51,8 +49,6 @@ export { default as SelectMenuValuesWrapper } from "./util/SelectMenuValuesWrapp
 export { default as SequentialBucket } from "./rest/SequentialBucket.js";
 export { default as Shard } from "./gateway/Shard.js";
 export { default as ShardManager } from "./gateway/ShardManager.js";
-export { default as StageChannel } from "./structures/StageChannel.js";
-export { default as StageInstance } from "./structures/StageInstance.js";
 export { default as Team } from "./structures/Team.js";
 export { default as TextableChannel } from "./structures/TextableChannel.js";
 export { default as TextChannel } from "./structures/TextChannel.js";

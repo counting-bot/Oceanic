@@ -1,6 +1,5 @@
 /** @module TextChannel */
 import TextableChannel from "./TextableChannel.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
 import type PublicThreadChannel from "./PublicThreadChannel.js";
 import type PrivateThreadChannel from "./PrivateThreadChannel.js";
 import ThreadChannel from "./ThreadChannel.js";
@@ -28,12 +27,6 @@ export default class TextChannel extends TextableChannel<TextChannel> {
         this.threads = new TypedCollection(ThreadChannel, client) as TypedCollection<string, RawPublicThreadChannel | RawPrivateThreadChannel, PublicThreadChannel | PrivateThreadChannel>;
     }
 
-    /**
-     * Convert this text channel to a announcement channel.
-     */
-    override async convert(): Promise<AnnouncementChannel> {
-        return super.convert() as Promise<AnnouncementChannel>;
-    }
 
     /**
      * Edit this channel.

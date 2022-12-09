@@ -6,7 +6,6 @@ import type {
     RawIntegration,
     RawMember,
     RawRole,
-    RawStageInstance,
     RawUnavailableGuild,
     RawSticker
 } from "./guilds.js";
@@ -427,21 +426,6 @@ export interface InteractionCreatePacket extends BaseDispatchPacket {
     t: "INTERACTION_CREATE";
 }
 
-export interface StageInstanceCreatePacket extends BaseDispatchPacket {
-    d: RawStageInstance;
-    t: "STAGE_INSTANCE_CREATE";
-}
-
-export interface StageInstanceDeletePacket extends BaseDispatchPacket {
-    d: RawStageInstance;
-    t: "STAGE_INSTANCE_DELETE";
-}
-
-export interface StageInstanceUpdatePacket extends BaseDispatchPacket {
-    d: RawStageInstance;
-    t: "STAGE_INSTANCE_UPDATE";
-}
-
 export type AnyDispatchPacket = PresenceUpdatePacket | ReadyPacket | ResumedPacket |
 GuildCreatePacket | GuildDeletePacket | GuildUpdatePacket | ApplicationCommandPermissionsUpdatePacket |
 ChannelCreatePacket | ChannelDeletePacket | ChannelUpdatePacket | ChannelPinsUpdatePacket |
@@ -452,4 +436,4 @@ GuildRoleCreatePacket | GuildRoleDeletePacket | GuildRoleUpdatePacket |
 IntegrationCreatePacket | IntegrationDeletePacket | IntegrationUpdatePacket |
 InviteCreatePacket | InviteDeletePacket |
 MessageCreatePacket | MessageDeletePacket | MessageDeleteBulkPacket | MessageUpdatePacket | MessageReactionAddPacket | MessageReactionRemovePacket | MessageReactionRemoveAllPacket | MessageReactionRemoveEmojiPacket |
-TypingStartPacket | UserUpdatePacket | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket | StageInstanceCreatePacket | StageInstanceDeletePacket | StageInstanceUpdatePacket;
+TypingStartPacket | UserUpdatePacket | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket;

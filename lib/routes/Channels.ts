@@ -19,7 +19,6 @@ import type {
     RawFollowedChannel,
     RawInvite,
     RawMessage,
-    RawAnnouncementThreadChannel,
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
     ThreadMember,
@@ -659,7 +658,7 @@ export default class Channels {
      * @param options The options for getting the archived threads.
      */
     async getPublicArchivedThreads<T extends AnnouncementThreadChannel | PublicThreadChannel = AnnouncementThreadChannel | PublicThreadChannel>(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T>> {
-        return this.#manager.authRequest<RawArchivedThreads<RawAnnouncementThreadChannel | RawPublicThreadChannel>>({
+        return this.#manager.authRequest<RawArchivedThreads<RawPublicThreadChannel>>({
             method: "GET",
             path:   Routes.CHANNEL_PUBLIC_ARCHIVED_THREADS(channelID),
             json:   {

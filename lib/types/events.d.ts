@@ -16,8 +16,6 @@ import type { AnyDispatchPacket } from "./gateway-raw.js";
 import type { DeletedPrivateChannel } from "./gateway.js";
 import type { Uncached } from "./shared.js";
 import type {
-    JSONAnnouncementChannel,
-    JSONAnnouncementThreadChannel,
     JSONCategoryChannel,
     JSONForumChannel,
     JSONGuild,
@@ -27,8 +25,6 @@ import type {
     JSONPrivateThreadChannel,
     JSONPublicThreadChannel,
     JSONRole,
-    JSONStageChannel,
-    JSONStageInstance,
     JSONTextChannel,
     JSONUser,
     JSONVoiceChannel
@@ -44,14 +40,11 @@ import type {
 import type { AnyInteractionGateway } from "./interactions.js";
 import type Guild from "../structures/Guild.js";
 import type UnavailableGuild from "../structures/UnavailableGuild.js";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel.js";
 import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
 import type PrivateThreadChannel from "../structures/PrivateThreadChannel.js";
 import type TextChannel from "../structures/TextChannel.js";
 import type VoiceChannel from "../structures/VoiceChannel.js";
 import type CategoryChannel from "../structures/CategoryChannel.js";
-import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
-import type StageChannel from "../structures/StageChannel.js";
 import type User from "../structures/User.js";
 import type Member from "../structures/Member.js";
 import type Role from "../structures/Role.js";
@@ -59,7 +52,6 @@ import type Integration from "../structures/Integration.js";
 import type Invite from "../structures/Invite.js";
 import type Message from "../structures/Message.js";
 import type PrivateChannel from "../structures/PrivateChannel.js";
-import type StageInstance from "../structures/StageInstance.js";
 import ForumChannel from "../structures/ForumChannel.js";
 
 
@@ -73,7 +65,7 @@ export interface ClientEvents {
     /** @event Emitted when a channel's pins are updated (message pinned, message unpinned). Requires the `GUILDS` intent for guild channels, and `DIRECT_MESSAGES` for direct messages. */
     channelPinsUpdate: [channel: AnyTextChannelWithoutGroup | Uncached, timestamp: Date | null];
     /** @event Emitted when a channel is updated. Requires the `GUILDS` intent. */
-    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: VoiceChannel, oldChannel: JSONVoiceChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: AnnouncementChannel, oldChannel: JSONAnnouncementChannel | null] | [channel: StageChannel, oldChannel: JSONStageChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
+    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: VoiceChannel, oldChannel: JSONVoiceChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
     /** @event Emitted when a shard connects. */
     connect: [id: number];
     /** @event Emitted with various information for debugging. */
@@ -162,12 +154,6 @@ export interface ClientEvents {
     shardReady: [id: number];
     /** @event Emitted when a shard resumes a connection. */
     shardResume: [id: number];
-    /** @event Emitted when a stage instance is created. */
-    stageInstanceCreate: [instance: StageInstance];
-    /** @event Emitted when a stage instance is deleted. */
-    stageInstanceDelete: [instance: StageInstance];
-    /** @event Emitted when a stage instance is updated. */
-    stageInstanceUpdate: [instance: StageInstance, oldInstance: JSONStageInstance | null];
     /** @event Emitted when a thread is created. Requires the `GUILDS` intent. */
     threadCreate: [thread: AnyThreadChannel];
     /** @event Emitted when a thread is deleted. Requires the `GUILDS` intent. */
@@ -179,7 +165,7 @@ export interface ClientEvents {
     /** @event Emitted when the members of a thread are updated. Requires the `GUILDS` intent. The received information will be different if `GUILD_MEMBERS` is also used. */
     threadMembersUpdate: [thread: MinimalPossiblyUncachedThread, addedMembers: Array<ThreadMember>, removedMembers: Array<ThreadMember | UncachedThreadMember>];
     /** @event Emitted when a thread is updated. Requires the `GUILDS` intent. */
-    threadUpdate: [thread: AnnouncementThreadChannel, oldThread: JSONAnnouncementThreadChannel | null] | [thread: PublicThreadChannel, oldThread: JSONPublicThreadChannel | null] | [thread: PrivateThreadChannel, oldThread: JSONPrivateThreadChannel | null];
+    threadUpdate: [thread: PublicThreadChannel, oldThread: JSONPublicThreadChannel | null] | [thread: PrivateThreadChannel, oldThread: JSONPrivateThreadChannel | null];
     /** @event Emitted when a user starts typing. Requires the `GUILD_MESSAGE_TYPING` for guilds, and `DIRECT_MESSAGE_TYPING` for direct messages. */
     typingStart: [channel: PrivateChannel | Uncached, user: User | Uncached, startTimestamp: Date] | [channel: AnyGuildTextChannel | Uncached, member: Member, startTimestamp: Date];
     /** @event Emitted when a guild is created, but is unavailable. Requires the `GUILDS` intent.*/

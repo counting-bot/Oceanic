@@ -1,6 +1,6 @@
 /** @module TextableChannel */
 import GuildChannel from "./GuildChannel.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type AnnouncementChannel from "./AnnouncementChannel";
 import type TextChannel from "./TextChannel.js";
 import PermissionOverwrite from "./PermissionOverwrite.js";
 import Message from "./Message.js";

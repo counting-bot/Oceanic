@@ -57,7 +57,6 @@ import type {
     VideoQualityModes,
     WebhookTypes,
     SortOrderTypes,
-    StageInstancePrivacyLevels,
     ForumLayoutTypes
 } from "../Constants.js";
 
@@ -235,7 +234,6 @@ export interface JSONGuild extends JSONBase {
     large: boolean;
     maxMembers?: number;
     maxPresences?: number;
-    maxStageVideoChannelUsers?: number;
     maxVideoChannelUsers?: number;
     memberCount: number;
     members: Array<string>;
@@ -252,7 +250,6 @@ export interface JSONGuild extends JSONBase {
     roles: Array<JSONRole>;
     rulesChannelID: string | null;
     splash: string | null;
-    stageInstances: Array<JSONStageInstance>;
     stickers?: Array<Sticker>;
     systemChannelFlags: number;
     systemChannelID: string | null;
@@ -304,12 +301,6 @@ export interface JSONInvite {
     inviter?: string;
     maxAge?: number;
     maxUses?: number;
-    stageInstance?: {
-        members: Array<string>;
-        participantCount: number;
-        speakerCount: number;
-        topic: string;
-    };
     targetApplication?: JSONPartialApplication;
     targetType?: InviteTargetTypes;
     targetUser?: string;
@@ -430,21 +421,7 @@ export interface JSONRole extends JSONBase {
     tags: RoleTags;
     unicodeEmoji: string | null;
 }
-export interface JSONStageChannel extends JSONGuildChannel {
-    bitrate: number;
-    permissionOverwrites: Array<JSONPermissionOverwrite>;
-    position: number;
-    rtcRegion: string | null;
-    topic: string | null;
-    type: ChannelTypes.GUILD_STAGE_VOICE;
-}
-export interface JSONStageInstance extends JSONBase {
-    channelID: string;
-    discoverableDisabled: boolean;
-    guildID: string;
-    privacyLevel: StageInstancePrivacyLevels;
-    topic: string;
-}
+
 export interface JSONTeam extends JSONBase {
     icon: string | null;
     members: Array<TeamMember>;

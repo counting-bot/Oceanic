@@ -204,7 +204,6 @@ export default class Guilds {
                     moderated:  tag.moderated,
                     name:       tag.name
                 })) : options.availableTags,
-                bitrate:                       options.bitrate,
                 default_auto_archive_duration: options.defaultAutoArchiveDuration,
                 default_forum_layout:          options.defaultForumLayout,
                 default_reaction_emoji:        options.defaultReactionEmoji ? { emoji_id: options.defaultReactionEmoji.id, emoji_name: options.defaultReactionEmoji.name } : options.defaultReactionEmoji,
@@ -215,7 +214,6 @@ export default class Guilds {
                 permission_overwrites:         options.permissionOverwrites,
                 position:                      options.position,
                 rate_limit_per_user:           options.rateLimitPerUser,
-                rtc_region:                    options.rtcRegion,
                 topic:                         options.topic,
                 type,
                 user_limit:                    options.userLimit,

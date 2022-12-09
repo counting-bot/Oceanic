@@ -10,7 +10,6 @@ import type TextChannel from "./TextChannel.js";
 import type CategoryChannel from "./CategoryChannel.js";
 import Integration from "./Integration.js";
 import Permission from "./Permission.js";
-import StageInstance from "./StageInstance.js";
 import Channel from "./Channel.js";
 import type Invite from "./Invite.js";
 import type Webhook from "./Webhook.js";
@@ -71,7 +70,6 @@ import type {
     Ban,
     GetVanityURLResponse,
     RawWidget,
-    RawStageInstance,
     EditMFALevelOptions,
     RESTMember,
     CreateStickerOptions,
@@ -127,8 +125,7 @@ export default class Guild extends Base {
     maxMembers?: number;
     /** The maximum amount of people that can be present at a time in this guild. Only present for very large guilds. */
     maxPresences?: number;
-    /** The maximum amount of users that can be present in a stage video channel. */
-    maxStageVideoChannelUsers?: number;
+
     /** The maximum amount of users that can be present in a video channel. */
     maxVideoChannelUsers?: number;
     /** The number of members in this guild. */
@@ -167,8 +164,6 @@ export default class Guild extends Base {
     rulesChannelID: string | null;
     /** The invite splash hash of this guild. */
     splash: string | null;
-    /** The stage instances in this guild. */
-    stageInstances: TypedCollection<string, RawStageInstance, StageInstance>;
     /** The custom stickers of this guild. */
     stickers: Array<Sticker>;
     /** The channel where welcome messages and boosts notices are posted. */
@@ -224,7 +219,6 @@ export default class Guild extends Base {
         this.roles = new TypedCollection(Role, client);
         this.rulesChannelID = null;
         this.splash = null;
-        this.stageInstances = new TypedCollection(StageInstance, client);
         this.stickers = [];
         this.systemChannelID = null;
         this.systemChannelFlags = data.system_channel_flags;
@@ -269,14 +263,6 @@ export default class Guild extends Base {
                 }
             }
         }
-
-        if (data.stage_instances) {
-            for (const stageInstance of data.stage_instances) {
-                stageInstance.guild_id = this.id;
-                this.stageInstances.update(stageInstance);
-            }
-        }
-
 
         if (data.presences) {
             for (const presence of data.presences) {
@@ -401,9 +387,6 @@ export default class Guild extends Base {
         }
         if (data.max_presences !== undefined) {
             this.maxPresences = data.max_presences;
-        }
-        if (data.max_stage_video_channel_users !== undefined) {
-            this.maxStageVideoChannelUsers = data.max_stage_video_channel_users;
         }
         if (data.max_video_channel_users !== undefined) {
             this.maxVideoChannelUsers = data.max_video_channel_users;
@@ -1050,7 +1033,6 @@ export default class Guild extends Base {
             large:                       this.large,
             maxMembers:                  this.maxMembers,
             maxPresences:                this.maxPresences,
-            maxStageVideoChannelUsers:   this.maxStageVideoChannelUsers,
             maxVideoChannelUsers:        this.maxVideoChannelUsers,
             memberCount:                 this.memberCount,
             members:                     this.members.map(member => member.id),
@@ -1067,7 +1049,6 @@ export default class Guild extends Base {
             roles:                       this.roles.map(role => role.toJSON()),
             rulesChannelID:              this.rulesChannelID,
             splash:                      this.splash,
-            stageInstances:              this.stageInstances.map(instance => instance.toJSON()),
             stickers:                    this.stickers,
             systemChannelID:             this.systemChannelID,
             systemChannelFlags:          this.systemChannelFlags,

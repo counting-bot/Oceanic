@@ -38,11 +38,8 @@ import type {
     AnyTextChannelWithoutGroup
 } from "../types/channels.js";
 import type TextChannel from "../structures/TextChannel.js";
-import type { JSONAnnouncementThreadChannel } from "../types/json.js";
 import Invite from "../structures/Invite.js";
 import Message from "../structures/Message.js";
-import StageInstance from "../structures/StageInstance.js";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel.js";
 import Interaction from "../structures/Interaction.js";
 import { is } from "../util/Util.js";
 import Guild from "../structures/Guild.js";
@@ -768,29 +765,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "STAGE_INSTANCE_CREATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const stateInstance = guild?.stageInstances.update(packet.d) ?? new StageInstance(packet.d, this.client);
-                this.client.emit("stageInstanceCreate", stateInstance);
-                break;
-            }
-
-            case "STAGE_INSTANCE_DELETE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const stateInstance = guild?.stageInstances.update(packet.d) ?? new StageInstance(packet.d, this.client);
-                guild?.stageInstances.delete(packet.d.id);
-                this.client.emit("stageInstanceDelete", stateInstance);
-                break;
-            }
-
-            case "STAGE_INSTANCE_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const oldStageInstance = guild?.stageInstances.get(packet.d.id)?.toJSON() ?? null;
-                const stateInstance = guild?.stageInstances.update(packet.d) ?? new StageInstance(packet.d, this.client);
-                this.client.emit("stageInstanceUpdate", stateInstance, oldStageInstance);
-                break;
-            }
-
             case "THREAD_CREATE": {
                 const thread = this.client.util.updateThread(packet.d);
                 const channel = this.client.getChannel<ThreadParentChannel>(packet.d.parent_id!);
@@ -923,13 +897,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                     addedMembers,
                     removedMembers
                 );
-                break;
-            }
-
-            case "THREAD_UPDATE": {
-                const oldThread = this.client.getChannel<AnyThreadChannel>(packet.d.id)?.toJSON() ?? null;
-                const thread = this.client.util.updateThread(packet.d);
-                this.client.emit("threadUpdate", thread as AnnouncementThreadChannel, oldThread as JSONAnnouncementThreadChannel);
                 break;
             }
 
@@ -1145,7 +1112,7 @@ export default class Shard extends TypedEmitter<ShardEvents> {
 
             assert(is<Buffer>(data));
             return this.onPacket(JSON.parse(data.toString()) as AnyReceivePacket);
-            
+
 
         } catch (err) {
             this.client.emit("error", err as Error, this.id);
