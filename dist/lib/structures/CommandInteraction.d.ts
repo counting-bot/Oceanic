@@ -7,7 +7,7 @@ import type Guild from "./Guild.js";
 import Permission from "./Permission.js";
 import type PrivateChannel from "./PrivateChannel.js";
 import type { InteractionTypes } from "../Constants.js";
-import type { ApplicationCommandInteractionData, InteractionContent, ModalData, RawApplicationCommandInteraction } from "../types/interactions.js";
+import type { ApplicationCommandInteractionData, InteractionContent, RawApplicationCommandInteraction } from "../types/interactions.js";
 import type Client from "../Client.js";
 import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
 import type { JSONCommandInteraction } from "../types/json.js";
@@ -50,11 +50,6 @@ export default class CommandInteraction<T extends AnyTextChannelWithoutGroup | U
      * @param options The options for the message.
      */
     createMessage(options: InteractionContent): Promise<void>;
-    /**
-     * Respond to this interaction with a modal. This is an initial response, and more than one initial response cannot be used.
-     * @param options The options for the modal.
-     */
-    createModal(options: ModalData): Promise<void>;
     /**
      * Defer this interaction. This is an initial response, and more than one initial response cannot be used.
      * @param flags The [flags](https://discord.com/developers/docs/resources/channel#message-object-message-flags) to respond with.

@@ -13,10 +13,13 @@ export default class OAuth {
     /**
      * Construct an oauth authorization url.
      * @param options The options to construct the url with.
-     * @deprecated Moved to {@link OAuthHelper#constructURL}. This will be removed in `1.5.0`.
+     * @deprecated Moved to {@link OAuthHelper~OAuthHelper.constructURL | OAuthHelper#constructURL}. This will be removed in `1.5.0`.
      */
     static constructURL(options: OAuthURLOptions): string;
-    /** Alias for {@link OAuthHelper#constructURL}. */
+    /**
+     * Alias for {@link Routes/OAuth~OAuth.constructURL | OAuth#constructURL}.
+     * @deprecated Moved to {@link OAuthHelper~OAuthHelper.constructURL | OAuthHelper#constructURL}. This will be removed in `1.5.0`.
+     */
     get constructURL(): typeof OAuthHelper["constructURL"];
     /**
      * Get an access token for the application owner. If the application is owned by a team, this is restricted to `identify` & `applications.commands.update`.

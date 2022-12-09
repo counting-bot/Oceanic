@@ -15,7 +15,7 @@ import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
 import { MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, EditMessageOptions, Embed, GetReactionsOptions, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, MessageActionRow, AnyThreadChannel } from "../types/channels.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, EditMessageOptions, Embed, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, MessageActionRow, AnyThreadChannel } from "../types/channels.js";
 import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks.js";
 import type { JSONMessage } from "../types/json.js";
 /** Represents a message. */
@@ -26,14 +26,14 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     activity?: MessageActivity;
     /**
      * The application associated with this message. This can be present in two scenarios:
-     * * If the message was from an interaction or application owned webhook (`ClientApplication`).
-     * * If the message has a rich presence embed (`PartialApplication`)
+     * * If the message was from an interaction or application owned webhook ({@link ClientApplication} if any shard has reached READY, {@link PartialApplication} otherwise).
+     * * If the message has a rich presence embed ({@link PartialApplication})
      */
-    application?: PartialApplication | ClientApplication | null;
+    application?: PartialApplication | ClientApplication;
     /**
      * The ID of the application associated with this message. This can be present in two scenarios:
-     * * If the message was from an interaction or application owned webhook (`ClientApplication`).
-     * * If the message has a rich presence embed (`PartialApplication`)
+     * * If the message was from an interaction or application owned webhook ({@link ClientApplication} if any shard has reached READY, {@link PartialApplication} otherwise).
+     * * If the message has a rich presence embed ({@link PartialApplication})
      */
     applicationID: string | null;
     /** The attachments on this message. */
@@ -111,25 +111,10 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      */
     createReaction(emoji: string): Promise<void>;
     /**
-     * Crosspost this message in an announcement channel.
-     */
-    crosspost(): Promise<Message<T>>;
-    /**
      * Delete this message.
      * @param reason The reason for deleting the message.
      */
     delete(reason?: string): Promise<void>;
-    /**
-     * Remove a reaction from this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    deleteReaction(emoji: string, user?: string): Promise<void>;
-    /**
-     * Remove all, or a specific emoji's reactions from this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    deleteReactions(emoji?: string): Promise<void>;
     /**
      * Delete this message as a webhook.
      * @param token The token of the webhook.
@@ -147,30 +132,14 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      * @param options The options for editing the message.
      */
     editWebhook(token: string, options: EditWebhookMessageOptions): Promise<Message<T>>;
-    /**
-     * Get the users who reacted with a specific emoji on this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    getReactions(emoji: string, options?: GetReactionsOptions): Promise<Array<User>>;
     /** Whether this message belongs to a cached guild channel. The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */
     inCachedGuildChannel(): this is Message<AnyGuildTextChannel>;
     /** Whether this message belongs to a direct message channel (PrivateChannel or uncached). The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */
     inDirectMessageChannel(): this is Message<PrivateChannel | Uncached>;
-    /**
-     * Pin this message.
-     * @param reason The reason for pinning the message.
-     */
-    pin(reason?: string): Promise<void>;
     /**
      * Create a thread from this message.
      * @param options The options for creating the thread.
      */
     startThread(options: StartThreadFromMessageOptions): Promise<T extends AnnouncementChannel ? AnnouncementThreadChannel : T extends TextChannel ? PublicThreadChannel : never>;
     toJSON(): JSONMessage;
-    /**
-     * Unpin this message.
-     * @param reason The reason for unpinning the message.
-     */
-    unpin(reason?: string): Promise<void>;
 }

@@ -1,8 +1,6 @@
 // Channel and Interaction MUST be at the top due to circular imports
 const Channel = (await import("./dist/lib/structures/Channel.js")).default.default;
 const Interaction = (await import("./dist/lib/structures/Interaction.js")).default.default;
-const AnnouncementChannel = (await import("./dist/lib/structures/AnnouncementChannel.js")).default.default;
-const AnnouncementThreadChannel = (await import("./dist/lib/structures/AnnouncementThreadChannel.js")).default.default;
 const Application = (await import("./dist/lib/structures/Application.js")).default.default;
 const ApplicationCommand = (await import("./dist/lib/structures/ApplicationCommand.js")).default.default;
 const Attachment = (await import("./dist/lib/structures/Attachment.js")).default.default;
@@ -30,7 +28,6 @@ const InteractionOptionsWrapper = (await import("./dist/lib/util/InteractionOpti
 const Invite = (await import("./dist/lib/structures/Invite.js")).default.default;
 const Member = (await import("./dist/lib/structures/Member.js")).default.default;
 const Message = (await import("./dist/lib/structures/Message.js")).default.default;
-const ModalSubmitInteraction = (await import("./dist/lib/structures/ModalSubmitInteraction.js")).default.default;
 const OAuth = (await import("./dist/lib/routes/OAuth.js")).default.default;
 const OAuthGuild = (await import ("./dist/lib/structures/OAuthGuild.js")).default.default;
 const OAuthHelper = (await import ("./dist/lib/rest/OAuthHelper.js")).default.default;
@@ -48,8 +45,6 @@ const SelectMenuValuesWrapper = (await import ("./dist/lib/util/SelectMenuValues
 const SequentialBucket = (await import("./dist/lib/rest/SequentialBucket.js")).default.default;
 const Shard = (await import("./dist/lib/gateway/Shard.js")).default.default;
 const ShardManager = (await import("./dist/lib/gateway/ShardManager.js")).default.default;
-const StageChannel = (await import("./dist/lib/structures/StageChannel.js")).default.default;
-const StageInstance = (await import("./dist/lib/structures/StageInstance.js")).default.default;
 const Team = (await import("./dist/lib/structures/Team.js")).default.default;
 const TextableChannel = (await import("./dist/lib/structures/TextableChannel.js")).default.default;
 const TextChannel = (await import("./dist/lib/structures/TextChannel.js")).default.default;
@@ -60,7 +55,6 @@ const UnavailableGuild = (await import("./dist/lib/structures/UnavailableGuild.j
 const UncaughtError = (await import("./dist/lib/util/UncaughtError.js")).default.default;
 const User = (await import("./dist/lib/structures/User.js")).default.default;
 const Util = (await import("./dist/lib/util/Util.js")).default.default;
-const VoiceChannel = (await import("./dist/lib/structures/VoiceChannel.js")).default.default;
 const Webhook = (await import("./dist/lib/structures/Webhook.js")).default.default;
 
 export * from "./dist/lib/Constants.js";
@@ -68,8 +62,6 @@ export * from "./dist/lib/Constants.js";
 export {
     Channel,
     Interaction,
-    AnnouncementChannel,
-    AnnouncementThreadChannel,
     Application,
     ApplicationCommand,
     Attachment,
@@ -97,7 +89,6 @@ export {
     Invite,
     Member,
     Message,
-    ModalSubmitInteraction,
     OAuth,
     OAuthGuild,
     OAuthHelper,
@@ -115,8 +106,6 @@ export {
     SequentialBucket,
     Shard,
     ShardManager,
-    StageChannel,
-    StageInstance,
     Team,
     TextableChannel,
     TextChannel,
@@ -127,6 +116,5 @@ export {
     UncaughtError,
     User,
     Util,
-    VoiceChannel,
     Webhook
 };

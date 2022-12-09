@@ -1,11 +1,10 @@
 /** @module TextChannel */
 import TextableChannel from "./TextableChannel.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
 import type PublicThreadChannel from "./PublicThreadChannel.js";
 import type PrivateThreadChannel from "./PrivateThreadChannel.js";
 import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
-import type { ArchivedThreads, EditTextChannelOptions, FollowedChannel, GetArchivedThreadsOptions, RawPrivateThreadChannel, RawPublicThreadChannel, RawTextChannel } from "../types/channels.js";
+import type { ArchivedThreads, EditTextChannelOptions, GetArchivedThreadsOptions, RawPrivateThreadChannel, RawPublicThreadChannel, RawTextChannel } from "../types/channels.js";
 import type { JSONTextChannel } from "../types/json.js";
 import TypedCollection from "../util/TypedCollection.js";
 /** Represents a guild text channel. */
@@ -15,19 +14,10 @@ export default class TextChannel extends TextableChannel<TextChannel> {
     type: ChannelTypes.GUILD_TEXT;
     constructor(data: RawTextChannel, client: Client);
     /**
-     * Convert this text channel to a announcement channel.
-     */
-    convert(): Promise<AnnouncementChannel>;
-    /**
      * Edit this channel.
      * @param options The options for editing the channel
      */
     edit(options: EditTextChannelOptions): Promise<this>;
-    /**
-     * Follow an announcement channel to this channel.
-     * @param webhookChannelID The ID of the channel to follow the announcement channel to.
-     */
-    followAnnouncement(webhookChannelID: string): Promise<FollowedChannel>;
     /**
      * Get the private archived threads the current user has joined in this channel.
      * @param options The options for getting the joined private archived threads.

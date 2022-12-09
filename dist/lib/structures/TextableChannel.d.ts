@@ -1,6 +1,6 @@
 /** @module TextableChannel */
 import GuildChannel from "./GuildChannel.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type AnnouncementChannel from "./AnnouncementChannel";
 import type TextChannel from "./TextChannel.js";
 import PermissionOverwrite from "./PermissionOverwrite.js";
 import Message from "./Message.js";
@@ -10,12 +10,11 @@ import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
 import type CategoryChannel from "./CategoryChannel.js";
 import type Member from "./Member.js";
 import Permission from "./Permission.js";
-import type User from "./User.js";
 import type Webhook from "./Webhook.js";
 import type { ThreadAutoArchiveDuration } from "../Constants.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
-import type { CreateInviteOptions, CreateMessageOptions, EditGuildChannelOptions, EditMessageOptions, EditPermissionOptions, GetArchivedThreadsOptions, GetChannelMessagesOptions, GetReactionsOptions, RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel, StartThreadFromMessageOptions, StartThreadWithoutMessageOptions, ArchivedThreads, PurgeOptions } from "../types/channels.js";
+import type { CreateInviteOptions, CreateMessageOptions, EditGuildChannelOptions, EditMessageOptions, EditPermissionOptions, GetArchivedThreadsOptions, GetChannelMessagesOptions, RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel, StartThreadFromMessageOptions, StartThreadWithoutMessageOptions, ArchivedThreads } from "../types/channels.js";
 import type { JSONTextableChannel } from "../types/json.js";
 /** Represents a guild textable channel. */
 export default class TextableChannel<T extends TextChannel | AnnouncementChannel = TextChannel | AnnouncementChannel> extends GuildChannel {
@@ -70,12 +69,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
      */
     deleteMessage(messageID: string, reason?: string): Promise<void>;
     /**
-     * Bulk delete messages in this channel.
-     * @param messageIDs The IDs of the messages to delete. Any duplicates or messages older than two weeks will cause an error.
-     * @param reason The reason for deleting the messages.
-     */
-    deleteMessages(messageIDs: Array<string>, reason?: string): Promise<number>;
-    /**
      * Delete a permission overwrite on this channel.
      * @param overwriteID The ID of the permission overwrite to delete.
      * @param reason The reason for deleting the permission overwrite.
@@ -126,21 +119,10 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
      */
     getMessages(options?: GetChannelMessagesOptions): Promise<Array<Message<T>>>;
     /**
-     * Get the pinned messages in this channel.
-     */
-    getPinnedMessages(): Promise<Array<Message<T>>>;
-    /**
      * Get the public archived threads in this channel.
      * @param options The options for getting the public archived threads.
      */
     getPublicArchivedThreads(options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T extends TextChannel ? PublicThreadChannel : AnnouncementThreadChannel>>;
-    /**
-     * Get the users who reacted with a specific emoji on a message in this channel.
-     * @param messageID The ID of the message to get reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    getReactions(messageID: string, emoji: string, options?: GetReactionsOptions): Promise<Array<User>>;
     /**
      * Get the webhooks in this channel.
      */
@@ -150,21 +132,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
      * @param member The member to get the permissions of.
      */
     permissionsOf(member: string | Member): Permission;
-    /**
-     * Pin a message in this channel.
-     * @param messageID The ID of the message to pin.
-     * @param reason The reason for pinning the message.
-     */
-    pinMessage(messageID: string, reason?: string): Promise<void>;
-    /**
-     * Purge an amount of messages from this channel.
-     * @param options The options to purge. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    purge(options: PurgeOptions<T>): Promise<number>;
-    /**
-     * Show a typing indicator in this channel. How long users see this varies from client to client.
-     */
-    sendTyping(): Promise<void>;
     /**
      * Create a thread from an existing message in this channel.
      * @param messageID The ID of the message to create a thread from.
@@ -177,10 +144,4 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
      */
     startThreadWithoutMessage(options: StartThreadWithoutMessageOptions): Promise<T extends TextChannel ? AnnouncementThreadChannel : PublicThreadChannel>;
     toJSON(): JSONTextableChannel;
-    /**
-     * Unpin a message in this channel.
-     * @param messageID The ID of the message to unpin.
-     * @param reason The reason for unpinning the message.
-     */
-    unpinMessage(messageID: string, reason?: string): Promise<void>;
 }

@@ -12,6 +12,7 @@ export default class PermissionOverwrite extends Base {
     /** The type of this overwrite. `0` for role, `1` for user. */
     type: OverwriteTypes;
     constructor(data: RawOverwrite, client: Client);
+    protected update(data: Partial<RawOverwrite>): void;
     get allow(): bigint;
     get deny(): bigint;
     /** A key-value map of permission to if it's been allowed or denied (not present if neither) */

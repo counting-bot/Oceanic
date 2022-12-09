@@ -7,7 +7,7 @@ import Permission from "./Permission.js";
 import type PrivateChannel from "./PrivateChannel.js";
 import User from "./User.js";
 import type Client from "../Client.js";
-import type { InteractionContent, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData, ModalData, RawMessageComponentInteraction } from "../types/interactions.js";
+import type { InteractionContent, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData, RawMessageComponentInteraction } from "../types/interactions.js";
 import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
 import type { JSONComponentInteraction } from "../types/json.js";
 import type { Uncached } from "../types/shared.js";
@@ -53,11 +53,6 @@ export default class ComponentInteraction<V extends ComponentTypes.BUTTON | Sele
      * @param options The options for the message.
      */
     createMessage(options: InteractionContent): Promise<void>;
-    /**
-     * Respond to this interaction with a modal. This is an initial response, and more than one initial response cannot be used.
-     * @param options The options for the modal.
-     */
-    createModal(options: ModalData): Promise<void>;
     /**
      * Defer this interaction with a `DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE` response. This is an initial response, and more than one initial response cannot be used.
      * @param flags The [flags](https://discord.com/developers/docs/resources/channel#message-object-message-flags) to respond with.

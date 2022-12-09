@@ -8,7 +8,7 @@ import type User from "../structures/User.js";
 export default class Users {
     #private;
     constructor(manager: RESTManager);
-    /** Alias for {@link Routes/Channels#createDM | Channels#createDM}. */
+    /** Alias for {@link Routes/Channels~Channels#createDM | Channels#createDM}. */
     get createDM(): typeof Channels.prototype.createDM;
     /**
      * Edit the currently authenticated user.
@@ -19,19 +19,19 @@ export default class Users {
     editSelf(options: EditSelfUserOptions): Promise<ExtendedUser>;
     /**
      * Get a user.
-     * @param id the ID of the user
+     * @param userID the ID of the user
      */
-    get(id: string): Promise<User>;
+    get(userID: string): Promise<User>;
     /**
      * Get the currently authenticated user's information.
      *
      * Note: This does not touch the client's cache in any way.
-     * @deprecated Moved to {@link Routes/OAuth#getCurrentUser}. This will be removed in `1.5.0`.
+     * @deprecated Moved to {@link Routes/OAuth~OAuth#getCurrentUser | OAuth#getCurrentUser}. This will be removed in `1.5.0`.
      */
     getCurrentUser(): Promise<ExtendedUser>;
     /**
      * Leave a guild.
-     * @param id The ID of the guild to leave.
+     * @param guildID The ID of the guild to leave.
      */
-    leaveGuild(id: string): Promise<void>;
+    leaveGuild(guildID: string): Promise<void>;
 }

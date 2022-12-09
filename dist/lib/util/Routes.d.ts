@@ -57,7 +57,6 @@ export declare const CHANNEL_THREAD_MEMBER: (channelID: string, userID: string) 
 export declare const CHANNEL_THREAD_MEMBERS: (channelID: string) => `/channels/${string}/thread-members`;
 export declare const CHANNEL_TYPING: (channelID: string) => `/channels/${string}/typing`;
 export declare const GROUP_RECIPIENT: (channelID: string, userID: string) => `/channels/${string}/recipients/${string}`;
-export declare const INVITE: (code: string) => `/invites/${string}`;
 export declare const OAUTH_APPLICATION: "/oauth2/applications/@me";
 export declare const OAUTH_AUTHORIZE: "/oauth2/authorize";
 export declare const OAUTH_INFO: "/oauth2/@me";
@@ -99,3 +98,4 @@ export declare const GATEWAY_BOT: "/gateway/bot";
 export declare const USER: (userID: string) => `/users/${string}`;
 export declare const MESSAGE_LINK: (guildID: string, channelID: string, messageID: string) => `/channels/${string}/${string}/${string}`;
 export declare const NITRO_STICKER_PACKS: "/sticker-packs";
+export declare const INVITE: (code: string) => `/invites/${string}`;

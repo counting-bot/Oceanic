@@ -1,7 +1,7 @@
 import Guild from "./Guild.js";
 import type User from "./User.js";
 import PartialApplication from "./PartialApplication.js";
-import type { InviteChannel, InviteInfoTypes, InviteStageInstance, PartialInviteChannel, RawInvite, RawInviteWithMetadata } from "../types/channels.js";
+import type { InviteChannel, InviteInfoTypes, PartialInviteChannel, RawInvite, RawInviteWithMetadata } from "../types/channels.js";
 import type Client from "../Client.js";
 import type { InviteTargetTypes } from "../Constants.js";
 import type { JSONInvite } from "../types/json.js";
@@ -32,8 +32,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
     maxAge: T extends "withMetadata" ? number : never;
     /** The maximum number of times this invite can be used, */
     maxUses: T extends "withMetadata" ? number : never;
-    /** @deprecated The stage instance in the invite this channel is for (deprecated). */
-    stageInstance?: InviteStageInstance;
     /** The embedded application this invite will open. */
     targetApplication?: PartialApplication;
     /** The [target type](https://discord.com/developers/docs/resources/invite#invite-object-invite-target-types) of this invite. */
@@ -48,11 +46,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
     protected update(data: Partial<RawInvite> | Partial<RawInviteWithMetadata>): void;
     /** The channel this invite leads to. If the channel is not cached, this will be a partial with only `id`, `name, and `type`. */
     get channel(): (CH extends InviteChannel ? CH : PartialInviteChannel) | null;
-    /**
-     * Delete this invite.
-     * @param reason The reason for deleting this invite.
-     */
-    deleteInvite(reason?: string): Promise<Invite<"withMetadata", CH>>;
     /** Whether this invite belongs to a cached channel. The only difference on using this method over a simple if statement is to easily update all the invite properties typing definitions based on the channel it belongs to. */
     inCachedChannel(): this is Invite<T, InviteChannel>;
     toJSON(): JSONInvite;

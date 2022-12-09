@@ -7,7 +7,7 @@ import type Permission from "./Permission.js";
 import type { ThreadChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
-import type { AnyThreadChannel, CreateMessageOptions, EditMessageOptions, EditThreadChannelOptions, GetChannelMessagesOptions, GetReactionsOptions, PrivateThreadMetadata, RawMessage, RawThreadChannel, ThreadMember, ThreadMetadata, PurgeOptions, ThreadParentChannel } from "../types/channels.js";
+import type { AnyThreadChannel, CreateMessageOptions, EditMessageOptions, EditThreadChannelOptions, GetChannelMessagesOptions, PrivateThreadMetadata, RawMessage, RawThreadChannel, ThreadMember, ThreadMetadata, ThreadParentChannel } from "../types/channels.js";
 import type { JSONThreadChannel } from "../types/json.js";
 /** Represents a guild thread channel. */
 export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel> extends GuildChannel {
@@ -63,25 +63,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
      */
     deleteMessage(messageID: string, reason?: string): Promise<void>;
     /**
-     * Bulk delete messages in this thread.
-     * @param messageIDs The IDs of the messages to delete. Any duplicates or messages older than two weeks will cause an error.
-     * @param reason The reason for deleting the messages.
-     */
-    deleteMessages(messageIDs: Array<string>, reason?: string): Promise<number>;
-    /**
-     * Remove a reaction from a message in this thread.
-     * @param messageID The ID of the message to remove a reaction from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    deleteReaction(messageID: string, emoji: string, user?: string): Promise<void>;
-    /**
-     * Remove all, or a specific emoji's reactions from a message.
-     * @param messageID The ID of the message to remove reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    deleteReactions(messageID: string, emoji?: string): Promise<void>;
-    /**
      * Edit this thread.
      * @param options The options for editing the channel.
      */
@@ -112,17 +93,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
      */
     getMessages(options?: GetChannelMessagesOptions): Promise<Array<Message<T>>>;
     /**
-     * Get the pinned messages in this thread.
-     */
-    getPinnedMessages(): Promise<Array<Message<T>>>;
-    /**
-     * Get the users who reacted with a specific emoji on a message.
-     * @param messageID The ID of the message to get reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    getReactions(messageID: string, emoji: string, options?: GetReactionsOptions): Promise<Array<User>>;
-    /**
      * Join this thread.
      */
     join(): Promise<void>;
@@ -136,30 +106,9 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
      */
     permissionsOf(member: string | Member): Permission;
     /**
-     * Pin a message in this thread.
-     * @param messageID The ID of the message to pin.
-     * @param reason The reason for pinning the message.
-     */
-    pinMessage(messageID: string, reason?: string): Promise<void>;
-    /**
-     * Purge an amount of messages from this channel.
-     * @param options The options to purge. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    purge(options: PurgeOptions<T>): Promise<number>;
-    /**
      * Remove a member from this thread.
      * @param userID The ID of the user to remove from the thread.
      */
     removeMember(userID: string): Promise<void>;
-    /**
-     * Show a typing indicator in this thread.
-     */
-    sendTyping(): Promise<void>;
     toJSON(): JSONThreadChannel;
-    /**
-     * Unpin a message in this thread.
-     * @param messageID The ID of the message to unpin.
-     * @param reason The reason for unpinning the message.
-     */
-    unpinMessage(messageID: string, reason?: string): Promise<void>;
 }

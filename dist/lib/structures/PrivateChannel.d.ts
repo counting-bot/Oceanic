@@ -4,7 +4,7 @@ import type User from "./User.js";
 import Message from "./Message.js";
 import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
-import type { CreateMessageOptions, EditMessageOptions, GetChannelMessagesOptions, GetReactionsOptions, RawMessage, RawPrivateChannel } from "../types/channels.js";
+import type { CreateMessageOptions, EditMessageOptions, RawMessage, RawPrivateChannel } from "../types/channels.js";
 import TypedCollection from "../util/TypedCollection.js";
 import type { JSONPrivateChannel } from "../types/json.js";
 /** Represents a direct message with a user. */
@@ -38,53 +38,10 @@ export default class PrivateChannel extends Channel {
      */
     deleteMessage(messageID: string, reason?: string): Promise<void>;
     /**
-     * Remove a reaction from a message in this channel.
-     * @param messageID The ID of the message to remove a reaction from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     */
-    deleteReaction(messageID: string, emoji: string): Promise<void>;
-    /**
      * Edit a message in this channel.
      * @param messageID The ID of the message to edit.
      * @param options The options for editing the message.
      */
     editMessage(messageID: string, options: EditMessageOptions): Promise<Message<this>>;
-    /**
-     * Get a message in this channel.
-     * @param messageID The ID of the message to get.
-     */
-    getMessage(messageID: string): Promise<Message<this>>;
-    /**
-     * Get messages in this channel.
-     * @param options The options for getting the messages. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    getMessages(options?: GetChannelMessagesOptions): Promise<Array<Message<this>>>;
-    /**
-     * Get the pinned messages in this channel.
-     */
-    getPinnedMessages(): Promise<Array<Message<this>>>;
-    /**
-     * Get the users who reacted with a specific emoji on a message.
-     * @param messageID The iIDd of the message to get reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    getReactions(messageID: string, emoji: string, options?: GetReactionsOptions): Promise<Array<User>>;
-    /**
-     * Pin a message in this channel.
-     * @param messageID The ID of the message to pin.
-     * @param reason The reason for pinning the message.
-     */
-    pinMessage(messageID: string, reason?: string): Promise<void>;
-    /**
-     * Show a typing indicator in this channel.
-     */
-    sendTyping(): Promise<void>;
     toJSON(): JSONPrivateChannel;
-    /**
-     * Unpin a message in this channel.
-     * @param messageID The ID of the message to unpin.
-     * @param reason The ID for unpinning the message.
-     */
-    unpinMessage(messageID: string, reason?: string): Promise<void>;
 }

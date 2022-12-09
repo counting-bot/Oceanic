@@ -11,7 +11,6 @@ import type { RequestOptions } from "../types/request-handler.js";
 import ApplicationCommands from "../routes/ApplicationCommands.js";
 import Interactions from "../routes/Interactions.js";
 import type { GetBotGatewayResponse, GetGatewayResponse } from "../types/gateway.js";
-import Miscellaneous from "../routes/Miscellaneous.js";
 /** A manager for all rest actions. */
 export default class RESTManager {
     #private;
@@ -20,7 +19,6 @@ export default class RESTManager {
     guilds: Guilds;
     handler: RequestHandler;
     interactions: Interactions;
-    misc: Miscellaneous;
     oauth: OAuth;
     users: Users;
     webhooks: Webhooks;

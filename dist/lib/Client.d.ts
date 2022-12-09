@@ -60,7 +60,7 @@ export default class Client extends TypedEmitter<ClientEvents> {
     editStatus(status: SendStatuses, activities?: Array<BotActivity>): Promise<void>;
     /**
      * Get a channel from an ID. This will return undefined if the channel is not cached.
-     * @param id The id of the channel.
+     * @param channelID The id of the channel.
      */
-    getChannel<T extends AnyChannel = AnyChannel>(id: string): T | undefined;
+    getChannel<T extends AnyChannel = AnyChannel>(channelID: string): T | undefined;
 }

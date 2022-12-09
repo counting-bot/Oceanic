@@ -37,11 +37,6 @@ export default class Role extends Base {
     /** A string that will mention this role. */
     get mention(): string;
     /**
-     * Delete this role.
-     * @param reason The reason for deleting the role.
-     */
-    delete(reason?: string): Promise<void>;
-    /**
      * Edit this role.
      * @param options The options for editing the role.
      */

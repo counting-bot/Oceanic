@@ -2,9 +2,9 @@
 import Channel from "./Channel.js";
 import User from "./User.js";
 import type ClientApplication from "./ClientApplication.js";
-import type { ChannelTypes, ImageFormat } from "../Constants.js";
+import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
-import type { AddGroupRecipientOptions, EditGroupDMOptions, RawGroupChannel } from "../types/channels.js";
+import type { RawGroupChannel } from "../types/channels.js";
 import type { RawUser } from "../types/users.js";
 import TypedCollection from "../util/TypedCollection.js";
 import type { JSONGroupChannel } from "../types/json.js";
@@ -33,30 +33,5 @@ export default class GroupChannel extends Channel {
     type: ChannelTypes.GROUP_DM;
     constructor(data: RawGroupChannel, client: Client);
     protected update(data: Partial<RawGroupChannel>): void;
-    /**
-     * Add a user to this channel.
-     * @param options The options for adding the user.
-     */
-    addRecipient(options: AddGroupRecipientOptions): Promise<void>;
-    /**
-     * Edit this channel.
-     * @param options The options for editing the channel.
-     */
-    edit(options: EditGroupDMOptions): Promise<this>;
-    /**
-     * The url of this application's icon.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    iconURL(format?: ImageFormat, size?: number): string | null;
-    /**
-     * Remove a user from this channel.
-     * @param userID The ID of the user to remove.
-     */
-    removeRecipient(userID: string): Promise<void>;
-    /**
-     * Show a typing indicator in this channel.
-     */
-    sendTyping(): Promise<void>;
     toJSON(): JSONGroupChannel;
 }

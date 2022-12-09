@@ -1,8 +1,6 @@
 export * from "./types/index.js";
 export { default as Channel } from "./structures/Channel.js";
 export { default as Interaction } from "./structures/Interaction.js";
-export { default as AnnouncementChannel } from "./structures/AnnouncementChannel.js";
-export { default as AnnouncementThreadChannel } from "./structures/AnnouncementThreadChannel.js";
 export { default as Application } from "./structures/Application.js";
 export { default as ApplicationCommand } from "./structures/ApplicationCommand.js";
 export { default as Attachment } from "./structures/Attachment.js";
@@ -31,8 +29,7 @@ export { default as InteractionOptionsWrapper } from "./util/InteractionOptionsW
 export { default as Invite } from "./structures/Invite.js";
 export { default as Member } from "./structures/Member.js";
 export { default as Message } from "./structures/Message.js";
-export { default as ModalSubmitInteraction } from "./structures/ModalSubmitInteraction.js";
-/** @depecated Use {@link OAuthHelper#constructURL} for the `constructURL` function. {@link OAuth#constructURL}, along with this export will be removed in `1.5.0`. */
+/** @depecated Use {@link OAuthHelper~OAuthHelper.constructURL} for the `constructURL` function. {@link Routes/OAuth~OAuth.constructURL}, along with this export will be removed in `1.5.0`. */
 export { default as OAuth } from "./routes/OAuth.js";
 export { default as OAuthGuild } from "./structures/OAuthGuild.js";
 export { default as OAuthHelper } from "./rest/OAuthHelper.js";
@@ -50,8 +47,6 @@ export { default as SelectMenuValuesWrapper } from "./util/SelectMenuValuesWrapp
 export { default as SequentialBucket } from "./rest/SequentialBucket.js";
 export { default as Shard } from "./gateway/Shard.js";
 export { default as ShardManager } from "./gateway/ShardManager.js";
-export { default as StageChannel } from "./structures/StageChannel.js";
-export { default as StageInstance } from "./structures/StageInstance.js";
 export { default as Team } from "./structures/Team.js";
 export { default as TextableChannel } from "./structures/TextableChannel.js";
 export { default as TextChannel } from "./structures/TextChannel.js";
@@ -62,5 +57,4 @@ export { default as UnavailableGuild } from "./structures/UnavailableGuild.js";
 export { default as UncaughtError } from "./util/UncaughtError.js";
 export { default as User } from "./structures/User.js";
 export { default as Util } from "./util/Util.js";
-export { default as VoiceChannel } from "./structures/VoiceChannel.js";
 export { default as Webhook } from "./structures/Webhook.js";

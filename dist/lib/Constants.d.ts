@@ -59,11 +59,13 @@ export declare enum ApplicationFlags {
     APPLICATION_COMMAND_BADGE = 2097152,
     ACTIVE = 16777216
 }
-export declare const GuildFeatures: readonly ["APPLICATION_COMMAND_PERMISSIONS_V2", "ANIMATED_BANNER", "ANIMATED_ICON", "AUTO_MODERATION", "BANNER", "BOT_DEVELOPER_EARLY_ACCESS", "COMMUNITY", "CREATOR_MONETIZABLE", "CREATOR_MONETIZABLE_DISABLED", "DEVELOPER_SUPPORT_SERVER", "DISCOVERABLE", "DISCOVERABLE_DISABLED", "ENABLED_DISCOVERABLE_BEFORE", "EXPOSED_TO_ACTIVITIES_WTP_EXPERIMENT", "FEATURABLE", "GUILD_HOME_TEST", "HAD_EARLY_ACTIVITIES_ACCESS", "HAS_DIRECTORY_ENTRY", "HUB", "INCREASED_THREAD_LIMIT", "INTERNAL_EMPLOYEE_ONLY", "INVITES_DISABLED", "INVITE_SPLASH", "LINKED_TO_HUB", "MEMBER_PROFILES", "MEMBER_VERIFICATION_GATE_ENABLED", "MONETIZATION_ENABLED", "MORE_EMOJI", "MORE_EMOJIS", "MORE_STICKERS", "NEWS", "NEW_THREAD_PERMISSIONS", "PARTNERED", "PREVIEW_ENABLED", "PREVIOUSLY_DISCOVERABLE", "ROLE_ICONS", "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE", "ROLE_SUBSCRIPTIONS_ENABLED", "SEVEN_DAY_THREAD_ARCHIVE", "TEXT_IN_VOICE_ENABLED", "THREADS_ENABLED", "THREADS_ENABLED_TESTING", "THREE_DAY_THREAD_ARCHIVE", "TICKETED_EVENTS_ENABLED", "VANITY_URL", "VERIFIED", "VIP_REGIONS", "WELCOME_SCREEN_ENABLED"];
+export declare const GuildFeatures: readonly ["APPLICATION_COMMAND_PERMISSIONS_V2", "ANIMATED_BANNER", "ANIMATED_ICON", "AUTO_MODERATION", "BANNER", "BOT_DEVELOPER_EARLY_ACCESS", "COMMUNITY", "CREATOR_MONETIZABLE", "CREATOR_MONETIZABLE_DISABLED", "CREATOR_MONETIZABLE_PROVISIONAL", "DEVELOPER_SUPPORT_SERVER", "DISCOVERABLE", "DISCOVERABLE_DISABLED", "ENABLED_DISCOVERABLE_BEFORE", "EXPOSED_TO_ACTIVITIES_WTP_EXPERIMENT", "FEATURABLE", "GUILD_HOME_TEST", "HAD_EARLY_ACTIVITIES_ACCESS", "HAS_DIRECTORY_ENTRY", "HUB", "INCREASED_THREAD_LIMIT", "INTERNAL_EMPLOYEE_ONLY", "INVITES_DISABLED", "INVITE_SPLASH", "LINKED_TO_HUB", "MEMBER_PROFILES", "MEMBER_VERIFICATION_GATE_ENABLED", "MONETIZATION_ENABLED", "MORE_EMOJI", "MORE_EMOJIS", "MORE_STICKERS", "NEWS", "NEW_THREAD_PERMISSIONS", "PARTNERED", "PREVIEW_ENABLED", "PREVIOUSLY_DISCOVERABLE", "PRIVATE_THREADS", "ROLE_ICONS", "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE", "ROLE_SUBSCRIPTIONS_ENABLED", "SEVEN_DAY_THREAD_ARCHIVE", "TEXT_IN_VOICE_ENABLED", "THREADS_ENABLED", "THREADS_ENABLED_TESTING", "THREE_DAY_THREAD_ARCHIVE", "TICKETED_EVENTS_ENABLED", "VANITY_URL", "VERIFIED", "VIP_REGIONS", "WELCOME_SCREEN_ENABLED"];
 export type GuildFeature = typeof GuildFeatures[number];
 export declare enum DefaultMessageNotificationLevels {
     ALL_MESSAGES = 0,
-    ONLY_MENTIONS = 1
+    ONLY_MENTIONS = 1,
+    NO_MESSAGES = 2,
+    NULL = 3
 }
 export declare enum ExplicitContentFilterLevels {
     DISABLED = 0,
@@ -97,7 +99,9 @@ export declare enum SystemChannelFlags {
     SUPPRESS_JOIN_NOTIFICATIONS = 1,
     SUPPRESS_PREMIUM_SUBSCRIPTIONS = 2,
     SUPPRESS_GUILD_REMINDER_NOTIFICATIONS = 4,
-    SUPPRESS_JOIN_NOTIFICATION_REPLIES = 8
+    SUPPRESS_JOIN_NOTIFICATION_REPLIES = 8,
+    SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATIONS = 16,
+    SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATION_REPLIES = 32
 }
 export declare enum StickerTypes {
     STANDARD = 1,
@@ -146,7 +150,7 @@ export declare enum VisibilityTypes {
 }
 export declare const ConnectionServices: readonly ["battlenet", "ebay", "epicgames", "facebook", "github", "leagueoflegends", "paypal", "playstation", "reddit", "riotgames", "spotify", "skype", "steam", "tiktok", "twitch", "twitter", "xbox", "youtube"];
 export type ConnectionService = typeof ConnectionServices[number];
-export declare const IntegrationTypes: readonly ["twitch", "youtube", "discord"];
+export declare const IntegrationTypes: readonly ["twitch", "youtube", "discord", "guild_subscription"];
 export type IntegrationType = typeof IntegrationTypes[number];
 export declare enum IntegrationExpireBehaviors {
     REMOVE_ROLE = 0,
@@ -215,6 +219,14 @@ export declare enum SortOrderTypes {
     LATEST_ACTIVITY = 0,
     /** Sort forum threads by creation time (from most recent to oldest). */
     CREATION_DATE = 1
+}
+export declare enum ForumLayoutTypes {
+    /** A preferred forum layout hasn't been set by a server admin. */
+    DEFAULT = 0,
+    /** List View: display forum posts in a text-focused list. */
+    LIST = 1,
+    /** Gallery View: display forum posts in a media-focused gallery. */
+    GRID = 2
 }
 export declare enum TeamMembershipState {
     INVITED = 1,
@@ -314,7 +326,8 @@ export declare enum MessageFlags {
     HAS_THREAD = 32,
     EPHEMERAL = 64,
     LOADING = 128,
-    FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 256
+    FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 256,
+    SHOULD_SHOW_LINK_NOT_DISCORD_WARNING = 1024
 }
 export declare enum MessageTypes {
     DEFAULT = 0,
@@ -330,6 +343,7 @@ export declare enum MessageTypes {
     GUILD_BOOST_TIER_2 = 10,
     GUILD_BOOST_TIER_3 = 11,
     CHANNEL_FOLLOW_ADD = 12,
+    GUILD_STREAM = 13,
     GUILD_DISCOVERY_DISQUALIFIED = 14,
     GUILD_DISCOVERY_REQUALIFIED = 15,
     GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING = 16,
@@ -341,7 +355,14 @@ export declare enum MessageTypes {
     GUILD_INVITE_REMINDER = 22,
     CONTEXT_MENU_COMMAND = 23,
     AUTO_MODERATION_ACTION = 24,
-    ROLE_SUBSCRIPTION_PURCHASE = 25
+    ROLE_SUBSCRIPTION_PURCHASE = 25,
+    INTERACTION_PREMIUM_UPSELL = 26,
+    STAGE_START = 27,
+    STAGE_END = 28,
+    STAGE_SPEAKER = 29,
+    STAGE_RAISE_HAND = 30,
+    STAGE_TOPIC_CHANGE = 31,
+    GUILD_APPLICATION_PREMIUM_SUBSCRIPTION = 32
 }
 export declare enum MessageActivityTypes {
     JOIN = 1,
@@ -415,8 +436,8 @@ export declare enum Intents {
     DIRECT_MESSAGE_TYPING = 16384,
     MESSAGE_CONTENT = 32768,
     GUILD_SCHEDULED_EVENTS = 65536,
-    AUTO_MODERATION_CONFIGURATION = 1048576,
-    AUTO_MODERATION_EXECUTION = 2097152
+    AUTO_MODERATION_CONFIGURATION = 131072,
+    AUTO_MODERATION_EXECUTION = 262144
 }
 export type IntentNames = keyof typeof Intents;
 export declare const AllNonPrivilegedIntents: number;
@@ -478,6 +499,13 @@ export declare enum VoiceCloseCodes {
     VOICE_SERVER_CRASHED = 4014,
     UNKNOWN_ENCRYPTION_MODE = 4015
 }
+export declare enum HubTypes {
+    DEFAULT = 0,
+    HIGH_SCHOOL = 1,
+    COLLEGE = 2
+}
+/** @deprecated Use {@link Constants~HubTypes | HubTypes}. This will be removed in `1.4.0`. */
+export declare const HubType: typeof HubTypes;
 export declare enum ActivityTypes {
     GAME = 0,
     STREAMING = 1,

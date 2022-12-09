@@ -12,13 +12,15 @@ import type { ArchivedThreads, CreateInviteOptions, EditForumChannelOptions, Edi
 import type { JSONForumChannel } from "../types/json.js";
 import TypedCollection from "../util/TypedCollection.js";
 import type { ChannelTypes, ThreadAutoArchiveDuration } from "../Constants.js";
-import { SortOrderTypes } from "../Constants.js";
+import { SortOrderTypes, ForumLayoutTypes } from "../Constants.js";
 /** Represents a forum channel. */
 export default class ForumChannel extends GuildChannel {
     /** The usable tags for threads. */
     availableTags: Array<ForumTag>;
     /** The default auto archive duration for threads. */
     defaultAutoArchiveDuration: ThreadAutoArchiveDuration;
+    /** The default forum layout used to display threads. */
+    defaultForumLayout: ForumLayoutTypes;
     /** The default reaction emoji for threads. */
     defaultReactionEmoji: ForumEmoji | null;
     /** The default sort order mode used to sort threads. */

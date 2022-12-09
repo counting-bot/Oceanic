@@ -95,9 +95,4 @@ export default class Member extends Base {
      */
     removeRole(roleID: string, reason?: string): Promise<void>;
     toJSON(): JSONMember;
-    /**
-     * Remove a ban for this member.
-     * @param reason The reason for removing the ban.
-     */
-    unban(reason?: string): Promise<void>;
 }
