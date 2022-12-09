@@ -9,17 +9,14 @@ import type {
     RawStageInstance,
     RawUnavailableGuild,
     RawSticker
-} from "./guilds";
-import type { RawClientApplication, RawPartialApplication } from "./oauth";
-import type { RawExtendedUser, RawUser } from "./users";
-import type { PresenceUpdate, RawAutoModerationActionExecution, RawDeletedPrivateChannel } from "./gateway";
-import type { RawGuildApplicationCommandPermissions } from "./application-commands";
-import type { RawAutoModerationRule } from "./auto-moderation";
-import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels";
-import type { RawScheduledEvent } from "./scheduled-events";
-import type { RawVoiceState } from "./voice";
-import type { RawInteraction } from "./interactions";
-import type { GatewayOPCodes, InviteTargetTypes } from "../Constants";
+} from "./guilds.js";
+import type { RawClientApplication, RawPartialApplication } from "./oauth.js";
+import type { RawExtendedUser, RawUser } from "./users.js";
+import type { PresenceUpdate, RawDeletedPrivateChannel } from "./gateway.js";
+import type { RawGuildApplicationCommandPermissions } from "./application-commands.js";
+import type { RawGuildChannel, RawMessage, RawThreadChannel, RawThreadMember } from "./channels.js";
+import type { RawInteraction } from "./interactions.js";
+import type { GatewayOPCodes, InviteTargetTypes } from "../Constants.js";
 
 export type AnyReceivePacket = AnyDispatchPacket | HeartbeatPacket | ReconnectPacket | InvalidSessionPacket | HelloPacket | HeartbeatAckPacket;
 export interface RawPacket {
@@ -99,26 +96,6 @@ export interface GuildUpdatePacket extends BaseDispatchPacket {
 export interface ApplicationCommandPermissionsUpdatePacket extends BaseDispatchPacket {
     d: RawGuildApplicationCommandPermissions;
     t: "APPLICATION_COMMAND_PERMISSIONS_UPDATE";
-}
-
-export interface AutoModerationRuleCreatePacket extends BaseDispatchPacket {
-    d: RawAutoModerationRule;
-    t: "AUTO_MODERATION_RULE_CREATE";
-}
-
-export interface AutoModerationRuleDeletePacket extends BaseDispatchPacket {
-    d: RawAutoModerationRule;
-    t: "AUTO_MODERATION_RULE_DELETE";
-}
-
-export interface AutoModerationRuleUpdatePacket extends BaseDispatchPacket {
-    d: RawAutoModerationRule;
-    t: "AUTO_MODERATION_RULE_UPDATE";
-}
-
-export interface AutoModerationActionExecutionPacket extends BaseDispatchPacket {
-    d: RawAutoModerationActionExecution;
-    t: "AUTO_MODERATION_ACTION_EXECUTION";
 }
 
 export interface ChannelCreatePacket extends BaseDispatchPacket {
@@ -292,39 +269,6 @@ export interface GuildRoleUpdatePacket extends BaseDispatchPacket {
     t: "GUILD_ROLE_UPDATE";
 }
 
-export interface GuildScheduledEventCreatePacket extends BaseDispatchPacket {
-    d: RawScheduledEvent;
-    t: "GUILD_SCHEDULED_EVENT_CREATE";
-}
-
-export interface GuildScheduledEventDeletePacket extends BaseDispatchPacket {
-    d: RawScheduledEvent;
-    t: "GUILD_SCHEDULED_EVENT_DELETE";
-}
-
-export interface GuildScheduledEventUpdatePacket extends BaseDispatchPacket {
-    d: RawScheduledEvent;
-    t: "GUILD_SCHEDULED_EVENT_UPDATE";
-}
-
-export interface GuildScheduledEventUserAddPacket extends BaseDispatchPacket {
-    d: {
-        guild_id: string;
-        guild_scheduled_event_id: string;
-        user_id: string;
-    };
-    t: "GUILD_SCHEDULED_EVENT_USER_ADD";
-}
-
-export interface GuildScheduledEventUserRemovePacket extends BaseDispatchPacket {
-    d: {
-        guild_id: string;
-        guild_scheduled_event_id: string;
-        user_id: string;
-    };
-    t: "GUILD_SCHEDULED_EVENT_USER_REMOVE";
-}
-
 export interface IntegrationCreatePacket extends BaseDispatchPacket {
     d: RawIntegration & { guild_id: string; };
     t: "INTEGRATION_CREATE";
@@ -461,11 +405,6 @@ export interface UserUpdatePacket extends BaseDispatchPacket {
     t: "USER_UPDATE";
 }
 
-export interface VoiceStateUpdate extends BaseDispatchPacket {
-    d: RawVoiceState;
-    t: "VOICE_STATE_UPDATE";
-}
-
 export interface VoiceServerUpdate extends BaseDispatchPacket {
     d: {
         endpoint: string | null;
@@ -505,14 +444,12 @@ export interface StageInstanceUpdatePacket extends BaseDispatchPacket {
 
 export type AnyDispatchPacket = PresenceUpdatePacket | ReadyPacket | ResumedPacket |
 GuildCreatePacket | GuildDeletePacket | GuildUpdatePacket | ApplicationCommandPermissionsUpdatePacket |
-AutoModerationRuleCreatePacket | AutoModerationRuleDeletePacket | AutoModerationRuleUpdatePacket | AutoModerationActionExecutionPacket |
 ChannelCreatePacket | ChannelDeletePacket | ChannelUpdatePacket | ChannelPinsUpdatePacket |
 ThreadCreatePacket | ThreadDeletePacket | ThreadUpdatePacket | ThreadListSyncPacket | ThreadMemberUpdatePacket | ThreadMembersUpdatePacket |
 GuildBanAddPacket | GuildBanRemovePacket | GuildEmojisUpdatePacket | GuildStickersUpdatePacket | GuildIntegrationsUpdatePacket |
 GuildMemberAddPacket | GuildMemberRemovePacket | GuildMemberUpdatePacket | GuildMembersChunkPacket |
 GuildRoleCreatePacket | GuildRoleDeletePacket | GuildRoleUpdatePacket |
-GuildScheduledEventCreatePacket | GuildScheduledEventDeletePacket | GuildScheduledEventUpdatePacket | GuildScheduledEventUserAddPacket | GuildScheduledEventUserRemovePacket |
 IntegrationCreatePacket | IntegrationDeletePacket | IntegrationUpdatePacket |
 InviteCreatePacket | InviteDeletePacket |
 MessageCreatePacket | MessageDeletePacket | MessageDeleteBulkPacket | MessageUpdatePacket | MessageReactionAddPacket | MessageReactionRemovePacket | MessageReactionRemoveAllPacket | MessageReactionRemoveEmojiPacket |
-TypingStartPacket | UserUpdatePacket | VoiceStateUpdate | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket | StageInstanceCreatePacket | StageInstanceDeletePacket | StageInstanceUpdatePacket;
+TypingStartPacket | UserUpdatePacket | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket | StageInstanceCreatePacket | StageInstanceDeletePacket | StageInstanceUpdatePacket;

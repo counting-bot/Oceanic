@@ -1,12 +1,12 @@
 /** @module Types/OAuth */
-import type { RawUser } from "./users";
-import type { OAuthWebhook } from "./webhooks";
-import type { RawIntegration } from "./guilds";
-import type { ConnectionService, PermissionName, TeamMembershipState, VisibilityTypes } from "../Constants";
-import type PartialApplication from "../structures/PartialApplication";
-import type User from "../structures/User";
-import type Webhook from "../structures/Webhook";
-import type Integration from "../structures/Integration";
+import type { RawUser } from "./users.js";
+import type { OAuthWebhook } from "./webhooks.js";
+import type { RawIntegration } from "./guilds.js";
+import type { ConnectionService, PermissionName, TeamMembershipState, VisibilityTypes } from "../Constants.js";
+import type PartialApplication from "../structures/PartialApplication.js";
+import type User from "../structures/User.js";
+import type Webhook from "../structures/Webhook.js";
+import type Integration from "../structures/Integration.js";
 
 export interface RawApplication {
     bot_public: boolean;

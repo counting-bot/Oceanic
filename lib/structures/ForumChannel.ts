@@ -1,13 +1,13 @@
 /** @module ForumChannel */
-import GuildChannel from "./GuildChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import PublicThreadChannel from "./PublicThreadChannel";
-import type Invite from "./Invite";
-import type Member from "./Member";
-import Permission from "./Permission";
-import type CategoryChannel from "./CategoryChannel";
-import type Webhook from "./Webhook";
-import type Client from "../Client";
+import GuildChannel from "./GuildChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import PublicThreadChannel from "./PublicThreadChannel.js";
+import type Invite from "./Invite.js";
+import type Member from "./Member.js";
+import Permission from "./Permission.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import type Webhook from "./Webhook.js";
+import type Client from "../Client.js";
 import type {
     ArchivedThreads,
     CreateInviteOptions,
@@ -20,11 +20,11 @@ import type {
     RawOverwrite,
     RawPublicThreadChannel,
     StartThreadInForumOptions
-} from "../types/channels";
-import type { JSONForumChannel } from "../types/json";
-import TypedCollection from "../util/TypedCollection";
-import type { ChannelTypes, ThreadAutoArchiveDuration } from "../Constants";
-import { AllPermissions, Permissions, SortOrderTypes, ForumLayoutTypes } from "../Constants";
+} from "../types/channels.js";
+import type { JSONForumChannel } from "../types/json.js";
+import TypedCollection from "../util/TypedCollection.js";
+import type { ChannelTypes, ThreadAutoArchiveDuration } from "../Constants.js";
+import { AllPermissions, Permissions, SortOrderTypes, ForumLayoutTypes } from "../Constants.js";
 
 /** Represents a forum channel. */
 export default class ForumChannel extends GuildChannel {

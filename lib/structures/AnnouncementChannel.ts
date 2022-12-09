@@ -1,14 +1,14 @@
 /** @module AnnouncementChannel */
-import TextableChannel from "./TextableChannel";
-import type TextChannel from "./TextChannel";
-import type CategoryChannel from "./CategoryChannel";
-import AnnouncementThreadChannel from "./AnnouncementThreadChannel";
-import type Message from "./Message";
-import type { ChannelTypes } from "../Constants";
-import type Client from "../Client";
-import type { EditGuildChannelOptions, RawAnnouncementChannel, RawAnnouncementThreadChannel } from "../types/channels";
-import type { JSONAnnouncementChannel } from "../types/json";
-import TypedCollection from "../util/TypedCollection";
+import TextableChannel from "./TextableChannel.js";
+import type TextChannel from "./TextChannel.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
+import type Message from "./Message.js";
+import type { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
+import type { EditGuildChannelOptions, RawAnnouncementChannel, RawAnnouncementThreadChannel } from "../types/channels.js";
+import type { JSONAnnouncementChannel } from "../types/json.js";
+import TypedCollection from "../util/TypedCollection.js";
 
 /** Represents a guild announcement channel. */
 export default class AnnouncementChannel extends TextableChannel<AnnouncementChannel> {

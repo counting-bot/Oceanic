@@ -14,18 +14,11 @@ export const GUILD                       = (userID: string) => `/guilds/${userID
 export const GUILDS                      = "/guilds" as const;
 export const GUILD_BANS                  = (guildID: string) => `/guilds/${guildID}/bans` as const;
 export const GUILD_BAN                   = (guildID: string, userID: string) => `/guilds/${guildID}/bans/${userID}` as const;
-export const GUILD_AUTOMOD_RULE          = (guildID: string, autoModerationRuleID: string) => `/guilds/${guildID}/auto-moderation/rules/${autoModerationRuleID}` as const;
-export const GUILD_AUTOMOD_RULES         = (guildID: string) => `/guilds/${guildID}/auto-moderation/rules` as const;
 export const GUILD_EMOJI                 = (guildID: string, emojiID: string) => `/guilds/${guildID}/emojis/${emojiID}` as const;
 export const GUILD_EMOJIS                = (guildID: string) => `/guilds/${guildID}/emojis` as const;
-export const GUILD_AUDIT_LOG             = (guildID: string) => `/guilds/${guildID}/audit-logs` as const;
 export const GUILD_SCHEDULED_EVENT       = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}` as const;
 export const GUILD_SCHEDULED_EVENTS      = (guildID: string) => `/guilds/${guildID}/scheduled-events` as const;
 export const GUILD_SCHEDULED_EVENT_USERS = (guildID: string, eventID: string) => `/guilds/${guildID}/scheduled-events/${eventID}/users` as const;
-export const GUILD_TEMPLATE_CODE         = (code: string) => `/guilds/templates/${code}` as const;
-export const GUILD_TEMPLATE              = (guildID: string, templateID: string) => `/guilds/${guildID}/templates/${templateID}` as const;
-export const GUILD_TEMPLATES             = (guildID: string) => `/guilds/${guildID}/templates` as const;
-export const GUILD_PREVIEW               = (guildID: string) => `/guilds/${guildID}/preview` as const;
 export const GUILD_CHANNELS              = (guildID: string) => `/guilds/${guildID}/channels` as const;
 export const GUILD_ACTIVE_THREADS        = (guildID: string) => `/guilds/${guildID}/threads/active` as const;
 export const GUILD_MEMBERS               = (guildID: string) => `/guilds/${guildID}/members` as const;
@@ -44,7 +37,6 @@ export const GUILD_VANITY_URL            = (guildID: string) => `/guilds/${guild
 export const GUILD_WIDGET_IMAGE          = (guildID: string) => `/guilds/${guildID}/widget.png` as const;
 export const GUILD_WIDGET_JSON           = (guildID: string) => `/guilds/${guildID}/widget.json` as const;
 export const GUILD_WELCOME_SCREEN        = (guildID: string) => `/guilds/${guildID}/welcome-screen` as const;
-export const GUILD_VOICE_STATE           = (guildID: string, userID: string) => `/guilds/${guildID}/voice-states/${userID}` as const;
 export const GUILD_STICKER			     = (guildID: string, stickerID: string) => `/guilds/${guildID}/stickers/${stickerID}` as const;
 export const GUILD_STICKERS			     = (guildID: string) => `/guilds/${guildID}/stickers` as const;
 
@@ -72,8 +64,6 @@ export const CHANNEL_THREAD_MEMBER                   = (channelID: string, userI
 export const CHANNEL_THREAD_MEMBERS                  = (channelID: string) => `/channels/${channelID}/thread-members` as const;
 export const CHANNEL_TYPING                          = (channelID: string) => `/channels/${channelID}/typing` as const;
 export const GROUP_RECIPIENT                         = (channelID: string, userID: string) => `/channels/${channelID}/recipients/${userID}` as const;
-export const VOICE_REGIONS                           = "/voice/regions" as const;
-export const GUILD_VOICE_REGIONS                     = (guildID: string) => `/guilds/${guildID}/regions` as const;
 
 // OAuth
 export const OAUTH_APPLICATION  = "/oauth2/applications/@me" as const;
@@ -124,5 +114,3 @@ export const USER                    = (userID: string) => `/users/${userID}` as
 export const MESSAGE_LINK            = (guildID: string, channelID: string, messageID: string) => `/channels/${guildID}/${channelID}/${messageID}` as const;
 export const NITRO_STICKER_PACKS     = "/sticker-packs" as const;
 export const INVITE                  = (code: string) => `/invites/${code}` as const;
-export const STAGE_INSTANCES         = "/stage-instances" as const;
-export const STAGE_INSTANCE          = (channelID: string) => `/stage-instances/${channelID}` as const;

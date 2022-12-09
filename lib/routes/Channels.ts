@@ -49,15 +49,12 @@ import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChan
 import type PublicThreadChannel from "../structures/PublicThreadChannel";
 import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
 import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type { VoiceRegion } from "../types/voice";
 import Channel from "../structures/Channel";
 import type RESTManager from "../rest/RESTManager";
 import type PrivateChannel from "../structures/PrivateChannel";
 import type GroupChannel from "../structures/GroupChannel";
 import type User from "../structures/User";
 import type { Uncached } from "../types/shared";
-import type { CreateStageInstanceOptions, EditStageInstanceOptions, RawStageInstance } from "../types/guilds";
-import StageInstance from "../structures/StageInstance";
 
 /** Various methods for interacting with channels. */
 export default class Channels {
@@ -198,29 +195,6 @@ export default class Channels {
             method: "PUT",
             path:   Routes.CHANNEL_REACTION_USER(channelID, messageID, emoji, "@me")
         });
-    }
-
-    /**
-     * Create a stage instance.
-     * @param channelID The ID of the channel to create the stage instance on.
-     * @param options The options for creating the stage instance.
-     */
-    async createStageInstance(channelID: string, options: CreateStageInstanceOptions): Promise<StageInstance> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawStageInstance>({
-            method: "POST",
-            path:   Routes.STAGE_INSTANCES,
-            json:   {
-                channel_id:              channelID,
-                topic:                   options.topic,
-                privacy_level:           options.privacyLevel,
-                send_start_notification: options.sendStartNotification
-            },
-            reason
-        }).then(data => new StageInstance(data, this.#manager.client));
     }
 
     /**
@@ -365,19 +339,6 @@ export default class Channels {
     }
 
     /**
-     * Delete a stage instance.
-     * @param channelID The ID of the channel to delete the stage instance on.
-     * @param reason The reason for deleting the stage instance.
-     */
-    async deleteStageInstance(channelID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.STAGE_INSTANCE(channelID),
-            reason
-        });
-    }
-
-    /**
      * Edit a channel.
      * @param channelID The ID of the channel to edit.
      * @param options The options for editing the channel.
@@ -486,28 +447,6 @@ export default class Channels {
     }
 
     /**
-     * Edit a stage instance.
-     * @param channelID The ID of the channel to edit the stage instance on.
-     * @param options The options for editing the stage instance.
-     */
-    async editStageInstance(channelID: string, options: EditStageInstanceOptions): Promise<StageInstance> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawStageInstance>({
-            method: "PATCH",
-            path:   Routes.STAGE_INSTANCE(channelID),
-            json:   {
-                channel_id:    channelID,
-                topic:         options.topic,
-                privacy_level: options.privacyLevel
-            },
-            reason
-        }).then(data => new StageInstance(data, this.#manager.client));
-    }
-
-    /**
      * Follow an announcement channel.
      * @param channelID The ID of the channel to follow the announcement channel to.
      * @param webhookChannelID The ID of the channel to follow the announcement channel to.
@@ -545,9 +484,6 @@ export default class Channels {
     async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithExpirationOptions): Promise<Invite<"withMetadata" | "withExpiration", T>>;
     async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options?: GetInviteOptions): Promise<Invite<never, T>> {
         const query = new URLSearchParams();
-        if (options?.guildScheduledEventID !== undefined) {
-            query.set("guild_scheduled_event_id", options.guildScheduledEventID);
-        }
         if (options?.withCounts !== undefined) {
             query.set("with_counts", options.withCounts.toString());
         }
@@ -798,17 +734,6 @@ export default class Channels {
     }
 
     /**
-     * Get the stage instance associated with a channel.
-     * @param channelID The ID of the channel to get the stage instance on.
-     */
-    async getStageInstance(channelID: string): Promise<StageInstance> {
-        return this.#manager.authRequest<RawStageInstance>({
-            method: "GET",
-            path:   Routes.STAGE_INSTANCE(channelID)
-        }).then(data => new StageInstance(data, this.#manager.client));
-    }
-
-    /**
      * Get a thread member.
      * @param channelID The ID of the thread.
      * @param userID The ID of the user to get the thread member of.
@@ -839,14 +764,6 @@ export default class Channels {
             joinTimestamp: new Date(d.join_timestamp),
             userID:        d.user_id
         })));
-    }
-
-    /** @deprecated Get the list of usable voice regions. Moved to `misc`. */
-    async getVoiceRegions(): Promise<Array<VoiceRegion>> {
-        return this.#manager.authRequest<Array<VoiceRegion>>({
-            method: "GET",
-            path:   Routes.VOICE_REGIONS
-        });
     }
 
     /**

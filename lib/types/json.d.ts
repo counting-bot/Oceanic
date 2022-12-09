@@ -1,25 +1,23 @@
 /** @module Types/JSON */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import type { InstallParams, TeamMember } from "./oauth";
-import type { ApplicationCommandOptions, LocaleMap } from "./application-commands";
+import type { InstallParams, TeamMember } from "./oauth.js";
+import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
 import type {
     ApplicationCommandInteractionData,
     AutocompleteInteractionData,
     MessageComponentButtonInteractionData,
     MessageComponentSelectMenuInteractionData,
     ModalSubmitInteractionData
-} from "./interactions";
-import type { AutoModerationAction, TriggerMetadata } from "./auto-moderation";
+} from "./interactions.js";
 import type {
     GuildEmoji,
     IntegrationAccount,
     RawGuild,
     RoleTags,
-    RawSticker,
     WelcomeScreen,
     Sticker,
     Presence
-} from "./guilds";
+} from "./guilds.js";
 import type {
     ChannelMention,
     MessageActivity,
@@ -33,12 +31,9 @@ import type {
     ForumEmoji,
     MessageActionRow,
     Embed
-} from "./channels";
-import type { ScheduledEventEntityMetadata } from "./scheduled-events";
+} from "./channels.js";
 import type {
     ApplicationCommandTypes,
-    AutoModerationEventTypes,
-    AutoModerationTriggerTypes,
     ChannelTypes,
     DefaultMessageNotificationLevels,
     ExplicitContentFilterLevels,
@@ -55,9 +50,6 @@ import type {
     PremiumTiers,
     PrivateChannelTypes,
     RESTMethod,
-    GuildScheduledEventEntityTypes,
-    GuildScheduledEventPrivacyLevels,
-    GuildScheduledEventStatuses,
     TextChannelTypes,
     ThreadAutoArchiveDuration,
     ThreadChannelTypes,
@@ -67,7 +59,7 @@ import type {
     SortOrderTypes,
     StageInstancePrivacyLevels,
     ForumLayoutTypes
-} from "../Constants";
+} from "../Constants.js";
 
 export interface JSONAnnouncementChannel extends JSONTextableChannel {
     rateLimitPerUser: 0;
@@ -133,18 +125,6 @@ export interface JSONAutocompleteInteraction extends JSONInteraction {
     member?: JSONMember;
     type: InteractionTypes.APPLICATION_COMMAND_AUTOCOMPLETE;
     user: JSONUser;
-}
-export interface JSONAutoModerationRule extends JSONBase {
-    actions: Array<AutoModerationAction>;
-    creatorID: string;
-    enabled: boolean;
-    eventType: AutoModerationEventTypes;
-    exemptChannels: Array<string>;
-    exemptRoles: Array<string>;
-    guildID: string;
-    name: string;
-    triggerMetadata: TriggerMetadata;
-    triggerType: AutoModerationTriggerTypes;
 }
 export interface JSONBase {
     createdAt: number;
@@ -239,12 +219,9 @@ export interface JSONGroupChannel extends JSONChannel {
     type: ChannelTypes.GROUP_DM;
 }
 export interface JSONGuild extends JSONBase {
-    afkChannelID: string | null;
-    afkTimeout: number;
     application?: string;
     approximateMemberCount?: number;
     approximatePresenceCount?: number;
-    autoModerationRules: Array<JSONAutoModerationRule>;
     banner: string | null;
     channels: Array<string>;
     defaultMessageNotifications: DefaultMessageNotificationLevels;
@@ -274,7 +251,6 @@ export interface JSONGuild extends JSONBase {
     region?: string | null;
     roles: Array<JSONRole>;
     rulesChannelID: string | null;
-    scheduledEvents: Array<JSONScheduledEvent>;
     splash: string | null;
     stageInstances: Array<JSONStageInstance>;
     stickers?: Array<Sticker>;
@@ -284,7 +260,6 @@ export interface JSONGuild extends JSONBase {
     unavailable: boolean;
     vanityURLCode: string | null;
     verificationLevel: VerificationLevels;
-    voiceStates: Array<JSONVoiceState>;
     welcomeScreen?: WelcomeScreen;
     widgetChannelID: string | null;
     widgetEnabled?: boolean;
@@ -294,30 +269,6 @@ export interface JSONGuildChannel extends JSONChannel {
     name: string;
     parentID: string | null;
     type: GuildChannelTypes;
-}
-export interface JSONGuildPreview extends JSONBase {
-    approximateMemberCount: number;
-    approximatePresenceCount: number;
-    description: string | null;
-    discoverySplash: string | null;
-    emojis: Array<GuildEmoji>;
-    features: Array<GuildFeature>;
-    icon: string | null;
-    name: string;
-    splash: string | null;
-    stickers: Array<RawSticker>;
-}
-export interface JSONGuildTemplate {
-    code: string;
-    createdAt: number;
-    creator: JSONUser;
-    description: string | null;
-    isDirty: boolean | null;
-    name: string;
-    serializedSourceGuild: Partial<RawGuild>;
-    sourceGuildID: string;
-    updatedAt: number;
-    usageCount: number;
 }
 export interface JSONIntegration extends JSONBase {
     account: IntegrationAccount;
@@ -350,7 +301,6 @@ export interface JSONInvite {
     createdAt?: number;
     expiresAt?: number;
     guildID?: string;
-    guildScheduledEvent?: JSONScheduledEvent;
     inviter?: string;
     maxAge?: number;
     maxUses?: number;
@@ -480,22 +430,6 @@ export interface JSONRole extends JSONBase {
     tags: RoleTags;
     unicodeEmoji: string | null;
 }
-export interface JSONScheduledEvent extends JSONBase {
-    channelID: string | null;
-    creator?: JSONUser;
-    description?: string | null;
-    entityID: string | null;
-    entityMetadata: ScheduledEventEntityMetadata | null;
-    entityType: GuildScheduledEventEntityTypes;
-    guildID: string;
-    image?: string | null;
-    name: string;
-    privacyLevel: GuildScheduledEventPrivacyLevels;
-    scheduledEndTime: number | null;
-    scheduledStartTime: number;
-    status: GuildScheduledEventStatuses;
-    userCount?: number;
-}
 export interface JSONStageChannel extends JSONGuildChannel {
     bitrate: number;
     permissionOverwrites: Array<JSONPermissionOverwrite>;
@@ -509,7 +443,6 @@ export interface JSONStageInstance extends JSONBase {
     discoverableDisabled: boolean;
     guildID: string;
     privacyLevel: StageInstancePrivacyLevels;
-    scheduledEventID: string | null;
     topic: string;
 }
 export interface JSONTeam extends JSONBase {
@@ -569,23 +502,8 @@ export interface JSONVoiceChannel extends JSONGuildChannel {
     type: ChannelTypes.GUILD_VOICE;
     userLimit: number;
     videoQualityMode: VideoQualityModes;
-    voiceMembers: Array<string>;
 }
-export interface JSONVoiceState extends JSONBase {
-    channelID: string | null;
-    deaf: boolean;
-    guildID?: string;
-    member?: JSONMember;
-    mute: boolean;
-    requestToSpeakTimestamp: number | null;
-    selfDeaf: boolean;
-    selfMute: boolean;
-    selfStream: boolean;
-    selfVideo: boolean;
-    sessionID: string;
-    suppress: boolean;
-    user?: JSONUser;
-}
+
 export interface JSONWebhook extends JSONBase {
     applicationID: string | null;
     avatar: string | null;

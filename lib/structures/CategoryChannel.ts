@@ -1,20 +1,20 @@
 /** @module CategoryChannel */
-import PermissionOverwrite from "./PermissionOverwrite";
-import GuildChannel from "./GuildChannel";
-import type Member from "./Member";
-import Permission from "./Permission";
-import type Client from "../Client";
-import type { ChannelTypes } from "../Constants";
-import { AllPermissions, Permissions } from "../Constants";
-import TypedCollection from "../util/TypedCollection";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import GuildChannel from "./GuildChannel.js";
+import type Member from "./Member.js";
+import Permission from "./Permission.js";
+import type Client from "../Client.js";
+import type { ChannelTypes } from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     EditAnyGuildChannelOptions,
     EditPermissionOptions,
     RawCategoryChannel,
     RawGuildChannel,
     RawOverwrite
-} from "../types/channels";
-import type { JSONCategoryChannel } from "../types/json";
+} from "../types/channels.js";
+import type { JSONCategoryChannel } from "../types/json.js";
 
 /** Represents a guild category channel. */
 export default class CategoryChannel extends GuildChannel {

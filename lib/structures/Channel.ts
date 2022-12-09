@@ -1,7 +1,7 @@
 /** @module Channel */
-import Base from "./Base";
-import { ChannelTypes } from "../Constants";
-import type Client from "../Client";
+import Base from "./Base.js";
+import { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
 import type {
     AnyChannel,
     RawAnnouncementChannel,
@@ -16,8 +16,20 @@ import type {
     RawStageChannel,
     RawTextChannel,
     RawVoiceChannel
-} from "../types/channels";
-import type { JSONChannel } from "../types/json";
+} from "../types/channels.js";
+import type { JSONChannel } from "../types/json.js";
+
+// import TextChannel from "./TextChannel.js";
+// import PrivateChannel from "./PrivateChannel.js";
+// import VoiceChannel from "./VoiceChannel.js";
+// import GroupChannel from "./GroupChannel.js";
+// import CategoryChannel from "./CategoryChannel.js";
+// import AnnouncementChannel from "./AnnouncementChannel.js";
+// import AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
+// import PublicThreadChannel from "./PublicThreadChannel.js";
+// import PrivateThreadChannel from "./PrivateThreadChannel.js";
+// import StageChannel from "./StageChannel.js";
+// import ForumChannel from "./ForumChannel.js";
 
 /** Represents a channel. */
 export default class Channel extends Base {
@@ -91,15 +103,15 @@ export default class Channel extends Base {
 
 // Yes this sucks, but it works. That's the important part. Circular imports are hell.
 /* eslint-disable @typescript-eslint/no-var-requires, unicorn/prefer-module */
-const TextChannel = (require("./TextChannel") as typeof import("./TextChannel")).default;
-const PrivateChannel = (require("./PrivateChannel") as typeof import("./PrivateChannel")).default;
-const VoiceChannel = (require("./VoiceChannel") as typeof import("./VoiceChannel")).default;
-const CategoryChannel = (require("./CategoryChannel") as typeof import("./CategoryChannel")).default;
-const GroupChannel = (require("./GroupChannel") as typeof import("./GroupChannel")).default;
-const AnnouncementChannel = (require("./AnnouncementChannel") as typeof import("./AnnouncementChannel")).default;
-const PublicThreadChannel = (require("./PublicThreadChannel") as typeof import("./PublicThreadChannel")).default;
-const PrivateThreadChannel = (require("./PrivateThreadChannel") as typeof import("./PrivateThreadChannel")).default;
-const AnnouncementThreadChannel = (require("./AnnouncementThreadChannel") as typeof import("./AnnouncementThreadChannel")).default;
-const StageChannel = (require("./StageChannel") as typeof import("./StageChannel")).default;
-const ForumChannel = (require("./ForumChannel") as typeof import("./ForumChannel")).default;
+const TextChannel = (require("./TextChannel.js") as typeof import("./TextChannel.js")).default;
+const PrivateChannel = (require("./PrivateChannel.js") as typeof import("./PrivateChannel.js")).default;
+const VoiceChannel = (require("./VoiceChannel.js") as typeof import("./VoiceChannel.js")).default;
+const CategoryChannel = (require("./CategoryChannel.js") as typeof import("./CategoryChannel.js")).default;
+const GroupChannel = (require("./GroupChannel") as typeof import("./GroupChannel.js")).default;
+const AnnouncementChannel = (require("./AnnouncementChannel.js") as typeof import("./AnnouncementChannel.js")).default;
+const PublicThreadChannel = (require("./PublicThreadChannel.js") as typeof import("./PublicThreadChannel.js")).default;
+const PrivateThreadChannel = (require("./PrivateThreadChannel.js") as typeof import("./PrivateThreadChannel.js")).default;
+const AnnouncementThreadChannel = (require("./AnnouncementThreadChannel.js") as typeof import("./AnnouncementThreadChannel.js")).default;
+const StageChannel = (require("./StageChannel.js") as typeof import("./StageChannel.js")).default;
+const ForumChannel = (require("./ForumChannel.js") as typeof import("./ForumChannel.js")).default;
 /* eslint-enable @typescript-eslint/no-var-requires, unicorn/prefer-module */

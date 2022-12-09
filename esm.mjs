@@ -6,9 +6,7 @@ const AnnouncementThreadChannel = (await import("./dist/lib/structures/Announcem
 const Application = (await import("./dist/lib/structures/Application.js")).default.default;
 const ApplicationCommand = (await import("./dist/lib/structures/ApplicationCommand.js")).default.default;
 const Attachment = (await import("./dist/lib/structures/Attachment.js")).default.default;
-const AuditLogEntry = (await import("./dist/lib/structures/AuditLogEntry.js")).default.default;
 const AutocompleteInteraction = (await import("./dist/lib/structures/AutocompleteInteraction.js")).default.default;
-const AutoModerationRule = (await import("./dist/lib/structures/AutoModerationRule.js")).default.default;
 const Base = (await import("./dist/lib/structures/Base.js")).default.default;
 const Bucket = (await import("./dist/lib/rest/Bucket.js")).default.default;
 const CategoryChannel = (await import("./dist/lib/structures/CategoryChannel.js")).default.default;
@@ -26,9 +24,6 @@ const GatewayError = (await import("./dist/lib/gateway/GatewayError.js")).defaul
 const GroupChannel = (await import("./dist/lib/structures/GroupChannel.js")).default.default;
 const Guild = (await import("./dist/lib/structures/Guild.js")).default.default;
 const GuildChannel = (await import("./dist/lib/structures/GuildChannel.js")).default.default;
-const GuildPreview = (await import("./dist/lib/structures/GuildPreview.js")).default.default;
-const GuildScheduledEvent = (await import("./dist/lib/structures/GuildScheduledEvent.js")).default.default;
-const GuildTemplate = (await import("./dist/lib/structures/GuildTemplate.js")).default.default;
 const Integration = (await import("./dist/lib/structures/Integration.js")).default.default;
 const InteractionResolvedChannel = (await import("./dist/lib/structures/InteractionResolvedChannel.js")).default.default;
 const InteractionOptionsWrapper = (await import("./dist/lib/util/InteractionOptionsWrapper.js")).default.default;
@@ -66,7 +61,6 @@ const UncaughtError = (await import("./dist/lib/util/UncaughtError.js")).default
 const User = (await import("./dist/lib/structures/User.js")).default.default;
 const Util = (await import("./dist/lib/util/Util.js")).default.default;
 const VoiceChannel = (await import("./dist/lib/structures/VoiceChannel.js")).default.default;
-const VoiceState = (await import("./dist/lib/structures/VoiceState.js")).default.default;
 const Webhook = (await import("./dist/lib/structures/Webhook.js")).default.default;
 
 export * from "./dist/lib/Constants.js";
@@ -79,9 +73,7 @@ export {
     Application,
     ApplicationCommand,
     Attachment,
-    AuditLogEntry,
     AutocompleteInteraction,
-    AutoModerationRule,
     Base,
     Bucket,
     CategoryChannel,
@@ -99,9 +91,6 @@ export {
     GroupChannel,
     Guild,
     GuildChannel,
-    GuildPreview,
-    GuildScheduledEvent,
-    GuildTemplate,
     Integration,
     InteractionResolvedChannel,
     InteractionOptionsWrapper,
@@ -139,6 +128,5 @@ export {
     User,
     Util,
     VoiceChannel,
-    VoiceState,
     Webhook
 };

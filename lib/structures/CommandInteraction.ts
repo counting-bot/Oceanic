@@ -1,32 +1,32 @@
 /** @module CommandInteraction */
-import Interaction from "./Interaction";
-import Attachment from "./Attachment";
-import Member from "./Member";
-import Message from "./Message";
-import Role from "./Role";
-import User from "./User";
-import type Guild from "./Guild";
-import Permission from "./Permission";
-import GuildChannel from "./GuildChannel";
-import type PrivateChannel from "./PrivateChannel";
-import InteractionResolvedChannel from "./InteractionResolvedChannel";
-import TypedCollection from "../util/TypedCollection";
-import type { InteractionTypes } from "../Constants";
-import { ApplicationCommandTypes, InteractionResponseTypes } from "../Constants";
+import Interaction from "./Interaction.js";
+import Attachment from "./Attachment.js";
+import Member from "./Member.js";
+import Message from "./Message.js";
+import Role from "./Role.js";
+import User from "./User.js";
+import type Guild from "./Guild.js";
+import Permission from "./Permission.js";
+import GuildChannel from "./GuildChannel.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import InteractionResolvedChannel from "./InteractionResolvedChannel.js";
+import TypedCollection from "../util/TypedCollection.js";
+import type { InteractionTypes } from "../Constants.js";
+import { ApplicationCommandTypes, InteractionResponseTypes } from "../Constants.js";
 import type {
     ApplicationCommandInteractionData,
     InteractionContent,
     ModalData,
     RawApplicationCommandInteraction,
     ApplicationCommandInteractionResolvedData
-} from "../types/interactions";
-import type Client from "../Client";
-import type { RawMember } from "../types/guilds";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
-import type { RawUser } from "../types/users";
-import type { JSONCommandInteraction } from "../types/json";
-import InteractionOptionsWrapper from "../util/InteractionOptionsWrapper";
-import type { Uncached } from "../types/shared";
+} from "../types/interactions.js";
+import type Client from "../Client.js";
+import type { RawMember } from "../types/guilds.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
+import type { RawUser } from "../types/users.js";
+import type { JSONCommandInteraction } from "../types/json.js";
+import InteractionOptionsWrapper from "../util/InteractionOptionsWrapper.js";
+import type { Uncached } from "../types/shared.js";
 
 /** Represents a command interaction. */
 export default class CommandInteraction<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {

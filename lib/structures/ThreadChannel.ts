@@ -1,13 +1,13 @@
 /** @module ThreadChannel */
-import GuildChannel from "./GuildChannel";
-import Message from "./Message";
-import type User from "./User";
-import type Member from "./Member";
-import type Permission from "./Permission";
-import type { ThreadChannelTypes } from "../Constants";
-import { ChannelTypes } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
+import GuildChannel from "./GuildChannel.js";
+import Message from "./Message.js";
+import type User from "./User.js";
+import type Member from "./Member.js";
+import type Permission from "./Permission.js";
+import type { ThreadChannelTypes } from "../Constants.js";
+import { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     AnyThreadChannel,
     CreateMessageOptions,
@@ -22,8 +22,8 @@ import type {
     ThreadMetadata,
     PurgeOptions,
     ThreadParentChannel
-} from "../types/channels";
-import type { JSONThreadChannel } from "../types/json";
+} from "../types/channels.js";
+import type { JSONThreadChannel } from "../types/json.js";
 
 /** Represents a guild thread channel. */
 export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel> extends GuildChannel {

@@ -1,9 +1,8 @@
 /** @module Invite */
-import Channel from "./Channel";
-import Guild from "./Guild";
-import type GuildScheduledEvent from "./GuildScheduledEvent";
-import type User from "./User";
-import PartialApplication from "./PartialApplication";
+import Channel from "./Channel.js";
+import Guild from "./Guild.js";
+import type User from "./User.js";
+import PartialApplication from "./PartialApplication.js";
 import type {
     InviteChannel,
     InviteInfoTypes,
@@ -11,12 +10,12 @@ import type {
     PartialInviteChannel,
     RawInvite,
     RawInviteWithMetadata
-} from "../types/channels";
-import type Client from "../Client";
-import type { InviteTargetTypes } from "../Constants";
-import type { RawGuild } from "../types/guilds";
-import type { JSONInvite } from "../types/json";
-import type { Uncached } from "../types/shared";
+} from "../types/channels.js";
+import type Client from "../Client.js";
+import type { InviteTargetTypes } from "../Constants.js";
+import type { RawGuild } from "../types/guilds.js";
+import type { JSONInvite } from "../types/json.js";
+import type { Uncached } from "../types/shared.js";
 
 /** Represents an invite. */
 export default class Invite<T extends InviteInfoTypes = "withMetadata", CH extends InviteChannel | Uncached = InviteChannel | Uncached> {
@@ -38,8 +37,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
     guild: Guild | null;
     /** The ID of the guild this invite leads to or `null` if this invite leads to a Group DM. */
     guildID: string | null;
-    /** The scheduled event associated with this invite. */
-    guildScheduledEvent?: GuildScheduledEvent;
     /** The user that created this invite. */
     inviter?: User;
     /** The time after which this invite expires. */
@@ -117,9 +114,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
         if (data.target_application !== undefined) {
             this.targetApplication = new PartialApplication(data.target_application, this.client);
         }
-        if (data.guild_scheduled_event !== undefined) {
-            this.guildScheduledEvent = guild!.scheduledEvents.update(data.guild_scheduled_event);
-        }
         if (data.target_user !== undefined) {
             this.targetUser = this.client.users.update(data.target_user);
         }
@@ -179,7 +173,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
             createdAt:                this.createdAt?.getTime(),
             expiresAt:                this.expiresAt?.getTime(),
             guildID:                  this.guildID ?? undefined,
-            guildScheduledEvent:      this.guildScheduledEvent?.toJSON(),
             inviter:                  this.inviter?.id,
             maxAge:                   this.maxAge,
             maxUses:                  this.maxUses,

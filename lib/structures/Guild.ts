@@ -1,26 +1,19 @@
 /** @module Guild */
-import Role from "./Role";
-import Base from "./Base";
-import GuildChannel from "./GuildChannel";
-import Member from "./Member";
-import GuildScheduledEvent from "./GuildScheduledEvent";
-import ThreadChannel from "./ThreadChannel";
-import type User from "./User";
-import type VoiceChannel from "./VoiceChannel";
-import type ClientApplication from "./ClientApplication";
-import type TextChannel from "./TextChannel";
-import type CategoryChannel from "./CategoryChannel";
-import Integration from "./Integration";
-import AutoModerationRule from "./AutoModerationRule";
-import Permission from "./Permission";
-import VoiceState from "./VoiceState";
-import StageInstance from "./StageInstance";
-import Channel from "./Channel";
-import type StageChannel from "./StageChannel";
-import type GuildTemplate from "./GuildTemplate";
-import type GuildPreview from "./GuildPreview";
-import type Invite from "./Invite";
-import type Webhook from "./Webhook";
+import Role from "./Role.js";
+import Base from "./Base.js";
+import GuildChannel from "./GuildChannel.js";
+import Member from "./Member.js";
+import ThreadChannel from "./ThreadChannel.js";
+import type User from "./User.js";
+import type ClientApplication from "./ClientApplication.js";
+import type TextChannel from "./TextChannel.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Integration from "./Integration.js";
+import Permission from "./Permission.js";
+import StageInstance from "./StageInstance.js";
+import Channel from "./Channel.js";
+import type Invite from "./Invite.js";
+import type Webhook from "./Webhook.js";
 import type {
     DefaultMessageNotificationLevels,
     ExplicitContentFilterLevels,
@@ -30,13 +23,12 @@ import type {
     MFALevels,
     PremiumTiers,
     VerificationLevels,
-    GuildChannelTypesWithoutThreads,
-    GatewayOPCodes
-} from "../Constants";
-import { AllPermissions, Permissions } from "../Constants";
-import * as Routes from "../util/Routes";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
+    GuildChannelTypesWithoutThreads
+} from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
+import * as Routes from "../util/Routes.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     AnyGuildChannel,
     AnyGuildChannelWithoutThreads,
@@ -45,7 +37,7 @@ import type {
     InviteChannel,
     RawGuildChannel,
     RawThreadChannel
-} from "../types/channels";
+} from "../types/channels.js";
 import type {
     AddMemberOptions,
     BeginPruneOptions,
@@ -54,13 +46,11 @@ import type {
     CreateEmojiOptions,
     CreateRoleOptions,
     EditCurrentMemberOptions,
-    EditCurrentUserVoiceStateOptions,
     EditEmojiOptions,
     EditGuildOptions,
     EditMemberOptions,
     EditRoleOptions,
     EditRolePositionsEntry,
-    EditUserVoiceStateOptions,
     EditWelcomeScreenOptions,
     GetBansOptions,
     GetMembersOptions,
@@ -87,36 +77,18 @@ import type {
     CreateStickerOptions,
     Sticker,
     EditStickerOptions
-} from "../types/guilds";
-import type {
-    CreateScheduledEventOptions,
-    EditScheduledEventOptions,
-    GetScheduledEventUsersOptions,
-    RawScheduledEvent,
-    ScheduledEventUser
-} from "../types/scheduled-events";
-import type { CreateAutoModerationRuleOptions, EditAutoModerationRuleOptions, RawAutoModerationRule } from "../types/auto-moderation";
-import type { AuditLog, GetAuditLogOptions } from "../types/audit-log";
-import type { CreateTemplateOptions, EditGuildTemplateOptions } from "../types/guild-template";
-import type { JoinVoiceChannelOptions, RawVoiceState, VoiceRegion } from "../types/voice";
-import type { JSONGuild } from "../types/json";
-import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway";
-import type Shard from "../gateway/Shard";
+} from "../types/guilds.js";
+import type { JSONGuild } from "../types/json.js";
+import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway.js";
+import type Shard from "../gateway/Shard.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore-line
-import Collection from "../util/Collection";
-import type { DiscordGatewayAdapterCreator, DiscordGatewayAdapterLibraryMethods, DiscordGatewayAdapterImplementerMethods, VoiceConnection } from "@discordjs/voice";
+import Collection from "../util/Collection.js";
 
 /** Represents a Discord server. */
 export default class Guild extends Base {
     private _clientMember?: Member;
     private _shard?: Shard;
-    /** This guild's afk voice channel. */
-    afkChannel?: VoiceChannel | null;
-    /** The ID of this guild's afk voice channel. */
-    afkChannelID: string | null;
-    /** The seconds after which voice users will be moved to the afk channel. */
-    afkTimeout: number;
     /** The application that created this guild, if applicable. */
     application?: ClientApplication | null;
     /** The ID of the application that created this guild, if applicable. */
@@ -125,8 +97,6 @@ export default class Guild extends Base {
     approximateMemberCount?: number;
     /** The approximate number of non-offline members in this guild (if retrieved with counts). */
     approximatePresenceCount?: number;
-    /** The auto moderation rules in this guild. */
-    autoModerationRules: TypedCollection<string, RawAutoModerationRule, AutoModerationRule>;
     /** The hash of this guild's banner. */
     banner: string | null;
     /** The channels in this guild. */
@@ -195,8 +165,6 @@ export default class Guild extends Base {
     rulesChannel?: TextChannel | null;
     /** The id of the channel where rules/guidelines are displayed. Only present in guilds with the `COMMUNITY` feature. */
     rulesChannelID: string | null;
-    /** The scheduled events in this guild. */
-    scheduledEvents: TypedCollection<string, RawScheduledEvent, GuildScheduledEvent>;
     /** The invite splash hash of this guild. */
     splash: string | null;
     /** The stage instances in this guild. */
@@ -217,8 +185,6 @@ export default class Guild extends Base {
     vanityURLCode: string | null;
     /** The [verification level](https://discord.com/developers/docs/resources/guild#guild-object-verification-level) of this guild. */
     verificationLevel: VerificationLevels;
-    /** The voice states of members in voice channels. */
-    voiceStates: TypedCollection<string, RawVoiceState, VoiceState>;
     /** The welcome screen configuration. Only present in guilds with the `WELCOME_SCREEN_ENABLED` feature. */
     welcomeScreen?: WelcomeScreen;
     /** The channel the widget will generate an invite to, or `null` if set to no invite. */
@@ -230,10 +196,7 @@ export default class Guild extends Base {
     constructor(data: RawGuild, client: Client) {
         super(data.id, client);
         this._shard = this.client.guildShardMap[this.id] !== undefined ? this.client.shards.get(this.client.guildShardMap[this.id]) : undefined;
-        this.afkChannelID = null;
-        this.afkTimeout = 0;
         this.applicationID = data.application_id;
-        this.autoModerationRules = new TypedCollection(AutoModerationRule, client);
         this.banner = null;
         this.channels = new TypedCollection(GuildChannel, client) as TypedCollection<string, RawGuildChannel, AnyGuildChannelWithoutThreads>;
         this.defaultMessageNotifications = data.default_message_notifications;
@@ -260,7 +223,6 @@ export default class Guild extends Base {
         this.publicUpdatesChannelID = null;
         this.roles = new TypedCollection(Role, client);
         this.rulesChannelID = null;
-        this.scheduledEvents = new TypedCollection(GuildScheduledEvent, client);
         this.splash = null;
         this.stageInstances = new TypedCollection(StageInstance, client);
         this.stickers = [];
@@ -270,7 +232,6 @@ export default class Guild extends Base {
         this.unavailable = !!data.unavailable;
         this.vanityURLCode = data.vanity_url_code;
         this.verificationLevel = data.verification_level;
-        this.voiceStates = new TypedCollection(VoiceState, client);
         this.widgetChannelID = data.widget_channel_id === null ? null : data.widget_channel_id!;
         for (const role of data.roles) {
             this.roles.update(role, data.id);
@@ -355,35 +316,6 @@ export default class Guild extends Base {
 
             }
         }
-
-
-        if (data.voice_states) {
-            for (const voiceState of data.voice_states) {
-                if (!this.members.has(voiceState.user_id) || !voiceState.channel_id) {
-                    continue;
-                }
-                voiceState.guild_id = this.id;
-                this.voiceStates.update({ ...voiceState, id: voiceState.user_id });
-                const channel = this.channels.get(voiceState.channel_id) as VoiceChannel | StageChannel;
-                const member = this.members.update({ id: voiceState.user_id, deaf: voiceState.deaf, mute: voiceState.mute }, this.id);
-                if (this._clientMember) {
-                    this._clientMember["update"]({ deaf: voiceState.deaf, mute: voiceState.mute });
-                }
-                if (channel && "voiceMembers" in channel) {
-                    channel.voiceMembers.add(member);
-                }
-                if (client.shards.options.seedVoiceConnections && voiceState.user_id === client.user.id && !this.client.getVoiceConnection(this.id)) {
-                    this.client.joinVoiceChannel({
-                        guildID:             this.id,
-                        channelID:           voiceState.channel_id,
-                        selfDeaf:            voiceState.self_deaf,
-                        selfMute:            voiceState.self_mute,
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        voiceAdapterCreator: this.voiceAdapterCreator
-                    });
-                }
-            }
-        }
     }
 
     private toggleFeature(feature: GuildFeature, enable: boolean, reason?: string): Promise<Guild> {
@@ -418,13 +350,6 @@ export default class Guild extends Base {
     }
 
     protected override update(data: Partial<RawGuild>): void {
-        if (data.afk_channel_id !== undefined) {
-            this.afkChannel = data.afk_channel_id === null ? null : this.client.getChannel<VoiceChannel>(data.afk_channel_id);
-            this.afkChannelID = data.afk_channel_id;
-        }
-        if (data.afk_timeout !== undefined) {
-            this.afkTimeout = data.afk_timeout;
-        }
         if (data.application_id !== undefined) {
             this.application = this.client["_application"] && data.application_id === null ? null : (this.client.application.id === data.application_id ? this.client.application : undefined);
             this.applicationID = data.application_id;
@@ -578,26 +503,6 @@ export default class Guild extends Base {
         return this._shard;
     }
 
-    /** The voice adapter creator for this guild that can be used with [@discordjs/voice](https://discord.js.org/#/docs/voice/main/general/welcome) to play audio in voice and stage channels. */
-    get voiceAdapterCreator(): DiscordGatewayAdapterCreator {
-        if (!this._shard) {
-            throw new Error(`Cannot use ${this.constructor.name}.voiceAdapterCreator if the guild was received via REST, or you do not have the GUILDS intent as this guild does not belong to any Shard.`);
-        }
-
-        return (methods: DiscordGatewayAdapterLibraryMethods): DiscordGatewayAdapterImplementerMethods => {
-            this.client.voiceAdapters.set(this.id, methods);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return {
-                sendPayload: (payload: { d: unknown; op: GatewayOPCodes; }): true => {
-                    this.shard.send(payload.op, payload.d);
-
-                    return true;
-                },
-                destroy: () => this.client.voiceAdapters.delete(this.id)
-            };
-        };
-    }
-
     /**
      * Add a member to this guild. Requires an access token with the `guilds.join` scope.
      *
@@ -637,14 +542,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create an auto moderation rule for this guild.
-     * @param options The options for the rule.
-     */
-    async createAutoModerationRule(options: CreateAutoModerationRuleOptions): Promise<AutoModerationRule> {
-        return this.client.rest.guilds.createAutoModerationRule(this.id, options);
-    }
-
-    /**
      * Create a bon for a user.
      * @param userID The ID of the user.
      * @param options The options for creating the bon.
@@ -678,14 +575,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create a scheduled event in this guild.
-     * @param options The options for creating the scheduled event.
-     */
-    async createScheduledEvent(options: CreateScheduledEventOptions): Promise<GuildScheduledEvent> {
-        return this.client.rest.guilds.createScheduledEvent(this.id, options);
-    }
-
-    /**
      * Create a sticker.
      * @param options The options for creating the sticker.
      */
@@ -694,27 +583,10 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create a guild template.
-     * @param options The options for creating the template.
-     */
-    async createTemplate(options: CreateTemplateOptions): Promise<GuildTemplate> {
-        return this.client.rest.guilds.createTemplate(this.id, options);
-    }
-
-    /**
      * Delete this guild.
      */
     async delete(): Promise<void> {
         return this.client.rest.guilds.delete(this.id);
-    }
-
-    /**
-     * Delete an auto moderation rule in this guild.
-     * @param ruleID The ID of the rule to delete.
-     * @param reason The reason for deleting the rule.
-     */
-    async deleteAutoModerationRule(ruleID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteAutoModerationRule(this.id, ruleID, reason);
     }
 
     /**
@@ -745,29 +617,12 @@ export default class Guild extends Base {
     }
 
     /**
-     * Delete a scheduled event.
-     * @param eventID The ID of the scheduled event.
-     * @param reason The reason for deleting the scheduled event. Discord's docs do not explicitly state a reason can be provided, so it may not be used.
-     */
-    async deleteScheduledEvent(eventID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteScheduledEvent(this.id, eventID, reason);
-    }
-
-    /**
      * Delete a sticker.
      * @param stickerID The ID of the sticker to delete.
      * @param reason The reason for deleting the sticker.
      */
     async deleteSticker(stickerID: string, reason?: string): Promise<void> {
         return this.client.rest.guilds.deleteSticker(this.id, stickerID, reason);
-    }
-
-    /**
-     * Delete a template.
-     * @param code The code of the template.
-     */
-    async deleteTemplate(code: string): Promise<void> {
-        return this.client.rest.guilds.deleteTemplate(this.id, code);
     }
 
     /**
@@ -813,15 +668,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Edit an existing auto moderation rule in this guild.
-     * @param ruleID The ID of the rule to edit.
-     * @param options The options for editing the rule.
-     */
-    async editAutoModerationRule(ruleID: string, options: EditAutoModerationRuleOptions): Promise<AutoModerationRule> {
-        return this.client.rest.guilds.editAutoModerationRule(this.id, ruleID, options);
-    }
-
-    /**
      * Edit the positions of channels in this guild.
      * @param options The channels to move. Unedited channels do not need to be specified.
      */
@@ -837,13 +683,6 @@ export default class Guild extends Base {
         return this.client.rest.guilds.editCurrentMember(this.id, options);
     }
 
-    /**
-     * Edit the current member's voice state in this guild. `channelID` is required, and the current member must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-current-user-voice-state-caveats) for more information.
-     * @param options The options for editing the voice state.
-     */
-    async editCurrentUserVoiceState(options: EditCurrentUserVoiceStateOptions): Promise<void> {
-        return this.client.rest.guilds.editCurrentUserVoiceState(this.id, options);
-    }
     /**
      * Edit an existing emoji in this guild.
      * @param options The options for editing the emoji.
@@ -886,37 +725,11 @@ export default class Guild extends Base {
     }
 
     /**
-     * Edit an existing scheduled event in this guild.
-     * @param options The options for editing the scheduled event.
-     */
-    async editScheduledEvent(options: EditScheduledEventOptions): Promise<GuildScheduledEvent> {
-        return this.client.rest.guilds.editScheduledEvent(this.id, options);
-    }
-
-    /**
      * Edit a sticker.
      * @param options The options for editing the sticker.
      */
     async editSticker(stickerID: string, options: EditStickerOptions): Promise<Sticker> {
         return this.client.rest.guilds.editSticker(this.id, stickerID, options);
-    }
-
-    /**
-     * Edit a template.
-     * @param code The code of the template.
-     * @param options The options for editing the template.
-     */
-    async editTemplate(code: string, options: EditGuildTemplateOptions): Promise<GuildTemplate> {
-        return this.client.rest.guilds.editTemplate(this.id, code, options);
-    }
-
-    /**
-     * Edit a guild member's voice state. `channelID` is required, and the user must already be in that channel. See [Discord's docs](https://discord.com/developers/docs/resources/guild#modify-user-voice-state) for more information.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the voice state.
-     */
-    async editUserVoiceState(memberID: string, options: EditUserVoiceStateOptions): Promise<void> {
-        return this.client.rest.guilds.editUserVoiceState(this.id, memberID, options);
     }
 
     /**
@@ -973,29 +786,6 @@ export default class Guild extends Base {
      */
     async getActiveThreads(): Promise<GetActiveThreadsResponse> {
         return this.client.rest.guilds.getActiveThreads(this.id);
-    }
-
-    /**
-     * Get this guild's audit log.
-     * @param options The options for the audit log.
-     */
-    async getAuditLog(options?: GetAuditLogOptions): Promise<AuditLog> {
-        return this.client.rest.guilds.getAuditLog(this.id, options);
-    }
-
-    /**
-     * Get an auto moderation rule for this guild.
-     * @param ruleID The ID of the rule to get.
-     */
-    async getAutoModerationRule(ruleID: string): Promise<AutoModerationRule> {
-        return this.client.rest.guilds.getAutoModerationRule(this.id, ruleID);
-    }
-
-    /**
-     * Get the auto moderation rules for this guild.
-     */
-    async getAutoModerationRules(): Promise<Array<AutoModerationRule>> {
-        return this.client.rest.guilds.getAutoModerationRules(this.id);
     }
 
     /**
@@ -1067,13 +857,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get a preview of this guild.
-     */
-    async getPreview(): Promise<GuildPreview> {
-        return this.client.rest.guilds.getPreview(this.id);
-    }
-
-    /**
      * Get the prune count of this guild.
      * @param options The options for getting the prune count.
      */
@@ -1086,32 +869,6 @@ export default class Guild extends Base {
      */
     async getRoles(): Promise<Array<Role>> {
         return this.client.rest.guilds.getRoles(this.id);
-    }
-
-    /**
-     * Get a scheduled event.
-     * @param eventID The ID of the scheduled event to get.
-     * @param withUserCount If the number of users subscribed to the event should be included.
-     */
-    async getScheduledEvent(eventID: string, withUserCount?: number): Promise<GuildScheduledEvent> {
-        return this.client.rest.guilds.getScheduledEvent(this.id, eventID, withUserCount);
-    }
-
-    /**
-     * Get the users subscribed to a scheduled event.
-     * @param eventID The ID of the scheduled event to get the users of.
-     * @param options The options for getting the users.
-     */
-    async getScheduledEventUsers(eventID: string, options?: GetScheduledEventUsersOptions): Promise<Array<ScheduledEventUser>> {
-        return this.client.rest.guilds.getScheduledEventUsers(this.id, eventID, options);
-    }
-
-    /**
-     * Get this guild's scheduled events
-     * @param withUserCount If the number of users subscribed to the event should be included.
-     */
-    async getScheduledEvents(withUserCount?: number): Promise<Array<GuildScheduledEvent>> {
-        return this.client.rest.guilds.getScheduledEvents(this.id, withUserCount);
     }
 
     /**
@@ -1130,24 +887,10 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get this guild's templates.
-     */
-    async getTemplates(): Promise<Array<GuildTemplate>> {
-        return this.client.rest.guilds.getTemplates(this.id);
-    }
-
-    /**
      * Get the vanity url of this guild.
      */
     async getVanityURL(): Promise<GetVanityURLResponse>{
         return this.client.rest.guilds.getVanityURL(this.id);
-    }
-
-    /**
-     * Get the list of usable voice regions for this guild. This will return VIP servers when the guild is VIP-enabled.
-     */
-    async getVoiceRegions(): Promise<Array<VoiceRegion>> {
-        return this.client.rest.guilds.getVoiceRegions(this.id);
     }
 
     /**
@@ -1203,29 +946,10 @@ export default class Guild extends Base {
     }
 
     /**
-     * Join a voice or stage channel.
-     * @param options The options to join the channel with.
-     */
-    joinChannel(options: Omit<JoinVoiceChannelOptions, "guildID" | "voiceAdapterCreator">): VoiceConnection {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        return this.client.joinVoiceChannel({
-            ...options,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            voiceAdapterCreator: this.voiceAdapterCreator,
-            guildID:             this.id
-        });
-    }
-
-    /**
      * Leave this guild.
      */
     async leave(): Promise<void> {
         return this.client.rest.users.leaveGuild(this.id);
-    }
-
-    /** Leave the connected voice or stage channel on this guild. */
-    leaveChannel(): void {
-        return this.client.leaveVoiceChannel(this.id);
     }
 
     /**
@@ -1307,23 +1031,12 @@ export default class Guild extends Base {
         return this.splash === null ? null : this.client.util.formatImage(Routes.GUILD_SPLASH(this.id, this.splash), format, size);
     }
 
-    /**
-     * Sync a guild template.
-     * @param code The code of the template to sync.
-     */
-    async syncTemplate(code: string): Promise<GuildTemplate> {
-        return this.client.rest.guilds.syncTemplate(this.id, code);
-    }
-
     override toJSON(): JSONGuild {
         return {
             ...super.toJSON(),
-            afkChannelID:                this.afkChannelID,
-            afkTimeout:                  this.afkTimeout,
             application:                 this.applicationID ?? undefined,
             approximateMemberCount:      this.approximateMemberCount,
             approximatePresenceCount:    this.approximatePresenceCount,
-            autoModerationRules:         this.autoModerationRules.map(rule => rule.toJSON()),
             banner:                      this.banner,
             channels:                    this.channels.map(channel => channel.id),
             defaultMessageNotifications: this.defaultMessageNotifications,
@@ -1353,7 +1066,6 @@ export default class Guild extends Base {
             region:                      this.region,
             roles:                       this.roles.map(role => role.toJSON()),
             rulesChannelID:              this.rulesChannelID,
-            scheduledEvents:             this.scheduledEvents.map(event => event.toJSON()),
             splash:                      this.splash,
             stageInstances:              this.stageInstances.map(instance => instance.toJSON()),
             stickers:                    this.stickers,
@@ -1363,7 +1075,6 @@ export default class Guild extends Base {
             unavailable:                 this.unavailable,
             vanityURLCode:               this.vanityURLCode,
             verificationLevel:           this.verificationLevel,
-            voiceStates:                 this.voiceStates.map(state => state.toJSON()),
             welcomeScreen:               this.welcomeScreen,
             widgetChannelID:             this.widgetChannelID,
             widgetEnabled:               this.widgetEnabled

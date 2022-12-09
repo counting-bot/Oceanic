@@ -1,7 +1,7 @@
 /** @module Interaction */
-import Base from "./Base";
-import type ClientApplication from "./ClientApplication";
-import type Client from "../Client";
+import Base from "./Base.js";
+import type ClientApplication from "./ClientApplication.js";
+import type Client from "../Client.js";
 import type {
     AnyInteraction,
     AnyRawInteraction,
@@ -10,9 +10,15 @@ import type {
     RawInteraction,
     RawMessageComponentInteraction,
     RawModalSubmitInteraction
-} from "../types/interactions";
-import { InteractionTypes } from "../Constants";
-import type { JSONInteraction } from "../types/json";
+} from "../types/interactions.js";
+import { InteractionTypes } from "../Constants.js";
+import type { JSONInteraction } from "../types/json.js";
+
+// import AutocompleteInteraction from "./AutocompleteInteraction.js";
+// import PingInteraction from "./PingInteraction.js";
+// import CommandInteraction from "./CommandInteraction.js";
+// import ComponentInteraction from "./ComponentInteraction.js";
+// import ModalSubmitInteraction from "./ModalSubmitInteraction.js";
 
 /** Represents an interaction. */
 export default class Interaction extends Base {
@@ -76,9 +82,9 @@ export default class Interaction extends Base {
 
 // Yes this sucks, but it works. That's the important part. Circular imports are hell.
 /* eslint-disable @typescript-eslint/no-var-requires, unicorn/prefer-module */
-const AutocompleteInteraction = (require("./AutocompleteInteraction") as typeof import("./AutocompleteInteraction")).default;
-const CommandInteraction = (require("./CommandInteraction") as typeof import("./CommandInteraction")).default;
-const ComponentInteraction = (require("./ComponentInteraction") as typeof import("./ComponentInteraction")).default;
-const ModalSubmitInteraction = (require("./ModalSubmitInteraction") as typeof import("./ModalSubmitInteraction")).default;
-const PingInteraction = (require("./PingInteraction") as typeof import("./PingInteraction")).default;
+const AutocompleteInteraction = (require("./AutocompleteInteraction.js") as typeof import("./AutocompleteInteraction.js")).default;
+const CommandInteraction = (require("./CommandInteraction.js") as typeof import("./CommandInteraction.js")).default;
+const ComponentInteraction = (require("./ComponentInteraction.js") as typeof import("./ComponentInteraction.js")).default;
+const ModalSubmitInteraction = (require("./ModalSubmitInteraction.js") as typeof import("./ModalSubmitInteraction.js")).default;
+const PingInteraction = (require("./PingInteraction.js") as typeof import("./PingInteraction.js")).default;
 /* eslint-enable @typescript-eslint/no-var-requires, unicorn/prefer-module */

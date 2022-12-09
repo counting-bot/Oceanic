@@ -1,15 +1,15 @@
 /** @module StageChannel */
-import GuildChannel from "./GuildChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import Member from "./Member";
-import type CategoryChannel from "./CategoryChannel";
-import Permission from "./Permission";
-import type Invite from "./Invite";
+import GuildChannel from "./GuildChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import type Member from "./Member.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import Permission from "./Permission.js";
+import type Invite from "./Invite.js";
 import type StageInstance from "./StageInstance";
-import type { ChannelTypes } from "../Constants";
-import { AllPermissions, Permissions } from "../Constants";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
+import type { ChannelTypes } from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
 import type {
     CreateInviteOptions,
     EditPermissionOptions,
@@ -17,13 +17,10 @@ import type {
     InviteInfoTypes,
     RawOverwrite,
     RawStageChannel
-} from "../types/channels";
-import type { JSONStageChannel } from "../types/json";
-import type { RawMember, CreateStageInstanceOptions, EditStageInstanceOptions } from "../types/guilds";
-import type { JoinVoiceChannelOptions } from "../types/voice";
+} from "../types/channels.js";
+import type { JSONStageChannel } from "../types/json.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import type { VoiceConnection } from "@discordjs/voice";
 
 /** Represents a guild stage channel. */
 export default class StageChannel extends GuildChannel {
@@ -38,7 +35,6 @@ export default class StageChannel extends GuildChannel {
     /** The topic of the channel. */
     topic: string | null;
     declare type: ChannelTypes.GUILD_STAGE_VOICE;
-    voiceMembers: TypedCollection<string, RawMember, Member, [guildID: string]>;
     constructor(data: RawStageChannel, client: Client) {
         super(data, client);
         this.bitrate = data.bitrate;
@@ -46,7 +42,6 @@ export default class StageChannel extends GuildChannel {
         this.position = data.position;
         this.rtcRegion = data.rtc_region;
         this.topic = data.topic;
-        this.voiceMembers = new TypedCollection(Member, client);
         this.update(data);
     }
 
@@ -122,41 +117,6 @@ export default class StageChannel extends GuildChannel {
      */
     async editPermission(overwriteID: string, options: EditPermissionOptions): Promise<void> {
         return this.client.rest.channels.editPermission(this.id, overwriteID, options);
-    }
-
-    /**
-     * Edit the stage instance on this channel.
-     * @param options The options for editing the stage instance.
-     */
-    async editStageInstance(options: EditStageInstanceOptions): Promise<StageInstance> {
-        return this.client.rest.channels.editStageInstance(this.id, options);
-    }
-
-    /**
-     * Get the stage instance associated with this channel.
-     */
-    async getStageInstance(): Promise<StageInstance> {
-        return this.client.rest.channels.getStageInstance(this.id);
-    }
-
-    /**
-     * Join this stage channel.
-     * @param options The options to join the channel with.
-     */
-    join(options: Omit<JoinVoiceChannelOptions, "guildID" | "channelID" | "voiceAdapterCreator">): VoiceConnection {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        return this.client.joinVoiceChannel({
-            ...options,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            voiceAdapterCreator: this.guild.voiceAdapterCreator,
-            guildID:             this.guildID,
-            channelID:           this.id
-        });
-    }
-
-    /** Leave this stage channel. */
-    leave(): void {
-        return this.client.leaveVoiceChannel(this.guildID);
     }
 
     /**

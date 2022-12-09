@@ -1,9 +1,9 @@
-import Base from "./Base";
-import Permission from "./Permission";
-import type { GuildFeature, ImageFormat } from "../Constants";
-import type { RawOAuthGuild } from "../types";
-import type Client from "../Client";
-import * as Routes from "../util/Routes";
+import Base from "./Base.js";
+import Permission from "./Permission.js";
+import type { GuildFeature, ImageFormat } from "../Constants.js";
+import type { RawOAuthGuild } from "../types/guilds.js";
+import type Client from "../Client.js";
+import * as Routes from "../util/Routes.js";
 
 /** Represents a guild retrieved via oauth. */
 export default class OAuthGuild extends Base {

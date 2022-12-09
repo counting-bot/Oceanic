@@ -1,5 +1,5 @@
 /** @module Types/Guilds */
-import type { RawUser } from "./users";
+import type { RawUser } from "./users.js";
 import type {
     AnyThreadChannel,
     OverwriteOptions,
@@ -9,11 +9,9 @@ import type {
     ThreadMember,
     ForumEmoji,
     ForumTag
-} from "./channels";
-import type { RawScheduledEvent } from "./scheduled-events";
-import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway";
-import type { RawVoiceState } from "./voice";
-import { File } from "./request-handler";
+} from "./channels.js";
+import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway.js";
+import { File } from "./request-handler.js";
 import type {
     ChannelTypes,
     DefaultMessageNotificationLevels,
@@ -41,9 +39,18 @@ import type VoiceChannel from "../structures/VoiceChannel";
 import type CategoryChannel from "../structures/CategoryChannel";
 import type AnnouncementChannel from "../structures/AnnouncementChannel";
 import type StageChannel from "../structures/StageChannel";
+    SortOrderTypes
+} from "../Constants.js";
+import type User from "../structures/User.js";
+import type Integration from "../structures/Integration.js";
+import type TextChannel from "../structures/TextChannel.js";
+import type VoiceChannel from "../structures/VoiceChannel.js";
+import type CategoryChannel from "../structures/CategoryChannel.js";
+import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
+import type StageChannel from "../structures/StageChannel.js";
 
-// channels, guild_scheduled_events, joined_at, large, member_count, members, presences,
-// stage_instances, threads, unavailable, voice_states - all gateway only
+// channels, joined_at, large, member_count, members, presences,
+// stage_instances, threads, unavailable - all gateway only
 export interface RawGuild {
     afk_channel_id: string | null;
     afk_timeout: number;
@@ -58,7 +65,6 @@ export interface RawGuild {
     emojis: Array<RawGuildEmoji>;
     explicit_content_filter: ExplicitContentFilterLevels;
     features: Array<GuildFeature>;
-    guild_scheduled_events: Array<RawScheduledEvent>;
     icon: string | null;
     icon_hash?: string | null;
     id: string;
@@ -94,7 +100,6 @@ export interface RawGuild {
     unavailable?: false;
     vanity_url_code: string | null;
     verification_level: VerificationLevels;
-    voice_states: Array<RawVoiceState>;
     welcome_screen?: RawWelcomeScreen;
     widget_channel_id?: string | null;
     widget_enabled?: boolean;
@@ -266,20 +271,6 @@ export interface EditEmojiOptions {
     reason?: string;
     /** The roles to restrict the emoji to. */
     roles?: Array<string> | null;
-}
-
-export interface RawGuildPreview {
-    approximate_member_count: number;
-    approximate_presence_count: number;
-    description: string | null;
-    discovery_splash: string | null;
-    emojis: Array<RawGuildEmoji>;
-    features: Array<GuildFeature>;
-    icon: string | null;
-    id: string;
-    name: string;
-    splash: string | null;
-    stickers: Array<RawSticker>;
 }
 
 export interface CreateGuildOptions {
@@ -608,20 +599,6 @@ export interface EditWelcomeScreenOptions extends WelcomeScreen {
     reason?: string;
 }
 
-export interface EditUserVoiceStateOptions {
-    /** The ID of the stage channel the member is in. */
-    channelID: string;
-    /** If the user should be suppressed. */
-    suppress?: boolean;
-}
-
-export interface EditCurrentUserVoiceStateOptions extends Omit<EditUserVoiceStateOptions, "channelID"> {
-    /** The ID of the stage channel the member is in. */
-    channelID?: string;
-    /** The timestamp of when the member should be able to speak. */
-    requestToSpeakTimestamp?: string | null;
-}
-
 export interface RawUnavailableGuild {
     id: string;
     unavailable: true;
@@ -640,7 +617,6 @@ export interface RawStageInstance {
     /** @deprecated */
     discoverable_disabled: boolean;
     guild_id: string;
-    guild_scheduled_event_id: string | null;
     id: string;
     privacy_level: StageInstancePrivacyLevels;
     topic: string;

@@ -30,14 +30,6 @@ NodeJS **16.16.0** or higher is required.
 
 **See [Development Builds](#development-builds) if you wish to install in-dev versions.**
 
-```sh
-npm i oceanic.js --omit=optional
-```
-
-If you need voice support, add `--include=optional`. Voice support is currently provided by [@discordjs/voice](https://discord.js.org/#/docs/voice/main/general/welcome).
-
-See the [examples](https://github.com/OceanicJS/Oceanic/tree/dev/examples) folder on GitHub for some examples, and visit [this site](https://docs.oceanic.ws) for documentation.
-
 ### Development Builds
 ```sh
 npm i oceanic.js@dev
