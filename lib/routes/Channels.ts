@@ -31,7 +31,7 @@ import type {
     RawPrivateChannel,
     AnyEditableChannel,
     PartialInviteChannel,
-    RawThreadChannel,
+    RawThreadChannel
 } from "../types/channels";
 import * as Routes from "../util/Routes";
 import Message from "../structures/Message";
@@ -153,7 +153,7 @@ export default class Channels {
             path:   Routes.CHANNEL_REACTION_USER(channelID, messageID, emoji, "@me")
         });
     }
-    
+
     /**
      * Delete or close a channel.
      * @param channelID The ID of the channel to delete or close.

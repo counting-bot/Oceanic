@@ -42,11 +42,8 @@ import type {
     CreateBanOptions,
     CreateChannelOptions,
     EditCurrentMemberOptions,
-    EditEmojiOptions,
-    EditGuildOptions,
     EditMemberOptions,
     EditRoleOptions,
-    GetBansOptions,
     GetMembersOptions,
     GuildEmoji,
     RawGuild,
@@ -57,7 +54,6 @@ import type {
     RawIntegration,
     CreateChannelReturn,
     GetActiveThreadsResponse,
-    Ban,
     RESTMember,
     Sticker
 } from "../types/guilds.js";
@@ -422,27 +418,11 @@ export default class Guild extends Base {
     }
 
     /**
-     * Edit this guild.
-     * @param options The options for editing the guild.
-     */
-    async edit(options: EditGuildOptions): Promise<Guild> {
-        return this.client.rest.guilds.edit(this.id, options);
-    }
-
-    /**
      * Modify the current member in this guild.
      * @param options The options for editing the member.
      */
     async editCurrentMember(options: EditCurrentMemberOptions): Promise<Member> {
         return this.client.rest.guilds.editCurrentMember(this.id, options);
-    }
-
-    /**
-     * Edit an existing emoji in this guild.
-     * @param options The options for editing the emoji.
-     */
-    async editEmoji(emojiID: string, options: EditEmojiOptions): Promise<GuildEmoji> {
-        return this.client.rest.guilds.editEmoji(this.id, emojiID, options);
     }
 
     /**
@@ -478,41 +458,10 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get a ban in this guild.
-     * @param userID The ID of the user to get the ban of.
-     */
-    async getBan(userID: string): Promise<Ban> {
-        return this.client.rest.guilds.getBan(this.id, userID);
-    }
-
-    /**
-     * Get the bans in this guild.
-     * @param options The options for getting the bans.
-     */
-    async getBans(options?: GetBansOptions): Promise<Array<Ban>> {
-        return this.client.rest.guilds.getBans(this.id, options);
-    }
-
-    /**
      * Get the channels in a guild. Does not include threads. Only use this if you need to. See the `channels` collection.
      */
     async getChannels(): Promise<Array<AnyGuildChannelWithoutThreads>> {
         return this.client.rest.guilds.getChannels(this.id);
-    }
-
-    /**
-     * Get an emoji in this guild.
-     * @param emojiID The ID of the emoji to get.
-     */
-    async getEmoji(emojiID: string): Promise<GuildEmoji> {
-        return this.client.rest.guilds.getEmoji(this.id, emojiID);
-    }
-
-    /**
-     * Get the emojis in this guild.
-     */
-    async getEmojis(): Promise<Array<GuildEmoji>> {
-        return this.client.rest.guilds.getEmojis(this.id);
     }
 
     /**
@@ -600,15 +549,6 @@ export default class Guild extends Base {
             }
             return new Permission(permissions);
         }
-    }
-
-    /**
-     * Remove a ban.
-     * @param userID The ID of the user to remove the ban from.
-     * @param reason The reason for removing the ban.
-     */
-    async removeBan(userID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.removeBan(this.id, userID, reason);
     }
 
     /**

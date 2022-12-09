@@ -201,12 +201,4 @@ export default class Member extends Base {
             user:                       this.user.toJSON()
         };
     }
-
-    /**
-     * Remove a ban for this member.
-     * @param reason The reason for removing the ban.
-     */
-    async unban(reason?: string): Promise<void> {
-        await this.client.rest.guilds.removeBan(this.guildID, this.id, reason);
-    }
 }

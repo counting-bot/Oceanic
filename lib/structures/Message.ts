@@ -22,7 +22,6 @@ import type {
     ChannelMention,
     EditMessageOptions,
     Embed,
-    GetReactionsOptions,
     MessageActivity,
     MessageInteraction,
     MessageReference,
@@ -347,15 +346,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
             throw new Error("This message is not a webhook message.");
         }
         return this.client.rest.webhooks.editMessage<never>(this.webhookID, token, this.id, options);
-    }
-
-    /**
-     * Get the users who reacted with a specific emoji on this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    async getReactions(emoji: string, options?: GetReactionsOptions): Promise<Array<User>> {
-        return this.client.rest.channels.getReactions(this.channelID, this.id, emoji, options);
     }
 
     /** Whether this message belongs to a cached guild channel. The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */

@@ -10,7 +10,6 @@ import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
 import type CategoryChannel from "./CategoryChannel.js";
 import type Member from "./Member.js";
 import Permission from "./Permission.js";
-import type User from "./User.js";
 import type Webhook from "./Webhook.js";
 import type { ThreadAutoArchiveDuration } from "../Constants.js";
 import { AllPermissions, Permissions, ChannelTypes } from "../Constants.js";
@@ -24,15 +23,13 @@ import type {
     EditPermissionOptions,
     GetArchivedThreadsOptions,
     GetChannelMessagesOptions,
-    GetReactionsOptions,
     RawMessage,
     RawAnnouncementChannel,
     RawOverwrite,
     RawTextChannel,
     StartThreadFromMessageOptions,
     StartThreadWithoutMessageOptions,
-    ArchivedThreads,
-    PurgeOptions
+    ArchivedThreads
 } from "../types/channels.js";
 import type { JSONTextableChannel } from "../types/json.js";
 
@@ -144,15 +141,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     }
 
     /**
-     * Bulk delete messages in this channel.
-     * @param messageIDs The IDs of the messages to delete. Any duplicates or messages older than two weeks will cause an error.
-     * @param reason The reason for deleting the messages.
-     */
-    async deleteMessages(messageIDs: Array<string>, reason?: string): Promise<number> {
-        return this.client.rest.channels.deleteMessages(this.id, messageIDs, reason);
-    }
-
-    /**
      * Delete a permission overwrite on this channel.
      * @param overwriteID The ID of the permission overwrite to delete.
      * @param reason The reason for deleting the permission overwrite.
@@ -230,28 +218,11 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     }
 
     /**
-     * Get the pinned messages in this channel.
-     */
-    async getPinnedMessages(): Promise<Array<Message<T>>> {
-        return this.client.rest.channels.getPinnedMessages<T>(this.id);
-    }
-
-    /**
      * Get the public archived threads in this channel.
      * @param options The options for getting the public archived threads.
      */
     async getPublicArchivedThreads(options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T extends TextChannel ? PublicThreadChannel : AnnouncementThreadChannel>> {
         return this.client.rest.channels.getPublicArchivedThreads<T extends TextChannel ? PublicThreadChannel : AnnouncementThreadChannel>(this.id, options);
-    }
-
-    /**
-     * Get the users who reacted with a specific emoji on a message in this channel.
-     * @param messageID The ID of the message to get reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    async getReactions(messageID: string, emoji: string, options?: GetReactionsOptions): Promise<Array<User>> {
-        return this.client.rest.channels.getReactions(this.id, messageID, emoji, options);
     }
 
     /**
@@ -298,30 +269,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     }
 
     /**
-     * Pin a message in this channel.
-     * @param messageID The ID of the message to pin.
-     * @param reason The reason for pinning the message.
-     */
-    async pinMessage(messageID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.pinMessage(this.id, messageID, reason);
-    }
-
-    /**
-     * Purge an amount of messages from this channel.
-     * @param options The options to purge. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    async purge(options: PurgeOptions<T>): Promise<number> {
-        return this.client.rest.channels.purgeMessages(this.id, options);
-    }
-
-    /**
-     * Show a typing indicator in this channel. How long users see this varies from client to client.
-     */
-    async sendTyping(): Promise<void> {
-        return this.client.rest.channels.sendTyping(this.id);
-    }
-
-    /**
      * Create a thread from an existing message in this channel.
      * @param messageID The ID of the message to create a thread from.
      * @param options The options for creating the thread.
@@ -351,14 +298,5 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
             topic:                      this.topic,
             type:                       this.type
         };
-    }
-
-    /**
-     * Unpin a message in this channel.
-     * @param messageID The ID of the message to unpin.
-     * @param reason The reason for unpinning the message.
-     */
-    async unpinMessage(messageID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.unpinMessage(this.id, messageID, reason);
     }
 }
