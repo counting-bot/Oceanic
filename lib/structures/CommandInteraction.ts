@@ -16,7 +16,6 @@ import { ApplicationCommandTypes, InteractionResponseTypes } from "../Constants.
 import type {
     ApplicationCommandInteractionData,
     InteractionContent,
-    ModalData,
     RawApplicationCommandInteraction,
     ApplicationCommandInteractionResolvedData
 } from "../types/interactions.js";
@@ -173,18 +172,6 @@ export default class CommandInteraction<T extends AnyTextChannelWithoutGroup | U
         }
         this.acknowledged = true;
         return this.client.rest.interactions.createInteractionResponse(this.id, this.token, { type: InteractionResponseTypes.CHANNEL_MESSAGE_WITH_SOURCE, data: options });
-    }
-
-    /**
-     * Respond to this interaction with a modal. This is an initial response, and more than one initial response cannot be used.
-     * @param options The options for the modal.
-     */
-    async createModal(options: ModalData): Promise<void> {
-        if (this.acknowledged) {
-            throw new Error("Interactions cannot have more than one initial response.");
-        }
-        this.acknowledged = true;
-        return this.client.rest.interactions.createInteractionResponse(this.id, this.token, { type: InteractionResponseTypes.MODAL, data: options });
     }
 
     /**

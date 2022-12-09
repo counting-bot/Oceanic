@@ -9,16 +9,9 @@ import type {
     RawAutocompleteInteraction,
     RawInteraction,
     RawMessageComponentInteraction,
-    RawModalSubmitInteraction
 } from "../types/interactions.js";
 import { InteractionTypes } from "../Constants.js";
 import type { JSONInteraction } from "../types/json.js";
-
-// import AutocompleteInteraction from "./AutocompleteInteraction.js";
-// import PingInteraction from "./PingInteraction.js";
-// import CommandInteraction from "./CommandInteraction.js";
-// import ComponentInteraction from "./ComponentInteraction.js";
-// import ModalSubmitInteraction from "./ModalSubmitInteraction.js";
 
 /** Represents an interaction. */
 export default class Interaction extends Base {
@@ -47,9 +40,6 @@ export default class Interaction extends Base {
 
     static from<T extends AnyInteraction = AnyInteraction>(data: RawInteraction, client: Client): T {
         switch (data.type) {
-            case InteractionTypes.PING: {
-                return new PingInteraction(data, client) as T;
-            }
             case InteractionTypes.APPLICATION_COMMAND: {
                 return new CommandInteraction(data as RawApplicationCommandInteraction, client) as T;
             }
@@ -58,9 +48,6 @@ export default class Interaction extends Base {
             }
             case InteractionTypes.APPLICATION_COMMAND_AUTOCOMPLETE: {
                 return new AutocompleteInteraction(data as RawAutocompleteInteraction, client) as T;
-            }
-            case InteractionTypes.MODAL_SUBMIT: {
-                return new ModalSubmitInteraction(data as RawModalSubmitInteraction, client) as T;
             }
             default: {
                 return new Interaction(data, client) as never;
@@ -85,6 +72,4 @@ export default class Interaction extends Base {
 const AutocompleteInteraction = (require("./AutocompleteInteraction.js") as typeof import("./AutocompleteInteraction.js")).default;
 const CommandInteraction = (require("./CommandInteraction.js") as typeof import("./CommandInteraction.js")).default;
 const ComponentInteraction = (require("./ComponentInteraction.js") as typeof import("./ComponentInteraction.js")).default;
-const ModalSubmitInteraction = (require("./ModalSubmitInteraction.js") as typeof import("./ModalSubmitInteraction.js")).default;
-const PingInteraction = (require("./PingInteraction.js") as typeof import("./PingInteraction.js")).default;
 /* eslint-enable @typescript-eslint/no-var-requires, unicorn/prefer-module */

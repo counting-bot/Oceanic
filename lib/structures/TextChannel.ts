@@ -8,7 +8,6 @@ import type Client from "../Client.js";
 import type {
     ArchivedThreads,
     EditTextChannelOptions,
-    FollowedChannel,
     GetArchivedThreadsOptions,
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
@@ -34,14 +33,6 @@ export default class TextChannel extends TextableChannel<TextChannel> {
      */
     override async edit(options: EditTextChannelOptions): Promise<this> {
         return this.client.rest.channels.edit<this>(this.id, options);
-    }
-
-    /**
-     * Follow an announcement channel to this channel.
-     * @param webhookChannelID The ID of the channel to follow the announcement channel to.
-     */
-    async followAnnouncement(webhookChannelID: string): Promise<FollowedChannel> {
-        return this.client.rest.channels.followAnnouncement(this.id, webhookChannelID);
     }
 
     /**

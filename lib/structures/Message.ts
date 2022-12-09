@@ -310,35 +310,11 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     /**
-     * Crosspost this message in an announcement channel.
-     */
-    async crosspost(): Promise<Message<T>> {
-        return this.client.rest.channels.crosspostMessage<T>(this.channelID, this.id);
-    }
-
-    /**
      * Delete this message.
      * @param reason The reason for deleting the message.
      */
     async delete(reason?: string): Promise<void> {
         return this.client.rest.channels.deleteMessage(this.channelID, this.id, reason);
-    }
-
-    /**
-     * Remove a reaction from this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    async deleteReaction(emoji: string, user = "@me"): Promise<void> {
-        return this.client.rest.channels.deleteReaction(this.channelID, this.id, emoji, user);
-    }
-
-    /**
-     * Remove all, or a specific emoji's reactions from this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    async deleteReactions(emoji?: string): Promise<void> {
-        return this.client.rest.channels.deleteReactions(this.channelID, this.id, emoji);
     }
 
     /**
@@ -393,15 +369,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     /**
-     * Pin this message.
-     * @param reason The reason for pinning the message.
-     */
-    async pin(reason?: string): Promise<void> {
-        return this.client.rest.channels.pinMessage(this.channelID, this.id, reason);
-    }
-
-
-    /**
      * Create a thread from this message.
      * @param options The options for creating the thread.
      */
@@ -450,13 +417,5 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
             type:              this.type,
             webhook:           this.webhookID
         };
-    }
-
-    /**
-     * Unpin this message.
-     * @param reason The reason for unpinning the message.
-     */
-    async unpin(reason?: string): Promise<void> {
-        return this.client.rest.channels.unpinMessage(this.channelID, this.id, reason);
     }
 }

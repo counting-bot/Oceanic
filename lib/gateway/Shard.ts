@@ -27,7 +27,6 @@ import type { RawGuild } from "../types/guilds.js";
 import ExtendedUser from "../structures/ExtendedUser.js";
 import type {
     AnyGuildChannelWithoutThreads,
-    AnyTextChannel,
     AnyThreadChannel,
     InviteChannel,
     PossiblyUncachedInvite,
@@ -226,11 +225,11 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "CHANNEL_PINS_UPDATE": {
-                const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-                this.client.emit("channelPinsUpdate", channel ?? { id: packet.d.channel_id }, packet.d.last_pin_timestamp === undefined || packet.d.last_pin_timestamp === null ? null : new Date(packet.d.last_pin_timestamp));
-                break;
-            }
+            // case "CHANNEL_PINS_UPDATE": {
+            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
+            //     this.client.emit("channelPinsUpdate", channel ?? { id: packet.d.channel_id }, packet.d.last_pin_timestamp === undefined || packet.d.last_pin_timestamp === null ? null : new Date(packet.d.last_pin_timestamp));
+            //     break;
+            // }
 
             case "CHANNEL_UPDATE": {
                 const oldChannel = this.client.getChannel<TextChannel>(packet.d.id)?.toJSON() ?? null;
@@ -546,105 +545,105 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "MESSAGE_REACTION_ADD": {
-                const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-                const message = channel?.messages?.get(packet.d.message_id);
-                const reactor = packet.d.member
-                    ? (packet.d.guild_id ? this.client.util.updateMember(packet.d.guild_id, packet.d.user_id, packet.d.member) : this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id })
-                    : this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
+            // case "MESSAGE_REACTION_ADD": {
+            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
+            //     const message = channel?.messages?.get(packet.d.message_id);
+            //     const reactor = packet.d.member
+            //         ? (packet.d.guild_id ? this.client.util.updateMember(packet.d.guild_id, packet.d.user_id, packet.d.member) : this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id })
+            //         : this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
 
-                if (message) {
-                    const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-                    if (message.reactions[name]) {
-                        message.reactions[name].count++;
-                        if (packet.d.user_id === this.client.user.id) {
-                            message.reactions[name].me = true;
-                        }
-                    } else {
-                        message.reactions[name] = {
-                            count: 1,
-                            me:    packet.d.user_id === this.client.user.id
-                        };
-                    }
+            //     if (message) {
+            //         const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
+            //         if (message.reactions[name]) {
+            //             message.reactions[name].count++;
+            //             if (packet.d.user_id === this.client.user.id) {
+            //                 message.reactions[name].me = true;
+            //             }
+            //         } else {
+            //             message.reactions[name] = {
+            //                 count: 1,
+            //                 me:    packet.d.user_id === this.client.user.id
+            //             };
+            //         }
 
-                }
+            //     }
 
-                this.client.emit("messageReactionAdd", message ?? {
-                    channel:   channel ?? { id: packet.d.channel_id },
-                    channelID: packet.d.channel_id,
-                    guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-                    guildID:   packet.d.guild_id,
-                    id:        packet.d.message_id
-                }, reactor, packet.d.emoji);
-                break;
-            }
+            //     this.client.emit("messageReactionAdd", message ?? {
+            //         channel:   channel ?? { id: packet.d.channel_id },
+            //         channelID: packet.d.channel_id,
+            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
+            //         guildID:   packet.d.guild_id,
+            //         id:        packet.d.message_id
+            //     }, reactor, packet.d.emoji);
+            //     break;
+            // }
 
-            case "MESSAGE_REACTION_REMOVE": {
-                const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-                const message = channel?.messages?.get(packet.d.message_id);
-                const reactor = this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
+            // case "MESSAGE_REACTION_REMOVE": {
+            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
+            //     const message = channel?.messages?.get(packet.d.message_id);
+            //     const reactor = this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
 
-                if (message) {
-                    const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-                    if (message.reactions[name]) {
-                        message.reactions[name].count--;
-                        if (packet.d.user_id === this.client.user.id) {
-                            message.reactions[name].me = false;
-                        }
-                        if (message.reactions[name].count === 0) {
-                            delete message.reactions[name];
-                        }
-                    }
-                }
+            //     if (message) {
+            //         const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
+            //         if (message.reactions[name]) {
+            //             message.reactions[name].count--;
+            //             if (packet.d.user_id === this.client.user.id) {
+            //                 message.reactions[name].me = false;
+            //             }
+            //             if (message.reactions[name].count === 0) {
+            //                 delete message.reactions[name];
+            //             }
+            //         }
+            //     }
 
-                this.client.emit("messageReactionRemove", message ?? {
-                    channel:   channel ?? { id: packet.d.channel_id },
-                    channelID: packet.d.channel_id,
-                    guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-                    guildID:   packet.d.guild_id,
-                    id:        packet.d.message_id
-                }, reactor, packet.d.emoji);
-                break;
-            }
+            //     this.client.emit("messageReactionRemove", message ?? {
+            //         channel:   channel ?? { id: packet.d.channel_id },
+            //         channelID: packet.d.channel_id,
+            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
+            //         guildID:   packet.d.guild_id,
+            //         id:        packet.d.message_id
+            //     }, reactor, packet.d.emoji);
+            //     break;
+            // }
 
-            case "MESSAGE_REACTION_REMOVE_ALL": {
-                const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-                const message = channel?.messages?.get(packet.d.message_id);
+            // case "MESSAGE_REACTION_REMOVE_ALL": {
+            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
+            //     const message = channel?.messages?.get(packet.d.message_id);
 
-                if (message) {
-                    message.reactions = {};
-                }
+            //     if (message) {
+            //         message.reactions = {};
+            //     }
 
-                this.client.emit("messageReactionRemoveAll", message ?? {
-                    channel:   channel ?? { id: packet.d.channel_id },
-                    channelID: packet.d.channel_id,
-                    guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-                    guildID:   packet.d.guild_id,
-                    id:        packet.d.message_id
-                });
-                break;
-            }
+            //     this.client.emit("messageReactionRemoveAll", message ?? {
+            //         channel:   channel ?? { id: packet.d.channel_id },
+            //         channelID: packet.d.channel_id,
+            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
+            //         guildID:   packet.d.guild_id,
+            //         id:        packet.d.message_id
+            //     });
+            //     break;
+            // }
 
-            case "MESSAGE_REACTION_REMOVE_EMOJI": {
-                const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-                const message = channel?.messages?.get(packet.d.message_id);
+            // case "MESSAGE_REACTION_REMOVE_EMOJI": {
+            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
+            //     const message = channel?.messages?.get(packet.d.message_id);
 
-                if (message) {
-                    const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-                    if (message.reactions[name]) {
-                        delete message.reactions[name];
-                    }
-                }
+            //     if (message) {
+            //         const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
+            //         if (message.reactions[name]) {
+            //             delete message.reactions[name];
+            //         }
+            //     }
 
-                this.client.emit("messageReactionRemoveEmoji", message ?? {
-                    channel:   channel ?? { id: packet.d.channel_id },
-                    channelID: packet.d.channel_id,
-                    guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-                    guildID:   packet.d.guild_id,
-                    id:        packet.d.message_id
-                }, packet.d.emoji);
-                break;
-            }
+            //     this.client.emit("messageReactionRemoveEmoji", message ?? {
+            //         channel:   channel ?? { id: packet.d.channel_id },
+            //         channelID: packet.d.channel_id,
+            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
+            //         guildID:   packet.d.guild_id,
+            //         id:        packet.d.message_id
+            //     }, packet.d.emoji);
+            //     break;
+            // }
 
             case "MESSAGE_UPDATE": {
                 const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
@@ -897,19 +896,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                     addedMembers,
                     removedMembers
                 );
-                break;
-            }
-
-            case "TYPING_START": {
-                const channel = this.client.getChannel<AnyTextChannel>(packet.d.channel_id) ?? { id: packet.d.channel_id };
-                const startTimestamp = new Date(packet.d.timestamp);
-                if (packet.d.member) {
-                    const member = this.client.util.updateMember(packet.d.guild_id!, packet.d.user_id, packet.d.member);
-                    this.client.emit("typingStart", channel, member, startTimestamp);
-                    break;
-                }
-                const user = this.client.users.get(packet.d.user_id);
-                this.client.emit("typingStart", channel, user ?? { id: packet.d.user_id }, startTimestamp);
                 break;
             }
 

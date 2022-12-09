@@ -180,25 +180,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
     }
 
     /**
-     * Remove a reaction from a message in this thread.
-     * @param messageID The ID of the message to remove a reaction from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    async deleteReaction(messageID: string, emoji: string, user = "@me"): Promise<void> {
-        return this.client.rest.channels.deleteReaction(this.id, messageID, emoji, user);
-    }
-
-    /**
-     * Remove all, or a specific emoji's reactions from a message.
-     * @param messageID The ID of the message to remove reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    async deleteReactions(messageID: string, emoji?: string): Promise<void> {
-        return this.client.rest.channels.deleteReactions(this.id, messageID, emoji);
-    }
-
-    /**
      * Edit this thread.
      * @param options The options for editing the channel.
      */
@@ -247,23 +228,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
     }
 
     /**
-     * Get the pinned messages in this thread.
-     */
-    async getPinnedMessages(): Promise<Array<Message<T>>> {
-        return this.client.rest.channels.getPinnedMessages<T>(this.id);
-    }
-
-    /**
-     * Get the users who reacted with a specific emoji on a message.
-     * @param messageID The ID of the message to get reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    async getReactions(messageID: string, emoji: string, options?: GetReactionsOptions): Promise<Array<User>> {
-        return this.client.rest.channels.getReactions(this.id, messageID, emoji, options);
-    }
-
-    /**
      * Join this thread.
      */
     async join(): Promise<void> {
@@ -289,35 +253,11 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
     }
 
     /**
-     * Pin a message in this thread.
-     * @param messageID The ID of the message to pin.
-     * @param reason The reason for pinning the message.
-     */
-    async pinMessage(messageID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.pinMessage(this.id, messageID, reason);
-    }
-
-    /**
-     * Purge an amount of messages from this channel.
-     * @param options The options to purge. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    async purge(options: PurgeOptions<T>): Promise<number> {
-        return this.client.rest.channels.purgeMessages(this.id, options);
-    }
-
-    /**
      * Remove a member from this thread.
      * @param userID The ID of the user to remove from the thread.
      */
     async removeMember(userID: string): Promise<void> {
         return this.client.rest.channels.removeThreadMember(this.id, userID);
-    }
-
-    /**
-     * Show a typing indicator in this thread.
-     */
-    async sendTyping(): Promise<void> {
-        return this.client.rest.channels.sendTyping(this.id);
     }
 
     override toJSON(): JSONThreadChannel {
@@ -334,14 +274,5 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
             totalMessageSent: this.totalMessageSent,
             type:             this.type
         };
-    }
-
-    /**
-     * Unpin a message in this thread.
-     * @param messageID The ID of the message to unpin.
-     * @param reason The reason for unpinning the message.
-     */
-    async unpinMessage(messageID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.unpinMessage(this.id, messageID, reason);
     }
 }

@@ -75,33 +75,6 @@ export default class Member extends Base {
         if (data.avatar !== undefined) {
             this.avatar = data.avatar;
         }
-        if (data.communication_disabled_until !== undefined) {
-            this.communicationDisabledUntil = data.communication_disabled_until === null ? null : new Date(data.communication_disabled_until);
-        }
-        if (data.deaf !== undefined) {
-            this.deaf = data.deaf;
-        }
-        if (data.flags !== undefined) {
-            this.flags = data.flags;
-        }
-        if (data.is_pending !== undefined) {
-            this.isPending = data.is_pending;
-        }
-        if (data.joined_at !== undefined) {
-            this.joinedAt = data.joined_at === null ? null : new Date(data.joined_at);
-        }
-        if (data.mute !== undefined) {
-            this.mute = data.mute;
-        }
-        if (data.nick !== undefined) {
-            this.nick = data.nick;
-        }
-        if (data.pending !== undefined) {
-            this.pending = data.pending;
-        }
-        if (data.premium_since !== undefined) {
-            this.premiumSince = data.premium_since === null ? null : new Date(data.premium_since);
-        }
         if (data.roles !== undefined) {
             this.roles = data.roles;
         }

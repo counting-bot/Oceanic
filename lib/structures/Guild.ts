@@ -39,42 +39,27 @@ import type {
 } from "../types/channels.js";
 import type {
     AddMemberOptions,
-    BeginPruneOptions,
     CreateBanOptions,
     CreateChannelOptions,
-    CreateEmojiOptions,
-    CreateRoleOptions,
     EditCurrentMemberOptions,
     EditEmojiOptions,
     EditGuildOptions,
     EditMemberOptions,
     EditRoleOptions,
-    EditRolePositionsEntry,
-    EditWelcomeScreenOptions,
     GetBansOptions,
     GetMembersOptions,
-    GetPruneCountOptions,
     GuildEmoji,
-    ModifyChannelPositionsEntry,
     RawGuild,
     RawMember,
     RawRole,
     SearchMembersOptions,
     WelcomeScreen,
-    WidgetImageStyle,
-    WidgetSettings,
     RawIntegration,
     CreateChannelReturn,
-    Widget,
     GetActiveThreadsResponse,
     Ban,
-    GetVanityURLResponse,
-    RawWidget,
-    EditMFALevelOptions,
     RESTMember,
-    CreateStickerOptions,
     Sticker,
-    EditStickerOptions
 } from "../types/guilds.js";
 import type { JSONGuild } from "../types/json.js";
 import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway.js";
@@ -304,13 +289,6 @@ export default class Guild extends Base {
         }
     }
 
-    private toggleFeature(feature: GuildFeature, enable: boolean, reason?: string): Promise<Guild> {
-        const newFeatures = enable ?
-            (this.features.includes(feature) ? this.features : [...this.features, feature]) :
-            this.features.filter(name => name !== feature);
-        return this.edit({ features: newFeatures, reason });
-    }
-
     // true = `memberCount`
     private updateMemberLimit(toAdd: true | number): void {
         if (this.members.limit === Infinity || this.client.options.disableMemberLimitScaling) {
@@ -346,18 +324,6 @@ export default class Guild extends Base {
         if (data.approximate_presence_count !== undefined) {
             this.approximatePresenceCount = data.approximate_presence_count;
         }
-        if (data.banner !== undefined) {
-            this.banner = data.banner;
-        }
-        if (data.default_message_notifications !== undefined) {
-            this.defaultMessageNotifications = data.default_message_notifications;
-        }
-        if (data.description !== undefined) {
-            this.description = data.description;
-        }
-        if (data.discovery_splash !== undefined) {
-            this.discoverySplash = data.discovery_splash;
-        }
         if (data.emojis !== undefined) {
             this.emojis = data.emojis.map(emoji => ({
                 animated:      emoji.animated,
@@ -369,12 +335,6 @@ export default class Guild extends Base {
                 roles:         emoji.roles,
                 user:          emoji.user === undefined ? undefined : this.client.users.update(emoji.user)
             }));
-        }
-        if (data.explicit_content_filter !== undefined) {
-            this.explicitContentFilter = data.explicit_content_filter;
-        }
-        if (data.features !== undefined) {
-            this.features = data.features;
         }
         if (data.icon !== undefined) {
             this.icon = data.icon;
@@ -394,14 +354,8 @@ export default class Guild extends Base {
         if (data.member_count !== undefined) {
             this.memberCount = data.member_count;
         }
-        if (data.mfa_level !== undefined) {
-            this.mfaLevel = data.mfa_level;
-        }
         if (data.name !== undefined) {
             this.name = data.name;
-        }
-        if (data.nsfw_level !== undefined) {
-            this.nsfwLevel = data.nsfw_level;
         }
         if (data.owner_id !== undefined) {
             this.ownerID = data.owner_id;
@@ -409,63 +363,6 @@ export default class Guild extends Base {
         }
         if (data.preferred_locale !== undefined) {
             this.preferredLocale = data.preferred_locale;
-        }
-        if (data.premium_progress_bar_enabled !== undefined) {
-            this.premiumProgressBarEnabled = data.premium_progress_bar_enabled;
-        }
-        if (data.premium_subscription_count !== undefined) {
-            this.premiumSubscriptionCount = data.premium_subscription_count;
-        }
-        if (data.premium_tier !== undefined) {
-            this.premiumTier = data.premium_tier;
-        }
-        if (data.public_updates_channel_id !== undefined) {
-            this.publicUpdatesChannel = data.public_updates_channel_id === null ? null : this.client.getChannel<AnyGuildTextChannel>(data.public_updates_channel_id);
-            this.publicUpdatesChannelID = data.public_updates_channel_id;
-        }
-        if (data.region !== undefined) {
-            this.region = data.region;
-        }
-        if (data.rules_channel_id !== undefined) {
-            this.rulesChannel = data.rules_channel_id === null ? null : this.client.getChannel<TextChannel>(data.rules_channel_id);
-            this.rulesChannelID = data.rules_channel_id;
-        }
-        if (data.splash !== undefined) {
-            this.splash = data.splash;
-        }
-        if (data.stickers !== undefined) {
-            this.stickers = data.stickers.map(sticker => this.client.util.convertSticker(sticker));
-        }
-        if (data.system_channel_flags !== undefined) {
-            this.systemChannelFlags = data.system_channel_flags;
-        }
-        if (data.system_channel_id !== undefined) {
-            this.systemChannel = data.system_channel_id === null ? null : this.client.getChannel<TextChannel>(data.system_channel_id);
-            this.systemChannelID = data.system_channel_id;
-        }
-        if (data.vanity_url_code !== undefined) {
-            this.vanityURLCode = data.vanity_url_code;
-        }
-        if (data.verification_level !== undefined) {
-            this.verificationLevel = data.verification_level;
-        }
-        if (data.welcome_screen !== undefined) {
-            this.welcomeScreen = {
-                description:     data.welcome_screen.description,
-                welcomeChannels: data.welcome_screen.welcome_channels.map(channel => ({
-                    channelID:   channel.channel_id,
-                    description: channel.description,
-                    emojiID:     channel.emoji_id,
-                    emojiName:   channel.emoji_name
-                }))
-            };
-        }
-        if (data.widget_channel_id !== undefined) {
-            this.widgetChannel = data.widget_channel_id === null ? null : this.client.getChannel<Exclude<AnyGuildChannel, CategoryChannel>>(data.widget_channel_id);
-            this.widgetChannelID = data.widget_channel_id;
-        }
-        if (data.widget_enabled !== undefined) {
-            this.widgetEnabled = data.widget_enabled;
         }
     }
 
@@ -508,23 +405,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * The url of this guild's banner.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    bannerURL(format?: ImageFormat, size?: number): string | null {
-        return this.banner === null ? null : this.client.util.formatImage(Routes.BANNER(this.id, this.banner), format, size);
-    }
-
-    /**
-     * Begin a prune.
-     * @param options The options for the prune.
-     */
-    async beginPrune(options?: BeginPruneOptions): Promise<number | null> {
-        return this.client.rest.guilds.beginPrune(this.id, options);
-    }
-
-    /**
      * Create a bon for a user.
      * @param userID The ID of the user.
      * @param options The options for creating the bon.
@@ -542,120 +422,11 @@ export default class Guild extends Base {
     }
 
     /**
-     * Create an emoji in this guild.
-     * @param options The options for creating the emoji.
-     */
-    async createEmoji(options: CreateEmojiOptions): Promise<GuildEmoji> {
-        return this.client.rest.guilds.createEmoji(this.id, options);
-    }
-
-    /**
-     * Create a role.
-     * @param options The options for creating the role.
-     */
-    async createRole(options?: CreateRoleOptions): Promise<Role> {
-        return this.client.rest.guilds.createRole(this.id, options);
-    }
-
-    /**
-     * Create a sticker.
-     * @param options The options for creating the sticker.
-     */
-    async createSticker(options: CreateStickerOptions): Promise<Sticker> {
-        return this.client.rest.guilds.createSticker(this.id, options);
-    }
-
-    /**
-     * Delete this guild.
-     */
-    async delete(): Promise<void> {
-        return this.client.rest.guilds.delete(this.id);
-    }
-
-    /**
-     * Delete an emoji in this guild.
-     * @param emojiID The ID of the emoji.
-     * @param reason The reason for deleting the emoji.
-     */
-    async deleteEmoji(emojiID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteEmoji(this.id, emojiID, reason);
-    }
-
-    /**
-     * Delete an integration.
-     * @param integrationID The ID of the integration.
-     * @param reason The reason for deleting the integration.
-     */
-    async deleteIntegration(integrationID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteIntegration(this.id, integrationID, reason);
-    }
-
-    /**
-     * Delete a role.
-     * @param roleID The ID of the role to delete.
-     * @param reason The reason for deleting the role.
-     */
-    async deleteRole(roleID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteRole(this.id, roleID, reason);
-    }
-
-    /**
-     * Delete a sticker.
-     * @param stickerID The ID of the sticker to delete.
-     * @param reason The reason for deleting the sticker.
-     */
-    async deleteSticker(stickerID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteSticker(this.id, stickerID, reason);
-    }
-
-    /**
-     * Disable the `COMMUNITY` feature for this guild. Requires the **Administrator** permission.
-     * @param reason The reason for disable the feature.
-     */
-    async disableCommunity(reason?: string): Promise<Guild> {
-        return this.toggleFeature("COMMUNITY", false, reason);
-    }
-
-    /**
-     * Disable the `DISCOVERABLE` feature for this guild. Requires the **Administrator** permission.
-     * @param reason The reason for disabling the feature.
-     */
-    async disableDiscovery(reason?: string): Promise<Guild> {
-        return this.toggleFeature("DISCOVERABLE", false, reason);
-    }
-
-
-    /**
-     * Disable the `INVITES_DISABLED` feature for this guild. Requires the **Manage Guild** permission.
-     * @param reason The reason for disabling the feature.
-     */
-    async disableInvites(reason?: string): Promise<Guild> {
-        return this.toggleFeature("INVITES_DISABLED", true, reason);
-    }
-
-    /**
-     * The url of this guild's discovery splash.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    discoverySplashURL(format?: ImageFormat, size?: number): string | null {
-        return this.discoverySplash === null ? null : this.client.util.formatImage(Routes.GUILD_DISCOVERY_SPLASH(this.id, this.discoverySplash), format, size);
-    }
-
-    /**
      * Edit this guild.
      * @param options The options for editing the guild.
      */
     async edit(options: EditGuildOptions): Promise<Guild> {
         return this.client.rest.guilds.edit(this.id, options);
-    }
-
-    /**
-     * Edit the positions of channels in this guild.
-     * @param options The channels to move. Unedited channels do not need to be specified.
-     */
-    async editChannelPositions(options: Array<ModifyChannelPositionsEntry>): Promise<void> {
-        return this.client.rest.guilds.editChannelPositions(this.id, options);
     }
 
     /**
@@ -675,14 +446,6 @@ export default class Guild extends Base {
     }
 
     /**
-     * Edit the [mfa level](https://discord.com/developers/docs/resources/guild#guild-object-mfa-level) of this guild. This can only be used by the guild owner.
-     * @param options The options for editing the MFA level.
-     */
-    async editMFALevel(options: EditMFALevelOptions): Promise<MFALevels> {
-        return this.client.rest.guilds.editMFALevel(this.id, options);
-    }
-
-    /**
      * Edit a member of this guild. Use \<Guild\>.editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
      * @param memberID The ID of the member.
      * @param options The options for editing the member.
@@ -697,63 +460,6 @@ export default class Guild extends Base {
      */
     async editRole(roleID: string, options: EditRoleOptions): Promise<Role> {
         return this.client.rest.guilds.editRole(this.id, roleID, options);
-    }
-
-    /**
-     * Edit the position of roles in this guild.
-     * @param options The roles to move.
-     */
-    async editRolePositions(options: Array<EditRolePositionsEntry>, reason?: string): Promise<Array<Role>> {
-        return this.client.rest.guilds.editRolePositions(this.id, options, reason);
-    }
-
-    /**
-     * Edit a sticker.
-     * @param options The options for editing the sticker.
-     */
-    async editSticker(stickerID: string, options: EditStickerOptions): Promise<Sticker> {
-        return this.client.rest.guilds.editSticker(this.id, stickerID, options);
-    }
-
-    /**
-     * Edit the welcome screen in this guild.
-     * @param options The options for editing the welcome screen.
-     */
-    async editWelcomeScreen(options: EditWelcomeScreenOptions): Promise<WelcomeScreen> {
-        return this.client.rest.guilds.editWelcomeScreen(this.id, options);
-    }
-
-    /**
-     * Edit the widget of this guild.
-     * @param options The options for editing the widget.
-     */
-    async editWidget(options: WidgetSettings): Promise<Widget> {
-        return this.client.rest.guilds.editWidget(this.id, options);
-    }
-
-
-    /**
-     * Enable the `COMMUNITY` feature for this guild. Requires the **Administrator** permission.
-     * @param reason The reason for enabling the feature.
-     */
-    async enableCommunity(reason?: string): Promise<Guild> {
-        return this.toggleFeature("COMMUNITY", true, reason);
-    }
-
-    /**
-     * Enable the `DISCOVERABLE` feature for this guild. Requires the **Administrator** permission. The server must also be passing all discovery requirements.
-     * @param reason The reason for enabling the feature.
-     */
-    async enableDiscovery(reason?: string): Promise<Guild> {
-        return this.toggleFeature("DISCOVERABLE", true, reason);
-    }
-
-    /**
-     * Enable the `INVITES_DISABLED` feature for this guild. Requires the **Manage Guild** permission.
-     * @param reason The reason for enabling the feature.
-     */
-    async enableInvites(reason?: string): Promise<Guild> {
-        return this.toggleFeature("INVITES_DISABLED", false, reason);
     }
 
     /**
@@ -840,40 +546,10 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get the prune count of this guild.
-     * @param options The options for getting the prune count.
-     */
-    async getPruneCount(options?: GetPruneCountOptions): Promise<number> {
-        return this.client.rest.guilds.getPruneCount(this.id, options);
-    }
-
-    /**
      * Get the roles in this guild. Only use this if you need to. See the `roles` collection.
      */
     async getRoles(): Promise<Array<Role>> {
         return this.client.rest.guilds.getRoles(this.id);
-    }
-
-    /**
-     * Get a sticker. Response will include a user if the client has the `MANAGE_EMOJIS_AND_STICKERS` permissions.
-     * @param stickerID The ID of the sticker to get.
-     */
-    async getSticker(stickerID: string): Promise<Sticker> {
-        return this.client.rest.guilds.getSticker(this.id, stickerID);
-    }
-
-    /**
-     * Get this guild's stickers. Stickers will include a user if the client has the `MANAGE_EMOJIS_AND_STICKERS` permissions.
-     */
-    async getStickers(): Promise<Array<Sticker>> {
-        return this.client.rest.guilds.getStickers(this.id);
-    }
-
-    /**
-     * Get the vanity url of this guild.
-     */
-    async getVanityURL(): Promise<GetVanityURLResponse>{
-        return this.client.rest.guilds.getVanityURL(this.id);
     }
 
     /**
@@ -884,55 +560,12 @@ export default class Guild extends Base {
     }
 
     /**
-     * Get the welcome screen for this guild.
-     */
-    async getWelcomeScreen(): Promise<WelcomeScreen> {
-        return this.client.rest.guilds.getWelcomeScreen(this.id);
-    }
-
-    /**
-     * Get the widget of this guild.
-     */
-    async getWidget(): Promise<Widget> {
-        return this.client.rest.guilds.getWidget(this.id);
-    }
-
-    /**
-     * Get the widget image of this guild.
-     * @param style The style of the image.
-     */
-    async getWidgetImage(style?: WidgetImageStyle): Promise<Buffer> {
-        return this.client.rest.guilds.getWidgetImage(this.id, style);
-    }
-
-    /**
-     * Get the raw JSON widget of this guild.
-     */
-    async getWidgetJSON(): Promise<RawWidget> {
-        return this.client.rest.guilds.getWidgetJSON(this.id);
-    }
-
-    /**
-     * Get this guild's widget settings.
-     */
-    async getWidgetSettings(): Promise<WidgetSettings> {
-        return this.client.rest.guilds.getWidgetSettings(this.id);
-    }
-
-    /**
      * The url of this guild's icon.
      * @param format The format the url should be.
      * @param size The dimensions of the image.
      */
     iconURL(format?: ImageFormat, size?: number): string | null {
         return this.icon === null ? null : this.client.util.formatImage(Routes.GUILD_ICON(this.id, this.icon), format, size);
-    }
-
-    /**
-     * Leave this guild.
-     */
-    async leave(): Promise<void> {
-        return this.client.rest.users.leaveGuild(this.id);
     }
 
     /**
@@ -1003,15 +636,6 @@ export default class Guild extends Base {
      */
     async searchMembers(options: SearchMembersOptions): Promise<Array<Member>> {
         return this.client.rest.guilds.searchMembers(this.id, options);
-    }
-
-    /**
-     * The url of this guild's invite splash.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    splashURL(format?: ImageFormat, size?: number): string | null {
-        return this.splash === null ? null : this.client.util.formatImage(Routes.GUILD_SPLASH(this.id, this.splash), format, size);
     }
 
     override toJSON(): JSONGuild {

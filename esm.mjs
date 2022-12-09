@@ -28,7 +28,6 @@ const InteractionOptionsWrapper = (await import("./dist/lib/util/InteractionOpti
 const Invite = (await import("./dist/lib/structures/Invite.js")).default.default;
 const Member = (await import("./dist/lib/structures/Member.js")).default.default;
 const Message = (await import("./dist/lib/structures/Message.js")).default.default;
-const ModalSubmitInteraction = (await import("./dist/lib/structures/ModalSubmitInteraction.js")).default.default;
 const OAuth = (await import("./dist/lib/routes/OAuth.js")).default.default;
 const OAuthGuild = (await import ("./dist/lib/structures/OAuthGuild.js")).default.default;
 const OAuthHelper = (await import ("./dist/lib/rest/OAuthHelper.js")).default.default;
@@ -91,7 +90,6 @@ export {
     Invite,
     Member,
     Message,
-    ModalSubmitInteraction,
     OAuth,
     OAuthGuild,
     OAuthHelper,

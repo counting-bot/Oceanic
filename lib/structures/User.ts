@@ -37,9 +37,6 @@ export default class User extends Base {
     }
 
     protected override update(data: Partial<RawUser>): void {
-        if (data.accent_color !== undefined) {
-            this.accentColor = data.accent_color;
-        }
         if (data.avatar !== undefined) {
             this.avatar = data.avatar;
         }

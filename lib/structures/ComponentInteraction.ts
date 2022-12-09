@@ -167,18 +167,6 @@ export default class ComponentInteraction<V extends ComponentTypes.BUTTON | Sele
     }
 
     /**
-     * Respond to this interaction with a modal. This is an initial response, and more than one initial response cannot be used.
-     * @param options The options for the modal.
-     */
-    async createModal(options: ModalData): Promise<void> {
-        if (this.acknowledged) {
-            throw new Error("Interactions cannot have more than one initial response.");
-        }
-        this.acknowledged = true;
-        return this.client.rest.interactions.createInteractionResponse(this.id, this.token, { type: InteractionResponseTypes.MODAL, data: options });
-    }
-
-    /**
      * Defer this interaction with a `DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE` response. This is an initial response, and more than one initial response cannot be used.
      * @param flags The [flags](https://discord.com/developers/docs/resources/channel#message-object-message-flags) to respond with.
      */

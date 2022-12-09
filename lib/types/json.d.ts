@@ -7,7 +7,6 @@ import type {
     AutocompleteInteractionData,
     MessageComponentButtonInteractionData,
     MessageComponentSelectMenuInteractionData,
-    ModalSubmitInteractionData
 } from "./interactions.js";
 import type {
     GuildEmoji,
@@ -362,17 +361,6 @@ export interface JSONMessage extends JSONBase {
     tts: boolean;
     type: MessageTypes;
     webhook?: string;
-}
-export interface JSONModalSubmitInteraction extends JSONInteraction {
-    appPermissions?: JSONPermission;
-    channelID: string;
-    data: ModalSubmitInteractionData;
-    guildID?: string;
-    guildLocale?: string;
-    locale: string;
-    member?: JSONMember;
-    type: InteractionTypes.MODAL_SUBMIT;
-    user: JSONUser;
 }
 export interface JSONPartialApplication extends JSONBase {
     botPublic?: boolean;

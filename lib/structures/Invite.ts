@@ -140,14 +140,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
         return this._cachedChannel === null ? this._cachedChannel : (this._cachedChannel = null);
     }
 
-    /**
-     * Delete this invite.
-     * @param reason The reason for deleting this invite.
-     */
-    async deleteInvite(reason?: string): Promise<Invite<"withMetadata", CH>> {
-        return this.client.rest.channels.deleteInvite<CH>(this.code, reason);
-    }
-
     /** Whether this invite belongs to a cached channel. The only difference on using this method over a simple if statement is to easily update all the invite properties typing definitions based on the channel it belongs to. */
     inCachedChannel(): this is Invite<T, InviteChannel> {
         return this.channel instanceof Channel;
