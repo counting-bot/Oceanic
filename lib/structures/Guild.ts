@@ -59,7 +59,7 @@ import type {
     GetActiveThreadsResponse,
     Ban,
     RESTMember,
-    Sticker,
+    Sticker
 } from "../types/guilds.js";
 import type { JSONGuild } from "../types/json.js";
 import type { PresenceUpdate, RequestGuildMembersOptions } from "../types/gateway.js";

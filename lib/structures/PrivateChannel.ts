@@ -4,12 +4,7 @@ import type User from "./User.js";
 import Message from "./Message.js";
 import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
-import type {
-    CreateMessageOptions,
-    EditMessageOptions,
-    RawMessage,
-    RawPrivateChannel
-} from "../types/channels.js";
+import type { CreateMessageOptions, EditMessageOptions, RawMessage, RawPrivateChannel } from "../types/channels.js";
 import TypedCollection from "../util/TypedCollection.js";
 import type { JSONPrivateChannel } from "../types/json.js";
 

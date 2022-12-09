@@ -13,12 +13,7 @@ import InteractionResolvedChannel from "./InteractionResolvedChannel.js";
 import TypedCollection from "../util/TypedCollection.js";
 import type { InteractionTypes } from "../Constants.js";
 import { ApplicationCommandTypes, InteractionResponseTypes } from "../Constants.js";
-import type {
-    ApplicationCommandInteractionData,
-    InteractionContent,
-    RawApplicationCommandInteraction,
-    ApplicationCommandInteractionResolvedData
-} from "../types/interactions.js";
+import type { ApplicationCommandInteractionData, InteractionContent, RawApplicationCommandInteraction, ApplicationCommandInteractionResolvedData } from "../types/interactions.js";
 import type Client from "../Client.js";
 import type { RawMember } from "../types/guilds.js";
 import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";

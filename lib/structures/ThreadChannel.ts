@@ -14,13 +14,11 @@ import type {
     EditMessageOptions,
     EditThreadChannelOptions,
     GetChannelMessagesOptions,
-    GetReactionsOptions,
     PrivateThreadMetadata,
     RawMessage,
     RawThreadChannel,
     ThreadMember,
     ThreadMetadata,
-    PurgeOptions,
     ThreadParentChannel
 } from "../types/channels.js";
 import type { JSONThreadChannel } from "../types/json.js";
@@ -168,15 +166,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
      */
     async deleteMessage(messageID: string, reason?: string): Promise<void> {
         return this.client.rest.channels.deleteMessage(this.id, messageID, reason);
-    }
-
-    /**
-     * Bulk delete messages in this thread.
-     * @param messageIDs The IDs of the messages to delete. Any duplicates or messages older than two weeks will cause an error.
-     * @param reason The reason for deleting the messages.
-     */
-    async deleteMessages(messageIDs: Array<string>, reason?: string): Promise<number> {
-        return this.client.rest.channels.deleteMessages(this.id, messageIDs, reason);
     }
 
     /**

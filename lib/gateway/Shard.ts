@@ -13,7 +13,6 @@ import {
 import type {
     UpdatePresenceOptions,
     RequestGuildMembersOptions,
-    PresenceUpdate,
     SendStatuses,
     BotActivity,
     ShardStatus
@@ -30,7 +29,6 @@ import type {
     AnyThreadChannel,
     InviteChannel,
     PossiblyUncachedInvite,
-    RawMessage,
     ThreadMember,
     ThreadParentChannel,
     UncachedThreadMember,
@@ -48,10 +46,8 @@ import Role from "../structures/Role.js";
 import Integration from "../structures/Integration.js";
 import type { Data } from "ws";
 import WebSocket from "ws";
-import type Pako from "pako";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import type { Inflate } from "zlib-sync";
 import { randomBytes } from "node:crypto";
 import { inspect } from "node:util";
 import assert from "node:assert";
@@ -81,7 +77,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     resumeURL: string | null;
     sequence: number;
     sessionID: string | null;
-    #sharedZLib!: Pako.Inflate | Inflate;
     status: ShardStatus;
     ws!: WebSocket | null;
     constructor(id: number, client: Client) {
@@ -542,170 +537,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                         id
                     };
                 }));
-                break;
-            }
-
-            // case "MESSAGE_REACTION_ADD": {
-            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-            //     const message = channel?.messages?.get(packet.d.message_id);
-            //     const reactor = packet.d.member
-            //         ? (packet.d.guild_id ? this.client.util.updateMember(packet.d.guild_id, packet.d.user_id, packet.d.member) : this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id })
-            //         : this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
-
-            //     if (message) {
-            //         const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-            //         if (message.reactions[name]) {
-            //             message.reactions[name].count++;
-            //             if (packet.d.user_id === this.client.user.id) {
-            //                 message.reactions[name].me = true;
-            //             }
-            //         } else {
-            //             message.reactions[name] = {
-            //                 count: 1,
-            //                 me:    packet.d.user_id === this.client.user.id
-            //             };
-            //         }
-
-            //     }
-
-            //     this.client.emit("messageReactionAdd", message ?? {
-            //         channel:   channel ?? { id: packet.d.channel_id },
-            //         channelID: packet.d.channel_id,
-            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-            //         guildID:   packet.d.guild_id,
-            //         id:        packet.d.message_id
-            //     }, reactor, packet.d.emoji);
-            //     break;
-            // }
-
-            // case "MESSAGE_REACTION_REMOVE": {
-            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-            //     const message = channel?.messages?.get(packet.d.message_id);
-            //     const reactor = this.client.users.get(packet.d.user_id) ?? { id: packet.d.user_id };
-
-            //     if (message) {
-            //         const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-            //         if (message.reactions[name]) {
-            //             message.reactions[name].count--;
-            //             if (packet.d.user_id === this.client.user.id) {
-            //                 message.reactions[name].me = false;
-            //             }
-            //             if (message.reactions[name].count === 0) {
-            //                 delete message.reactions[name];
-            //             }
-            //         }
-            //     }
-
-            //     this.client.emit("messageReactionRemove", message ?? {
-            //         channel:   channel ?? { id: packet.d.channel_id },
-            //         channelID: packet.d.channel_id,
-            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-            //         guildID:   packet.d.guild_id,
-            //         id:        packet.d.message_id
-            //     }, reactor, packet.d.emoji);
-            //     break;
-            // }
-
-            // case "MESSAGE_REACTION_REMOVE_ALL": {
-            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-            //     const message = channel?.messages?.get(packet.d.message_id);
-
-            //     if (message) {
-            //         message.reactions = {};
-            //     }
-
-            //     this.client.emit("messageReactionRemoveAll", message ?? {
-            //         channel:   channel ?? { id: packet.d.channel_id },
-            //         channelID: packet.d.channel_id,
-            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-            //         guildID:   packet.d.guild_id,
-            //         id:        packet.d.message_id
-            //     });
-            //     break;
-            // }
-
-            // case "MESSAGE_REACTION_REMOVE_EMOJI": {
-            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-            //     const message = channel?.messages?.get(packet.d.message_id);
-
-            //     if (message) {
-            //         const name = packet.d.emoji.id ? `${packet.d.emoji.name}:${packet.d.emoji.id}` : packet.d.emoji.name;
-            //         if (message.reactions[name]) {
-            //             delete message.reactions[name];
-            //         }
-            //     }
-
-            //     this.client.emit("messageReactionRemoveEmoji", message ?? {
-            //         channel:   channel ?? { id: packet.d.channel_id },
-            //         channelID: packet.d.channel_id,
-            //         guild:     packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) : undefined,
-            //         guildID:   packet.d.guild_id,
-            //         id:        packet.d.message_id
-            //     }, packet.d.emoji);
-            //     break;
-            // }
-
-            case "MESSAGE_UPDATE": {
-                const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-                const oldMessage = channel?.messages?.get(packet.d.id)?.toJSON() ?? null;
-                if (!oldMessage && !packet.d.author) {
-                    this.client.emit("debug", `Got partial MESSAGE_UPDATE for uncached message ${packet.d.id} for channel ${packet.d.channel_id}, discarding..`);
-                    break;
-                }
-                const message = channel?.messages?.update(packet.d) ?? new Message(packet.d as RawMessage, this.client);
-                this.client.emit("messageUpdate", message, oldMessage);
-                break;
-            }
-
-            case "PRESENCE_UPDATE": {
-                const user = this.client.users.get(packet.d.user.id);
-                if (user) {
-                    const oldUser = user.toJSON();
-                    user["update"](packet.d.user);
-                    if (JSON.stringify(oldUser) !== JSON.stringify(user.toJSON())) {
-                        this.client.emit("userUpdate", user, oldUser);
-                    }
-                }
-
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const member = guild?.members.get(packet.d.user.id);
-                const oldPresence = member?.presence ?? null;
-
-                const presence = {
-                    clientStatus: packet.d.client_status,
-                    guildID:      packet.d.guild_id,
-                    status:       packet.d.status,
-                    activities:   packet.d.activities?.map(activity => ({
-                        createdAt:     activity.created_at,
-                        name:          activity.name,
-                        type:          activity.type,
-                        applicationID: activity.application_id,
-                        assets:        activity.assets ? {
-                            largeImage: activity.assets.large_image,
-                            largeText:  activity.assets.large_text,
-                            smallImage: activity.assets.small_image,
-                            smallText:  activity.assets.small_text
-                        } : undefined,
-                        buttons:    activity.buttons,
-                        details:    activity.details,
-                        emoji:      activity.emoji,
-                        flags:      activity.flags,
-                        instance:   activity.instance,
-                        party:      activity.party,
-                        secrets:    activity.secrets,
-                        state:      activity.state,
-                        timestamps: activity.timestamps,
-                        url:        activity.url
-                    }))
-                };
-                const userID = packet.d.user.id;
-
-                delete (packet.d as { user?: PresenceUpdate["user"]; }).user;
-                if (member) {
-                    member.presence = presence;
-                }
-
-                this.client.emit("presenceUpdate", guild ?? { id: packet.d.guild_id }, member ?? { id: userID }, presence, oldPresence);
                 break;
             }
 

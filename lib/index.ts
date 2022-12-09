@@ -58,5 +58,4 @@ export { default as UnavailableGuild } from "./structures/UnavailableGuild.js";
 export { default as UncaughtError } from "./util/UncaughtError.js";
 export { default as User } from "./structures/User.js";
 export { default as Util } from "./util/Util.js";
-export { default as VoiceChannel } from "./structures/VoiceChannel.js";
 export { default as Webhook } from "./structures/Webhook.js";

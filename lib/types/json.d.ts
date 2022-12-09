@@ -2,12 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import type { InstallParams, TeamMember } from "./oauth.js";
 import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
-import type {
-    ApplicationCommandInteractionData,
-    AutocompleteInteractionData,
-    MessageComponentButtonInteractionData,
-    MessageComponentSelectMenuInteractionData,
-} from "./interactions.js";
+import type { ApplicationCommandInteractionData, AutocompleteInteractionData, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData } from "./interactions.js";
 import type {
     GuildEmoji,
     IntegrationAccount,
@@ -53,7 +48,6 @@ import type {
     ThreadAutoArchiveDuration,
     ThreadChannelTypes,
     VerificationLevels,
-    VideoQualityModes,
     WebhookTypes,
     SortOrderTypes,
     ForumLayoutTypes
@@ -455,18 +449,6 @@ export interface JSONUser extends JSONBase {
     publicFlags: number;
     system: boolean;
     username: string;
-}
-export interface JSONVoiceChannel extends JSONGuildChannel {
-    bitrate: number;
-    messages: Array<string>;
-    nsfw: boolean;
-    permissionOverwrites: Array<JSONPermissionOverwrite>;
-    position: number;
-    rtcRegion: string | null;
-    topic: string | null;
-    type: ChannelTypes.GUILD_VOICE;
-    userLimit: number;
-    videoQualityMode: VideoQualityModes;
 }
 
 export interface JSONWebhook extends JSONBase {

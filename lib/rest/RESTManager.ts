@@ -12,7 +12,6 @@ import ApplicationCommands from "../routes/ApplicationCommands.js";
 import Interactions from "../routes/Interactions.js";
 import * as Routes from "../util/Routes.js";
 import type { GetBotGatewayResponse, GetGatewayResponse, RawGetBotGatewayResponse } from "../types/gateway.js";
-import Miscellaneous from "../routes/Miscellaneous.js";
 
 /** A manager for all rest actions. */
 export default class RESTManager {
@@ -22,7 +21,6 @@ export default class RESTManager {
     guilds: Guilds;
     handler: RequestHandler;
     interactions: Interactions;
-    misc: Miscellaneous;
     oauth: OAuth;
     users: Users;
     webhooks: Webhooks;
@@ -33,7 +31,6 @@ export default class RESTManager {
         this.guilds = new Guilds(this);
         this.handler = new RequestHandler(this, options);
         this.interactions = new Interactions(this);
-        this.misc = new Miscellaneous(this);
         this.oauth = new OAuth(this);
         this.users = new Users(this);
         this.webhooks = new Webhooks(this);

@@ -15,7 +15,6 @@ import type {
     MessageComponentButtonInteractionData,
     MessageComponentInteractionResolvedData,
     MessageComponentSelectMenuInteractionData,
-    ModalData,
     RawMessageComponentInteraction
 } from "../types/interactions.js";
 import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";

@@ -34,7 +34,6 @@ import type {
 import type User from "../structures/User.js";
 import type Integration from "../structures/Integration.js";
 import type TextChannel from "../structures/TextChannel.js";
-import type VoiceChannel from "../structures/VoiceChannel.js";
 import type CategoryChannel from "../structures/CategoryChannel.js";
 import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
 
@@ -368,16 +367,14 @@ export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads 
 }
 
 export type CreateTextChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_TEXT>, "rtcRegion" | "userLimit" | "videoQualityMode">;
-export type CreateVoiceChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_VOICE>, "defaultAutoArchiveDuration" | "topic">;
 export type CreateCategoryChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_CATEGORY>, "defaultAutoArchiveDuration" | "nsfw" | "parentID" | "rtcRegion" | "topic" | "userLimit" | "videoQualityMode">;
 export type CreateAnnouncementChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_ANNOUNCEMENT>, "rtcRegion" | "userLimit" | "videoQualityMode">;
 
 export type CreateChannelReturn<T extends GuildChannelTypesWithoutThreads> =
     T extends ChannelTypes.GUILD_TEXT ? TextChannel :
-        T extends ChannelTypes.GUILD_VOICE ? VoiceChannel :
-            T extends ChannelTypes.GUILD_CATEGORY ? CategoryChannel :
-                T extends ChannelTypes.GUILD_ANNOUNCEMENT ? AnnouncementChannel :
-                    never;
+        T extends ChannelTypes.GUILD_CATEGORY ? CategoryChannel :
+            T extends ChannelTypes.GUILD_ANNOUNCEMENT ? AnnouncementChannel :
+                never;
 
 export interface CreateRoleOptions {
     /** The color of the role. */

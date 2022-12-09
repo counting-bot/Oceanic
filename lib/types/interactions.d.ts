@@ -5,8 +5,7 @@ import type {
     ModalActionRow,
     RawAttachment,
     RawInteractionResolvedChannel,
-    RawMessage,
-    RawModalActionRow
+    RawMessage
 } from "./channels.js";
 import type { InteractionMember, RawMember, RawRole } from "./guilds.js";
 import type { RawUser } from "./users.js";

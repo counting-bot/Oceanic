@@ -1,50 +1,26 @@
 /** @module Routes/Guilds */
 import type {
-    CreateEmojiOptions,
-    CreateGuildOptions,
-    EditEmojiOptions,
-    EditGuildOptions,
-    GuildEmoji,
-    ModifyChannelPositionsEntry,
     RawGuild,
-    RawGuildEmoji,
     GetActiveThreadsResponse,
     GetMembersOptions,
     SearchMembersOptions,
     AddMemberOptions,
     EditMemberOptions,
     EditCurrentMemberOptions,
-    GetBansOptions,
-    RawBan,
-    Ban,
     CreateBanOptions,
     RawRole,
     CreateRoleOptions,
-    EditRolePositionsEntry,
     EditRoleOptions,
-    GetPruneCountOptions,
-    BeginPruneOptions,
     RawIntegration,
-    RawWidgetSettings,
-    WidgetSettings,
-    RawWidget,
-    Widget,
-    WidgetImageStyle,
     RawWelcomeScreen,
     WelcomeScreen,
-    EditWelcomeScreenOptions,
     GetVanityURLResponse,
     CreateChannelReturn,
     CreateChannelOptions,
-    EditMFALevelOptions,
-    RESTMember,
-    RawSticker,
-    Sticker,
-    CreateStickerOptions,
-    EditStickerOptions
+    RESTMember
 } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
-import type { GuildChannelTypesWithoutThreads, MFALevels } from "../Constants.js";
+import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
 import type {
     AnyGuildChannelWithoutThreads,
     InviteChannel,
@@ -61,7 +37,6 @@ import type RESTManager from "../rest/RESTManager.js";
 import Guild from "../structures/Guild.js";
 import type Member from "../structures/Member.js";
 import type { Uncached } from "../types/shared.js";
-import { File, FormData } from "undici";
 
 /** Various methods for interacting with guilds. */
 export default class Guilds {
@@ -108,58 +83,6 @@ export default class Guilds {
             path:   Routes.GUILD_MEMBER_ROLE(guildID, memberID, roleID),
             reason
         });
-    }
-
-    /**
-     * Begin a prune.
-     * @param guildID The ID of the guild.
-     * @param options The options for the prune.
-     */
-    async beginPrune(guildID: string, options?: BeginPruneOptions): Promise<number | null> {
-        const reason = options?.reason;
-        if (options?.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<{ pruned: number | null; }>({
-            method: "POST",
-            path:   Routes.GUILD_PRUNE(guildID),
-            json:   {
-                days:                options?.days,
-                compute_prune_count: options?.computePruneCount,
-                include_roles:       options?.includeRoles
-            },
-            reason
-        }).then(data => data.pruned);
-    }
-
-    /**
-     * Create a guild. This can only be used by bots in under 10 guilds.
-     *
-     * Note: This does NOT add the guild to the client's cache.
-     * @param options The options for creating the guild.
-     */
-    async create(options: CreateGuildOptions): Promise<Guild> {
-        if (options.icon) {
-            options.icon = this.#manager.client.util._convertImage(options.icon, "icon");
-        }
-        return this.#manager.authRequest<RawGuild>({
-            method: "POST",
-            path:   Routes.GUILDS,
-            json:   {
-                afk_channel_id:                options.afkChannelID,
-                afk_timeout:                   options.afkTimeout,
-                channels:                      options.channels,
-                default_message_notifications: options.defaultMessageNotifications,
-                explicit_content_filter:       options.explicitContentFilter,
-                icon:                          options.icon,
-                name:                          options.name,
-                region:                        options.region,
-                roles:                         options.roles,
-                system_channel_flags:          options.systemChannelFlags,
-                system_channel_id:             options.systemChannelID,
-                verification_level:            options.verificationLevel
-            }
-        }).then(data => new Guild(data, this.#manager.client));
     }
 
     /**
@@ -224,34 +147,6 @@ export default class Guilds {
     }
 
     /**
-     * Create an emoji in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for creating the emoji.
-     */
-    async createEmoji(guildID: string, options: CreateEmojiOptions): Promise<GuildEmoji> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        if (options.image) {
-            options.image = this.#manager.client.util._convertImage(options.image, "image");
-        }
-        return this.#manager.authRequest<RawGuildEmoji>({
-            method: "POST",
-            path:   Routes.GUILD_EMOJIS(guildID),
-            json:   {
-                image: options.image,
-                name:  options.name,
-                roles: options.roles
-            },
-            reason
-        }).then(data => ({
-            ...data,
-            user: !data.user ? undefined : this.#manager.client.users.update(data.user)
-        }));
-    }
-
-    /**
      * Create a role.
      * @param guildID The ID of the guild.
      * @param options The options for creating the role.
@@ -281,177 +176,6 @@ export default class Guilds {
     }
 
     /**
-     * Create a sticker.
-     * @param guildID The ID of the guild.
-     * @param options The options for creating the sticker.
-     */
-    async createSticker(guildID: string, options: CreateStickerOptions): Promise<Sticker> {
-        const magic = this.#manager.client.util.getMagic(options.file.contents);
-        let mime: string | undefined;
-        switch (magic) {
-            // png & apng have the same magic
-            case "89504E47": {
-                mime = "image/png"; break;
-            }
-            // lottie
-            case "7B227622": {
-                mime = "application/json"; break;
-            }
-        }
-
-        const form = new FormData();
-        form.append("description", options.description);
-        form.append("name", options.name);
-        form.append("tags", options.tags);
-        form.append("file", new File([options.file.contents], options.file.name, { type: mime }));
-
-        return this.#manager.authRequest<RawSticker>({
-            method: "POST",
-            path:   Routes.GUILD_STICKERS(guildID),
-            form,
-            reason: options.reason
-        }).then(data => this.#manager.client.util.convertSticker(data));
-    }
-
-    /**
-     * Delete a guild.
-     * @param guildID The ID of the guild.
-     */
-    async delete(guildID: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD(guildID)
-        });
-    }
-
-    /**
-     * Delete an emoji.
-     * @param guildID The ID of the guild.
-     * @param emojiID The ID of the emoji.
-     * @param reason The reason for deleting the emoji.
-     */
-    async deleteEmoji(guildID: string, emojiID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_EMOJI(guildID, emojiID),
-            reason
-        });
-    }
-
-    /**
-     * Delete an integration.
-     * @param guildID The ID of the guild.
-     * @param integrationID The ID of the integration.
-     * @param reason The reason for deleting the integration.
-     */
-    async deleteIntegration(guildID: string, integrationID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_INTEGRATION(guildID, integrationID),
-            reason
-        });
-    }
-
-    /**
-     * Delete a role.
-     * @param guildID The ID of the guild.
-     * @param roleID The ID of the role to delete.
-     * @param reason The reason for deleting the role.
-     */
-    async deleteRole(guildID: string, roleID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_ROLE(guildID, roleID),
-            reason
-        });
-    }
-
-    /**
-     * Delete a sticker.
-     * @param guildID The ID of the guild.
-     * @param stickerID The ID of the sticker to delete.
-     * @param reason The reason for deleting the sticker.
-     */
-    async deleteSticker(guildID: string, stickerID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_STICKER(guildID, stickerID),
-            reason
-        });
-    }
-
-    /**
-     * Edit a guild.
-     *
-     * Note: If the client's cache does not already contain the guild, it will not be added.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the guild.
-     */
-    async edit(guildID: string, options: EditGuildOptions): Promise<Guild> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        if (options.banner) {
-            options.banner = this.#manager.client.util._convertImage(options.banner, "banner");
-        }
-        if (options.discoverySplash) {
-            options.discoverySplash = this.#manager.client.util._convertImage(options.discoverySplash, "discovery splash");
-        }
-        if (options.icon) {
-            options.icon = this.#manager.client.util._convertImage(options.icon, "icon");
-        }
-        if (options.splash) {
-            options.splash = this.#manager.client.util._convertImage(options.splash, "splash");
-        }
-        return this.#manager.authRequest<RawGuild>({
-            method: "PATCH",
-            path:   Routes.GUILD(guildID),
-            json:   {
-                afk_channel_id:                options.afkChannelID,
-                afk_timeout:                   options.afkTimeout,
-                banner:                        options.banner,
-                default_message_notifications: options.defaultMessageNotifications,
-                description:                   options.description,
-                discovery_splash:              options.discoverySplash,
-                explicit_content_filter:       options.explicitContentFilter,
-                features:                      options.features,
-                icon:                          options.icon,
-                name:                          options.name,
-                owner_id:                      options.ownerID,
-                preferred_locale:              options.preferredLocale,
-                premium_progress_bar_enabled:  options.premiumProgressBarEnabled,
-                public_updates_channel_id:     options.publicUpdatesChannelID,
-                region:                        options.region,
-                rules_channel_id:              options.rulesChannelID,
-                splash:                        options.splash,
-                system_channel_flags:          options.systemChannelFlags,
-                system_channel_id:             options.systemChannelID,
-                verification_level:            options.verificationLevel
-            },
-            reason
-        }).then(data => this.#manager.client.guilds.has(guildID) ? this.#manager.client.guilds.update(data) : new Guild(data, this.#manager.client));
-    }
-
-    /**
-     * Edit the positions of channels in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The channels to move. Unedited channels do not need to be specified.
-     */
-    async editChannelPositions(guildID: string, options: Array<ModifyChannelPositionsEntry>): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "PATCH",
-            path:   Routes.GUILD_CHANNELS(guildID),
-            json:   options.map(o => ({
-                id:               o.id,
-                lock_permissions: o.lockPermissions ?? null,
-                parent_id:        o.parentID ?? null,
-                position:         o.position ?? null
-            }))
-        });
-    }
-
-    /**
      * Modify the current member in a guild.
      * @param guildID The ID of the guild.
      * @param options The options for editing the member.
@@ -467,48 +191,6 @@ export default class Guilds {
             json:   { nick: options.nick },
             reason
         }).then(data => this.#manager.client.util.updateMember(guildID, data.user.id, data));
-    }
-
-    /**
-     * Edit an existing emoji.
-     * @param guildID The ID of the guild the emoji is in.
-     * @param options The options for editing the emoji.
-     */
-    async editEmoji(guildID: string, emojiID: string, options: EditEmojiOptions): Promise<GuildEmoji> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawGuildEmoji>({
-            method: "POST",
-            path:   Routes.GUILD_EMOJI(guildID, emojiID),
-            json:   {
-                name:  options.name,
-                roles: options.roles
-            },
-            reason
-        }).then(data => ({
-            ...data,
-            user: !data.user ? undefined : this.#manager.client.users.update(data.user)
-        }));
-    }
-
-    /**
-     * Edit the [mfa level](https://discord.com/developers/docs/resources/guild#guild-object-mfa-level) of a guild. This can only be used by the guild owner.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the MFA level.
-     */
-    async editMFALevel(guildID: string, options: EditMFALevelOptions): Promise<MFALevels> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<MFALevels>({
-            method: "POST",
-            path:   Routes.GUILD_MFA(guildID),
-            json:   { level: options.level },
-            reason
-        });
     }
 
     /**
@@ -567,109 +249,6 @@ export default class Guilds {
     }
 
     /**
-     * Edit the position of roles in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The roles to move.
-     */
-    async editRolePositions(guildID: string, options: Array<EditRolePositionsEntry>, reason?: string): Promise<Array<Role>> {
-        const guild = this.#manager.client.guilds.get(guildID);
-        return this.#manager.authRequest<Array<RawRole>>({
-            method: "PATCH",
-            path:   Routes.GUILD_ROLES(guildID),
-            json:   options.map(o => ({
-                id:       o.id,
-                position: o.position
-            })),
-            reason
-        }).then(data => data.map(role => guild?.roles.update(role, guildID) ?? new Role(role, this.#manager.client, guildID)));
-    }
-
-    /**
-     * Edit a sticker.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the sticker.
-     */
-    async editSticker(guildID: string, stickerID: string, options: EditStickerOptions): Promise<Sticker> {
-        return this.#manager.authRequest<RawSticker>({
-            method: "PATCH",
-            path:   Routes.GUILD_STICKER(guildID, stickerID),
-            json:   {
-                description: options.description,
-                name:        options.name,
-                tags:        options.tags
-            },
-            reason: options.reason
-        }).then(data => this.#manager.client.util.convertSticker(data));
-    }
-
-    /**
-     * Edit the welcome screen in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the welcome screen.
-     */
-    async editWelcomeScreen(guildID: string, options: EditWelcomeScreenOptions): Promise<WelcomeScreen> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawWelcomeScreen>({
-            method: "PATCH",
-            path:   Routes.GUILD_WELCOME_SCREEN(guildID),
-            json:   {
-                description:      options.description,
-                enabled:          options.enabled,
-                welcome_channels: options.welcomeChannels.map(ch => ({
-                    channel_id:  ch.channelID,
-                    description: ch.description,
-                    emoji_id:    ch.emojiID,
-                    emoji_name:  ch.emojiName
-                }))
-            },
-            reason
-        }).then(data => ({
-            description:     data.description,
-            welcomeChannels: data.welcome_channels.map(channel => ({
-                channelID:   channel.channel_id,
-                description: channel.description,
-                emojiID:     channel.emoji_id,
-                emojiName:   channel.emoji_name
-            }))
-        }));
-    }
-
-    /**
-     * Edit the widget of a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the widget.
-     */
-    async editWidget(guildID: string, options: WidgetSettings): Promise<Widget> {
-        return this.#manager.authRequest<RawWidget>({
-            method: "POST",
-            path:   Routes.GUILD_WIDGET(guildID),
-            json:   {
-                channel_id: options.channelID,
-                enabled:    options.enabled
-            }
-        }).then(data => ({
-            channels:      data.channels,
-            id:            data.id,
-            instantInvite: data.instant_invite,
-            members:       data.members.map(m => ({
-                activity:      m.activity,
-                avatar:        m.avatar,
-                avatarURL:     m.avatar_url,
-                discriminator: m.discriminator,
-                id:            m.id,
-                status:        m.status,
-                tag:           `${m.username}#${m.discriminator}`,
-                username:      m.username
-            })),
-            name:          data.name,
-            presenceCount: data.presence_count
-        }));
-    }
-
-    /**
      * Get a guild.
      *
      * Note: If the guild is not already in the client's cache, this will not add it.
@@ -708,84 +287,6 @@ export default class Guilds {
     }
 
     /**
-     * Get a ban.
-     * @param guildID The ID of the guild.
-     * @param userID The ID of the user to get the ban of.
-     */
-    async getBan(guildID: string, userID: string): Promise<Ban> {
-        return this.#manager.authRequest<RawBan>({
-            method: "GET",
-            path:   Routes.GUILD_BAN(guildID, userID)
-        }).then(data => ({
-            reason: data.reason,
-            user:   this.#manager.client.users.update(data.user)
-        }));
-    }
-
-    /**
-     * Get the bans in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for getting the bans.
-     */
-    async getBans(guildID: string, options?: GetBansOptions): Promise<Array<Ban>> {
-        const _getBans = async (_options?: GetBansOptions): Promise<Array<Ban>> => {
-            const query = new URLSearchParams();
-            if (_options?.after !== undefined) {
-                query.set("after", _options.after);
-            }
-            if (_options?.before !== undefined) {
-                query.set("before", _options.before);
-            }
-            if (_options?.limit !== undefined) {
-                query.set("limit", _options.limit.toString());
-            }
-            return this.#manager.authRequest<Array<RawBan>>({
-                method: "GET",
-                path:   Routes.GUILD_BANS(guildID),
-                query
-            }).then(data => data.map(ban => ({
-                reason: ban.reason,
-                user:   this.#manager.client.users.update(ban.user)
-            })));
-        };
-
-        const limit = options?.limit ?? 1000;
-        let chosenOption: "after" | "before";
-        if (options?.after) {
-            chosenOption = "after";
-        } else if (options?.before) {
-            chosenOption = "before";
-        } else {
-            chosenOption = "after";
-        }
-        let optionValue = options?.[chosenOption] ?? undefined;
-
-        let bans: Array<Ban> = [];
-        while (bans.length < limit) {
-            const limitLeft = limit - bans.length;
-            const limitToFetch = limitLeft <= 1000 ? limitLeft : 1000;
-            this.#manager.client.emit("debug", `Getting ${limitLeft} more ban${limitLeft === 1 ? "" : "s"} for ${guildID}: ${optionValue ?? ""}`);
-            const bansChunk = await _getBans({
-                limit:          limitToFetch,
-                [chosenOption]: optionValue
-            });
-
-            if (bansChunk.length === 0) {
-                break;
-            }
-
-            bans = bans.concat(bansChunk);
-            optionValue = bansChunk.at(-1)!.user.id;
-
-            if (bansChunk.length < 1000) {
-                break;
-            }
-        }
-
-        return bans;
-    }
-
-    /**
      * Get the channels in a guild. Does not include threads.
      * @param guildID The ID of the guild.
      */
@@ -794,35 +295,6 @@ export default class Guilds {
             method: "GET",
             path:   Routes.GUILD_CHANNELS(guildID)
         }).then(data => data.map(d => this.#manager.client.util.updateChannel(d)));
-    }
-
-    /**
-     * Get an emoji in a guild.
-     * @param guildID The ID of the guild.
-     * @param emojiID The ID of the emoji to get.
-     */
-    async getEmoji(guildID: string, emojiID: string): Promise<GuildEmoji> {
-        return this.#manager.authRequest<RawGuildEmoji>({
-            method: "GET",
-            path:   Routes.GUILD_EMOJI(guildID, emojiID)
-        }).then(data => ({
-            ...data,
-            user: !data.user ? undefined : this.#manager.client.users.update(data.user)
-        }));
-    }
-
-    /**
-     * Get the emojis in a guild.
-     * @param guildID The ID of the guild.
-     */
-    async getEmojis(guildID: string): Promise<Array<GuildEmoji>> {
-        return this.#manager.authRequest<Array<RawGuildEmoji>>({
-            method: "GET",
-            path:   Routes.GUILD_EMOJIS(guildID)
-        }).then(data => data.map(d => ({
-            ...d,
-            user: !d.user ? undefined : this.#manager.client.users.update(d.user)
-        })));
     }
 
     /**
@@ -880,26 +352,6 @@ export default class Guilds {
     }
 
     /**
-     * Get the prune count of a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for getting the prune count.
-     */
-    async getPruneCount(guildID: string, options?: GetPruneCountOptions): Promise<number> {
-        const query = new URLSearchParams();
-        if (options?.days !== undefined) {
-            query.set("days", options.days.toString());
-        }
-        if (options?.includeRoles !== undefined) {
-            query.set("include_roles", options.includeRoles.join(","));
-        }
-        return this.#manager.authRequest<{ pruned: number; }>({
-            method: "GET",
-            path:   Routes.GUILD_PRUNE(guildID),
-            query
-        }).then(data => data.pruned);
-    }
-
-    /**
      * Get the roles in a guild.
      * @param guildID The ID of the guild.
      */
@@ -909,29 +361,6 @@ export default class Guilds {
             method: "GET",
             path:   Routes.GUILD_ROLES(guildID)
         }).then(data => data.map(role => guild ? guild.roles.update(role, guildID) : new Role(role, this.#manager.client, guildID)));
-    }
-
-    /**
-     * Get a sticker. Response will include a user if the client has the `MANAGE_EMOJIS_AND_STICKERS` permissions.
-     * @param guildID The ID of the guild.
-     * @param stickerID The ID of the sticker to get.
-     */
-    async getSticker(guildID: string, stickerID: string): Promise<Sticker> {
-        return this.#manager.authRequest<RawSticker>({
-            method: "GET",
-            path:   Routes.GUILD_STICKER(guildID, stickerID)
-        }).then(data => this.#manager.client.util.convertSticker(data));
-    }
-
-    /**
-     * Get a guild's stickers. Stickers will include a user if the client has the `MANAGE_EMOJIS_AND_STICKERS` permissions.
-     * @param guildID The ID of the guild.
-     */
-    async getStickers(guildID: string): Promise<Array<Sticker>> {
-        return this.#manager.authRequest<Array<RawSticker>>({
-            method: "GET",
-            path:   Routes.GUILD_STICKERS(guildID)
-        }).then(data => data.map(d => this.#manager.client.util.convertSticker(d)));
     }
 
     /**
@@ -962,89 +391,6 @@ export default class Guilds {
                 emojiName:   channel.emoji_name
             }))
         }));
-    }
-
-    /**
-     * Get the widget of a guild.
-     * @param guildID The ID of the guild.
-     */
-    async getWidget(guildID: string): Promise<Widget> {
-        return this.#manager.authRequest<RawWidget>({
-            method: "GET",
-            path:   Routes.GUILD_WIDGET(guildID)
-        }).then(data => ({
-            channels:      data.channels,
-            id:            data.id,
-            instantInvite: data.instant_invite,
-            members:       data.members.map(m => ({
-                activity:      m.activity,
-                avatar:        m.avatar,
-                avatarURL:     m.avatar_url,
-                discriminator: m.discriminator,
-                id:            m.id,
-                status:        m.status,
-                tag:           `${m.username}#${m.discriminator}`,
-                username:      m.username
-            })),
-            name:          data.name,
-            presenceCount: data.presence_count
-        }));
-    }
-
-    /**
-     * Get the widget image of a guild.
-     * @param guildID The ID of the guild.
-     * @param style The style of the image.
-     */
-    async getWidgetImage(guildID: string, style?: WidgetImageStyle): Promise<Buffer> {
-        const query = new URLSearchParams();
-        if (style !== undefined) {
-            query.set("style", style);
-        }
-        return this.#manager.request<Buffer>({
-            method: "GET",
-            path:   Routes.GUILD_WIDGET_IMAGE(guildID),
-            query
-        });
-    }
-
-    /**
-     * Get the raw JSON widget of a guild.
-     * @param guildID The ID of the guild.
-     */
-    async getWidgetJSON(guildID: string): Promise<RawWidget> {
-        return this.#manager.request<RawWidget>({
-            method: "GET",
-            path:   Routes.GUILD_WIDGET_JSON(guildID)
-        });
-    }
-
-    /**
-     * Get a guild's widget settings.
-     * @param guildID The ID of the guild.
-     */
-    async getWidgetSettings(guildID: string): Promise<WidgetSettings> {
-        return this.#manager.authRequest<RawWidgetSettings>({
-            method: "GET",
-            path:   Routes.GUILD_WIDGET(guildID)
-        }).then(data => ({
-            channelID: data.channel_id,
-            enabled:   data.enabled
-        }));
-    }
-
-    /**
-     * Remove a ban.
-     * @param guildID The ID of the guild.
-     * @param userID The ID of the user to remove the ban from.
-     * @param reason The reason for removing the ban.
-     */
-    async removeBan(guildID: string, userID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GUILD_BAN(guildID, userID),
-            reason
-        });
     }
 
     /**

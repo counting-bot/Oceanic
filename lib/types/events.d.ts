@@ -26,8 +26,7 @@ import type {
     JSONPublicThreadChannel,
     JSONRole,
     JSONTextChannel,
-    JSONUser,
-    JSONVoiceChannel
+    JSONUser
 } from "./json.js";
 import type { GuildApplicationCommandPermissions } from "./application-commands.js";
 import type {
@@ -43,7 +42,6 @@ import type UnavailableGuild from "../structures/UnavailableGuild.js";
 import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
 import type PrivateThreadChannel from "../structures/PrivateThreadChannel.js";
 import type TextChannel from "../structures/TextChannel.js";
-import type VoiceChannel from "../structures/VoiceChannel.js";
 import type CategoryChannel from "../structures/CategoryChannel.js";
 import type User from "../structures/User.js";
 import type Member from "../structures/Member.js";
@@ -65,7 +63,7 @@ export interface ClientEvents {
     /** @event Emitted when a channel's pins are updated (message pinned, message unpinned). Requires the `GUILDS` intent for guild channels, and `DIRECT_MESSAGES` for direct messages. */
     channelPinsUpdate: [channel: AnyTextChannelWithoutGroup | Uncached, timestamp: Date | null];
     /** @event Emitted when a channel is updated. Requires the `GUILDS` intent. */
-    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: VoiceChannel, oldChannel: JSONVoiceChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
+    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
     /** @event Emitted when a shard connects. */
     connect: [id: number];
     /** @event Emitted with various information for debugging. */

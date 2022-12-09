@@ -8,7 +8,7 @@ import type {
     RawApplicationCommandInteraction,
     RawAutocompleteInteraction,
     RawInteraction,
-    RawMessageComponentInteraction,
+    RawMessageComponentInteraction
 } from "../types/interactions.js";
 import { InteractionTypes } from "../Constants.js";
 import type { JSONInteraction } from "../types/json.js";

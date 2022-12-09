@@ -7,11 +7,7 @@ import type Client from "../Client.js";
 import type { ChannelTypes } from "../Constants.js";
 import { AllPermissions, Permissions } from "../Constants.js";
 import TypedCollection from "../util/TypedCollection.js";
-import type {
-    RawCategoryChannel,
-    RawGuildChannel,
-    RawOverwrite
-} from "../types/channels.js";
+import type { RawCategoryChannel, RawGuildChannel, RawOverwrite } from "../types/channels.js";
 import type { JSONCategoryChannel } from "../types/json.js";
 
 /** Represents a guild category channel. */
