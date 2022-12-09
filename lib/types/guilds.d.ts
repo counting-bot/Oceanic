@@ -29,6 +29,16 @@ import type {
     ThreadAutoArchiveDuration,
     VerificationLevels,
     VideoQualityModes,
+    SortOrderTypes,
+    ForumLayoutTypes
+} from "../Constants";
+import type User from "../structures/User";
+import type Integration from "../structures/Integration";
+import type TextChannel from "../structures/TextChannel";
+import type VoiceChannel from "../structures/VoiceChannel";
+import type CategoryChannel from "../structures/CategoryChannel";
+import type AnnouncementChannel from "../structures/AnnouncementChannel";
+import type StageChannel from "../structures/StageChannel";
     SortOrderTypes
 } from "../Constants.js";
 import type User from "../structures/User.js";
@@ -342,6 +352,8 @@ export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads 
     bitrate?: number | null;
     /** [Announcement, Text] The default auto archive duration for the channel. */
     defaultAutoArchiveDuration?: ThreadAutoArchiveDuration | null;
+    /** [Forum] The default forum layout used to display threads. */
+    defaultForumLayout?: ForumLayoutTypes;
     /** [Forum] The default reaction emoji for threads. */
     defaultReactionEmoji?: ForumEmoji | null;
     /** [Forum] The default sort order mode used to sort forum threads. */
@@ -609,6 +621,22 @@ export interface RawStageInstance {
     privacy_level: StageInstancePrivacyLevels;
     topic: string;
 }
+
+export interface CreateStageInstanceOptions {
+    /** The privacy level of the stage instance. */
+    privacyLevel?: StageInstancePrivacyLevels;
+    /** The reason for creating the stage instance. */
+    reason?: string;
+    /** Whether to notify @everyone that a stage instance has started. */
+    sendStartNotification?: boolean;
+    /** The topic of the stage instance. */
+    topic: string;
+}
+
+export type EditStageInstanceOptions = Pick<CreateStageInstanceOptions, "topic" | "privacyLevel"> & {
+    /** The reason for editing the stage instance. */
+    reason?: string;
+};
 
 export interface EditMFALevelOptions {
     /** The new MFA level. */

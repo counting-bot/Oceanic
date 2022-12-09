@@ -33,7 +33,7 @@ export { default as Invite } from "./structures/Invite.js";
 export { default as Member } from "./structures/Member.js";
 export { default as Message } from "./structures/Message.js";
 export { default as ModalSubmitInteraction } from "./structures/ModalSubmitInteraction.js";
-/** @depecated Use {@link OAuthHelper#constructURL} for the `constructURL` function. {@link OAuth#constructURL}, along with this export will be removed in `1.5.0`. */
+/** @depecated Use {@link OAuthHelper~OAuthHelper.constructURL} for the `constructURL` function. {@link Routes/OAuth~OAuth.constructURL}, along with this export will be removed in `1.5.0`. */
 export { default as OAuth } from "./routes/OAuth.js";
 export { default as OAuthGuild } from "./structures/OAuthGuild.js";
 export { default as OAuthHelper } from "./rest/OAuthHelper.js";

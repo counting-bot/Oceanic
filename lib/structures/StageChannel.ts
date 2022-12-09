@@ -5,6 +5,7 @@ import type Member from "./Member.js";
 import type CategoryChannel from "./CategoryChannel.js";
 import Permission from "./Permission.js";
 import type Invite from "./Invite.js";
+import type StageInstance from "./StageInstance";
 import type { ChannelTypes } from "../Constants.js";
 import { AllPermissions, Permissions } from "../Constants.js";
 import type Client from "../Client.js";
@@ -67,6 +68,7 @@ export default class StageChannel extends GuildChannel {
         return super.parent as CategoryChannel | null | undefined;
     }
 
+
     /**
      * Create an invite for this channel.
      * @param options The options to create an invite with.
@@ -76,12 +78,28 @@ export default class StageChannel extends GuildChannel {
     }
 
     /**
+     * Create a stage instance on this channel.
+     * @param options The options for creating the stage instance.
+     */
+    async createStageInstance(options: CreateStageInstanceOptions): Promise<StageInstance> {
+        return this.client.rest.channels.createStageInstance(this.id, options);
+    }
+
+    /**
      * Delete a permission overwrite on this channel.
      * @param overwriteID The ID of the permission overwrite to delete.
      * @param reason The reason for deleting the permission overwrite.
      */
     async deletePermission(overwriteID: string, reason?: string): Promise<void> {
         return this.client.rest.channels.deletePermission(this.id, overwriteID, reason);
+    }
+
+    /**
+     * Delete the stage instance on this channel.
+     * @param reason The reason for deleting the stage instance.
+     */
+    async deleteStageInstance(reason?: string): Promise<void> {
+        return this.client.rest.channels.deleteStageInstance(this.id, reason);
     }
 
     /**

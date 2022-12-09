@@ -30,14 +30,14 @@ export type ImageFormat = typeof ImageFormats[number];
 export enum WebhookTypes {
     INCOMING         = 1,
     CHANNEL_FOLLOWER = 2,
-    APPLICATION      = 3
+    APPLICATION      = 3,
 }
 
 export enum PremiumTypes {
     NONE          = 0,
     NITRO_CLASSIC = 1,
     NITRO         = 2,
-    NITRO_BASIC   = 3
+    NITRO_BASIC   = 3,
 }
 
 export enum UserFlags {
@@ -81,7 +81,7 @@ export enum ApplicationFlags {
     GATEWAY_MESSAGE_CONTENT_LIMITED  = 1 << 19,
     EMBEDDED_FIRST_PARTY             = 1 << 20,
     APPLICATION_COMMAND_BADGE        = 1 << 21,
-    ACTIVE                           = 1 << 24
+    ACTIVE                           = 1 << 24,
 }
 
 export const GuildFeatures = [
@@ -94,6 +94,7 @@ export const GuildFeatures = [
     "COMMUNITY",
     "CREATOR_MONETIZABLE",
     "CREATOR_MONETIZABLE_DISABLED",
+    "CREATOR_MONETIZABLE_PROVISIONAL",
     "DEVELOPER_SUPPORT_SERVER",
     "DISCOVERABLE",
     "DISCOVERABLE_DISABLED",
@@ -120,6 +121,7 @@ export const GuildFeatures = [
     "PARTNERED",
     "PREVIEW_ENABLED",
     "PREVIOUSLY_DISCOVERABLE",
+    "PRIVATE_THREADS",
     "ROLE_ICONS",
     "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE",
     "ROLE_SUBSCRIPTIONS_ENABLED",
@@ -138,18 +140,20 @@ export type GuildFeature = typeof GuildFeatures[number];
 
 export enum DefaultMessageNotificationLevels {
     ALL_MESSAGES  = 0,
-    ONLY_MENTIONS = 1
+    ONLY_MENTIONS = 1,
+    NO_MESSAGES   = 2,
+    NULL          = 3,
 }
 
 export enum ExplicitContentFilterLevels {
     DISABLED              = 0,
     MEMBERS_WITHOUT_ROLES = 1,
-    ALL_MEMBERS           = 2
+    ALL_MEMBERS           = 2,
 }
 
 export enum MFALevels {
     NONE     = 0,
-    ELEVATED = 1
+    ELEVATED = 1,
 }
 
 export enum VerificationLevels {
@@ -157,39 +161,41 @@ export enum VerificationLevels {
     LOW       = 1,
     MEDIUM    = 2,
     HIGH      = 3,
-    VERY_HIGH = 4
+    VERY_HIGH = 4,
 }
 
 export enum GuildNSFWLevels {
-    DEFAULT         = 0,
+    DEFAULT        = 0,
     EXPLICIT       = 1,
     SAFE           = 2,
-    AGE_RESTRICTED = 3
+    AGE_RESTRICTED = 3,
 }
 
 export enum PremiumTiers {
     NONE   = 0,
     TIER_1 = 1,
     TIER_2 = 2,
-    TIER_3 = 3
+    TIER_3 = 3,
 }
 
 export enum SystemChannelFlags {
-    SUPPRESS_JOIN_NOTIFICATIONS           = 1 << 0,
-    SUPPRESS_PREMIUM_SUBSCRIPTIONS        = 1 << 1,
-    SUPPRESS_GUILD_REMINDER_NOTIFICATIONS = 1 << 2,
-    SUPPRESS_JOIN_NOTIFICATION_REPLIES    = 1 << 3,
+    SUPPRESS_JOIN_NOTIFICATIONS                              = 1 << 0,
+    SUPPRESS_PREMIUM_SUBSCRIPTIONS                           = 1 << 1,
+    SUPPRESS_GUILD_REMINDER_NOTIFICATIONS                    = 1 << 2,
+    SUPPRESS_JOIN_NOTIFICATION_REPLIES                       = 1 << 3,
+    SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATIONS        = 1 << 4,
+    SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATION_REPLIES = 1 << 5,
 }
 
 export enum StickerTypes {
     STANDARD = 1,
-    GUILD    = 2
+    GUILD    = 2,
 }
 
 export enum StickerFormatTypes {
     PNG    = 1,
     APNG   = 2,
-    LOTTIE = 3
+    LOTTIE = 3,
 }
 
 export enum ChannelTypes {
@@ -205,7 +211,7 @@ export enum ChannelTypes {
     PRIVATE_THREAD       = 12,
     GUILD_STAGE_VOICE    = 13,
     GUILD_DIRECTORY      = 14,
-    GUILD_FORUM          = 15
+    GUILD_FORUM          = 15,
 }
 
 export type NotImplementedChannelTypes = ChannelTypes.GUILD_DIRECTORY;
@@ -219,12 +225,12 @@ export type VoiceChannelTypes = ChannelTypes.GUILD_VOICE | ChannelTypes.GUILD_ST
 
 export enum OverwriteTypes {
     ROLE   = 0,
-    MEMBER = 1
+    MEMBER = 1,
 }
 
 export enum VideoQualityModes {
     AUTO = 1,
-    FULL = 2
+    FULL = 2,
 }
 
 export const ThreadAutoArchiveDurations = [
@@ -237,7 +243,7 @@ export type ThreadAutoArchiveDuration = typeof ThreadAutoArchiveDurations[number
 
 export enum VisibilityTypes {
     NONE     = 0,
-    EVERYONE = 1
+    EVERYONE = 1,
 }
 
 export const ConnectionServices = [
@@ -265,13 +271,14 @@ export type ConnectionService = typeof ConnectionServices[number];
 export const IntegrationTypes = [
     "twitch",
     "youtube",
-    "discord"
+    "discord",
+    "guild_subscription"
 ] as const;
 export type IntegrationType = typeof IntegrationTypes[number];
 
 export enum IntegrationExpireBehaviors {
     REMOVE_ROLE = 0,
-    KICK        = 1
+    KICK        = 1,
 }
 
 // values won't be statically typed if we use bit shifting, and enums can't use bigints
@@ -378,19 +385,28 @@ export enum ChannelFlags {
     ACTIVE_CHANNELS_REMOVED = 1 << 2,
     /** For forums, if tags are required when creating threads. */
     REQUIRE_TAG             = 1 << 4,
-    IS_SPAM                 = 1 << 5
+    IS_SPAM                 = 1 << 5,
 }
 
 export enum SortOrderTypes {
     /** Sort forum threads by activity. */
     LATEST_ACTIVITY = 0,
     /** Sort forum threads by creation time (from most recent to oldest). */
-    CREATION_DATE = 1
+    CREATION_DATE = 1,
+}
+
+export enum ForumLayoutTypes {
+    /** A preferred forum layout hasn't been set by a server admin. */
+    DEFAULT = 0,
+    /** List View: display forum posts in a text-focused list. */
+    LIST = 1,
+    /** Gallery View: display forum posts in a media-focused gallery. */
+    GRID = 2,
 }
 
 export enum TeamMembershipState {
     INVITED  = 1,
-    ACCEPTED = 2
+    ACCEPTED = 2,
 }
 
 export enum OAuthScopes {
@@ -450,7 +466,7 @@ export enum OAuthScopes {
     /** allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval */
     VOICE = "voice",
     /** This generates a webhook that is returned in the oauth token response for authorization code grants. */
-    WEBHOOK_INCOMING = "webhook.incoming"
+    WEBHOOK_INCOMING = "webhook.incoming",
 }
 
 export enum ComponentTypes {
@@ -461,7 +477,7 @@ export enum ComponentTypes {
     USER_SELECT        = 5,
     ROLE_SELECT        = 6,
     MENTIONABLE_SELECT = 7,
-    CHANNEL_SELECT     = 8
+    CHANNEL_SELECT     = 8,
 }
 
 export type SelectMenuNonResolvedTypes = ComponentTypes.STRING_SELECT;
@@ -476,41 +492,42 @@ export enum ButtonStyles {
     SECONDARY = 2,
     SUCCESS   = 3,
     DANGER    = 4,
-    LINK      = 5
+    LINK      = 5,
 }
 
 export enum TextInputStyles {
     SHORT     = 1,
-    PARAGRAPH = 2
+    PARAGRAPH = 2,
 }
 
 export enum MessageFlags {
-    CROSSPOSTED                            = 1,
-    IS_CROSSPOST                           = 2,
-    SUPPRESS_EMBEDS                        = 4,
-    SOURCE_MESSAGE_DELETED                 = 8,
-    URGENT                                 = 16,
-    HAS_THREAD                             = 32,
-    EPHEMERAL                              = 64,
-    LOADING                                = 128,
-    FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 256,
+    CROSSPOSTED                            = 1 << 0,
+    IS_CROSSPOST                           = 1 << 1,
+    SUPPRESS_EMBEDS                        = 1 << 2,
+    SOURCE_MESSAGE_DELETED                 = 1 << 3,
+    URGENT                                 = 1 << 4,
+    HAS_THREAD                             = 1 << 5,
+    EPHEMERAL                              = 1 << 6,
+    LOADING                                = 1 << 7,
+    FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 1 << 8,
+    SHOULD_SHOW_LINK_NOT_DISCORD_WARNING   = 1 << 10,
 }
 
 export enum MessageTypes {
-    DEFAULT                = 0,
-    RECIPIENT_ADD          = 1,
-    RECIPIENT_REMOVE       = 2,
-    CALL                   = 3,
-    CHANNEL_NAME_CHANGE    = 4,
-    CHANNEL_ICON_CHANGE    = 5,
-    CHANNEL_PINNED_MESSAGE = 6,
-    USER_JOIN              = 7,
-    GUILD_BOOST            = 8,
-    GUILD_BOOST_TIER_1     = 9,
-    GUILD_BOOST_TIER_2     = 10,
-    GUILD_BOOST_TIER_3     = 11,
-    CHANNEL_FOLLOW_ADD     = 12,
-
+    DEFAULT                                      = 0,
+    RECIPIENT_ADD                                = 1,
+    RECIPIENT_REMOVE                             = 2,
+    CALL                                         = 3,
+    CHANNEL_NAME_CHANGE                          = 4,
+    CHANNEL_ICON_CHANGE                          = 5,
+    CHANNEL_PINNED_MESSAGE                       = 6,
+    USER_JOIN                                    = 7,
+    GUILD_BOOST                                  = 8,
+    GUILD_BOOST_TIER_1                           = 9,
+    GUILD_BOOST_TIER_2                           = 10,
+    GUILD_BOOST_TIER_3                           = 11,
+    CHANNEL_FOLLOW_ADD                           = 12,
+    GUILD_STREAM                                 = 13,
     GUILD_DISCOVERY_DISQUALIFIED                 = 14,
     GUILD_DISCOVERY_REQUALIFIED                  = 15,
     GUILD_DISCOVERY_GRACE_PERIOD_INITIAL_WARNING = 16,
@@ -523,13 +540,20 @@ export enum MessageTypes {
     CONTEXT_MENU_COMMAND                         = 23,
     AUTO_MODERATION_ACTION                       = 24,
     ROLE_SUBSCRIPTION_PURCHASE                   = 25,
+    INTERACTION_PREMIUM_UPSELL                   = 26,
+    STAGE_START                                  = 27,
+    STAGE_END                                    = 28,
+    STAGE_SPEAKER                                = 29,
+    STAGE_RAISE_HAND                             = 30,
+    STAGE_TOPIC_CHANGE                           = 31,
+    GUILD_APPLICATION_PREMIUM_SUBSCRIPTION       = 32,
 }
 
 export enum MessageActivityTypes {
     JOIN         = 1,
     SPECTATE     = 2,
     LISTEN       = 3,
-    JOIN_REQUEST = 5
+    JOIN_REQUEST = 5,
 }
 
 export enum InteractionTypes {
@@ -537,7 +561,7 @@ export enum InteractionTypes {
     APPLICATION_COMMAND              = 2,
     MESSAGE_COMPONENT                = 3,
     APPLICATION_COMMAND_AUTOCOMPLETE = 4,
-    MODAL_SUBMIT                     = 5
+    MODAL_SUBMIT                     = 5,
 }
 
 export enum InviteTargetTypes {
@@ -548,13 +572,13 @@ export enum InviteTargetTypes {
 export enum StageInstancePrivacyLevels {
     /** @deprecated */
     PUBLIC     = 1,
-    GUILD_ONLY = 2
+    GUILD_ONLY = 2,
 }
 
 export enum ApplicationCommandTypes {
     CHAT_INPUT = 1,
     USER       = 2,
-    MESSAGE    = 3
+    MESSAGE    = 3,
 }
 
 export enum ApplicationCommandOptionTypes {
@@ -568,13 +592,13 @@ export enum ApplicationCommandOptionTypes {
     ROLE              = 8,
     MENTIONABLE       = 9,
     NUMBER            = 10,
-    ATTACHMENT        = 11
+    ATTACHMENT        = 11,
 }
 
 export enum ApplicationCommandPermissionTypes {
     ROLE    = 1,
     USER    = 2,
-    CHANNEL = 3
+    CHANNEL = 3,
 }
 
 export enum InteractionResponseTypes {
@@ -584,29 +608,29 @@ export enum InteractionResponseTypes {
     DEFERRED_UPDATE_MESSAGE                 = 6,
     UPDATE_MESSAGE                          = 7,
     APPLICATION_COMMAND_AUTOCOMPLETE_RESULT = 8,
-    MODAL                                   = 9
+    MODAL                                   = 9,
 }
 
 export enum Intents {
-    GUILDS                        = 1,
-    GUILD_MEMBERS                 = 2,
-    GUILD_BANS                    = 4,
-    GUILD_EMOJIS_AND_STICKERS     = 8,
-    GUILD_INTEGRATIONS            = 16,
-    GUILD_WEBHOOKS                = 32,
-    GUILD_INVITES                 = 64,
-    GUILD_VOICE_STATES            = 128,
-    GUILD_PRESENCES               = 256,
-    GUILD_MESSAGES                = 512,
-    GUILD_MESSAGE_REACTIONS       = 1024,
-    GUILD_MESSAGE_TYPING          = 2048,
-    DIRECT_MESSAGES               = 4096,
-    DIRECT_MESSAGE_REACTIONS      = 8192,
-    DIRECT_MESSAGE_TYPING         = 16384,
-    MESSAGE_CONTENT               = 32768,
-    GUILD_SCHEDULED_EVENTS        = 65536,
-    AUTO_MODERATION_CONFIGURATION = 1048576,
-    AUTO_MODERATION_EXECUTION     = 2097152
+    GUILDS                        = 1 << 0,
+    GUILD_MEMBERS                 = 1 << 1,
+    GUILD_BANS                    = 1 << 2,
+    GUILD_EMOJIS_AND_STICKERS     = 1 << 3,
+    GUILD_INTEGRATIONS            = 1 << 4,
+    GUILD_WEBHOOKS                = 1 << 5,
+    GUILD_INVITES                 = 1 << 6,
+    GUILD_VOICE_STATES            = 1 << 7,
+    GUILD_PRESENCES               = 1 << 8,
+    GUILD_MESSAGES                = 1 << 9,
+    GUILD_MESSAGE_REACTIONS       = 1 << 10,
+    GUILD_MESSAGE_TYPING          = 1 << 11,
+    DIRECT_MESSAGES               = 1 << 12,
+    DIRECT_MESSAGE_REACTIONS      = 1 << 13,
+    DIRECT_MESSAGE_TYPING         = 1 << 14,
+    MESSAGE_CONTENT               = 1 << 15,
+    GUILD_SCHEDULED_EVENTS        = 1 << 16,
+    AUTO_MODERATION_CONFIGURATION = 1 << 17,
+    AUTO_MODERATION_EXECUTION     = 1 << 18,
 }
 
 export type IntentNames = keyof typeof Intents;
@@ -676,7 +700,7 @@ export enum VoiceOPCodes {
     RESUME              = 7,
     HELLO               = 8,
     RESUMED             = 9,
-    CLIENT_DISCONNECT   = 13
+    CLIENT_DISCONNECT   = 13,
 }
 
 export enum VoiceCloseCodes {
@@ -694,32 +718,42 @@ export enum VoiceCloseCodes {
     UNKNOWN_ENCRYPTION_MODE = 4015,
 }
 
+export enum HubTypes {
+    DEFAULT     = 0,
+    HIGH_SCHOOL = 1,
+    COLLEGE     = 2,
+}
+
+
+/** @deprecated Use {@link Constants~HubTypes | HubTypes}. This will be removed in `1.4.0`. */
+export const HubType = HubTypes;
+
 export enum ActivityTypes {
     GAME      = 0,
     STREAMING = 1,
     LISTENING = 2,
     WATCHING  = 3,
     CUSTOM    = 4,
-    COMPETING = 5
+    COMPETING = 5,
 }
 
 export enum ActivityFlags {
-    INSTANCE                    = 1,
-    JOIN                        = 2,
-    SPECTATE                    = 4,
-    JOIN_REQUEST                = 8,
-    SYNC                        = 16,
-    PLAY                        = 32,
-    PARTY_PRIVACY_FRIENDS_ONLY  = 64,
-    PARTY_PRIVACY_VOICE_CHANNEL = 128,
-    EMBEDDED                    = 256
+    INSTANCE                    = 1 << 0,
+    JOIN                        = 1 << 1,
+    SPECTATE                    = 1 << 2,
+    JOIN_REQUEST                = 1 << 3,
+    SYNC                        = 1 << 4,
+    PLAY                        = 1 << 5,
+    PARTY_PRIVACY_FRIENDS_ONLY  = 1 << 6,
+    PARTY_PRIVACY_VOICE_CHANNEL = 1 << 7,
+    EMBEDDED                    = 1 << 8,
 }
 
 export enum ThreadMemberFlags {
-    HAS_INTERACTED = 1,
-    ALL_MESSAGES   = 2,
-    ONLY_MENTIONS  = 4,
-    NO_MESSAGES    = 8
+    HAS_INTERACTED = 1 << 0,
+    ALL_MESSAGES   = 1 << 1,
+    ONLY_MENTIONS  = 1 << 2,
+    NO_MESSAGES    = 1 << 3,
 }
 
 // entries are intentionally not aligned
@@ -906,5 +940,5 @@ export enum JSONErrorCodes {
     WEBHOOKS_POSTED_TO_FORUM_CHANNELS_CANNOT_HAVE_BOTH_THREAD_NAME_AND_THREAD_ID = 220002,
     WEBHOOKS_CAN_ONLY_CREATE_THREADS_IN_FORUM_CHANNELS = 220003,
     WEBHOOK_SERVICES_CANNOT_BE_USED_IN_FORUM_CHANNELS = 220004,
-    MESSAGE_BLOCKED_BY_HARMFUL_LINKS_FILTER = 220005
+    MESSAGE_BLOCKED_BY_HARMFUL_LINKS_FILTER = 220005,
 }
