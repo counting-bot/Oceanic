@@ -95,7 +95,6 @@ export const MEMBER_BANNER               = (guildID: string, userID: string, has
 export const ROLE_ICON                   = (roleID: string, hash: string) => `/role-icons/${roleID}/${hash}` as const;
 export const STICKER                     = (stickerID: string) => `/stickers/${stickerID}` as const;
 export const STICKER_PACK_BANNER         = (assetID: string) => APPLICATION_ASSET("710982414301790216", assetID);
-export const TEAM_ICON                   = (teamID: string, hash: string) => `/team-icons/${teamID}/${hash}` as const;
 export const USER_AVATAR                 = (userID: string, hash: string) => `/avatars/${userID}/${hash}` as const;
 
 // Application Commands

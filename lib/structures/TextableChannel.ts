@@ -12,15 +12,12 @@ import type Member from "./Member.js";
 import Permission from "./Permission.js";
 import type Webhook from "./Webhook.js";
 import type { ThreadAutoArchiveDuration } from "../Constants.js";
-import { AllPermissions, Permissions, ChannelTypes } from "../Constants.js";
+import { AllPermissions, Permissions } from "../Constants.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
 import type {
     CreateInviteOptions,
     CreateMessageOptions,
-    EditGuildChannelOptions,
-    EditMessageOptions,
-    EditPermissionOptions,
     GetArchivedThreadsOptions,
     GetChannelMessagesOptions,
     RawMessage,
@@ -69,24 +66,12 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
 
     protected override update(data: Partial<RawTextChannel> | Partial<RawAnnouncementChannel>): void {
         super.update(data);
-        if (data.default_auto_archive_duration !== undefined) {
-            this.defaultAutoArchiveDuration = data.default_auto_archive_duration;
-        }
         if (data.last_message_id !== undefined) {
             this.lastMessage = data.last_message_id === null ? null : this.messages.get(data.last_message_id);
             this.lastMessageID = data.last_message_id;
         }
-        if (data.nsfw !== undefined) {
-            this.nsfw = data.nsfw;
-        }
-        if (data.position !== undefined) {
-            this.position = data.position;
-        }
         if (data.rate_limit_per_user !== undefined) {
             this.rateLimitPerUser = data.rate_limit_per_user;
-        }
-        if (data.topic !== undefined) {
-            this.topic = data.topic;
         }
         if (data.permission_overwrites !== undefined) {
             data.permission_overwrites.map(overwrite => this.permissionOverwrites.update(overwrite));
@@ -95,15 +80,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
 
     override get parent(): CategoryChannel | undefined | null {
         return super.parent as CategoryChannel | undefined | null;
-    }
-
-    /**
-     * [Text] Convert this text channel to an announcement channel.
-     *
-     * [Announcement] Convert this announcement channel to a text channel.
-     */
-    async convert(): Promise<TextChannel | AnnouncementChannel> {
-        return this.edit({ type: this.type === ChannelTypes.GUILD_TEXT ? ChannelTypes.GUILD_ANNOUNCEMENT : ChannelTypes.GUILD_TEXT });
     }
 
     /**
@@ -138,60 +114,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
      */
     async deleteMessage(messageID: string, reason?: string): Promise<void> {
         return this.client.rest.channels.deleteMessage(this.id, messageID, reason);
-    }
-
-    /**
-     * Delete a permission overwrite on this channel.
-     * @param overwriteID The ID of the permission overwrite to delete.
-     * @param reason The reason for deleting the permission overwrite.
-     */
-    async deletePermission(overwriteID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.deletePermission(this.id, overwriteID, reason);
-    }
-
-    /**
-     * Remove a reaction from a message in this channel.
-     * @param messageID The ID of the message to remove a reaction from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    async deleteReaction(messageID: string, emoji: string, user = "@me"): Promise<void> {
-        return this.client.rest.channels.deleteReaction(this.id, messageID, emoji, user);
-    }
-
-    /**
-     * Remove all, or a specific emoji's reactions from a message in this channel.
-     * @param messageID The ID of the message to remove reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    async deleteReactions(messageID: string, emoji?: string): Promise<void> {
-        return this.client.rest.channels.deleteReactions(this.id, messageID, emoji);
-    }
-
-    /**
-     * Edit this channel.
-     * @param options The options for editing the channel.
-     */
-    override async edit(options: EditGuildChannelOptions): Promise<TextChannel | AnnouncementChannel> {
-        return this.client.rest.channels.edit<TextChannel | AnnouncementChannel>(this.id, options);
-    }
-
-    /**
-     * Edit a message in this channel.
-     * @param messageID The ID of the message to edit.
-     * @param options The options for editing the message.
-     */
-    async editMessage(messageID: string, options: EditMessageOptions): Promise<Message<T>> {
-        return this.client.rest.channels.editMessage<T>(this.id, messageID, options);
-    }
-
-    /**
-     * Edit a permission overwrite on this channel.
-     * @param overwriteID The ID of the permission overwrite to edit.
-     * @param options The options for editing the permission overwrite.
-     */
-    async editPermission(overwriteID: string, options: EditPermissionOptions): Promise<void> {
-        return this.client.rest.channels.editPermission(this.id, overwriteID, options);
     }
 
     /**

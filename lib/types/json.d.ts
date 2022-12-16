@@ -1,6 +1,6 @@
 /** @module Types/JSON */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import type { InstallParams, TeamMember } from "./oauth.js";
+import type { InstallParams } from "./oauth.js";
 import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
 import type { ApplicationCommandInteractionData, AutocompleteInteractionData, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData } from "./interactions.js";
 import type {
@@ -78,7 +78,6 @@ export interface JSONApplication extends JSONClientApplication {
     rpcOrigins: Array<string>;
     slug?: string;
     tags?: Array<string>;
-    team: JSONTeam | null;
     termsOfServiceURL?: string;
     verifyKey: string;
 }
@@ -404,12 +403,6 @@ export interface JSONRole extends JSONBase {
     unicodeEmoji: string | null;
 }
 
-export interface JSONTeam extends JSONBase {
-    icon: string | null;
-    members: Array<TeamMember>;
-    name: string;
-    ownerID: string;
-}
 export interface JSONTextableChannel extends JSONGuildChannel {
     defaultAutoArchiveDuration: ThreadAutoArchiveDuration;
     lastMessageID: string | null;

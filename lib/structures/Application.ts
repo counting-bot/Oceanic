@@ -1,6 +1,5 @@
 /** @module Application */
 import type User from "./User.js";
-import Team from "./Team.js";
 import ClientApplication from "./ClientApplication.js";
 import type Guild from "./Guild.js";
 import type Client from "../Client.js";
@@ -44,8 +43,7 @@ export default class Application extends ClientApplication {
     slug?: string;
     /** The tags for this application. */
     tags?: Array<string>;
-    /** The team that owns this application, if any. */
-    team: Team | null;
+
     /** A URL to this application's terms of service. */
     termsOfServiceURL?: string;
     /** The bot's hex encoded public key. */
@@ -62,7 +60,6 @@ export default class Application extends ClientApplication {
         this.owner = client.users.update(data.owner);
         this.ownerID = data.owner.id;
         this.rpcOrigins = [];
-        this.team = null;
         this.verifyKey = data.verify_key;
         this.update(data);
     }
@@ -112,9 +109,6 @@ export default class Application extends ClientApplication {
         }
         if (data.tags !== undefined) {
             this.tags = data.tags;
-        }
-        if (data.team !== undefined) {
-            this.team = data.team ? new Team(data.team, this.client) : null;
         }
         if (data.terms_of_service_url !== undefined) {
             this.termsOfServiceURL = data.terms_of_service_url;
@@ -168,7 +162,6 @@ export default class Application extends ClientApplication {
             rpcOrigins:          this.rpcOrigins,
             slug:                this.slug,
             tags:                this.tags,
-            team:                this.team?.toJSON() ?? null,
             termsOfServiceURL:   this.termsOfServiceURL,
             verifyKey:           this.verifyKey
         };

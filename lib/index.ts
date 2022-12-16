@@ -48,7 +48,6 @@ export { default as SelectMenuValuesWrapper } from "./util/SelectMenuValuesWrapp
 export { default as SequentialBucket } from "./rest/SequentialBucket.js";
 export { default as Shard } from "./gateway/Shard.js";
 export { default as ShardManager } from "./gateway/ShardManager.js";
-export { default as Team } from "./structures/Team.js";
 export { default as TextableChannel } from "./structures/TextableChannel.js";
 export { default as TextChannel } from "./structures/TextChannel.js";
 export { default as ThreadChannel } from "./structures/ThreadChannel.js";

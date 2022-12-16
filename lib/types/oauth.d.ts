@@ -2,7 +2,7 @@
 import type { RawUser } from "./users.js";
 import type { OAuthWebhook } from "./webhooks.js";
 import type { RawIntegration } from "./guilds.js";
-import type { ConnectionService, PermissionName, TeamMembershipState, VisibilityTypes } from "../Constants.js";
+import type { ConnectionService, PermissionName, VisibilityTypes } from "../Constants.js";
 import type PartialApplication from "../structures/PartialApplication.js";
 import type User from "../structures/User.js";
 import type Webhook from "../structures/Webhook.js";
@@ -27,28 +27,12 @@ export interface RawApplication {
     slug?: string;
     // summary is deprecated and being removed in v11
     tags?: Array<string>;
-    team: RawTeam | null;
     terms_of_service_url?: string;
     verify_key: string;
 }
 export type RawPartialApplication = Pick<RawApplication, "id" | "name" | "icon" | "description"> & Partial<Pick<RawApplication, "bot_public" | "bot_require_code_grant" | "verify_key">>;
 export type RESTApplication = Omit<RawApplication, "cover_image" | "flags" | "owner" | "rpc_origins"> & Required<Pick<RawApplication, "cover_image" | "flags" | "install_params" | "owner" | "rpc_origins">>;
 export type RawClientApplication = Required<Pick<RawApplication, "id" | "flags">>;
-
-export interface RawTeam {
-    icon: string | null;
-    id: string;
-    members: Array<RawTeamMember>;
-    name: string;
-    owner_user_id: string;
-}
-
-export interface RawTeamMember {
-    membership_state: TeamMembershipState;
-    permissions: ["*"];
-    team_id: string;
-    user: RawUser;
-}
 
 export interface InstallParams {
     permissions: Array<PermissionName>;
@@ -176,17 +160,6 @@ export interface RevokeTokenOptions {
     clientSecret: string;
     /** The access token to revoke. */
     token: string;
-}
-
-export interface TeamMember {
-    /** This member's [membership state](https://discord.com/developers/docs/topics/teams#data-models-membership-state-enum) on this team. */
-    membershipState: TeamMembershipState;
-    /** An array of permissions this member has for this team. Currently, always only has one entry: `*`.  */
-    permissions: ["*"];
-    /** The id of the team this member is associated with. */
-    teamID: string;
-    /** The user associated with this team member. */
-    user: User;
 }
 
 export interface GetCurrentGuildsOptions {

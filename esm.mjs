@@ -45,7 +45,6 @@ const SelectMenuValuesWrapper = (await import ("./dist/lib/util/SelectMenuValues
 const SequentialBucket = (await import("./dist/lib/rest/SequentialBucket.js")).default.default;
 const Shard = (await import("./dist/lib/gateway/Shard.js")).default.default;
 const ShardManager = (await import("./dist/lib/gateway/ShardManager.js")).default.default;
-const Team = (await import("./dist/lib/structures/Team.js")).default.default;
 const TextableChannel = (await import("./dist/lib/structures/TextableChannel.js")).default.default;
 const TextChannel = (await import("./dist/lib/structures/TextChannel.js")).default.default;
 const ThreadChannel = (await import("./dist/lib/structures/ThreadChannel.js")).default.default;
@@ -106,7 +105,6 @@ export {
     SequentialBucket,
     Shard,
     ShardManager,
-    Team,
     TextableChannel,
     TextChannel,
     ThreadChannel,
