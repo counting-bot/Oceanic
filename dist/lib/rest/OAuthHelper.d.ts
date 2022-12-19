@@ -1,6 +1,5 @@
 /** @module OAuthHelper */
 import type RESTManager from "./RESTManager.js";
-import Application from "../structures/Application.js";
 import type { AuthorizationInformation, Connection, OAuthURLOptions, RevokeTokenOptions } from "../types/oauth.js";
 import Member from "../structures/Member.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
@@ -14,10 +13,6 @@ export default class OAuthHelper {
      * @param options The options to construct the url with.
      */
     static constructURL(options: OAuthURLOptions): string;
-    /**
-     * Get the current OAuth2 application's information.
-     */
-    getApplication(): Promise<Application>;
     /**
      * Get information about the current authorization.
      */

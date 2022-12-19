@@ -10,11 +10,5 @@ export default class Channel extends Base {
     type: ChannelTypes;
     constructor(data: RawChannel, client: Client);
     static from<T extends AnyChannel = AnyChannel>(data: RawChannel, client: Client): T;
-    /** A string that will mention this channel. */
-    get mention(): string;
-    /**
-     * Close a direct message, leave a group channel, or delete a guild channel.
-     */
-    delete(): Promise<void>;
     toJSON(): JSONChannel;
 }

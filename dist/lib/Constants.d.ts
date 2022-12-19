@@ -228,10 +228,6 @@ export declare enum ForumLayoutTypes {
     /** Gallery View: display forum posts in a media-focused gallery. */
     GRID = 2
 }
-export declare enum TeamMembershipState {
-    INVITED = 1,
-    ACCEPTED = 2
-}
 export declare enum OAuthScopes {
     /** allows your app to fetch data from a user's "Now Playing/Recently Played" list - requires Discord approval */
     ACTIVITIES_READ = "activities.read",

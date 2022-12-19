@@ -25,8 +25,6 @@ export declare const GUILD_ROLE: (guildID: string, roleID: string) => `/guilds/$
 export declare const GUILD_MFA: (guildID: string) => `/guilds/${string}/mfa`;
 export declare const GUILD_PRUNE: (guildID: string) => `/guilds/${string}/prune`;
 export declare const GUILD_INVITES: (guildID: string) => `/guilds/${string}/invites`;
-export declare const GUILD_INTEGRATION: (guildID: string, integrationID: string) => `/guilds/${string}/integrations/${string}`;
-export declare const GUILD_INTEGRATIONS: (guildID: string) => `/guilds/${string}/integrations`;
 export declare const GUILD_WIDGET: (guildID: string) => `/guilds/${string}/widget`;
 export declare const GUILD_VANITY_URL: (guildID: string) => `/guilds/${string}/vanity-url`;
 export declare const GUILD_WIDGET_IMAGE: (guildID: string) => `/guilds/${string}/widget.png`;
@@ -84,7 +82,6 @@ export declare const MEMBER_BANNER: (guildID: string, userID: string, hash: stri
 export declare const ROLE_ICON: (roleID: string, hash: string) => `/role-icons/${string}/${string}`;
 export declare const STICKER: (stickerID: string) => `/stickers/${string}`;
 export declare const STICKER_PACK_BANNER: (assetID: string) => `/applications/${string}/assets/${string}`;
-export declare const TEAM_ICON: (teamID: string, hash: string) => `/team-icons/${string}/${string}`;
 export declare const USER_AVATAR: (userID: string, hash: string) => `/avatars/${string}/${string}`;
 export declare const APPLICATION_COMMAND: (applicationID: string, commandID: string) => `/applications/${string}/commands/${string}`;
 export declare const APPLICATION_COMMANDS: (applicationID: string) => `/applications/${string}/commands`;

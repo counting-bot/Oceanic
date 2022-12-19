@@ -14,7 +14,7 @@ import type Webhook from "./Webhook.js";
 import type { ThreadAutoArchiveDuration } from "../Constants.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
-import type { CreateInviteOptions, CreateMessageOptions, EditGuildChannelOptions, EditMessageOptions, EditPermissionOptions, GetArchivedThreadsOptions, GetChannelMessagesOptions, RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel, StartThreadFromMessageOptions, StartThreadWithoutMessageOptions, ArchivedThreads } from "../types/channels.js";
+import type { CreateInviteOptions, CreateMessageOptions, GetArchivedThreadsOptions, GetChannelMessagesOptions, RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel, StartThreadFromMessageOptions, StartThreadWithoutMessageOptions, ArchivedThreads } from "../types/channels.js";
 import type { JSONTextableChannel } from "../types/json.js";
 /** Represents a guild textable channel. */
 export default class TextableChannel<T extends TextChannel | AnnouncementChannel = TextChannel | AnnouncementChannel> extends GuildChannel {
@@ -41,12 +41,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     protected update(data: Partial<RawTextChannel> | Partial<RawAnnouncementChannel>): void;
     get parent(): CategoryChannel | undefined | null;
     /**
-     * [Text] Convert this text channel to an announcement channel.
-     *
-     * [Announcement] Convert this announcement channel to a text channel.
-     */
-    convert(): Promise<TextChannel | AnnouncementChannel>;
-    /**
      * Create an invite for this channel.
      * @param options The options for the invite.
      */
@@ -68,42 +62,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
      * @param reason The reason for deleting the message.
      */
     deleteMessage(messageID: string, reason?: string): Promise<void>;
-    /**
-     * Delete a permission overwrite on this channel.
-     * @param overwriteID The ID of the permission overwrite to delete.
-     * @param reason The reason for deleting the permission overwrite.
-     */
-    deletePermission(overwriteID: string, reason?: string): Promise<void>;
-    /**
-     * Remove a reaction from a message in this channel.
-     * @param messageID The ID of the message to remove a reaction from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    deleteReaction(messageID: string, emoji: string, user?: string): Promise<void>;
-    /**
-     * Remove all, or a specific emoji's reactions from a message in this channel.
-     * @param messageID The ID of the message to remove reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    deleteReactions(messageID: string, emoji?: string): Promise<void>;
-    /**
-     * Edit this channel.
-     * @param options The options for editing the channel.
-     */
-    edit(options: EditGuildChannelOptions): Promise<TextChannel | AnnouncementChannel>;
-    /**
-     * Edit a message in this channel.
-     * @param messageID The ID of the message to edit.
-     * @param options The options for editing the message.
-     */
-    editMessage(messageID: string, options: EditMessageOptions): Promise<Message<T>>;
-    /**
-     * Edit a permission overwrite on this channel.
-     * @param overwriteID The ID of the permission overwrite to edit.
-     * @param options The options for editing the permission overwrite.
-     */
-    editPermission(overwriteID: string, options: EditPermissionOptions): Promise<void>;
     /**
      * Get the invites of this channel.
      */

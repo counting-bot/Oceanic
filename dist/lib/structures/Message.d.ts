@@ -10,12 +10,11 @@ import type AnnouncementChannel from "./AnnouncementChannel.js";
 import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
 import type PublicThreadChannel from "./PublicThreadChannel.js";
 import type TextChannel from "./TextChannel.js";
-import type PrivateChannel from "./PrivateChannel.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
 import { MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, EditMessageOptions, Embed, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, MessageActionRow, AnyThreadChannel } from "../types/channels.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, Embed, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, AnyThreadChannel } from "../types/channels.js";
 import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks.js";
 import type { JSONMessage } from "../types/json.js";
 /** Represents a message. */
@@ -42,12 +41,8 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     author: User;
     /** The ID of the channel this message was created in. */
     channelID: string;
-    /** The components on this message. */
-    components: Array<MessageActionRow>;
     /** The content of this message. */
     content: string;
-    /** The timestamp at which this message was last edited. */
-    editedTimestamp: Date | null;
     /** The embeds on this message. */
     embeds: Array<Embed>;
     /** The [flags](https://discord.com/developers/docs/resources/channel#message-object-message-flags) on this message. */
@@ -77,8 +72,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     messageReference?: MessageReference;
     /** A nonce for ensuring a message was sent. */
     nonce?: number | string;
-    /** If this message is pinned. */
-    pinned: boolean;
     /** This message's relative position, if in a thread. */
     position?: number;
     /** The reactions on this message. */
@@ -91,8 +84,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     thread?: AnyThreadChannel;
     /** The timestamp at which this message was sent. */
     timestamp: Date;
-    /** If this message was read aloud. */
-    tts: boolean;
     /** The [type](https://discord.com/developers/docs/resources/channel#message-object-message-types) of this message. */
     type: MessageTypes;
     /** The webhook associated with this message, if sent via a webhook. This only has an `id` property. */
@@ -122,20 +113,11 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      */
     deleteWebhook(token: string, options: DeleteWebhookMessageOptions): Promise<void>;
     /**
-     * Edit this message.
-     * @param options The options for editing the message.
-     */
-    edit(options: EditMessageOptions): Promise<Message<T>>;
-    /**
      * Edit this message as a webhook.
      * @param token The token of the webhook.
      * @param options The options for editing the message.
      */
     editWebhook(token: string, options: EditWebhookMessageOptions): Promise<Message<T>>;
-    /** Whether this message belongs to a cached guild channel. The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */
-    inCachedGuildChannel(): this is Message<AnyGuildTextChannel>;
-    /** Whether this message belongs to a direct message channel (PrivateChannel or uncached). The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */
-    inDirectMessageChannel(): this is Message<PrivateChannel | Uncached>;
     /**
      * Create a thread from this message.
      * @param options The options for creating the thread.

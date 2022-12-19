@@ -1,7 +1,6 @@
 // Channel and Interaction MUST be at the top due to circular imports
 const Channel = (await import("./dist/lib/structures/Channel.js")).default.default;
 const Interaction = (await import("./dist/lib/structures/Interaction.js")).default.default;
-const Application = (await import("./dist/lib/structures/Application.js")).default.default;
 const ApplicationCommand = (await import("./dist/lib/structures/ApplicationCommand.js")).default.default;
 const Attachment = (await import("./dist/lib/structures/Attachment.js")).default.default;
 const AutocompleteInteraction = (await import("./dist/lib/structures/AutocompleteInteraction.js")).default.default;
@@ -22,7 +21,6 @@ const GatewayError = (await import("./dist/lib/gateway/GatewayError.js")).defaul
 const GroupChannel = (await import("./dist/lib/structures/GroupChannel.js")).default.default;
 const Guild = (await import("./dist/lib/structures/Guild.js")).default.default;
 const GuildChannel = (await import("./dist/lib/structures/GuildChannel.js")).default.default;
-const Integration = (await import("./dist/lib/structures/Integration.js")).default.default;
 const InteractionResolvedChannel = (await import("./dist/lib/structures/InteractionResolvedChannel.js")).default.default;
 const InteractionOptionsWrapper = (await import("./dist/lib/util/InteractionOptionsWrapper.js")).default.default;
 const Invite = (await import("./dist/lib/structures/Invite.js")).default.default;
@@ -34,7 +32,6 @@ const OAuthHelper = (await import ("./dist/lib/rest/OAuthHelper.js")).default.de
 const PartialApplication = (await import("./dist/lib/structures/PartialApplication.js")).default.default;
 const Permission = (await import("./dist/lib/structures/Permission.js")).default.default;
 const PermissionOverwrite = (await import("./dist/lib/structures/PermissionOverwrite.js")).default.default;
-const PingInteraction = (await import("./dist/lib/structures/PingInteraction.js")).default.default;
 const PrivateChannel = (await import("./dist/lib/structures/PrivateChannel.js")).default.default;
 const PrivateThreadChannel = (await import("./dist/lib/structures/PrivateThreadChannel.js")).default.default;
 const PublicThreadChannel = (await import("./dist/lib/structures/PublicThreadChannel.js")).default.default;
@@ -45,7 +42,6 @@ const SelectMenuValuesWrapper = (await import ("./dist/lib/util/SelectMenuValues
 const SequentialBucket = (await import("./dist/lib/rest/SequentialBucket.js")).default.default;
 const Shard = (await import("./dist/lib/gateway/Shard.js")).default.default;
 const ShardManager = (await import("./dist/lib/gateway/ShardManager.js")).default.default;
-const Team = (await import("./dist/lib/structures/Team.js")).default.default;
 const TextableChannel = (await import("./dist/lib/structures/TextableChannel.js")).default.default;
 const TextChannel = (await import("./dist/lib/structures/TextChannel.js")).default.default;
 const ThreadChannel = (await import("./dist/lib/structures/ThreadChannel.js")).default.default;
@@ -62,7 +58,6 @@ export * from "./dist/lib/Constants.js";
 export {
     Channel,
     Interaction,
-    Application,
     ApplicationCommand,
     Attachment,
     AutocompleteInteraction,
@@ -83,7 +78,6 @@ export {
     GroupChannel,
     Guild,
     GuildChannel,
-    Integration,
     InteractionResolvedChannel,
     InteractionOptionsWrapper,
     Invite,
@@ -95,7 +89,6 @@ export {
     PartialApplication,
     Permission,
     PermissionOverwrite,
-    PingInteraction,
     PrivateChannel,
     PrivateThreadChannel,
     PublicThreadChannel,
@@ -106,7 +99,6 @@ export {
     SequentialBucket,
     Shard,
     ShardManager,
-    Team,
     TextableChannel,
     TextChannel,
     ThreadChannel,

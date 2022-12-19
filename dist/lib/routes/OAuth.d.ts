@@ -1,6 +1,5 @@
 /** @module Routes/OAuth */
 import type { AuthorizationInformation, ClientCredentialsTokenOptions, ClientCredentialsTokenResponse, Connection, ExchangeCodeOptions, ExchangeCodeResponse, OAuthURLOptions, RefreshTokenOptions, RefreshTokenResponse, RevokeTokenOptions, GetCurrentGuildsOptions } from "../types/oauth.js";
-import Application from "../structures/Application.js";
 import Member from "../structures/Member.js";
 import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
@@ -31,10 +30,6 @@ export default class OAuth {
      * @param options The options for exchanging the code.
      */
     exchangeCode(options: ExchangeCodeOptions): Promise<ExchangeCodeResponse>;
-    /**
-     * Get the current OAuth2 application's information.
-     */
-    getApplication(): Promise<Application>;
     /**
      * Get information about the current authorization.
      *

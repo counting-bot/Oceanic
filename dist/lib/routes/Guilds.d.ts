@@ -4,7 +4,6 @@ import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
 import type { AnyGuildChannelWithoutThreads, InviteChannel, PartialInviteChannel } from "../types/channels.js";
 import Role from "../structures/Role.js";
 import Invite from "../structures/Invite.js";
-import Integration from "../structures/Integration.js";
 import type RESTManager from "../rest/RESTManager.js";
 import Guild from "../structures/Guild.js";
 import type Member from "../structures/Member.js";
@@ -86,11 +85,6 @@ export default class Guilds {
      * @param guildID The ID of the guild.
      */
     getChannels(guildID: string): Promise<Array<AnyGuildChannelWithoutThreads>>;
-    /**
-     * Get the integrations in a guild.
-     * @param guildID The ID of the guild.
-     */
-    getIntegrations(guildID: string): Promise<Array<Integration>>;
     /**
      * Get the invites of a guild.
      * @param guildID The ID of the guild to get the invites of.
