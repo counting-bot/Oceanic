@@ -11,7 +11,6 @@ import type {
     RawRole,
     CreateRoleOptions,
     EditRoleOptions,
-    RawIntegration,
     RawWelcomeScreen,
     WelcomeScreen,
     GetVanityURLResponse,
@@ -32,7 +31,6 @@ import type {
 } from "../types/channels.js";
 import Role from "../structures/Role.js";
 import Invite from "../structures/Invite.js";
-import Integration from "../structures/Integration.js";
 import type RESTManager from "../rest/RESTManager.js";
 import Guild from "../structures/Guild.js";
 import type Member from "../structures/Member.js";
@@ -295,17 +293,6 @@ export default class Guilds {
             method: "GET",
             path:   Routes.GUILD_CHANNELS(guildID)
         }).then(data => data.map(d => this.#manager.client.util.updateChannel(d)));
-    }
-
-    /**
-     * Get the integrations in a guild.
-     * @param guildID The ID of the guild.
-     */
-    async getIntegrations(guildID: string): Promise<Array<Integration>> {
-        return this.#manager.authRequest<Array<RawIntegration>>({
-            method: "GET",
-            path:   Routes.GUILD_INTEGRATIONS(guildID)
-        }).then(data => data.map(integration => this.#manager.client.guilds.get(guildID)?.integrations.update(integration, guildID) ?? new Integration(integration, this.#manager.client, guildID)));
     }
 
     /**

@@ -93,14 +93,14 @@ export interface RawInteraction {
 }
 
 export type AnyRawInteraction = RawPingInteraction | AnyRawGatewayInteraction;
-export type AnyRawGatewayInteraction = RawApplicationCommandInteraction | RawMessageComponentInteraction | RawAutocompleteInteraction;
+export type AnyRawGatewayInteraction = RawApplicationCommandInteraction | RawMessageComponentInteraction | RawAutocompleteInteraction | RawModalSubmitInteraction;
 export type RawPingInteraction = Pick<RawInteraction, "application_id" | "id" | "token" | "type" | "version">;
 export type RawApplicationCommandInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawApplicationCommandInteractionData; };
 export type RawMessageComponentInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawMessageComponentInteractionData; message: RawMessage; };
 export type RawAutocompleteInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawAutocompleteInteractionData; };
 
-export type RawInteractionData = RawApplicationCommandInteractionData | RawMessageComponentInteractionData | RawAutocompleteInteractionData;
-export type InteractionData = ApplicationCommandInteractionData | MessageComponentInteractionData | AutocompleteInteractionData;
+export type RawInteractionData = RawApplicationCommandInteractionData | RawMessageComponentInteractionData | RawAutocompleteInteractionData | RawModalSubmitInteractionData;
+export type InteractionData = ApplicationCommandInteractionData | MessageComponentInteractionData | AutocompleteInteractionData | ModalSubmitInteractionData;
 export interface RawApplicationCommandInteractionData {
     guild_id?: string;
     id: string;
@@ -224,7 +224,7 @@ export type InteractionOptionsNumber = InteractionOptionsNumberValue<Application
 export type InteractionOptionsAttachment = InteractionOptionsStringValue<ApplicationCommandOptionTypes.ATTACHMENT>;
 
 export type AnyInteraction = PingInteraction | AnyInteractionGateway;
-export type AnyInteractionGateway = AutocompleteInteraction | CommandInteraction | ComponentInteraction;
+export type AnyInteractionGateway = AutocompleteInteraction | CommandInteraction | ComponentInteraction | ModalSubmitInteraction;
 
 
 export interface AutocompleteChoice {

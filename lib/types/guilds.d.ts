@@ -19,8 +19,6 @@ import type {
     GuildChannelTypesWithoutThreads,
     GuildFeature,
     GuildNSFWLevels,
-    IntegrationExpireBehaviors,
-    IntegrationType,
     MFALevels,
     PremiumTiers,
     StickerFormatTypes,
@@ -32,7 +30,6 @@ import type {
     ForumLayoutTypes
 } from "../Constants";
 import type User from "../structures/User.js";
-import type Integration from "../structures/Integration.js";
 import type TextChannel from "../structures/TextChannel.js";
 import type CategoryChannel from "../structures/CategoryChannel.js";
 import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
@@ -107,12 +104,10 @@ export interface RawRole {
 }
 export interface RawRoleTags {
     bot_id?: string;
-    integration_id?: string;
     premium_subscriber?: null;
 }
 export interface RoleTags {
     botID?: string;
-    integrationID?: string;
     premiumSubscriber?: null;
 }
 export interface Emoji {
@@ -187,14 +182,12 @@ export interface Sticker {
 export interface RawMember {
     avatar?: string | null;
     communication_disabled_until?: string | null;
-    deaf: boolean;
     /** undocumented */
     flags?: number;
     /** undocumented */
     is_pending?: boolean;
     // this is nullable over gateway
     joined_at: string | null;
-    mute: boolean;
     nick?: string | null;
     pending?: boolean;
     permissions?: string;
@@ -204,38 +197,6 @@ export interface RawMember {
 }
 export type RESTMember = Required<Omit<RawMember, "permissions" | "joined_at">> & { joined_at: string; };
 export type InteractionMember = Required<RawMember>;
-
-export interface RawIntegration {
-    account: IntegrationAccount;
-    application?: RawIntegrationApplication;
-    enable_emoticons?: boolean;
-    enabled?: boolean;
-    expire_behavior?: IntegrationExpireBehaviors;
-    expire_grace_period?: number;
-    id: string;
-    name: string;
-    revoked?: boolean;
-    role_id?: string;
-    scopes?: Array<string>;
-    subscriber_count?: number;
-    synced_at?: string;
-    syncing?: boolean;
-    type: IntegrationType;
-    user?: RawUser;
-}
-
-export interface IntegrationAccount {
-    id: string;
-    name: string;
-}
-
-export interface RawIntegrationApplication {
-    bot?: RawUser;
-    description: string;
-    icon: string | null;
-    id: string;
-    name: string;
-}
 
 export type PartialEmoji = Pick<Emoji, "id" | "name" | "animated">;
 
@@ -587,8 +548,6 @@ export interface RawGuild {
     afkTimeout: number;
     applicationID: string | null;
 }
-
-export type PossiblyUncachedIntegration = Integration | { applicationID?: string; id: string; };
 
 export interface RawStageInstance {
     channel_id: string;

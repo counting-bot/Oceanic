@@ -14,17 +14,14 @@ import type {
     RawRefreshTokenResponse,
     RefreshTokenOptions,
     RefreshTokenResponse,
-    RESTApplication,
     RevokeTokenOptions,
     GetCurrentGuildsOptions
 } from "../types/oauth.js";
 import type { RawOAuthGuild, RESTMember } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
-import Application from "../structures/Application.js";
 import PartialApplication from "../structures/PartialApplication.js";
 import Member from "../structures/Member.js";
 import Webhook from "../structures/Webhook.js";
-import Integration from "../structures/Integration.js";
 import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
@@ -104,16 +101,6 @@ export default class OAuth {
     }
 
     /**
-     * Get the current OAuth2 application's information.
-     */
-    async getApplication(): Promise<Application> {
-        return this.#manager.authRequest<RESTApplication>({
-            method: "GET",
-            path:   Routes.OAUTH_APPLICATION
-        }).then(data => new Application(data, this.#manager.client));
-    }
-
-    /**
      * Get information about the current authorization.
      *
      * Note: OAuth only. Bots cannot use this.
@@ -142,7 +129,6 @@ export default class OAuth {
         }).then(data => data.map(connection => ({
             friendSync:   connection.friend_sync,
             id: 	         connection.id,
-            integrations: connection.integrations?.map(integration => new Integration(integration, this.#manager.client)),
             name:         connection.name,
             revoked:      connection.revoked,
             showActivity: connection.show_activity,

@@ -40,14 +40,8 @@ export default class User extends Base {
         if (data.avatar !== undefined) {
             this.avatar = data.avatar;
         }
-        if (data.banner !== undefined) {
-            this.banner = data.banner;
-        }
         if (data.discriminator !== undefined) {
             this.discriminator = data.discriminator;
-        }
-        if (data.public_flags !== undefined) {
-            this.publicFlags = data.public_flags;
         }
         if (data.username !== undefined) {
             this.username = data.username;

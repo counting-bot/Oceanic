@@ -1,12 +1,10 @@
 /** @module Types/OAuth */
 import type { RawUser } from "./users.js";
 import type { OAuthWebhook } from "./webhooks.js";
-import type { RawIntegration } from "./guilds.js";
 import type { ConnectionService, PermissionName, VisibilityTypes } from "../Constants.js";
 import type PartialApplication from "../structures/PartialApplication.js";
 import type User from "../structures/User.js";
 import type Webhook from "../structures/Webhook.js";
-import type Integration from "../structures/Integration.js";
 
 export interface RawApplication {
     bot_public: boolean;
@@ -56,7 +54,6 @@ export interface AuthorizationInformation {
 export interface RawConnection {
     friend_sync: boolean;
     id: string;
-    integrations?: Array<RawIntegration>;
     name: string;
     revoked?: boolean;
     show_activity: boolean;
@@ -69,7 +66,6 @@ export interface RawConnection {
 export interface Connection {
     friendSync: boolean;
     id: string;
-    integrations?: Array<Integration>;
     name: string;
     revoked?: boolean;
     showActivity: boolean;

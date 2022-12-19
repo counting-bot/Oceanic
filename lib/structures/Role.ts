@@ -66,7 +66,6 @@ export default class Role extends Base {
         if (data.tags !== undefined) {
             this.tags = {
                 botID:             data.tags.bot_id,
-                integrationID:     data.tags.integration_id,
                 premiumSubscriber: data.tags.premium_subscriber
             };
         }

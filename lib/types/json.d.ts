@@ -3,15 +3,7 @@
 import type { InstallParams } from "./oauth.js";
 import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
 import type { ApplicationCommandInteractionData, AutocompleteInteractionData, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData } from "./interactions.js";
-import type {
-    GuildEmoji,
-    IntegrationAccount,
-    RawGuild,
-    RoleTags,
-    WelcomeScreen,
-    Sticker,
-    Presence
-} from "./guilds.js";
+import type { RawGuild, RoleTags } from "./guilds.js";
 import type {
     ChannelMention,
     MessageActivity,
@@ -23,31 +15,21 @@ import type {
     PrivateThreadMetadata,
     ForumTag,
     ForumEmoji,
-    MessageActionRow,
     Embed
 } from "./channels.js";
 import type {
     ApplicationCommandTypes,
     ChannelTypes,
-    DefaultMessageNotificationLevels,
-    ExplicitContentFilterLevels,
     GuildChannelTypes,
-    GuildFeature,
-    GuildNSFWLevels,
-    IntegrationExpireBehaviors,
-    IntegrationType,
     InteractionTypes,
     InviteTargetTypes,
     MessageTypes,
-    MFALevels,
     OverwriteTypes,
-    PremiumTiers,
     PrivateChannelTypes,
     RESTMethod,
     TextChannelTypes,
     ThreadAutoArchiveDuration,
     ThreadChannelTypes,
-    VerificationLevels,
     WebhookTypes,
     SortOrderTypes,
     ForumLayoutTypes
@@ -213,68 +195,27 @@ export interface JSONGuild extends JSONBase {
     application?: string;
     approximateMemberCount?: number;
     approximatePresenceCount?: number;
-    banner: string | null;
     channels: Array<string>;
-    defaultMessageNotifications: DefaultMessageNotificationLevels;
-    description: string | null;
-    discoverySplash: string | null;
-    emojis: Array<GuildEmoji>;
-    explicitContentFilter: ExplicitContentFilterLevels;
-    features: Array<GuildFeature>;
     icon: string | null;
-    joinedAt: number | null;
     large: boolean;
     maxMembers?: number;
     maxPresences?: number;
-    maxVideoChannelUsers?: number;
     memberCount: number;
     members: Array<string>;
-    mfaLevel: MFALevels;
     name: string;
-    nsfwLevel: GuildNSFWLevels;
     ownerID: string;
     preferredLocale: string;
-    premiumProgressBarEnabled: boolean;
-    premiumSubscriptionCount?: number;
-    premiumTier: PremiumTiers;
-    publicUpdatesChannelID: string | null;
     region?: string | null;
     roles: Array<JSONRole>;
-    rulesChannelID: string | null;
-    splash: string | null;
-    stickers?: Array<Sticker>;
-    systemChannelFlags: number;
-    systemChannelID: string | null;
     threads: Array<string>;
     unavailable: boolean;
     vanityURLCode: string | null;
-    verificationLevel: VerificationLevels;
-    welcomeScreen?: WelcomeScreen;
-    widgetChannelID: string | null;
-    widgetEnabled?: boolean;
 }
 export interface JSONGuildChannel extends JSONChannel {
     guildID: string;
     name: string;
     parentID: string | null;
     type: GuildChannelTypes;
-}
-export interface JSONIntegration extends JSONBase {
-    account: IntegrationAccount;
-    application?: JSONPartialApplication;
-    enableEmoticons?: boolean;
-    enabled?: boolean;
-    expireBehavior?: IntegrationExpireBehaviors;
-    expireGracePeriod?: number;
-    name: string;
-    revoked?: boolean;
-    roleID: string | null;
-    scopes?: Array<string>;
-    subscriberCount?: number;
-    syncedAt?: number;
-    syncing?: boolean;
-    type: IntegrationType;
-    user?: JSONUser;
 }
 export interface JSONInteraction extends JSONBase {
     applicationID: string;
@@ -300,18 +241,7 @@ export interface JSONInvite {
     uses?: number;
 }
 export interface JSONMember extends JSONBase {
-    avatar: string | null;
-    communicationDisabledUntil: number | null;
-    deaf: boolean;
-    flags?: number;
     guildID: string;
-    isPending?: boolean;
-    joinedAt: number | null;
-    mute: boolean;
-    nick: string | null;
-    pending: boolean;
-    premiumSince: number | null;
-    presence?: Presence;
     roles: Array<string>;
     user: JSONUser;
 }
@@ -321,9 +251,7 @@ export interface JSONMessage extends JSONBase {
     attachments: Array<JSONAttachment>;
     author: JSONUser;
     channelID: string;
-    components?: Array<MessageActionRow>;
     content: string;
-    editedTimestamp: number | null;
     embeds: Array<Embed>;
     flags?: number;
     guildID?: string;
@@ -344,14 +272,12 @@ export interface JSONMessage extends JSONBase {
     };
     messageReference?: MessageReference;
     nonce?: number | string;
-    pinned: boolean;
     position?: number;
     reactions: Record<string, MessageReaction>;
     referencedMessage?: JSONMessage | null;
     stickerItems?: Array<StickerItem>;
     thread?: JSONAnnouncementThreadChannel | JSONPublicThreadChannel | JSONPrivateThreadChannel;
     timestamp: number;
-    tts: boolean;
     type: MessageTypes;
     webhook?: string;
 }

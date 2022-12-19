@@ -24,26 +24,14 @@ import ClientApplication from "../structures/ClientApplication.js";
 import type { RawOAuthUser, RawUser } from "../types/users.js";
 import type { RawGuild } from "../types/guilds.js";
 import ExtendedUser from "../structures/ExtendedUser.js";
-import type {
-    AnyGuildChannelWithoutThreads,
-    AnyThreadChannel,
-    InviteChannel,
-    PossiblyUncachedInvite,
-    ThreadMember,
-    ThreadParentChannel,
-    UncachedThreadMember,
-    AnyTextChannelWithoutGroup
-} from "../types/channels.js";
+import type { AnyGuildChannelWithoutThreads, AnyTextChannelWithoutGroup } from "../types/channels.js";
 import type TextChannel from "../structures/TextChannel.js";
-import Invite from "../structures/Invite.js";
 import Message from "../structures/Message.js";
 import Interaction from "../structures/Interaction.js";
 import { is } from "../util/Util.js";
-import Guild from "../structures/Guild.js";
+import type Guild from "../structures/Guild.js";
 import type { ShardEvents } from "../types/events.js";
-import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
 import Role from "../structures/Role.js";
-import Integration from "../structures/Integration.js";
 import type { Data } from "ws";
 import WebSocket from "ws";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -185,16 +173,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     private async onDispatch(packet: AnyDispatchPacket): Promise<void> {
         this.client.emit("packet", packet, this.id);
         switch (packet.t) {
-            case "APPLICATION_COMMAND_PERMISSIONS_UPDATE": {
-                this.client.emit("applicationCommandPermissionsUpdate", this.client.guilds.get(packet.d.guild_id) ?? { id: packet.d.guild_id }, {
-                    application:   packet.d.application_id === this.client.application.id ? this.client.application : undefined,
-                    applicationID: packet.d.application_id,
-                    id:            packet.d.id,
-                    permissions:   packet.d.permissions
-                });
-                break;
-            }
-
             case "CHANNEL_CREATE": {
                 const channel = this.client.util.updateChannel<AnyGuildChannelWithoutThreads>(packet.d);
                 this.client.emit("channelCreate", channel);
@@ -219,12 +197,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 this.client.emit("channelDelete", channel);
                 break;
             }
-
-            // case "CHANNEL_PINS_UPDATE": {
-            //     const channel = this.client.getChannel<AnyTextChannelWithoutGroup>(packet.d.channel_id);
-            //     this.client.emit("channelPinsUpdate", channel ?? { id: packet.d.channel_id }, packet.d.last_pin_timestamp === undefined || packet.d.last_pin_timestamp === null ? null : new Date(packet.d.last_pin_timestamp));
-            //     break;
-            // }
 
             case "CHANNEL_UPDATE": {
                 const oldChannel = this.client.getChannel<TextChannel>(packet.d.id)?.toJSON() ?? null;
@@ -279,34 +251,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "GUILD_EMOJIS_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const oldEmojis = guild?.emojis ? [...guild.emojis] : null;
-                // eslint-disable-next-line @typescript-eslint/dot-notation
-                guild?.["update"]({ emojis: packet.d.emojis });
-                this.client.emit(
-                    "guildEmojisUpdate",
-                    guild ?? { id: packet.d.guild_id },
-                    guild?.emojis ?? packet.d.emojis.map(emoji => ({
-                        animated:      emoji.animated,
-                        available:     emoji.available,
-                        id:            emoji.id,
-                        managed:       emoji.managed,
-                        name:          emoji.name,
-                        requireColons: emoji.require_colons,
-                        roles:         emoji.roles,
-                        user:          emoji.user === undefined ? undefined : this.client.users.update(emoji.user)
-                    })),
-                    oldEmojis
-                );
-                break;
-            }
-
-            case "GUILD_INTEGRATIONS_UPDATE": {
-                this.client.emit("guildIntegrationsUpdate", this.client.guilds.get(packet.d.guild_id) ?? { id: packet.d.guild_id });
-                break;
-            }
-
             case "GUILD_MEMBER_ADD": {
                 const guild = this.client.guilds.get(packet.d.guild_id);
                 if (guild) {
@@ -322,36 +266,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 // eslint-disable-next-line @typescript-eslint/dot-notation
                 guild?.["updateMemberLimit"](packet.d.members.length);
                 const members = packet.d.members.map(member => this.client.util.updateMember(packet.d.guild_id, member.user!.id, member));
-                if (packet.d.presences) for (const presence of packet.d.presences) {
-                    const member = members.find(m => m.id === presence.user.id)!;
-                    member.presence = {
-                        clientStatus: presence.client_status,
-                        guildID:      presence.guild_id,
-                        status:       presence.status,
-                        activities:   presence.activities?.map(activity => ({
-                            createdAt:     activity.created_at,
-                            name:          activity.name,
-                            type:          activity.type,
-                            applicationID: activity.application_id,
-                            assets:        activity.assets ? {
-                                largeImage: activity.assets.large_image,
-                                largeText:  activity.assets.large_text,
-                                smallImage: activity.assets.small_image,
-                                smallText:  activity.assets.small_text
-                            } : undefined,
-                            buttons:    activity.buttons,
-                            details:    activity.details,
-                            emoji:      activity.emoji,
-                            flags:      activity.flags,
-                            instance:   activity.instance,
-                            party:      activity.party,
-                            secrets:    activity.secrets,
-                            state:      activity.state,
-                            timestamps: activity.timestamps,
-                            url:        activity.url
-                        }))
-                    };
-                }
                 if (!packet.d.nonce) {
                     this.client.emit("warn", "Received GUILD_MEMBERS_CHUNK without a nonce.");
                     break;
@@ -395,7 +309,7 @@ export default class Shard extends TypedEmitter<ShardEvents> {
             case "GUILD_MEMBER_UPDATE": {
                 const guild = this.client.guilds.get(packet.d.guild_id);
                 const oldMember = guild?.members.get(packet.d.user.id)?.toJSON() ?? null;
-                const member = this.client.util.updateMember(packet.d.guild_id, packet.d.user.id, {  deaf: oldMember?.deaf ?? false, mute: oldMember?.mute ?? false, ...packet.d });
+                const member = this.client.util.updateMember(packet.d.guild_id, packet.d.user.id, { ...packet.d });
                 this.client.emit("guildMemberUpdate", member, oldMember);
                 break;
             }
@@ -423,15 +337,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "GUILD_STICKERS_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const oldStickers = guild?.stickers ? [...guild.stickers] : null;
-                // eslint-disable-next-line @typescript-eslint/dot-notation
-                guild?.["update"]({ stickers: packet.d.stickers });
-                this.client.emit("guildStickersUpdate", guild ?? { id: packet.d.guild_id }, guild?.stickers ?? packet.d.stickers.map(sticker => this.client.util.convertSticker(sticker)), oldStickers);
-                break;
-            }
-
             case "GUILD_UPDATE": {
                 const guild = this.client.guilds.get(packet.d.id);
                 const oldGuild = guild?.toJSON() ?? null;
@@ -439,57 +344,8 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 break;
             }
 
-            case "INTEGRATION_CREATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const integration = guild?.integrations.update(packet.d, packet.d.guild_id) ?? new Integration(packet.d, this.client, packet.d.guild_id);
-                this.client.emit("integrationCreate", guild ?? { id: packet.d.guild_id }, integration);
-                break;
-            }
-
-            case "INTEGRATION_DELETE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const integration = guild?.integrations.get(packet.d.id);
-                guild?.integrations.delete(packet.d.id);
-                this.client.emit("integrationDelete", guild ?? { id: packet.d.guild_id }, integration ?? { applicationID: packet.d.application_id, id: packet.d.id });
-                break;
-            }
-
-            case "INTEGRATION_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const oldIntegration = guild?.integrations.get(packet.d.id)?.toJSON() ?? null;
-                const integration = guild?.integrations.update(packet.d, packet.d.guild_id) ?? new Integration(packet.d, this.client, packet.d.guild_id);
-                this.client.emit("integrationUpdate", guild ?? { id: packet.d.guild_id }, integration, oldIntegration);
-                break;
-            }
-
             case "INTERACTION_CREATE": {
                 this.client.emit("interactionCreate", Interaction.from(packet.d, this.client));
-                break;
-            }
-
-            case "INVITE_CREATE": {
-                const invite = new Invite(packet.d, this.client);
-                if (packet.d.guild_id) {
-                    const guild = this.client.guilds.get(packet.d.guild_id);
-                    guild?.invites.set(invite.code, invite);
-                }
-                this.client.emit("inviteCreate", new Invite(packet.d, this.client));
-                break;
-            }
-
-            case "INVITE_DELETE": {
-                const channel = this.client.getChannel<InviteChannel>(packet.d.channel_id) ?? { id: packet.d.channel_id };
-                const guild = packet.d.guild_id ? this.client.guilds.get(packet.d.guild_id) ?? { id: packet.d.guild_id } : undefined;
-                let invite: PossiblyUncachedInvite = {
-                    code: packet.d.code,
-                    channel,
-                    guild
-                };
-                if (guild instanceof Guild && guild.invites.has(packet.d.code)) {
-                    invite = guild.invites.get(packet.d.code)!;
-                    guild.invites.delete(packet.d.code);
-                }
-                this.client.emit("inviteDelete", invite);
                 break;
             }
 
@@ -592,141 +448,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 this.status = "ready";
                 this.client.shards["_ready"](this.id);
                 this.emit("resume");
-                break;
-            }
-
-            case "THREAD_CREATE": {
-                const thread = this.client.util.updateThread(packet.d);
-                const channel = this.client.getChannel<ThreadParentChannel>(packet.d.parent_id!);
-                if (channel?.type === ChannelTypes.GUILD_FORUM) {
-                    channel.lastThread = thread as PublicThreadChannel;
-                    channel.lastThreadID = thread.id;
-                }
-                this.client.emit("threadCreate", thread);
-                break;
-            }
-
-            case "THREAD_DELETE": {
-                const channel = this.client.getChannel<ThreadParentChannel>(packet.d.parent_id!);
-                const thread = this.client.getChannel<AnyThreadChannel>(packet.d.id) ?? {
-                    id:       packet.d.id,
-                    guild:    this.client.guilds.get(packet.d.guild_id),
-                    guildID:  packet.d.guild_id,
-                    parent:   channel,
-                    parentID: packet.d.parent_id!,
-                    type:     packet.d.type
-                };
-                if (channel) {
-                    channel.threads?.delete(packet.d.id);
-                    if (channel.type === ChannelTypes.GUILD_FORUM && channel.lastThreadID === packet.d.id) {
-                        channel.lastThread = null;
-                        channel.lastThreadID = null;
-                    }
-                }
-                this.client.emit("threadDelete", thread);
-                break;
-            }
-
-            case "THREAD_LIST_SYNC": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                if (!guild) {
-                    this.client.emit("debug", `Missing guild in THREAD_LIST_SYNC: ${packet.d.guild_id}`);
-                    break;
-                }
-                for (const threadData of packet.d.threads) {
-                    this.client.util.updateThread(threadData);
-                }
-                for (const member of packet.d.members) {
-                    const thread = this.client.getChannel<AnyThreadChannel>(member.id);
-                    if (thread) {
-                        const threadMember: ThreadMember = {
-                            id:            member.id,
-                            flags:         member.flags,
-                            joinTimestamp: new Date(member.join_timestamp),
-                            userID:        member.user_id
-                        };
-                        const index = thread.members.findIndex(m => m.userID === member.user_id);
-                        if (index === -1) {
-                            thread.members.push(threadMember);
-                        } else {
-                            thread.members[index] = threadMember;
-                        }
-                    }
-                }
-                break;
-            }
-
-            case "THREAD_MEMBER_UPDATE": {
-                const thread = this.client.getChannel<AnyThreadChannel>(packet.d.id);
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const threadMember: ThreadMember = {
-                    id:            packet.d.id,
-                    flags:         packet.d.flags,
-                    joinTimestamp: new Date(packet.d.join_timestamp),
-                    userID:        packet.d.user_id
-                };
-                let oldThreadMember: ThreadMember | null = null;
-                if (thread) {
-                    const index = thread.members.findIndex(m => m.userID === packet.d.user_id);
-                    if (index === -1) {
-                        thread.members.push(threadMember);
-                    } else {
-                        oldThreadMember = { ...thread.members[index] };
-                        thread.members[index] = threadMember;
-                    }
-                }
-
-                this.client.emit(
-                    "threadMemberUpdate",
-                    thread ?? {
-                        id:      packet.d.id,
-                        guild,
-                        guildID: packet.d.guild_id
-                    },
-                    threadMember,
-                    oldThreadMember
-                );
-                break;
-            }
-
-            case "THREAD_MEMBERS_UPDATE": {
-                const thread = this.client.getChannel<AnyThreadChannel>(packet.d.id);
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const addedMembers: Array<ThreadMember> = (packet.d.added_members ?? []).map(rawMember => ({
-                    flags:         rawMember.flags,
-                    id:            rawMember.id,
-                    joinTimestamp: new Date(rawMember.join_timestamp),
-                    userID:        rawMember.user_id
-                }));
-                const removedMembers: Array<ThreadMember | UncachedThreadMember> = (packet.d.removed_member_ids ?? []).map(id => ({ userID: id, id: packet.d.id }));
-                if (thread) {
-                    thread.memberCount = packet.d.member_count;
-                    for (const rawMember of addedMembers) {
-                        const index = thread.members.findIndex(m => m.userID === rawMember.id);
-                        if (index === -1) {
-                            thread.members.push(rawMember);
-                        } else {
-                            thread.members[index] = rawMember;
-                        }
-                    }
-                    for (const [index, { userID }] of removedMembers.entries()) {
-                        const memberIndex = thread.members.findIndex(m => m.userID === userID);
-                        if (memberIndex >= 0) {
-                            removedMembers[index] = thread.members[memberIndex];
-                            thread.members.splice(memberIndex, 1);
-                        }
-                    }
-                }
-                this.client.emit(
-                    "threadMembersUpdate",
-                    thread ?? {
-                        id:      packet.d.id,
-                        guild,
-                        guildID: packet.d.guild_id
-                    },
-                    addedMembers,
-                    removedMembers
-                );
                 break;
             }
 

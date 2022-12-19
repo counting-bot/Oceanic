@@ -62,7 +62,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
         this.ownerID = data.owner_id;
         this.rateLimitPerUser = data.rate_limit_per_user;
         this.threadMetadata = {
-            archiveTimestamp:    new Date(data.thread_metadata.archive_timestamp),
             archived:            !!data.thread_metadata.archived,
             autoArchiveDuration: data.thread_metadata.auto_archive_duration,
             createTimestamp:     !data.thread_metadata.create_timestamp ? null : new Date(data.thread_metadata.create_timestamp),
@@ -113,7 +112,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
         }
         if (data.thread_metadata !== undefined) {
             this.threadMetadata = {
-                archiveTimestamp:    new Date(data.thread_metadata.archive_timestamp),
                 archived:            !!data.thread_metadata.archived,
                 autoArchiveDuration: data.thread_metadata.auto_archive_duration,
                 createTimestamp:     !data.thread_metadata.create_timestamp ? null : new Date(data.thread_metadata.create_timestamp),

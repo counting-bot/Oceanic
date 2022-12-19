@@ -45,18 +45,6 @@ export default class Channel extends Base {
         }
     }
 
-    /** A string that will mention this channel. */
-    get mention(): string {
-        return `<#${this.id}>`;
-    }
-
-    /**
-     * Close a direct message, leave a group channel, or delete a guild channel.
-     */
-    async delete(): Promise<void> {
-        await this.client.rest.channels.delete(this.id);
-    }
-
     override toJSON(): JSONChannel {
         return {
             ...super.toJSON(),

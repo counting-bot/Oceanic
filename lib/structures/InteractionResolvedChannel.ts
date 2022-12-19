@@ -28,7 +28,6 @@ export default class InteractionResolvedChannel extends Channel {
         this.name = data.name;
         this.parentID = data.parent_id ?? null;
         this.threadMetadata = data.thread_metadata ? {
-            archiveTimestamp:    new Date(data.thread_metadata.archive_timestamp),
             archived:            !!data.thread_metadata.archived,
             autoArchiveDuration: data.thread_metadata.auto_archive_duration,
             createTimestamp:     !data.thread_metadata.create_timestamp ? null : new Date(data.thread_metadata.create_timestamp),

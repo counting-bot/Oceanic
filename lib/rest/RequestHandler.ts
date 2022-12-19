@@ -8,7 +8,7 @@ import { API_URL, RESTMethods, USER_AGENT } from "../Constants.js";
 import Base from "../structures/Base.js";
 import type { LatencyRef, RequestHandlerInstanceOptions, RequestOptions } from "../types/request-handler.js";
 import type { RESTOptions } from "../types/client.js";
-import { FormData, fetch, File as UFile } from "undici";
+import { FormData, fetch } from "undici";
 
 /**
  * Latency & ratelimit related things lovingly borrowed from eris
@@ -130,12 +130,6 @@ export default class RequestHandler {
                         }
                         if (options.form || (options.files && options.files.length !== 0)) {
                             const data = options.form ?? new FormData();
-                            if (options.files) for (const [index, file] of options.files.entries()) {
-                                if (!file.contents) {
-                                    continue;
-                                }
-                                data.set(`files[${index}]`, new UFile([file.contents], file.name));
-                            }
                             if (stringBody) {
                                 data.set("payload_json", stringBody);
                             }

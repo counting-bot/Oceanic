@@ -87,7 +87,6 @@ export type RawGroupChannel = Required<Pick<RawChannel, "id" | "recipients" | "a
 export type RawTextChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel, "default_auto_archive_duration" | "last_message_id" | "last_pin_timestamp" | "rate_limit_per_user" | "topic" | "nsfw" | "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_TEXT; };
 export type RawCategoryChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel,  "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_CATEGORY; };
 export type RawAnnouncementChannel = Omit<RawTextChannel, "type"> & { type: ChannelTypes.GUILD_ANNOUNCEMENT; };
-export type RawStageChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel, "bitrate" | "rtc_region" | "topic" | "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_STAGE_VOICE; };
 export type RawThreadChannel = RawAnnouncementThreadChannel | RawPublicThreadChannel | RawPrivateThreadChannel;
 export type RawAnnouncementThreadChannel = Required<Pick<RawChannel, "id" | "guild_id" | "parent_id" | "owner_id" | "last_message_id" | "thread_metadata" | "message_count" | "member_count" | "rate_limit_per_user" | "flags" | "total_message_sent" | "newly_created" | "member">> & { name: string; type: ChannelTypes.ANNOUNCEMENT_THREAD; };
 export type RawPublicThreadChannel = Omit<RawAnnouncementThreadChannel, "type"> & { type: ChannelTypes.PUBLIC_THREAD; } & Required<Pick<RawChannel, "applied_tags">>;
@@ -123,7 +122,6 @@ export interface OverwriteOptions {
 }
 
 export interface RawThreadMetadata {
-    archive_timestamp: string;
     archived: boolean;
     auto_archive_duration: ThreadAutoArchiveDuration;
     create_timestamp?: string | null;
@@ -153,10 +151,6 @@ export interface UncachedThreadMember {
     userID: string;
 }
 
-export interface GatewayThreadMember {
-    flags: number;
-    joinTimestamp: Date;
-}
 export interface EditGroupDMOptions {
     /** [Group DM] The icon of the channel. */
     icon?: string | Buffer;
@@ -224,20 +218,10 @@ export type EditChannelOptions = EditGroupDMOptions & EditGuildChannelOptions;
 export type EditAnyGuildChannelOptions = Pick<EditGuildChannelOptions, "name" | "position" | "permissionOverwrites">;
 export type EditTextChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "topic" | "nsfw" | "rateLimitPerUser" | "parentID" | "defaultAutoArchiveDuration"> & { type?: ChannelTypes.GUILD_ANNOUNCEMENT; };
 export type EditAnnouncementChannelOptions = Omit<EditTextChannelOptions, "rateLimitPerUser"> & { type?: ChannelTypes.GUILD_TEXT; };
-export type EditStageChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "bitrate" | "rtcRegion">;
 export type EditThreadChannelOptions = EditPublicThreadChannelOptions | EditPrivateThreadChannelOptions;
 export type EditPublicThreadChannelOptions = Pick<EditGuildChannelOptions, "name" | "archived" | "autoArchiveDuration" | "locked" | "rateLimitPerUser" | "flags" | "appliedTags">;
 export type EditPrivateThreadChannelOptions = EditPublicThreadChannelOptions & Pick<EditGuildChannelOptions, "invitable">;
 export type EditForumChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "availableTags" | "defaultReactionEmoji" | "defaultSortOrder" |"defaultThreadRateLimitPerUser" | "flags" | "nsfw"  | "rateLimitPerUser" | "topic">;
-
-export interface AddGroupRecipientOptions {
-    /** The access token of the user to add. */
-    accessToken: string;
-    /** The nickname of the user to add. */
-    nick?: string;
-    /** The id of the user to add. */
-    userID: string;
-}
 
 export interface CreateMessageOptions {
     /** An object that specifies the allowed mentions in this message. */
@@ -719,13 +703,6 @@ export interface GetChannelMessagesOptions {
     limit?: number;
 }
 
-export interface GetReactionsOptions {
-    /** The ID of the user to get reactions after. */
-    after?: string;
-    /** The maximum amount of reactions to get. Defaults to 100. Use Infinity if you wish to get as many reactions as possible. */
-    limit?: number;
-}
-
 export type EditMessageOptions = Pick<CreateMessageOptions, "content" | "embeds" | "allowedMentions" | "components" | "attachments" | "files" | "flags">;
 
 export interface EditPermissionOptions {
@@ -798,16 +775,6 @@ export interface CreateInviteOptions {
     temporary?: boolean;
     /** If the invite should be unique. */
     unique?: boolean;
-}
-
-export interface RawFollowedChannel {
-    channel_id: string;
-    webhook_id: string;
-}
-
-export interface FollowedChannel {
-    channelID: string;
-    webhookID: string;
 }
 
 export interface StartThreadFromMessageOptions {
@@ -892,7 +859,6 @@ export type InviteInfoTypes = "withMetadata" | "withCounts" | "withoutCounts" | 
 
 
 export interface ThreadMetadata {
-    archiveTimestamp: Date;
     archived: boolean;
     autoArchiveDuration: ThreadAutoArchiveDuration;
     createTimestamp: Date | null;
@@ -930,25 +896,5 @@ export interface ForumEmoji {
 }
 
 export type PossiblyUncachedMessage = Message | { channel: AnyTextChannelWithoutGroup | Uncached; channelID: string; guild?: Guild; guildID?: string; } & Uncached;
-export type PossiblyUncachedThread = AnyThreadChannel | Pick<AnyThreadChannel, "id" | "type"> & { guild?: Guild; guildID: string; parent?: ThreadParentChannel; parentID: string; };
-export type MinimalPossiblyUncachedThread = AnyThreadChannel | { guild?: Guild; guildID: string; id: string; };
-
-export interface PurgeOptions<T extends AnyGuildTextChannel | Uncached> {
-    /** The ID of the message to purge after. */
-    after?: string;
-    /** The ID of the message to purge around. */
-    around?: string;
-    /** The ID of the message to purge before. */
-    before?: string;
-    /** The limit of messages to purge. */
-    limit: number;
-    /** The reason for purging the messages. */
-    reason?: string;
-    /**
-     * The filter to apply to messages to decide if they should be purged.
-     * @param message The message to filter.
-     */
-    filter?(message: Message<T>): boolean | PromiseLike<boolean>;
-}
 
 export type ThreadParentChannel = TextChannel | AnnouncementChannel | ForumChannel;

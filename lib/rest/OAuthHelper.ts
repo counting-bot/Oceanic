@@ -1,19 +1,16 @@
 /** @module OAuthHelper */
 import type RESTManager from "./RESTManager.js";
-import Application from "../structures/Application.js";
 import type {
     AuthorizationInformation,
     Connection,
     OAuthURLOptions,
     RawAuthorizationInformation,
     RawConnection,
-    RESTApplication,
     RevokeTokenOptions
 } from "../types/oauth.js";
 import type { RawOAuthGuild, RESTMember } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
 import PartialApplication from "../structures/PartialApplication.js";
-import Integration from "../structures/Integration.js";
 import Member from "../structures/Member.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
 import ExtendedUser from "../structures/ExtendedUser.js";
@@ -62,17 +59,6 @@ export default class OAuthHelper {
     }
 
     /**
-     * Get the current OAuth2 application's information.
-     */
-    async getApplication(): Promise<Application> {
-        return this.#manager.request<RESTApplication>({
-            method: "GET",
-            path:   Routes.OAUTH_APPLICATION,
-            auth:   this.#token
-        }).then(data => new Application(data, this.#manager.client));
-    }
-
-    /**
      * Get information about the current authorization.
      */
     async getCurrentAuthorizationInformation(): Promise<AuthorizationInformation> {
@@ -101,7 +87,6 @@ export default class OAuthHelper {
         }).then(data => data.map(connection => ({
             friendSync:   connection.friend_sync,
             id: 	         connection.id,
-            integrations: connection.integrations?.map(integration => new Integration(integration, this.#manager.client)),
             name:         connection.name,
             revoked:      connection.revoked,
             showActivity: connection.show_activity,

@@ -3,7 +3,6 @@ import type {
     PartialEmoji,
     RawGuild,
     RawGuildEmoji,
-    RawIntegration,
     RawMember,
     RawRole,
     RawUnavailableGuild,
@@ -194,13 +193,6 @@ export interface GuildStickersUpdatePacket extends BaseDispatchPacket {
     t: "GUILD_STICKERS_UPDATE";
 }
 
-export interface GuildIntegrationsUpdatePacket extends BaseDispatchPacket {
-    d: {
-        guild_id: string;
-    };
-    t: "GUILD_INTEGRATIONS_UPDATE";
-}
-
 export interface GuildMemberAddPacket extends BaseDispatchPacket {
     d: RawMember & { guild_id: string; };
     t: "GUILD_MEMBER_ADD";
@@ -266,25 +258,6 @@ export interface GuildRoleUpdatePacket extends BaseDispatchPacket {
         role: RawRole;
     };
     t: "GUILD_ROLE_UPDATE";
-}
-
-export interface IntegrationCreatePacket extends BaseDispatchPacket {
-    d: RawIntegration & { guild_id: string; };
-    t: "INTEGRATION_CREATE";
-}
-
-export interface IntegrationDeletePacket extends BaseDispatchPacket {
-    d: {
-        application_id?: string;
-        guild_id: string;
-        id: string;
-    };
-    t: "INTEGRATION_DELETE";
-}
-
-export interface IntegrationUpdatePacket extends BaseDispatchPacket {
-    d: RawIntegration & { guild_id: string; };
-    t: "INTEGRATION_UPDATE";
 }
 
 export interface InviteCreatePacket extends BaseDispatchPacket {
@@ -430,10 +403,9 @@ export type AnyDispatchPacket = PresenceUpdatePacket | ReadyPacket | ResumedPack
 GuildCreatePacket | GuildDeletePacket | GuildUpdatePacket | ApplicationCommandPermissionsUpdatePacket |
 ChannelCreatePacket | ChannelDeletePacket | ChannelUpdatePacket | ChannelPinsUpdatePacket |
 ThreadCreatePacket | ThreadDeletePacket | ThreadUpdatePacket | ThreadListSyncPacket | ThreadMemberUpdatePacket | ThreadMembersUpdatePacket |
-GuildBanAddPacket | GuildBanRemovePacket | GuildEmojisUpdatePacket | GuildStickersUpdatePacket | GuildIntegrationsUpdatePacket |
+GuildBanAddPacket | GuildBanRemovePacket | GuildEmojisUpdatePacket | GuildStickersUpdatePacket |
 GuildMemberAddPacket | GuildMemberRemovePacket | GuildMemberUpdatePacket | GuildMembersChunkPacket |
 GuildRoleCreatePacket | GuildRoleDeletePacket | GuildRoleUpdatePacket |
-IntegrationCreatePacket | IntegrationDeletePacket | IntegrationUpdatePacket |
 InviteCreatePacket | InviteDeletePacket |
 MessageCreatePacket | MessageDeletePacket | MessageDeleteBulkPacket | MessageUpdatePacket | MessageReactionAddPacket | MessageReactionRemovePacket | MessageReactionRemoveAllPacket | MessageReactionRemoveEmojiPacket |
 TypingStartPacket | UserUpdatePacket | VoiceServerUpdate | WebhooksUpdatePacket | InteractionCreatePacket;

@@ -40,6 +40,9 @@ export default class Interaction extends Base {
 
     static from<T extends AnyInteraction = AnyInteraction>(data: RawInteraction, client: Client): T {
         switch (data.type) {
+            case InteractionTypes.PING: {
+                return new PingInteraction(data, client) as T;
+            }
             case InteractionTypes.APPLICATION_COMMAND: {
                 return new CommandInteraction(data as RawApplicationCommandInteraction, client) as T;
             }
@@ -72,4 +75,5 @@ export default class Interaction extends Base {
 const AutocompleteInteraction = (require("./AutocompleteInteraction.js") as typeof import("./AutocompleteInteraction.js")).default;
 const CommandInteraction = (require("./CommandInteraction.js") as typeof import("./CommandInteraction.js")).default;
 const ComponentInteraction = (require("./ComponentInteraction.js") as typeof import("./ComponentInteraction.js")).default;
+const PingInteraction = (require("./PingInteraction.js") as typeof import("./PingInteraction.js")).default;
 /* eslint-enable @typescript-eslint/no-var-requires, unicorn/prefer-module */

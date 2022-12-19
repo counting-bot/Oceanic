@@ -30,8 +30,6 @@ export const GUILD_ROLE                  = (guildID: string, roleID: string) => 
 export const GUILD_MFA                   = (guildID: string) => `/guilds/${guildID}/mfa` as const;
 export const GUILD_PRUNE                 = (guildID: string) => `/guilds/${guildID}/prune` as const;
 export const GUILD_INVITES               = (guildID: string) => `/guilds/${guildID}/invites` as const;
-export const GUILD_INTEGRATION           = (guildID: string, integrationID: string) => `/guilds/${guildID}/integrations/${integrationID}` as const;
-export const GUILD_INTEGRATIONS          = (guildID: string) => `/guilds/${guildID}/integrations` as const;
 export const GUILD_WIDGET                = (guildID: string) => `/guilds/${guildID}/widget` as const;
 export const GUILD_VANITY_URL            = (guildID: string) => `/guilds/${guildID}/vanity-url` as const;
 export const GUILD_WIDGET_IMAGE          = (guildID: string) => `/guilds/${guildID}/widget.png` as const;
