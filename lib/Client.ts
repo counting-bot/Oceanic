@@ -3,10 +3,9 @@ import { GATEWAY_VERSION } from "./Constants.js";
 import RESTManager from "./rest/RESTManager.js";
 import TypedCollection from "./util/TypedCollection.js";
 import PrivateChannel from "./structures/PrivateChannel.js";
-import GroupChannel from "./structures/GroupChannel.js";
 import User from "./structures/User.js";
 import Guild from "./structures/Guild.js";
-import type { AnyChannel, RawGroupChannel, RawPrivateChannel } from "./types/channels.js";
+import type { AnyChannel, RawPrivateChannel } from "./types/channels.js";
 import type { RawGuild, RawUnavailableGuild } from "./types/guilds.js";
 import type { RawUser } from "./types/users.js";
 import type {  ClientInstanceOptions, ClientOptions } from "./types/client.js";
@@ -25,7 +24,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
     private _user?: ExtendedUser;
     channelGuildMap: Record<string, string>;
     gatewayURL!: string;
-    groupChannels: TypedCollection<string, RawGroupChannel, GroupChannel>;
     guildShardMap: Record<string, number>;
     guilds: TypedCollection<string, RawGuild, Guild>;
     options: ClientInstanceOptions;
@@ -65,7 +63,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
             disableMemberLimitScaling: options?.disableMemberLimitScaling ?? false
         };
         this.channelGuildMap = {};
-        this.groupChannels = new TypedCollection(GroupChannel, this, 10);
         this.guilds = new TypedCollection(Guild, this);
         this.privateChannels = new TypedCollection(PrivateChannel, this, 25);
         this.ready = false;
@@ -190,6 +187,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
         } else if (this.threadGuildMap[channelID]) {
             return this.guilds.get(this.threadGuildMap[channelID])?.threads.get(channelID) as T;
         }
-        return (this.privateChannels.get(channelID) ?? this.groupChannels.get(channelID)) as T;
+        return this.privateChannels.get(channelID) as T;
     }
 }

@@ -181,16 +181,6 @@ export interface JSONForumChannel extends JSONGuildChannel {
     threads: Array<string>;
     topic: string | null;
 }
-export interface JSONGroupChannel extends JSONChannel {
-    applicationID: string;
-    icon: string | null;
-    managed: boolean;
-    name: string | null;
-    nicks: Array<Record<"id" | "nick", string>>;
-    ownerID: string;
-    recipients: Array<JSONUser>;
-    type: ChannelTypes.GROUP_DM;
-}
 export interface JSONGuild extends JSONBase {
     application?: string;
     approximateMemberCount?: number;

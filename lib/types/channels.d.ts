@@ -24,7 +24,6 @@ import type {
     ForumLayoutTypes
 } from "../Constants.js";
 import type CategoryChannel from "../structures/CategoryChannel.js";
-import type GroupChannel from "../structures/GroupChannel.js";
 import type Member from "../structures/Member.js";
 import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
 import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel.js";
@@ -83,7 +82,6 @@ export interface RawChannel {
 export type RawGuildChannel = Required<Pick<RawChannel, "id" | "guild_id" | "parent_id">> & { name: string; type: GuildChannelTypes; };
 export type RawPrivateChannel = Required<Pick<RawChannel, "id" | "last_message_id" | "recipients">> & { type: ChannelTypes.DM; };
 // managed and nicks are undocumented, creating a group dm DOES work, and they show in the client, so we're supporting them
-export type RawGroupChannel = Required<Pick<RawChannel, "id" | "recipients" | "application_id" | "icon" | "owner_id" | "nsfw" | "last_message_id">> & { managed: boolean; name: string; nicks?: Array<Record<"id" | "nick", string>>; type: ChannelTypes.GROUP_DM; };
 export type RawTextChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel, "default_auto_archive_duration" | "last_message_id" | "last_pin_timestamp" | "rate_limit_per_user" | "topic" | "nsfw" | "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_TEXT; };
 export type RawCategoryChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel,  "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_CATEGORY; };
 export type RawAnnouncementChannel = Omit<RawTextChannel, "type"> & { type: ChannelTypes.GUILD_ANNOUNCEMENT; };
@@ -665,18 +663,18 @@ export interface StickerItem {
 }
 
 
-export type AnyChannel = TextChannel | PrivateChannel | GroupChannel | CategoryChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel | StageChannel | ForumChannel;
-export type AnyPrivateChannel = PrivateChannel | GroupChannel;
+export type AnyChannel = TextChannel | PrivateChannel | CategoryChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel | StageChannel | ForumChannel;
+export type AnyPrivateChannel = PrivateChannel;
 export type AnyEditableChannel = Exclude<AnyChannel, PrivateChannel>;
 export type AnyGuildChannel = Exclude<AnyChannel, AnyPrivateChannel>;
 export type AnyGuildChannelWithoutThreads = Exclude<AnyGuildChannel, AnyThreadChannel>;
 export type AnyTextChannelWithoutThreads = Exclude<AnyTextChannel, AnyThreadChannel>;
-export type AnyTextChannel = TextChannel | PrivateChannel | GroupChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel;
-export type AnyTextChannelWithoutGroup = Exclude<AnyTextChannel, GroupChannel>;
+export type AnyTextChannel = TextChannel | PrivateChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel;
+export type AnyTextChannelWithoutGroup = Exclude<AnyTextChannel>;
 export type AnyGuildTextChannel = Exclude<AnyTextChannel, AnyPrivateChannel>;
 export type AnyGuildTextChannelWithoutThreads = Exclude<AnyGuildTextChannel, AnyThreadChannel>;
 export type AnyThreadChannel = AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel;
-export type InviteChannel = Exclude<AnyChannel, PrivateChannel | CategoryChannel | GroupChannel | AnyThreadChannel>;
+export type InviteChannel = Exclude<AnyChannel, PrivateChannel | CategoryChannel | AnyThreadChannel>;
 
 export interface PartialInviteChannel {
     icon?: string | null;

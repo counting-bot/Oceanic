@@ -32,10 +32,3 @@ export interface EditSelfUserOptions {
     /** The new username. */
     username?: string;
 }
-
-export interface CreateGroupChannelOptions {
-    /** An array of access tokens with the `gdm.join` scope. */
-    accessTokens: Array<string>;
-    /** A dictionary of ids to nicknames, looks unused. */
-    nicks?: Record<string, string>;
-}
