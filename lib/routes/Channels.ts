@@ -1,6 +1,5 @@
 /** @module Routes/Channels */
 import type {
-    AddGroupRecipientOptions,
     AnyChannel,
     AnyTextChannelWithoutGroup,
     ArchivedThreads,
@@ -9,17 +8,13 @@ import type {
     EditChannelOptions,
     EditMessageOptions,
     EditPermissionOptions,
-    FollowedChannel,
     GetChannelMessagesOptions,
     GetArchivedThreadsOptions,
-    GetReactionsOptions,
     InviteChannel,
     RawArchivedThreads,
     RawChannel,
-    RawFollowedChannel,
     RawInvite,
     RawMessage,
-    RawAnnouncementThreadChannel,
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
     ThreadMember,
@@ -34,52 +29,26 @@ import type {
     RawThreadMember,
     InviteInfoTypes,
     RawPrivateChannel,
-    RawGroupChannel,
     AnyEditableChannel,
     PartialInviteChannel,
-    RawThreadChannel,
-    PurgeOptions,
-    AnyGuildTextChannel
+    RawThreadChannel
 } from "../types/channels";
 import * as Routes from "../util/Routes";
 import Message from "../structures/Message";
-import type { CreateGroupChannelOptions, RawUser } from "../types/users";
 import Invite from "../structures/Invite";
 import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
 import type PublicThreadChannel from "../structures/PublicThreadChannel";
 import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type { VoiceRegion } from "../types/voice";
 import Channel from "../structures/Channel";
 import type RESTManager from "../rest/RESTManager";
 import type PrivateChannel from "../structures/PrivateChannel";
-import type GroupChannel from "../structures/GroupChannel";
-import type User from "../structures/User";
 import type { Uncached } from "../types/shared";
-import type { CreateStageInstanceOptions, EditStageInstanceOptions, RawStageInstance } from "../types/guilds";
-import StageInstance from "../structures/StageInstance";
 
 /** Various methods for interacting with channels. */
 export default class Channels {
     #manager: RESTManager;
     constructor(manager: RESTManager) {
         this.#manager = manager;
-    }
-
-    /**
-     * Add a user to a group channel.
-     * @param groupID The ID of the group to add the user to.
-     * @param options The options for adding the recipient.
-     */
-    async addGroupRecipient(groupID: string, options: AddGroupRecipientOptions): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "PUT",
-            path:   Routes.GROUP_RECIPIENT(groupID, options.userID),
-            json:   {
-                access_token: options.accessToken,
-                nick:         options.nick
-            }
-        });
     }
 
     /**
@@ -108,21 +77,6 @@ export default class Channels {
             json:   { recipient_id: recipient }
         }
         ).then(data => this.#manager.client.privateChannels.update(data));
-    }
-
-    /**
-     * Create a group dm.
-     * @param options The options for creating the group dm.
-     */
-    async createGroupDM(options: CreateGroupChannelOptions): Promise<GroupChannel> {
-        return this.#manager.authRequest<RawGroupChannel>({
-            method: "POST",
-            path:   Routes.OAUTH_CHANNELS,
-            json:   {
-                access_tokens: options.accessTokens,
-                nicks:         options.nicks
-            }
-        }).then(data => this.#manager.client.groupChannels.update(data));
     }
 
     /**
@@ -201,41 +155,6 @@ export default class Channels {
     }
 
     /**
-     * Create a stage instance.
-     * @param channelID The ID of the channel to create the stage instance on.
-     * @param options The options for creating the stage instance.
-     */
-    async createStageInstance(channelID: string, options: CreateStageInstanceOptions): Promise<StageInstance> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawStageInstance>({
-            method: "POST",
-            path:   Routes.STAGE_INSTANCES,
-            json:   {
-                channel_id:              channelID,
-                topic:                   options.topic,
-                privacy_level:           options.privacyLevel,
-                send_start_notification: options.sendStartNotification
-            },
-            reason
-        }).then(data => new StageInstance(data, this.#manager.client));
-    }
-
-    /**
-     * Crosspost a message in an announcement channel.
-     * @param channelID The ID of the channel to crosspost the message in.
-     * @param messageID The ID of the message to crosspost.
-     */
-    async crosspostMessage<T extends AnnouncementChannel | Uncached = AnnouncementChannel | Uncached>(channelID: string, messageID: string): Promise<Message<T>> {
-        return this.#manager.authRequest<RawMessage>({
-            method: "POST",
-            path:   Routes.CHANNEL_MESSAGES_CROSSPOST(channelID, messageID)
-        }).then(data => new Message<T>(data, this.#manager.client));
-    }
-
-    /**
      * Delete or close a channel.
      * @param channelID The ID of the channel to delete or close.
      * @param reason The reason to be displayed in the audit log.
@@ -273,48 +192,6 @@ export default class Channels {
             path:   Routes.CHANNEL_MESSAGE(channelID, messageID),
             reason
         });
-    }
-
-    /**
-     * Bulk delete messages.
-     * @param channelID The ID of the channel to delete the messages in.
-     * @param messageIDs The IDs of the messages to delete. Any duplicates or messages older than two weeks will cause an error.
-     * @param reason The reason for deleting the messages.
-     */
-    async deleteMessages(channelID: string, messageIDs: Array<string>, reason?: string): Promise<number> {
-        const chunks: Array<Array<string>> = [];
-        messageIDs = [...messageIDs];
-        const amountOfMessages = messageIDs.length;
-        while (messageIDs.length !== 0) {
-            chunks.push(messageIDs.splice(0, 100));
-        }
-
-        let done = 0;
-        const deleteMessagesPromises: Array<Promise<unknown>> = [];
-        for (const chunk of chunks.values()) {
-            if (chunks.length > 1) {
-                const left = amountOfMessages - done;
-                this.#manager.client.emit("debug", `Deleting ${left} messages in ${channelID}`);
-            }
-
-            if (chunk.length === 1) {
-                this.#manager.client.emit("debug", "deleteMessages created a chunk with only 1 element, using deleteMessage instead.");
-                deleteMessagesPromises.push(this.deleteMessage(channelID, chunk[0], reason));
-                continue;
-            }
-
-            deleteMessagesPromises.push(this.#manager.authRequest<null>({
-                method: "POST",
-                path:   Routes.CHANNEL_BULK_DELETE_MESSAGES(channelID),
-                json:   { messages: chunk },
-                reason
-            }));
-            done += chunk.length;
-        }
-
-        await Promise.all(deleteMessagesPromises);
-
-        return amountOfMessages;
     }
 
     /**
@@ -361,19 +238,6 @@ export default class Channels {
         await this.#manager.authRequest<null>({
             method: "DELETE",
             path:   !emoji ? Routes.CHANNEL_REACTIONS(channelID, messageID) : Routes.CHANNEL_REACTION(channelID, messageID, emoji)
-        });
-    }
-
-    /**
-     * Delete a stage instance.
-     * @param channelID The ID of the channel to delete the stage instance on.
-     * @param reason The reason for deleting the stage instance.
-     */
-    async deleteStageInstance(channelID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.STAGE_INSTANCE(channelID),
-            reason
         });
     }
 
@@ -486,44 +350,6 @@ export default class Channels {
     }
 
     /**
-     * Edit a stage instance.
-     * @param channelID The ID of the channel to edit the stage instance on.
-     * @param options The options for editing the stage instance.
-     */
-    async editStageInstance(channelID: string, options: EditStageInstanceOptions): Promise<StageInstance> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawStageInstance>({
-            method: "PATCH",
-            path:   Routes.STAGE_INSTANCE(channelID),
-            json:   {
-                channel_id:    channelID,
-                topic:         options.topic,
-                privacy_level: options.privacyLevel
-            },
-            reason
-        }).then(data => new StageInstance(data, this.#manager.client));
-    }
-
-    /**
-     * Follow an announcement channel.
-     * @param channelID The ID of the channel to follow the announcement channel to.
-     * @param webhookChannelID The ID of the channel to follow the announcement channel to.
-     */
-    async followAnnouncement(channelID: string, webhookChannelID: string): Promise<FollowedChannel> {
-        return this.#manager.authRequest<RawFollowedChannel>({
-            method: "POST",
-            path:   Routes.CHANNEL_FOLLOWERS(channelID),
-            json:   { webhook_channel_id: webhookChannelID }
-        }).then(data => ({
-            channelID: data.channel_id,
-            webhookID: data.webhook_id
-        }));
-    }
-
-    /**
      * Get a channel.
      * @param channelID The ID of the channel to get.
      */
@@ -545,9 +371,6 @@ export default class Channels {
     async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithExpirationOptions): Promise<Invite<"withMetadata" | "withExpiration", T>>;
     async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options?: GetInviteOptions): Promise<Invite<never, T>> {
         const query = new URLSearchParams();
-        if (options?.guildScheduledEventID !== undefined) {
-            query.set("guild_scheduled_event_id", options.guildScheduledEventID);
-        }
         if (options?.withCounts !== undefined) {
             query.set("with_counts", options.withCounts.toString());
         }
@@ -682,17 +505,6 @@ export default class Channels {
     }
 
     /**
-     * Get the pinned messages in a channel.
-     * @param channelID The ID of the channel to get the pinned messages from.
-     */
-    async getPinnedMessages<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string): Promise<Array<Message<T>>> {
-        return this.#manager.authRequest<Array<RawMessage>>({
-            method: "GET",
-            path:   Routes.CHANNEL_PINS(channelID)
-        }).then(data => data.map(d => new Message<T>(d, this.#manager.client)));
-    }
-
-    /**
      * Get the private archived threads in a channel.
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
@@ -723,7 +535,7 @@ export default class Channels {
      * @param options The options for getting the archived threads.
      */
     async getPublicArchivedThreads<T extends AnnouncementThreadChannel | PublicThreadChannel = AnnouncementThreadChannel | PublicThreadChannel>(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T>> {
-        return this.#manager.authRequest<RawArchivedThreads<RawAnnouncementThreadChannel | RawPublicThreadChannel>>({
+        return this.#manager.authRequest<RawArchivedThreads<RawPublicThreadChannel>>({
             method: "GET",
             path:   Routes.CHANNEL_PUBLIC_ARCHIVED_THREADS(channelID),
             json:   {
@@ -740,72 +552,6 @@ export default class Channels {
             }) as ThreadMember),
             threads: data.threads.map(d => this.#manager.client.util.updateThread(d))
         }));
-    }
-
-    /**
-     * Get the users who reacted with a specific emoji on a message.
-     * @param channelID The ID of the channel the message is in.
-     * @param messageID The ID of the message to get reactions from.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    async getReactions(channelID: string, messageID: string, emoji: string, options?: GetReactionsOptions): Promise<Array<User>> {
-        if (emoji === decodeURIComponent(emoji)) {
-            emoji = encodeURIComponent(emoji);
-        }
-
-        const _getReactions = async (_options?: GetReactionsOptions): Promise<Array<User>> => {
-            const query = new URLSearchParams();
-            if (_options?.after !== undefined) {
-                query.set("after", _options.after);
-            }
-            if (_options?.limit !== undefined) {
-                query.set("limit", _options.limit.toString());
-            }
-            return this.#manager.authRequest<Array<RawUser>>({
-                method: "GET",
-                path:   Routes.CHANNEL_REACTION(channelID, messageID, emoji),
-                query
-            }).then(data => data.map(d => this.#manager.client.users.update(d)));
-        };
-
-        const limit = options?.limit ?? 100;
-        let after = options?.after;
-
-        let reactions: Array<User> = [];
-        while (reactions.length < limit) {
-            const limitLeft = limit - reactions.length;
-            const limitToFetch = limitLeft <= 100 ? limitLeft : 100;
-            this.#manager.client.emit("debug", `Getting ${limitLeft} more ${emoji} reactions for message ${messageID} on ${channelID}: ${after ?? ""}`);
-            const reactionsChunk = await _getReactions({
-                after,
-                limit: limitToFetch
-            });
-
-            if (reactionsChunk.length === 0) {
-                break;
-            }
-
-            reactions = reactions.concat(reactionsChunk);
-            after = reactionsChunk.at(-1)!.id;
-
-            if (reactionsChunk.length < 100) {
-                break;
-            }
-        }
-
-        return reactions;
-    }
-
-    /**
-     * Get the stage instance associated with a channel.
-     * @param channelID The ID of the channel to get the stage instance on.
-     */
-    async getStageInstance(channelID: string): Promise<StageInstance> {
-        return this.#manager.authRequest<RawStageInstance>({
-            method: "GET",
-            path:   Routes.STAGE_INSTANCE(channelID)
-        }).then(data => new StageInstance(data, this.#manager.client));
     }
 
     /**
@@ -841,14 +587,6 @@ export default class Channels {
         })));
     }
 
-    /** @deprecated Get the list of usable voice regions. Moved to `misc`. */
-    async getVoiceRegions(): Promise<Array<VoiceRegion>> {
-        return this.#manager.authRequest<Array<VoiceRegion>>({
-            method: "GET",
-            path:   Routes.VOICE_REGIONS
-        });
-    }
-
     /**
      * Join a thread.
      * @param channelID The ID of the thread to join.
@@ -872,123 +610,6 @@ export default class Channels {
     }
 
     /**
-     * Pin a message in a channel.
-     * @param channelID The ID of the channel to pin the message in.
-     * @param messageID The ID of the message to pin.
-     * @param reason The reason for pinning the message.
-     */
-    async pinMessage(channelID: string, messageID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "PUT",
-            path:   Routes.CHANNEL_PINNED_MESSAGE(channelID, messageID),
-            reason
-        });
-    }
-
-    /**
-     * Purge an amount of messages from a channel.
-     * @param channelID The ID of the channel to purge.
-     * @param options The options to purge. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    async purgeMessages<T extends AnyGuildTextChannel | Uncached = AnyGuildTextChannel | Uncached>(channelID: string, options: PurgeOptions<T>): Promise<number> {
-        const filter = options.filter?.bind(this) ?? ((): true => true);
-
-        const messageIDsToPurge: Array<string> = [];
-        let chosenOption: "after" | "around" | "before";
-        if (options.after) {
-            chosenOption = "after";
-        } else if (options.around) {
-            chosenOption = "around";
-        } else if (options.before) {
-            chosenOption = "before";
-        } else {
-            chosenOption = "before";
-        }
-        let optionValue = options[chosenOption] ?? undefined;
-
-        let finishedFetchingMessages = false;
-        let limitWasReach = false;
-        const addMessageIDsToPurgeBatch = async (): Promise<void> => {
-            const messages = await this.getMessages(channelID, {
-                limit:          100,
-                [chosenOption]: optionValue
-            });
-
-            if (messages.length === 0) {
-                finishedFetchingMessages = true;
-                return;
-            }
-
-            if (chosenOption === "around") {
-                finishedFetchingMessages = true;
-            } else {
-                optionValue = messages.at(-1)!.id;
-            }
-
-            const filterPromises: Array<Promise<unknown>> = [];
-            const resolvers: Array<(() => void) | null> = [];
-            for (const [index, message] of messages.entries()) {
-                if (message.timestamp.getTime() < Date.now() - 1209600000) {
-                    finishedFetchingMessages = true;
-                    break;
-                }
-
-                filterPromises.push(new Promise<void>(resolve => {
-                    resolvers.push(resolve);
-
-                    void (async (): Promise<void> => {
-                        let removedResolver: (() => void) | null = null;
-
-                        if (await filter(message as Message<T>) && !limitWasReach) {
-                            messageIDsToPurge.push(message.id);
-                            if (messageIDsToPurge.length === options.limit) {
-                                limitWasReach = true;
-                            }
-                        }
-
-                        removedResolver = resolvers[index];
-                        resolvers[index] = null;
-
-                        if (removedResolver) {
-                            removedResolver();
-                        }
-
-                        if (limitWasReach) {
-                            for (const [resolverIndex, resolver] of resolvers.entries()) {
-                                if (resolver) {
-                                    resolver();
-                                    resolvers[resolverIndex] = null;
-                                }
-                            }
-                        }
-                    })();
-                }));
-            }
-
-            await Promise.all(filterPromises);
-
-            if (!finishedFetchingMessages && !limitWasReach) {
-                await addMessageIDsToPurgeBatch();
-            }
-        };
-        await addMessageIDsToPurgeBatch();
-
-        return this.deleteMessages(channelID, messageIDsToPurge, options.reason);
-    }
-
-    /**
-     * Remove a user from the group channel.
-     * @param groupID The ID of the group to remove the user from.
-     * @param userID The ID of the user to remove.
-     */
-    async removeGroupRecipient(groupID: string, userID: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.GROUP_RECIPIENT(groupID, userID)
-        });
-    }
-
-    /**
      * Remove a member from a thread.
      * @param channelID The ID of the thread to remove them from.
      * @param userID The ID of the user to remove from the thread.
@@ -997,17 +618,6 @@ export default class Channels {
         await this.#manager.authRequest<null>({
             method: "DELETE",
             path:   Routes.CHANNEL_THREAD_MEMBER(channelID, userID)
-        });
-    }
-
-    /**
-     * Show a typing indicator in a channel. How long users see this varies from client to client.
-     * @param channelID The ID of the channel to show the typing indicator in.
-     */
-    async sendTyping(channelID: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "POST",
-            path:   Routes.CHANNEL_TYPING(channelID)
         });
     }
 
@@ -1092,19 +702,5 @@ export default class Channels {
             },
             reason
         }).then(data => this.#manager.client.util.updateThread<T>(data));
-    }
-
-    /**
-     * Unpin a message in a channel.
-     * @param channelID The ID of the channel to unpin the message in.
-     * @param messageID The ID of the message to unpin.
-     * @param reason The reason for unpinning the message.
-     */
-    async unpinMessage(channelID: string, messageID: string, reason?: string): Promise<void> {
-        await this.#manager.authRequest<null>({
-            method: "DELETE",
-            path:   Routes.CHANNEL_PINNED_MESSAGE(channelID, messageID),
-            reason
-        });
     }
 }

@@ -1,43 +1,22 @@
 /** @module Client */
-import { GATEWAY_VERSION } from "./Constants";
-import RESTManager from "./rest/RESTManager";
-import TypedCollection from "./util/TypedCollection";
-import PrivateChannel from "./structures/PrivateChannel";
-import GroupChannel from "./structures/GroupChannel";
-import User from "./structures/User";
-import Guild from "./structures/Guild";
-import type { AnyChannel, RawGroupChannel, RawPrivateChannel } from "./types/channels";
-import type { RawGuild, RawUnavailableGuild } from "./types/guilds";
-import type { RawUser } from "./types/users";
-import type {  ClientInstanceOptions, ClientOptions } from "./types/client";
-import TypedEmitter from "./util/TypedEmitter";
-import type ClientApplication from "./structures/ClientApplication";
-import ShardManager from "./gateway/ShardManager";
-import type { BotActivity, GetBotGatewayResponse, SendStatuses } from "./types/gateway";
-import UnavailableGuild from "./structures/UnavailableGuild";
-import type ExtendedUser from "./structures/ExtendedUser";
-import Util from "./util/Util";
-import type { ClientEvents } from "./types/events";
-import type { JoinVoiceChannelOptions } from "./types/voice";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import type { DiscordGatewayAdapterLibraryMethods,VoiceConnection } from "@discordjs/voice";
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-let DiscordJSVoice: typeof import("@discordjs/voice") | undefined;
-try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, unicorn/prefer-module
-    DiscordJSVoice = require("@discordjs/voice");
-} catch {}
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-let Erlpack: typeof import("erlpack") | undefined;
-try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, unicorn/prefer-module
-    Erlpack = require("erlpack");
-} catch {}
+import { GATEWAY_VERSION } from "./Constants.js";
+import RESTManager from "./rest/RESTManager.js";
+import TypedCollection from "./util/TypedCollection.js";
+import PrivateChannel from "./structures/PrivateChannel.js";
+import User from "./structures/User.js";
+import Guild from "./structures/Guild.js";
+import type { AnyChannel, RawPrivateChannel } from "./types/channels.js";
+import type { RawGuild, RawUnavailableGuild } from "./types/guilds.js";
+import type { RawUser } from "./types/users.js";
+import type {  ClientInstanceOptions, ClientOptions } from "./types/client.js";
+import TypedEmitter from "./util/TypedEmitter.js";
+import type ClientApplication from "./structures/ClientApplication.js";
+import ShardManager from "./gateway/ShardManager.js";
+import type { BotActivity, GetBotGatewayResponse, SendStatuses } from "./types/gateway.js";
+import UnavailableGuild from "./structures/UnavailableGuild.js";
+import type ExtendedUser from "./structures/ExtendedUser.js";
+import Util from "./util/Util.js";
+import type { ClientEvents } from "./types/events.js";
 
 /** The primary class for interfacing with Discord. See {@link Events~ClientEvents | Client Events} for a list of events. */
 export default class Client extends TypedEmitter<ClientEvents> {
@@ -45,7 +24,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
     private _user?: ExtendedUser;
     channelGuildMap: Record<string, string>;
     gatewayURL!: string;
-    groupChannels: TypedCollection<string, RawGroupChannel, GroupChannel>;
     guildShardMap: Record<string, number>;
     guilds: TypedCollection<string, RawGuild, Guild>;
     options: ClientInstanceOptions;
@@ -58,7 +36,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
     unavailableGuilds: TypedCollection<string, RawUnavailableGuild, UnavailableGuild>;
     users: TypedCollection<string, RawUser, User>;
     util: Util;
-    voiceAdapters: Map<string, DiscordGatewayAdapterLibraryMethods>;
     /**
      * @constructor
      * @param options The options to create the client with.
@@ -85,9 +62,7 @@ export default class Client extends TypedEmitter<ClientEvents> {
             defaultImageSize:          options?.defaultImageSize ?? 4096,
             disableMemberLimitScaling: options?.disableMemberLimitScaling ?? false
         };
-        this.voiceAdapters = new Map();
         this.channelGuildMap = {};
-        this.groupChannels = new TypedCollection(GroupChannel, this, 10);
         this.guilds = new TypedCollection(Guild, this);
         this.privateChannels = new TypedCollection(PrivateChannel, this, 25);
         this.ready = false;
@@ -122,15 +97,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
         }
     }
 
-    /** The active voice connections of this client. */
-    get voiceConnections(): Map<string, VoiceConnection> {
-        if (!DiscordJSVoice) {
-            throw new Error("Voice is only supported with @discordjs/voice installed.");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-        return DiscordJSVoice.getVoiceConnections();
-    }
-
     /** Connect the client to Discord. */
     async connect(): Promise<void> {
         if (!this.options.auth || !this.options.auth.startsWith("Bot ")) {
@@ -153,7 +119,7 @@ export default class Client extends TypedEmitter<ClientEvents> {
         if (!url.endsWith("/")) {
             url += "/";
         }
-        this.gatewayURL = `${url}?v=${GATEWAY_VERSION}&encoding=${Erlpack ? "etf" : "json"}`;
+        this.gatewayURL = `${url}?v=${GATEWAY_VERSION}&encoding=json`;
         if (this.shards.options.compress) {
             this.gatewayURL += "&compress=zlib-stream";
         }
@@ -221,47 +187,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
         } else if (this.threadGuildMap[channelID]) {
             return this.guilds.get(this.threadGuildMap[channelID])?.threads.get(channelID) as T;
         }
-        return (this.privateChannels.get(channelID) ?? this.groupChannels.get(channelID)) as T;
-    }
-
-    /**
-     * Get a voice connection.
-     * @param guildID The ID of the guild the voice channel belongs to.
-     */
-    getVoiceConnection(guildID: string): VoiceConnection | undefined {
-        if (!DiscordJSVoice) {
-            throw new Error("Voice is only supported with @discordjs/voice installed.");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        return DiscordJSVoice.getVoiceConnection(guildID);
-    }
-
-    /**
-     * Join a voice channel.
-     * @param options The options to join the channel with.
-     * */
-    joinVoiceChannel(options: JoinVoiceChannelOptions): VoiceConnection {
-        if (!DiscordJSVoice) {
-            throw new Error("Voice is only supported with @discordjs/voice installed.");
-        }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-        return DiscordJSVoice.joinVoiceChannel({
-            channelId:      options.channelID,
-            guildId:        options.guildID,
-            debug:          options.debug,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            adapterCreator: options.voiceAdapterCreator,
-            selfDeaf:       options.selfDeaf,
-            selfMute:       options.selfMute
-        });
-    }
-
-    /**
-     * Leave a voice channel.
-     * @param guildID The ID of the guild the voice channel belongs to.
-     */
-    leaveVoiceChannel(guildID: string): void {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-        return this.getVoiceConnection(guildID)?.destroy();
+        return this.privateChannels.get(channelID) as T;
     }
 }

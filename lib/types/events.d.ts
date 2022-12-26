@@ -1,84 +1,38 @@
 /** @module Events */
+import type { AnyGuildChannelWithoutThreads, AnyTextChannelWithoutGroup, PossiblyUncachedInvite, PossiblyUncachedMessage } from "./channels.js";
+import type { RawRequest } from "./request-handler.js";
+import type { AnyDispatchPacket } from "./gateway-raw.js";
+import type { DeletedPrivateChannel } from "./gateway.js";
+import type { Uncached } from "./shared.js";
 import type {
-    AnyGuildChannelWithoutThreads,
-    AnyGuildTextChannel,
-    AnyTextChannelWithoutGroup,
-    AnyThreadChannel,
-    MinimalPossiblyUncachedThread,
-    PossiblyUncachedInvite,
-    PossiblyUncachedMessage,
-    PossiblyUncachedThread,
-    ThreadMember,
-    UncachedThreadMember
-} from "./channels";
-import type { RawRequest } from "./request-handler";
-import type { AutoModerationActionExecution, DeletedPrivateChannel } from "./gateway";
-import type { AnyDispatchPacket } from "./gateway-raw";
-import type { Uncached } from "./shared";
-import type {
-    JSONAnnouncementChannel,
-    JSONAnnouncementThreadChannel,
-    JSONAutoModerationRule,
     JSONCategoryChannel,
     JSONForumChannel,
     JSONGuild,
-    JSONIntegration,
     JSONMember,
     JSONMessage,
-    JSONPrivateThreadChannel,
-    JSONPublicThreadChannel,
     JSONRole,
-    JSONScheduledEvent,
-    JSONStageChannel,
-    JSONStageInstance,
     JSONTextChannel,
-    JSONUser,
-    JSONVoiceChannel,
-    JSONVoiceState
-} from "./json";
-import type { GuildApplicationCommandPermissions } from "./application-commands";
-import type {
-    GuildEmoji,
-    PartialEmoji,
-    PossiblyUncachedIntegration,
-    Sticker,
-    Presence
-} from "./guilds";
-import type { AnyInteractionGateway } from "./interactions";
-import type Guild from "../structures/Guild";
-import type UnavailableGuild from "../structures/UnavailableGuild";
-import type AutoModerationRule from "../structures/AutoModerationRule";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
-import type PublicThreadChannel from "../structures/PublicThreadChannel";
-import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import type TextChannel from "../structures/TextChannel";
-import type VoiceChannel from "../structures/VoiceChannel";
-import type CategoryChannel from "../structures/CategoryChannel";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type StageChannel from "../structures/StageChannel";
-import type User from "../structures/User";
-import type Member from "../structures/Member";
-import type Role from "../structures/Role";
-import type GuildScheduledEvent from "../structures/GuildScheduledEvent";
-import type Integration from "../structures/Integration";
-import type Invite from "../structures/Invite";
-import type Message from "../structures/Message";
-import type PrivateChannel from "../structures/PrivateChannel";
-import type StageInstance from "../structures/StageInstance";
-import ForumChannel from "../structures/ForumChannel";
+    JSONUser
+} from "./json.js";
+import type { GuildApplicationCommandPermissions } from "./application-commands.js";
+import type { GuildEmoji, PartialEmoji, Sticker } from "./guilds.js";
+import type { AnyInteractionGateway } from "./interactions.js";
+import type Guild from "../structures/Guild.js";
+import type UnavailableGuild from "../structures/UnavailableGuild.js";
+import type TextChannel from "../structures/TextChannel.js";
+import type CategoryChannel from "../structures/CategoryChannel.js";
+import type User from "../structures/User.js";
+import type Member from "../structures/Member.js";
+import type Role from "../structures/Role.js";
+import type Invite from "../structures/Invite.js";
+import type Message from "../structures/Message.js";
+import type PrivateChannel from "../structures/PrivateChannel.js";
+import ForumChannel from "../structures/ForumChannel.js";
 
 
 export interface ClientEvents {
     /** @event Emitted when an application command's permissions are updated. */
     applicationCommandPermissionsUpdate: [guild: Guild | Uncached, permissions: GuildApplicationCommandPermissions];
-    /** @event Emitted when an auto moderation action is executed. Requires the `AUTO_MODERATION_EXECUTION` intent. */
-    autoModerationActionExecution: [guild: Guild | Uncached, channel: AnyGuildTextChannel | Uncached | null, user: User | Uncached, executionOptions: AutoModerationActionExecution];
-    /** @event Emitted when an auto moderation rule is created. Requires the `AUTO_MODERATION_CONFIGURATION` intent. */
-    autoModerationRuleCreate: [rule: AutoModerationRule];
-    /** @event Emitted when an auto moderation rule is deleted. Requires the `AUTO_MODERATION_CONFIGURATION` intent. */
-    autoModerationRuleDelete: [rule: AutoModerationRule];
-    /** @event Emitted when an auto moderation rule is updated. Requires the `AUTO_MODERATION_CONFIGURATION` intent. */
-    autoModerationRuleUpdate: [rule: AutoModerationRule, oldRule: JSONAutoModerationRule | null];
     /** @event Emitted when a channel is created. Requires the `GUILDS` intent. */
     channelCreate: [channel: AnyGuildChannelWithoutThreads];
     /** @event Emitted when channel is deleted. Requires the `GUILDS` intent. */
@@ -86,7 +40,7 @@ export interface ClientEvents {
     /** @event Emitted when a channel's pins are updated (message pinned, message unpinned). Requires the `GUILDS` intent for guild channels, and `DIRECT_MESSAGES` for direct messages. */
     channelPinsUpdate: [channel: AnyTextChannelWithoutGroup | Uncached, timestamp: Date | null];
     /** @event Emitted when a channel is updated. Requires the `GUILDS` intent. */
-    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: VoiceChannel, oldChannel: JSONVoiceChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: AnnouncementChannel, oldChannel: JSONAnnouncementChannel | null] | [channel: StageChannel, oldChannel: JSONStageChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
+    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
     /** @event Emitted when a shard connects. */
     connect: [id: number];
     /** @event Emitted with various information for debugging. */
@@ -107,8 +61,6 @@ export interface ClientEvents {
     guildDelete: [guild: Guild | Uncached];
     /** @event Emitted when a guild's emojis are updated. Requires the `GUILD_EMOJIS_AND_STICKERS` intent. */
     guildEmojisUpdate: [guild: Guild | Uncached, emojis: Array<GuildEmoji>, oldEmojis: Array<GuildEmoji> | null];
-    /** @event Emitted when a guild's integrations are updated. Requires the `GUILD_INTEGRATIONS` intent. */
-    guildIntegrationsUpdate: [guild: Guild | Uncached];
     /** @event Emitted when a member joins a guild. Requires the `GUILD_MEMBERS` intent. */
     guildMemberAdd: [member: Member];
     /** @event Emitted when a chunk of guild members is received from Discord. */
@@ -123,16 +75,6 @@ export interface ClientEvents {
     guildRoleDelete: [role: Role | Uncached, guild: Guild | Uncached];
     /** @event Emitted when a role is updated. Requires the `GUILDS` intent. */
     guildRoleUpdate: [role: Role, oldRole: JSONRole | null];
-    /** @event Emitted when a scheduled event is created. Requires the `GUILD_SCHEDULED_EVENTS` intent. */
-    guildScheduledEventCreate: [event: GuildScheduledEvent];
-    /** @event Emitted when a scheduled event is deleted. Requires the `GUILD_SCHEDULED_EVENTS` intent. */
-    guildScheduledEventDelete: [event: GuildScheduledEvent];
-    /** @event Emitted when a scheduled event is updated. Requires the `GUILD_SCHEDULED_EVENTS` intent. */
-    guildScheduledEventUpdate: [event: GuildScheduledEvent, oldEvent: JSONScheduledEvent | null];
-    /** @event Emitted when a user subscribes to a scheduled event. Requires the `GUILD_SCHEDULED_EVENTS` intent. */
-    guildScheduledEventUserAdd: [event: GuildScheduledEvent | Uncached, user: User | Uncached];
-    /** @event Emitted when a user unsubscribes from a scheduled event. Requires the `GUILD_SCHEDULED_EVENTS` intent. */
-    guildScheduledEventUserRemove: [event: GuildScheduledEvent | Uncached, user: User | Uncached];
     /** @event Emitted when a guild's stickers are updated. Requires the `GUILD_EMOJIS_AND_STICKERS` intent. */
     guildStickersUpdate: [guild: Guild | Uncached, stickers: Array<Sticker>, oldStickers: Array<Sticker> | null];
     /** @event Emitted when a guild becomes unavailable. Requires the `GUILDS` intent. */
@@ -141,12 +83,6 @@ export interface ClientEvents {
     guildUpdate: [guild: Guild, oldGuild: JSONGuild | null];
     /** @event Emitted when a shard receives the HELLO packet. */
     hello: [interval: number, shard: number];
-    /** @event Emitted when an integration is created. Requires the `GUILD_INTEGRATIONS` intent. */
-    integrationCreate: [guild: Guild | Uncached, integration: Integration];
-    /** @event Emitted when an integration is deleted. Requires the `GUILD_INTEGRATIONS` intent. */
-    integrationDelete: [guild: Guild | Uncached, integration: Integration | PossiblyUncachedIntegration];
-    /** @event Emitted when an integration is updated. Requires the `GUILD_INTEGRATIONS` intent. */
-    integrationUpdate: [guild: Guild | Uncached, integration: Integration, oldIntegration: JSONIntegration | null];
     /** @event Emitted when an interaction is created. */
     interactionCreate: [interaction: AnyInteractionGateway];
     /** @event Emitted when an invite is created. Requires the `GUILD_INVITES` intent. */
@@ -171,8 +107,6 @@ export interface ClientEvents {
     messageUpdate: [message: Message, oldMessage: JSONMessage | null];
     /** @event Emitted when a raw dispatch packet is received. */
     packet: [data: AnyDispatchPacket, shard: number];
-    /** @event Emitted when a guild member's presence, or user is updated. Requires the `GUILD_PRESENCES` intent. */
-    presenceUpdate: [guild: Guild | Uncached, member: Member | Uncached, presence: Presence, oldPresence: Presence | null];
     /** @event Emitted when all shards are ready. */
     ready: [];
     /** @event Emitted when a request is made. */
@@ -185,38 +119,10 @@ export interface ClientEvents {
     shardReady: [id: number];
     /** @event Emitted when a shard resumes a connection. */
     shardResume: [id: number];
-    /** @event Emitted when a stage instance is created. */
-    stageInstanceCreate: [instance: StageInstance];
-    /** @event Emitted when a stage instance is deleted. */
-    stageInstanceDelete: [instance: StageInstance];
-    /** @event Emitted when a stage instance is updated. */
-    stageInstanceUpdate: [instance: StageInstance, oldInstance: JSONStageInstance | null];
-    /** @event Emitted when a thread is created. Requires the `GUILDS` intent. */
-    threadCreate: [thread: AnyThreadChannel];
-    /** @event Emitted when a thread is deleted. Requires the `GUILDS` intent. */
-    threadDelete: [thread: PossiblyUncachedThread];
-    /** @event Emitted when a guild's threads are synced. Requires the `GUILDS` intent. */
-    threadListSync: [threads: Array<AnyThreadChannel>, members: Array<ThreadMember>];
-    /** @event Emitted when the client's thread member is updated. Requires the `GUILDS` intent. */
-    threadMemberUpdate: [thread: MinimalPossiblyUncachedThread, member: ThreadMember, oldMember: ThreadMember | null];
-    /** @event Emitted when the members of a thread are updated. Requires the `GUILDS` intent. The received information will be different if `GUILD_MEMBERS` is also used. */
-    threadMembersUpdate: [thread: MinimalPossiblyUncachedThread, addedMembers: Array<ThreadMember>, removedMembers: Array<ThreadMember | UncachedThreadMember>];
-    /** @event Emitted when a thread is updated. Requires the `GUILDS` intent. */
-    threadUpdate: [thread: AnnouncementThreadChannel, oldThread: JSONAnnouncementThreadChannel | null] | [thread: PublicThreadChannel, oldThread: JSONPublicThreadChannel | null] | [thread: PrivateThreadChannel, oldThread: JSONPrivateThreadChannel | null];
-    /** @event Emitted when a user starts typing. Requires the `GUILD_MESSAGE_TYPING` for guilds, and `DIRECT_MESSAGE_TYPING` for direct messages. */
-    typingStart: [channel: PrivateChannel | Uncached, user: User | Uncached, startTimestamp: Date] | [channel: AnyGuildTextChannel | Uncached, member: Member, startTimestamp: Date];
     /** @event Emitted when a guild is created, but is unavailable. Requires the `GUILDS` intent.*/
     unavailableGuildCreate: [guild: UnavailableGuild];
     /** @event Emitted when a user is updated. */
     userUpdate: [user: User, oldUser: JSONUser | null];
-    /** @event Emitted when a user joins a voice channel. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceChannelJoin: [member: Member, channel: VoiceChannel | StageChannel | Uncached];
-    /** @event Emitted when a user leaves a voice channel. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceChannelLeave: [member: Member, channel: VoiceChannel | StageChannel | Uncached];
-    /** @event Emitted when a user switches voice channels. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceChannelSwitch: [member: Member, channel: VoiceChannel | StageChannel | Uncached, oldChannel: VoiceChannel | StageChannel | Uncached | null];
-    /** @event Emitted when a user's voice state is updated. Requires the `GUILD_VOICE_STATES` intent. */
-    voiceStateUpdate: [member: Member, oldState: JSONVoiceState | null];
     /** @event Emitted with various warning information. */
     warn: [info: string, shard?: number];
     /** @event Emitted when a guild's webhooks are updated. Requires the `GUILD_WEBHOOKS` intent. */

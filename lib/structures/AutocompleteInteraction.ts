@@ -1,19 +1,19 @@
 /** @module AutocompleteInteraction */
-import Interaction from "./Interaction";
-import type Member from "./Member";
-import type User from "./User";
-import type Guild from "./Guild";
-import Permission from "./Permission";
-import GuildChannel from "./GuildChannel";
-import type PrivateChannel from "./PrivateChannel";
-import type { InteractionTypes } from "../Constants";
-import { InteractionResponseTypes } from "../Constants";
-import type { AutocompleteChoice, AutocompleteInteractionData, RawAutocompleteInteraction } from "../types/interactions";
-import type Client from "../Client";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
-import type { JSONAutocompleteInteraction } from "../types/json";
-import InteractionOptionsWrapper from "../util/InteractionOptionsWrapper";
-import type { Uncached } from "../types/shared";
+import Interaction from "./Interaction.js";
+import type Member from "./Member.js";
+import type User from "./User.js";
+import type Guild from "./Guild.js";
+import Permission from "./Permission.js";
+import GuildChannel from "./GuildChannel.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import type { InteractionTypes } from "../Constants.js";
+import { InteractionResponseTypes } from "../Constants.js";
+import type { AutocompleteChoice, AutocompleteInteractionData, RawAutocompleteInteraction } from "../types/interactions.js";
+import type Client from "../Client.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
+import type { JSONAutocompleteInteraction } from "../types/json.js";
+import InteractionOptionsWrapper from "../util/InteractionOptionsWrapper.js";
+import type { Uncached } from "../types/shared.js";
 
 /** Represents an autocomplete interaction. */
 export default class AutocompleteInteraction<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {

@@ -1,17 +1,16 @@
 /** @module Types/Interactions */
-import type { ExecuteWebhookOptions } from "./webhooks";
+import type { ExecuteWebhookOptions } from "./webhooks.js";
 import type {
     AnyGuildTextChannel,
     ModalActionRow,
     RawAttachment,
     RawInteractionResolvedChannel,
-    RawMessage,
-    RawModalActionRow
-} from "./channels";
-import type { InteractionMember, RawMember, RawRole } from "./guilds";
-import type { RawUser } from "./users";
-import type { Uncached } from "./shared";
-import type { LocaleMap } from "./application-commands";
+    RawMessage
+} from "./channels.js";
+import type { InteractionMember, RawMember, RawRole } from "./guilds.js";
+import type { RawUser } from "./users.js";
+import type { Uncached } from "./shared.js";
+import type { LocaleMap } from "./application-commands.js";
 import type {
     ApplicationCommandOptionTypes,
     ApplicationCommandTypes,
@@ -20,22 +19,21 @@ import type {
     InteractionTypes,
     MessageComponentTypes,
     SelectMenuTypes
-} from "../Constants";
-import type Attachment from "../structures/Attachment";
-import type Member from "../structures/Member";
-import type Message from "../structures/Message";
-import type Role from "../structures/Role";
-import type User from "../structures/User";
-import type PingInteraction from "../structures/PingInteraction";
-import type CommandInteraction from "../structures/CommandInteraction";
-import type ComponentInteraction from "../structures/ComponentInteraction";
-import type AutocompleteInteraction from "../structures/AutocompleteInteraction";
-import type ModalSubmitInteraction from "../structures/ModalSubmitInteraction";
-import type InteractionOptionsWrapper from "../util/InteractionOptionsWrapper";
-import type PrivateChannel from "../structures/PrivateChannel";
-import TypedCollection from "../util/TypedCollection";
-import type InteractionResolvedChannel from "../structures/InteractionResolvedChannel";
-import SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper";
+} from "../Constants.js";
+import type Attachment from "../structures/Attachment.js";
+import type Member from "../structures/Member.js";
+import type Message from "../structures/Message.js";
+import type Role from "../structures/Role.js";
+import type User from "../structures/User.js";
+import type PingInteraction from "../structures/PingInteraction.js";
+import type CommandInteraction from "../structures/CommandInteraction.js";
+import type ComponentInteraction from "../structures/ComponentInteraction.js";
+import type AutocompleteInteraction from "../structures/AutocompleteInteraction.js";
+import type InteractionOptionsWrapper from "../util/InteractionOptionsWrapper.js";
+import type PrivateChannel from "../structures/PrivateChannel.js";
+import TypedCollection from "../util/TypedCollection.js";
+import type InteractionResolvedChannel from "../structures/InteractionResolvedChannel.js";
+import SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper.js";
 
 export type InteractionContent = Pick<ExecuteWebhookOptions, "tts" | "content" | "embeds" | "allowedMentions" | "flags" | "components" | "attachments" | "files">;
 
@@ -100,7 +98,6 @@ export type RawPingInteraction = Pick<RawInteraction, "application_id" | "id" | 
 export type RawApplicationCommandInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawApplicationCommandInteractionData; };
 export type RawMessageComponentInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawMessageComponentInteractionData; message: RawMessage; };
 export type RawAutocompleteInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawAutocompleteInteractionData; };
-export type RawModalSubmitInteraction = Omit<RawInteraction, "data" | "message"> & { data: RawModalSubmitInteractionData; };
 
 export type RawInteractionData = RawApplicationCommandInteractionData | RawMessageComponentInteractionData | RawAutocompleteInteractionData | RawModalSubmitInteractionData;
 export type InteractionData = ApplicationCommandInteractionData | MessageComponentInteractionData | AutocompleteInteractionData | ModalSubmitInteractionData;
@@ -158,16 +155,6 @@ export interface MessageComponentSelectMenuInteractionData {
     customID: string;
     resolved: MessageComponentInteractionResolvedData;
     values: SelectMenuValuesWrapper;
-}
-
-export interface RawModalSubmitInteractionData {
-    components: Array<RawModalActionRow>;
-    custom_id: string;
-}
-
-export interface ModalSubmitInteractionData {
-    components: Array<ModalActionRow>;
-    customID: string;
 }
 
 export interface RawApplicationCommandInteractionResolvedData {
@@ -265,9 +252,5 @@ export type PrivateComponentButtonInteraction = Omit<ComponentInteraction<Compon
 export type PrivateComponentSelectMenuInteraction = Omit<ComponentInteraction<SelectMenuTypes, PrivateChannel | Uncached>, "appPermissions" | "guild" | "guildID" | "guildLocale" | "member" | "memberPermissions" | "data"> & { data: MessageComponentSelectMenuInteractionData; };
 export type PrivateComponentInteraction = PrivateComponentButtonInteraction | PrivateComponentSelectMenuInteraction;
 export type AnyComponentInteraction = GuildComponentInteraction | PrivateComponentInteraction;
-
-export type GuildModalSubmitInteraction = ModalSubmitInteraction<AnyGuildTextChannel>;
-export type PrivateModalSubmitInteraction = Omit<ModalSubmitInteraction<PrivateChannel | Uncached>, "appPermissions" | "guild" | "guildID" | "guildLocale" | "member" | "memberPermissions">;
-export type AnyModalSubmitInteraction = GuildModalSubmitInteraction | PrivateModalSubmitInteraction;
 
 export type SubCommandArray = [subcommand: string] | [subcommandGroup: string, subcommand: string];

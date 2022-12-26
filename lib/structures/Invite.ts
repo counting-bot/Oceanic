@@ -1,22 +1,20 @@
 /** @module Invite */
-import Channel from "./Channel";
-import Guild from "./Guild";
-import type GuildScheduledEvent from "./GuildScheduledEvent";
-import type User from "./User";
-import PartialApplication from "./PartialApplication";
+import Channel from "./Channel.js";
+import Guild from "./Guild.js";
+import type User from "./User.js";
+import PartialApplication from "./PartialApplication.js";
 import type {
     InviteChannel,
     InviteInfoTypes,
-    InviteStageInstance,
     PartialInviteChannel,
     RawInvite,
     RawInviteWithMetadata
-} from "../types/channels";
-import type Client from "../Client";
-import type { InviteTargetTypes } from "../Constants";
-import type { RawGuild } from "../types/guilds";
-import type { JSONInvite } from "../types/json";
-import type { Uncached } from "../types/shared";
+} from "../types/channels.js";
+import type Client from "../Client.js";
+import type { InviteTargetTypes } from "../Constants.js";
+import type { RawGuild } from "../types/guilds.js";
+import type { JSONInvite } from "../types/json.js";
+import type { Uncached } from "../types/shared.js";
 
 /** Represents an invite. */
 export default class Invite<T extends InviteInfoTypes = "withMetadata", CH extends InviteChannel | Uncached = InviteChannel | Uncached> {
@@ -38,16 +36,12 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
     guild: Guild | null;
     /** The ID of the guild this invite leads to or `null` if this invite leads to a Group DM. */
     guildID: string | null;
-    /** The scheduled event associated with this invite. */
-    guildScheduledEvent?: GuildScheduledEvent;
     /** The user that created this invite. */
     inviter?: User;
     /** The time after which this invite expires. */
     maxAge!: T extends "withMetadata" ? number : never;
     /** The maximum number of times this invite can be used, */
     maxUses!: T extends "withMetadata" ? number : never;
-    /** @deprecated The stage instance in the invite this channel is for (deprecated). */
-    stageInstance?: InviteStageInstance;
     /** The embedded application this invite will open. */
     targetApplication?: PartialApplication;
     /** The [target type](https://discord.com/developers/docs/resources/invite#invite-object-invite-target-types) of this invite. */
@@ -106,19 +100,8 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
         if (data.inviter !== undefined) {
             this.inviter = this.client.users.update(data.inviter);
         }
-        if (data.stage_instance !== undefined) {
-            this.stageInstance = {
-                members:          data.stage_instance.members.map(member => this.client.util.updateMember(guild!.id, member.user!.id, member)),
-                participantCount: data.stage_instance.participant_count,
-                speakerCount:     data.stage_instance.speaker_count,
-                topic:            data.stage_instance.topic
-            };
-        }
         if (data.target_application !== undefined) {
             this.targetApplication = new PartialApplication(data.target_application, this.client);
-        }
-        if (data.guild_scheduled_event !== undefined) {
-            this.guildScheduledEvent = guild!.scheduledEvents.update(data.guild_scheduled_event);
         }
         if (data.target_user !== undefined) {
             this.targetUser = this.client.users.update(data.target_user);
@@ -157,14 +140,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
         return this._cachedChannel === null ? this._cachedChannel : (this._cachedChannel = null);
     }
 
-    /**
-     * Delete this invite.
-     * @param reason The reason for deleting this invite.
-     */
-    async deleteInvite(reason?: string): Promise<Invite<"withMetadata", CH>> {
-        return this.client.rest.channels.deleteInvite<CH>(this.code, reason);
-    }
-
     /** Whether this invite belongs to a cached channel. The only difference on using this method over a simple if statement is to easily update all the invite properties typing definitions based on the channel it belongs to. */
     inCachedChannel(): this is Invite<T, InviteChannel> {
         return this.channel instanceof Channel;
@@ -179,21 +154,14 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
             createdAt:                this.createdAt?.getTime(),
             expiresAt:                this.expiresAt?.getTime(),
             guildID:                  this.guildID ?? undefined,
-            guildScheduledEvent:      this.guildScheduledEvent?.toJSON(),
             inviter:                  this.inviter?.id,
             maxAge:                   this.maxAge,
             maxUses:                  this.maxUses,
-            stageInstance:            !this.stageInstance ? undefined : {
-                members:          this.stageInstance.members.map(member => member.id),
-                participantCount: this.stageInstance.participantCount,
-                speakerCount:     this.stageInstance.speakerCount,
-                topic:            this.stageInstance.topic
-            },
-            targetApplication: this.targetApplication?.toJSON(),
-            targetType:        this.targetType,
-            targetUser:        this.targetUser?.id,
-            temporary:         this.temporary,
-            uses:              this.uses
+            targetApplication:        this.targetApplication?.toJSON(),
+            targetType:               this.targetType,
+            targetUser:               this.targetUser?.id,
+            temporary:                this.temporary,
+            uses:                     this.uses
         };
     }
 }

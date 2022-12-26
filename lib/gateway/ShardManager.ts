@@ -1,9 +1,9 @@
 /** @module ShardManager */
-import Shard from "./Shard";
-import type Client from "../Client";
-import { AllIntents, AllNonPrivilegedIntents, Intents } from "../Constants";
-import type { GatewayOptions, ShardManagerInstanceOptions } from "../types/gateway";
-import Collection from "../util/Collection";
+import Shard from "./Shard.js";
+import type Client from "../Client.js";
+import { AllIntents, AllNonPrivilegedIntents, Intents } from "../Constants.js";
+import type { GatewayOptions, ShardManagerInstanceOptions } from "../types/gateway.js";
+import Collection from "../util/Collection.js";
 
 /** A manager for all the client's shards. */
 export default class ShardManager extends Collection<number, Shard> {
@@ -42,10 +42,9 @@ export default class ShardManager extends Collection<number, Shard> {
                 afk:		      options.presence?.afk ?? false,
                 status:		   options.presence?.status ?? "online"
             },
-            reconnectDelay:       options.reconnectDelay ?? ((lastDelay, attempts): number => Math.pow(attempts + 1, 0.7) * 20000),
-            seedVoiceConnections: options.seedVoiceConnections ?? false,
-            shardIDs:             options.shardIDs ?? [],
-            ws:                   options.ws ?? {}
+            reconnectDelay: options.reconnectDelay ?? ((lastDelay, attempts): number => Math.pow(attempts + 1, 0.7) * 20000),
+            shardIDs:       options.shardIDs ?? [],
+            ws:             options.ws ?? {}
         };
 
         if (this.options.lastShardID === -1 && this.options.maxShards !== -1) {

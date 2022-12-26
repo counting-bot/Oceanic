@@ -1,5 +1,5 @@
 /** @module Types/Guilds */
-import type { RawUser } from "./users";
+import type { RawUser } from "./users.js";
 import type {
     AnyThreadChannel,
     OverwriteOptions,
@@ -9,11 +9,9 @@ import type {
     ThreadMember,
     ForumEmoji,
     ForumTag
-} from "./channels";
-import type { RawScheduledEvent } from "./scheduled-events";
-import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway";
-import type { RawVoiceState } from "./voice";
-import { File } from "./request-handler";
+} from "./channels.js";
+import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway.js";
+import { File } from "./request-handler.js";
 import type {
     ChannelTypes,
     DefaultMessageNotificationLevels,
@@ -21,11 +19,8 @@ import type {
     GuildChannelTypesWithoutThreads,
     GuildFeature,
     GuildNSFWLevels,
-    IntegrationExpireBehaviors,
-    IntegrationType,
     MFALevels,
     PremiumTiers,
-    StageInstancePrivacyLevels,
     StickerFormatTypes,
     StickerTypes,
     ThreadAutoArchiveDuration,
@@ -34,16 +29,13 @@ import type {
     SortOrderTypes,
     ForumLayoutTypes
 } from "../Constants";
-import type User from "../structures/User";
-import type Integration from "../structures/Integration";
-import type TextChannel from "../structures/TextChannel";
-import type VoiceChannel from "../structures/VoiceChannel";
-import type CategoryChannel from "../structures/CategoryChannel";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type StageChannel from "../structures/StageChannel";
+import type User from "../structures/User.js";
+import type TextChannel from "../structures/TextChannel.js";
+import type CategoryChannel from "../structures/CategoryChannel.js";
+import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
 
-// channels, guild_scheduled_events, joined_at, large, member_count, members, presences,
-// stage_instances, threads, unavailable, voice_states - all gateway only
+// channels, joined_at, large, member_count, members, presences,
+// threads, unavailable - all gateway only
 export interface RawGuild {
     afk_channel_id: string | null;
     afk_timeout: number;
@@ -58,7 +50,6 @@ export interface RawGuild {
     emojis: Array<RawGuildEmoji>;
     explicit_content_filter: ExplicitContentFilterLevels;
     features: Array<GuildFeature>;
-    guild_scheduled_events: Array<RawScheduledEvent>;
     icon: string | null;
     icon_hash?: string | null;
     id: string;
@@ -66,7 +57,6 @@ export interface RawGuild {
     large: boolean;
     max_members?: number;
     max_presences?: number;
-    max_stage_video_channel_users?: number;
     max_video_channel_users?: number;
     member_count: number;
     members: Array<RawMember>;
@@ -87,7 +77,6 @@ export interface RawGuild {
     rules_channel_id: string | null;
     safety_alerts_channel_id: string | null;
     splash: string | null;
-    stage_instances: Array<RawStageInstance>;
     stickers?: Array<RawSticker>;
     system_channel_flags: number;
     system_channel_id: string | null;
@@ -95,7 +84,6 @@ export interface RawGuild {
     unavailable?: false;
     vanity_url_code: string | null;
     verification_level: VerificationLevels;
-    voice_states: Array<RawVoiceState>;
     welcome_screen?: RawWelcomeScreen;
     widget_channel_id?: string | null;
     widget_enabled?: boolean;
@@ -118,7 +106,6 @@ export interface RawRole {
 export interface RawRoleTags {
     available_for_purchase?: null;
     bot_id?: string;
-    integration_id?: string;
     premium_subscriber?: null;
     subscription_listing_id?: string;
 }
@@ -126,7 +113,7 @@ export interface RoleTags {
     availableForPurchase: boolean;
     botID?: string;
     integrationID?: string;
-    premiumSubscriber: boolean;
+    premiumSubscriber?: null;
     subscriptionListingID?: string;
 }
 export interface Emoji {
@@ -201,14 +188,12 @@ export interface Sticker {
 export interface RawMember {
     avatar?: string | null;
     communication_disabled_until?: string | null;
-    deaf: boolean;
     /** undocumented */
     flags?: number;
     /** undocumented */
     is_pending?: boolean;
     // this is nullable over gateway
     joined_at: string | null;
-    mute: boolean;
     nick?: string | null;
     pending?: boolean;
     permissions?: string;
@@ -218,38 +203,6 @@ export interface RawMember {
 }
 export type RESTMember = Required<Omit<RawMember, "permissions" | "joined_at">> & { joined_at: string; };
 export type InteractionMember = Required<RawMember>;
-
-export interface RawIntegration {
-    account: IntegrationAccount;
-    application?: RawIntegrationApplication;
-    enable_emoticons?: boolean;
-    enabled?: boolean;
-    expire_behavior?: IntegrationExpireBehaviors;
-    expire_grace_period?: number;
-    id: string;
-    name: string;
-    revoked?: boolean;
-    role_id?: string;
-    scopes?: Array<string>;
-    subscriber_count?: number;
-    synced_at?: string;
-    syncing?: boolean;
-    type: IntegrationType;
-    user?: RawUser;
-}
-
-export interface IntegrationAccount {
-    id: string;
-    name: string;
-}
-
-export interface RawIntegrationApplication {
-    bot?: RawUser;
-    description: string;
-    icon: string | null;
-    id: string;
-    name: string;
-}
 
 export type PartialEmoji = Pick<Emoji, "id" | "name" | "animated">;
 
@@ -271,20 +224,6 @@ export interface EditEmojiOptions {
     reason?: string;
     /** The roles to restrict the emoji to. */
     roles?: Array<string> | null;
-}
-
-export interface RawGuildPreview {
-    approximate_member_count: number;
-    approximate_presence_count: number;
-    description: string | null;
-    discovery_splash: string | null;
-    emojis: Array<RawGuildEmoji>;
-    features: Array<GuildFeature>;
-    icon: string | null;
-    id: string;
-    name: string;
-    splash: string | null;
-    stickers: Array<RawSticker>;
 }
 
 export interface CreateGuildOptions {
@@ -362,8 +301,6 @@ export interface EditGuildOptions {
 export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads = GuildChannelTypesWithoutThreads> {
     /** [Forum] The {@link Types/Channels.ForumTag | tags} available in the channel. */
     availableTags?: Array<Omit<ForumTag, "id">> | null;
-    /** [Stage, Voice] The bitrate of the channel. Minimum 8000. */
-    bitrate?: number | null;
     /** [Announcement, Text] The default auto archive duration for the channel. */
     defaultAutoArchiveDuration?: ThreadAutoArchiveDuration | null;
     /** [Forum] The default forum layout used to display threads. */
@@ -386,8 +323,6 @@ export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads 
     rateLimitPerUser?: number | null;
     /** The reason for creating the channel. */
     reason?: string;
-    /** [Stage, Voice] The voice region for the channel. */
-    rtcRegion?: string | null;
     /** [Announcement, Forum, Text, Voice] The topic of the channel. In forum channels, this is the `Guidelines` section. */
     topic?: string | null;
     /** The [type](https://discord.com/developers/docs/resources/channel#channel-object-channel-types) of channel to create. */
@@ -399,18 +334,14 @@ export interface CreateChannelOptions<T extends GuildChannelTypesWithoutThreads 
 }
 
 export type CreateTextChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_TEXT>, "rtcRegion" | "userLimit" | "videoQualityMode">;
-export type CreateVoiceChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_VOICE>, "defaultAutoArchiveDuration" | "topic">;
 export type CreateCategoryChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_CATEGORY>, "defaultAutoArchiveDuration" | "nsfw" | "parentID" | "rtcRegion" | "topic" | "userLimit" | "videoQualityMode">;
 export type CreateAnnouncementChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_ANNOUNCEMENT>, "rtcRegion" | "userLimit" | "videoQualityMode">;
-export type CreateStageChannelOptions = Omit<CreateChannelOptions<ChannelTypes.GUILD_STAGE_VOICE>, "defaultAutoArchiveDuration" | "nsfw" | "rtcRegion" | "topic" | "userLimit" | "videoQualityMode">;
 
 export type CreateChannelReturn<T extends GuildChannelTypesWithoutThreads> =
     T extends ChannelTypes.GUILD_TEXT ? TextChannel :
-        T extends ChannelTypes.GUILD_VOICE ? VoiceChannel :
-            T extends ChannelTypes.GUILD_CATEGORY ? CategoryChannel :
-                T extends ChannelTypes.GUILD_ANNOUNCEMENT ? AnnouncementChannel :
-                    T extends ChannelTypes.GUILD_STAGE_VOICE ? StageChannel :
-                        never;
+        T extends ChannelTypes.GUILD_CATEGORY ? CategoryChannel :
+            T extends ChannelTypes.GUILD_ANNOUNCEMENT ? AnnouncementChannel :
+                never;
 
 export interface CreateRoleOptions {
     /** The color of the role. */
@@ -613,20 +544,6 @@ export interface EditWelcomeScreenOptions extends WelcomeScreen {
     reason?: string;
 }
 
-export interface EditUserVoiceStateOptions {
-    /** The ID of the stage channel the member is in. */
-    channelID: string;
-    /** If the user should be suppressed. */
-    suppress?: boolean;
-}
-
-export interface EditCurrentUserVoiceStateOptions extends Omit<EditUserVoiceStateOptions, "channelID"> {
-    /** The ID of the stage channel the member is in. */
-    channelID?: string;
-    /** The timestamp of when the member should be able to speak. */
-    requestToSpeakTimestamp?: string | null;
-}
-
 export interface RawUnavailableGuild {
     id: string;
     unavailable: true;
@@ -638,14 +555,11 @@ export interface RawGuild {
     applicationID: string | null;
 }
 
-export type PossiblyUncachedIntegration = Integration | { applicationID?: string; id: string; };
-
 export interface RawStageInstance {
     channel_id: string;
     /** @deprecated */
     discoverable_disabled: boolean;
     guild_id: string;
-    guild_scheduled_event_id: string | null;
     id: string;
     privacy_level: StageInstancePrivacyLevels;
     topic: string;

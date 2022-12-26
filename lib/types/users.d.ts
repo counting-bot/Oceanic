@@ -1,6 +1,6 @@
 /** @module Types/Users */
-import type { RawMember } from "./guilds";
-import type { PremiumTypes } from "../Constants";
+import type { RawMember } from "./guilds.js";
+import type { PremiumTypes } from "../Constants.js";
 
 // avatar_decoration, (self) bio
 export interface RESTUser {
@@ -32,11 +32,4 @@ export interface EditSelfUserOptions {
     avatar?: Buffer | string | null;
     /** The new username. */
     username?: string;
-}
-
-export interface CreateGroupChannelOptions {
-    /** An array of access tokens with the `gdm.join` scope. */
-    accessTokens: Array<string>;
-    /** A dictionary of ids to nicknames, looks unused. */
-    nicks?: Record<string, string>;
 }
