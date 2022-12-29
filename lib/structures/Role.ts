@@ -3,7 +3,7 @@ import Base from "./Base.js";
 import Permission from "./Permission.js";
 import type Guild from "./Guild.js";
 import type Client from "../Client.js";
-import type { RawRole, RoleTags, EditRoleOptions } from "../types/guilds.js";
+import type { RawRole, EditRoleOptions } from "../types/guilds.js";
 import type { JSONRole } from "../types/json.js";
 
 /** Represents a role in a guild. */
@@ -27,8 +27,6 @@ export default class Role extends Base {
     permissions: Permission;
     /** The position of this role. */
     position: number;
-    /** The [tags](https://discord.com/developers/docs/topics/permissions#role-object-role-tags-structure) of this role. */
-    tags: RoleTags;
     /** The unicode emoji of this role. */
     unicodeEmoji: string | null;
     constructor(data: RawRole, client: Client, guildID: string) {
@@ -42,10 +40,6 @@ export default class Role extends Base {
         this.name = data.name;
         this.permissions = new Permission(data.permissions);
         this.position = data.position;
-        this.tags = {
-            availableForPurchase: false,
-            premiumSubscriber:    false
-        };
         this.unicodeEmoji = null;
         this.update(data);
     }
@@ -84,11 +78,6 @@ export default class Role extends Base {
         return this._cachedGuild;
     }
 
-    /** A string that will mention this role. */
-    get mention(): string {
-        return `<@&${this.id}>`;
-    }
-
     /**
      * Edit this role.
      * @param options The options for editing the role.
@@ -109,7 +98,6 @@ export default class Role extends Base {
             name:         this.name,
             permissions:  this.permissions.toJSON(),
             position:     this.position,
-            tags:         this.tags,
             unicodeEmoji: this.unicodeEmoji
         };
     }

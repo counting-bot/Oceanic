@@ -3,7 +3,7 @@
 import type { InstallParams } from "./oauth.js";
 import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
 import type { ApplicationCommandInteractionData, AutocompleteInteractionData, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData } from "./interactions.js";
-import type { RawGuild, RoleTags } from "./guilds.js";
+import type { RawGuild } from "./guilds.js";
 import type {
     ChannelMention,
     MessageActivity,
@@ -253,13 +253,6 @@ export interface JSONMessage extends JSONBase {
         user: JSONUser;
     };
     mentionChannels?: Array<ChannelMention>;
-    mentions: {
-        channels: Array<string>;
-        everyone: boolean;
-        members: Array<JSONMember>;
-        roles: Array<string>;
-        users: Array<JSONUser>;
-    };
     messageReference?: MessageReference;
     nonce?: number | string;
     position?: number;
@@ -315,7 +308,6 @@ export interface JSONRole extends JSONBase {
     name: string;
     permissions: JSONPermission;
     position: number;
-    tags: RoleTags;
     unicodeEmoji: string | null;
 }
 
