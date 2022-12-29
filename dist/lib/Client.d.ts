@@ -1,10 +1,9 @@
 import RESTManager from "./rest/RESTManager.js";
 import TypedCollection from "./util/TypedCollection.js";
 import PrivateChannel from "./structures/PrivateChannel.js";
-import GroupChannel from "./structures/GroupChannel.js";
 import User from "./structures/User.js";
 import Guild from "./structures/Guild.js";
-import type { AnyChannel, RawGroupChannel, RawPrivateChannel } from "./types/channels.js";
+import type { AnyChannel, RawPrivateChannel } from "./types/channels.js";
 import type { RawGuild, RawUnavailableGuild } from "./types/guilds.js";
 import type { RawUser } from "./types/users.js";
 import type { ClientInstanceOptions, ClientOptions } from "./types/client.js";
@@ -22,7 +21,6 @@ export default class Client extends TypedEmitter<ClientEvents> {
     private _user?;
     channelGuildMap: Record<string, string>;
     gatewayURL: string;
-    groupChannels: TypedCollection<string, RawGroupChannel, GroupChannel>;
     guildShardMap: Record<string, number>;
     guilds: TypedCollection<string, RawGuild, Guild>;
     options: ClientInstanceOptions;

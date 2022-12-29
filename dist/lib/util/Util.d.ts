@@ -22,7 +22,7 @@ export default class Util {
     embedsToRaw(embeds: Array<EmbedOptions>): Array<RawEmbedOptions>;
     formatAllowedMentions(allowed?: AllowedMentions): RawAllowedMentions;
     formatImage(url: string, format?: ImageFormat, size?: number): string;
-    getMagic(file: Buffer): string;
+    getMagic(file: Buffer, len?: number): string;
     optionToParsed(option: RawApplicationCommandOption): ApplicationCommandOptions;
     optionToRaw(option: ApplicationCommandOptions): RawApplicationCommandOption;
     updateChannel<T extends AnyChannel>(channelData: RawChannel): T;

@@ -66,6 +66,7 @@ export declare const OAUTH_GUILD_MEMBER: (guildID: string) => `/users/@me/guilds
 export declare const OAUTH_GUILDS: "/users/@me/guilds";
 export declare const OAUTH_TOKEN: "/oauth2/token";
 export declare const OAUTH_TOKEN_REVOKE: "/oauth2/token/revoke";
+export declare const OAUTH_ROLE_CONNECTION: (applicationID: string) => `/users/@me/applications/${string}/role-connection`;
 export declare const ACHIEVEMENT_ICON: (applicationID: string, achievementID: string, hash: string) => `/app-assets/${string}/achievements/${string}/icons/${string}`;
 export declare const APPLICATION_ASSET: (applicationID: string, assetID: string) => `/applications/${string}/assets/${string}`;
 export declare const APPLICATION_COVER: (applicationID: string, hash: string) => `/app-icons/${string}/${string}`;
@@ -83,6 +84,7 @@ export declare const ROLE_ICON: (roleID: string, hash: string) => `/role-icons/$
 export declare const STICKER: (stickerID: string) => `/stickers/${string}`;
 export declare const STICKER_PACK_BANNER: (assetID: string) => `/applications/${string}/assets/${string}`;
 export declare const USER_AVATAR: (userID: string, hash: string) => `/avatars/${string}/${string}`;
+export declare const USER_AVATAR_DECORATION: (userID: string, hash: string) => `/avatar-decorations/${string}/${string}`;
 export declare const APPLICATION_COMMAND: (applicationID: string, commandID: string) => `/applications/${string}/commands/${string}`;
 export declare const APPLICATION_COMMANDS: (applicationID: string) => `/applications/${string}/commands`;
 export declare const GUILD_APPLICATION_COMMAND: (applicationID: string, guildID: string, commandID: string) => `/applications/${string}/guilds/${string}/commands/${string}`;

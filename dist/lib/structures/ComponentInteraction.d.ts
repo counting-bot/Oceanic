@@ -1,6 +1,6 @@
 /** @module ComponentInteraction */
 import Interaction from "./Interaction.js";
-import Message from "./Message.js";
+import type Message from "./Message.js";
 import type Guild from "./Guild.js";
 import Member from "./Member.js";
 import Permission from "./Permission.js";
@@ -33,8 +33,6 @@ export default class ComponentInteraction<V extends ComponentTypes.BUTTON | Sele
     member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** The permissions of the member associated with the invoking user, if this interaction is sent from a guild. */
     memberPermissions: T extends AnyGuildTextChannel ? Permission : Permission | undefined;
-    /** The message the interaction is from. */
-    message: Message<T>;
     type: InteractionTypes.MESSAGE_COMPONENT;
     /** The user that invoked this interaction. */
     user: User;

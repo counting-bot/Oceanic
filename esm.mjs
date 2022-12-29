@@ -18,7 +18,6 @@ const DiscordRESTError = (await import("./dist/lib/rest/DiscordRESTError.js")).d
 const ExtendedUser = (await import("./dist/lib/structures/ExtendedUser.js")).default.default;
 const ForumChannel = (await import("./dist/lib/structures/ForumChannel.js")).default.default;
 const GatewayError = (await import("./dist/lib/gateway/GatewayError.js")).default.default;
-const GroupChannel = (await import("./dist/lib/structures/GroupChannel.js")).default.default;
 const Guild = (await import("./dist/lib/structures/Guild.js")).default.default;
 const GuildChannel = (await import("./dist/lib/structures/GuildChannel.js")).default.default;
 const InteractionResolvedChannel = (await import("./dist/lib/structures/InteractionResolvedChannel.js")).default.default;
@@ -75,7 +74,6 @@ export {
     ExtendedUser,
     ForumChannel,
     GatewayError,
-    GroupChannel,
     Guild,
     GuildChannel,
     InteractionResolvedChannel,

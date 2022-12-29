@@ -19,7 +19,6 @@ export { default as DiscordRESTError } from "./rest/DiscordRESTError.js";
 export { default as ExtendedUser } from "./structures/ExtendedUser.js";
 export { default as ForumChannel } from "./structures/ForumChannel.js";
 export { default as GatewayError } from "./gateway/GatewayError.js";
-export { default as GroupChannel } from "./structures/GroupChannel.js";
 export { default as Guild } from "./structures/Guild.js";
 export { default as GuildChannel } from "./structures/GuildChannel.js";
 export { default as InteractionResolvedChannel } from "./structures/InteractionResolvedChannel.js";

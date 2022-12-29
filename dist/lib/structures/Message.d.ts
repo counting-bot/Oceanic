@@ -55,19 +55,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** Channels mentioned in a `CROSSPOSTED` channel follower message. See [Discord's docs](https://discord.com/developers/docs/resources/channel#channel-mention-object) for more information. */
     mentionChannels?: Array<ChannelMention>;
-    /** The mentions in this message. */
-    mentions: {
-        /** The ids of the channels mentioned in this message. */
-        channels: Array<string>;
-        /** If @everyone/@here is mentioned in this message. */
-        everyone: boolean;
-        /** The members mentioned in this message. */
-        members: Array<Member>;
-        /** The ids of the roles mentioned in this message. */
-        roles: Array<string>;
-        /** The users mentioned in this message. */
-        users: Array<User>;
-    };
     /** If this message is a `REPLY` or `THREAD_STARTER_MESSAGE`, some info about the referenced message. */
     messageReference?: MessageReference;
     /** A nonce for ensuring a message was sent. */

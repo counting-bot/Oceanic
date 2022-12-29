@@ -11,6 +11,8 @@ export default class User extends Base {
     accentColor?: number | null;
     /** The user's avatar hash. */
     avatar: string | null;
+    /** The hash of this user's avatar decoration. This will always resolve to a png. */
+    avatarDecoration?: string | null;
     /** The user's banner hash. If this member was received via the gateway, this will never be present. */
     banner?: string | null;
     /** If this user is a bot. */
@@ -31,6 +33,13 @@ export default class User extends Base {
     get mention(): string;
     /** a combination of this user's username and discriminator. */
     get tag(): string;
+    /**
+     * The url of this user's avatar decoration. This will always be a png.
+     * Discord does not combine the decoration and their current avatar for you. This is ONLY the decoration.
+     * @note As of 12/8/2022 (Dec 8) `avatar_decoration` is only visible to bots if they set an `X-Super-Properties` header with a `client_build_number` ~162992. You can do this via the {@link Types/Client~RESTOptions#superProperties | rest.superProperties} option.
+     * @param size The dimensions of the image.
+     */
+    avatarDecorationURL(size?: number): string | null;
     /**
      * The url of this user's avatar (or default avatar, if they have not set an avatar).
      * @param format The format the url should be.
