@@ -64,17 +64,18 @@ export const CHANNEL_TYPING                          = (channelID: string) => `/
 export const GROUP_RECIPIENT                         = (channelID: string, userID: string) => `/channels/${channelID}/recipients/${userID}` as const;
 
 // OAuth
-export const OAUTH_APPLICATION  = "/oauth2/applications/@me" as const;
-export const OAUTH_AUTHORIZE    = "/oauth2/authorize" as const;
-export const OAUTH_INFO         = "/oauth2/@me" as const;
-export const OAUTH_CURRENT_USER = "/users/@me" as const;
-export const OAUTH_CHANNELS     = "/users/@me/channels" as const;
-export const OAUTH_CONNECTIONS  = "/users/@me/connections" as const;
-export const OAUTH_GUILD        = (guildID: string) => `/users/@me/guilds/${guildID}` as const;
-export const OAUTH_GUILD_MEMBER = (guildID: string) => `${OAUTH_GUILD(guildID)}/member` as const;
-export const OAUTH_GUILDS       = "/users/@me/guilds" as const;
-export const OAUTH_TOKEN        = "/oauth2/token" as const;
-export const OAUTH_TOKEN_REVOKE = "/oauth2/token/revoke" as const;
+export const OAUTH_APPLICATION     = "/oauth2/applications/@me" as const;
+export const OAUTH_AUTHORIZE       = "/oauth2/authorize" as const;
+export const OAUTH_INFO            = "/oauth2/@me" as const;
+export const OAUTH_CURRENT_USER    = "/users/@me" as const;
+export const OAUTH_CHANNELS        = "/users/@me/channels" as const;
+export const OAUTH_CONNECTIONS     = "/users/@me/connections" as const;
+export const OAUTH_GUILD           = (guildID: string) => `/users/@me/guilds/${guildID}` as const;
+export const OAUTH_GUILD_MEMBER    = (guildID: string) => `${OAUTH_GUILD(guildID)}/member` as const;
+export const OAUTH_GUILDS          = "/users/@me/guilds" as const;
+export const OAUTH_TOKEN           = "/oauth2/token" as const;
+export const OAUTH_TOKEN_REVOKE    = "/oauth2/token/revoke" as const;
+export const OAUTH_ROLE_CONNECTION = (applicationID: string) => `/users/@me/applications/${applicationID}/role-connection` as const;
 
 // Images
 export const ACHIEVEMENT_ICON            = (applicationID: string, achievementID: string, hash: string) => `/app-assets/${applicationID}/achievements/${achievementID}/icons/${hash}` as const;
@@ -94,6 +95,7 @@ export const ROLE_ICON                   = (roleID: string, hash: string) => `/r
 export const STICKER                     = (stickerID: string) => `/stickers/${stickerID}` as const;
 export const STICKER_PACK_BANNER         = (assetID: string) => APPLICATION_ASSET("710982414301790216", assetID);
 export const USER_AVATAR                 = (userID: string, hash: string) => `/avatars/${userID}/${hash}` as const;
+export const USER_AVATAR_DECORATION      = (userID: string, hash: string) => `/avatar-decorations/${userID}/${hash}` as const;
 
 // Application Commands
 export const APPLICATION_COMMAND                   = (applicationID: string, commandID: string) => `/applications/${applicationID}/commands/${commandID}` as const;

@@ -72,19 +72,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** Channels mentioned in a `CROSSPOSTED` channel follower message. See [Discord's docs](https://discord.com/developers/docs/resources/channel#channel-mention-object) for more information. */
     mentionChannels?: Array<ChannelMention>;
-    /** The mentions in this message. */
-    mentions: {
-        /** The ids of the channels mentioned in this message. */
-        channels: Array<string>;
-        /** If @everyone/@here is mentioned in this message. */
-        everyone: boolean;
-        /** The members mentioned in this message. */
-        members: Array<Member>;
-        /** The ids of the roles mentioned in this message. */
-        roles: Array<string>;
-        /** The users mentioned in this message. */
-        users: Array<User>;
-    };
     /** If this message is a `REPLY` or `THREAD_STARTER_MESSAGE`, some info about the referenced message. */
     messageReference?: MessageReference;
     /** A nonce for ensuring a message was sent. */
@@ -115,13 +102,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         this.flags = 0;
         this.guildID = (data.guild_id === undefined ? null : data.guild_id) as T extends AnyGuildTextChannel ? string : string | null;
         this.member = (data.member !== undefined ? this.client.util.updateMember(data.guild_id!, data.author.id, { ...data.member, user: data.author }) : undefined) as T extends AnyGuildTextChannel ? Member : Member | undefined;
-        this.mentions = {
-            channels: [],
-            everyone: false,
-            members:  [],
-            roles:    [],
-            users:    []
-        };
         this.reactions = {};
         this.timestamp = new Date(data.timestamp);
         this.type = data.type;
@@ -149,22 +129,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     protected override update(data: Partial<RawMessage>): void {
-        if (data.mention_everyone !== undefined) {
-            this.mentions.everyone = data.mention_everyone;
-        }
-        if (data.mention_roles !== undefined) {
-            this.mentions.roles = data.mention_roles;
-        }
-        if (data.mentions !== undefined) {
-            const members: Array<Member> = [];
-            this.mentions.users = data.mentions.map(user => {
-                if (this.channel && "guildID" in (this.channel as T) && user.member) {
-                    members.push(this.client.util.updateMember((this.channel as AnyGuildTextChannel).guildID, user.id, { ...user.member, user }));
-                }
-                return this.client.users.update(user);
-            });
-            this.mentions.members = members;
-        }
         if (data.activity !== undefined) {
             this.activity = data.activity;
         }
@@ -181,7 +145,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         }
         if (data.content !== undefined) {
             this.content = data.content;
-            this.mentions.channels = (data.content.match(/<#\d{17,21}>/g) ?? []).map(mention => mention.slice(2, -1));
         }
         if (data.embeds !== undefined) {
             this.embeds = this.client.util.embedsToParsed(data.embeds);
@@ -220,14 +183,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         if (data.position !== undefined) {
             this.position = data.position;
         }
-        if (data.referenced_message !== undefined) {
-            if (data.referenced_message === null) {
-                this.referencedMessage = null;
-            } else {
-                this.referencedMessage = this.channel ? this.channel.messages?.update(data.referenced_message) : new Message(data.referenced_message, this.client);
-            }
-        }
-
 
         if (data.sticker_items !== undefined) {
             this.stickerItems = data.sticker_items;
@@ -330,14 +285,7 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
                 type:   this.interaction.type,
                 user:   this.interaction.user.toJSON()
             },
-            mentionChannels: this.mentionChannels,
-            mentions:        {
-                channels: this.mentions.channels,
-                everyone: this.mentions.everyone,
-                members:  this.mentions.members.map(member => member.toJSON()),
-                roles:    this.mentions.roles,
-                users:    this.mentions.users.map(user => user.toJSON())
-            },
+            mentionChannels:   this.mentionChannels,
             messageReference:  this.messageReference,
             nonce:             this.nonce,
             position:          this.position,

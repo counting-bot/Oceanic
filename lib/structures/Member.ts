@@ -1,11 +1,11 @@
 /** @module Member */
-import Base from "./Base.js";
-import type User from "./User.js";
-import type Guild from "./Guild.js";
-import type Permission from "./Permission.js";
-import type Client from "../Client.js";
-import type { RawMember, RESTMember } from "../types/guilds.js";
-import type { JSONMember } from "../types/json.js";
+import Base from "./Base";
+import type User from "./User";
+import type Guild from "./Guild";
+import type Permission from "./Permission";
+import type Client from "../Client";
+import type { CreateBanOptions, EditMemberOptions, RawMember, RESTMember } from "../types/guilds";
+import type { JSONMember } from "../types/json";
 
 /** Represents a member of a guild. */
 export default class Member extends Base {
@@ -70,6 +70,55 @@ export default class Member extends Base {
     /** If this user associated with this member is an official discord system user. */
     get system(): boolean {
         return this.user.system;
+    }
+    /** A combination of the user associated with this member's username and discriminator. */
+    get tag(): string {
+        return this.user.tag;
+    }
+    /** The username associated with this member's user. */
+    get username(): string {
+        return this.user.username;
+    }
+
+    /**
+     * Add a role to this member.
+     * @param roleID The ID of the role to add.
+     */
+    async addRole(roleID: string, reason?: string): Promise<void> {
+        await this.client.rest.guilds.addMemberRole(this.guildID, this.id, roleID, reason);
+    }
+
+    /**
+     * Create a ban for this member.
+     * @param options The options for the ban.
+     */
+    async ban(options?: CreateBanOptions): Promise<void> {
+        await this.client.rest.guilds.createBan(this.guildID, this.id, options);
+    }
+
+    /**
+     * Edit this member. Use \<Guild\>.editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
+     * @param options The options for editing the member.
+     */
+    async edit(options: EditMemberOptions): Promise<Member> {
+        return this.client.rest.guilds.editMember(this.guildID, this.id, options);
+    }
+
+    /**
+     * Remove a member from the guild.
+     * @param reason The reason for the kick.
+     */
+    async kick(reason?: string): Promise<void> {
+        await this.client.rest.guilds.removeMember(this.guildID, this.id, reason);
+    }
+
+    /**
+     * remove a role from this member.
+     * @param roleID The ID of the role to remove.
+     * @param reason The reason for removing the role.
+     */
+    async removeRole(roleID: string, reason?: string): Promise<void> {
+        await this.client.rest.guilds.removeMemberRole(this.guildID, this.id, roleID, reason);
     }
 
     override toJSON(): JSONMember {

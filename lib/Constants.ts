@@ -95,6 +95,7 @@ export const GuildFeatures = [
     "CREATOR_MONETIZABLE",
     "CREATOR_MONETIZABLE_DISABLED",
     "CREATOR_MONETIZABLE_PROVISIONAL",
+    "CREATOR_STORE_PAGE",
     "DEVELOPER_SUPPORT_SERVER",
     "DISCOVERABLE",
     "DISCOVERABLE_DISABLED",
@@ -122,6 +123,7 @@ export const GuildFeatures = [
     "PREVIEW_ENABLED",
     "PREVIOUSLY_DISCOVERABLE",
     "PRIVATE_THREADS",
+    "RAID_ALERTS_ENABLED",
     "ROLE_ICONS",
     "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE",
     "ROLE_SUBSCRIPTIONS_ENABLED",
@@ -137,6 +139,7 @@ export const GuildFeatures = [
     "WELCOME_SCREEN_ENABLED"
 ] as const;
 export type GuildFeature = typeof GuildFeatures[number];
+export type MutableGuildFeatures = "COMMUNITY" | "DISCOVERABLE" | "INVITES_DISABLED" | "RAID_ALERTS_ENABLED";
 
 export enum DefaultMessageNotificationLevels {
     ALL_MESSAGES  = 0,
@@ -444,7 +447,7 @@ export enum OAuthScopes {
     MESSAGES_READ = "messages.read",
     /** allows your app to know a user's friends and implicit relationships - requires Discord approval */
     RELATIONSHIPS_READ = "relationships.read",
-    /** allows your app to update your connection and metadata for the app */
+    /** allows your app to update a user's connection and metadata for the app */
     ROLE_CONNECTIONS_WRITE = "role_connection.write",
     /** for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval */
     RPC = "rpc",
@@ -560,8 +563,9 @@ export enum InteractionTypes {
 }
 
 export enum InviteTargetTypes {
-    STREAM               = 1,
-    EMBEDDED_APPLICATION = 2,
+    STREAM                      = 1,
+    EMBEDDED_APPLICATION        = 2,
+    ROLE_SUBSCRIPTIONS_PURCHASE = 3,
 }
 
 export enum StageInstancePrivacyLevels {
@@ -719,10 +723,6 @@ export enum HubTypes {
     COLLEGE     = 2,
 }
 
-
-/** @deprecated Use {@link Constants~HubTypes | HubTypes}. This will be removed in `1.4.0`. */
-export const HubType = HubTypes;
-
 export enum ActivityTypes {
     GAME      = 0,
     STREAMING = 1,
@@ -749,6 +749,17 @@ export enum ThreadMemberFlags {
     ALL_MESSAGES   = 1 << 1,
     ONLY_MENTIONS  = 1 << 2,
     NO_MESSAGES    = 1 << 3,
+}
+
+export enum RoleConnectionMetadataTypes {
+    INTEGER_LESS_THAN_OR_EQUAL     = 1,
+    INTEGER_GREATER_THAN_OR_EQUAL  = 2,
+    INTEGER_EQUAL                  = 3,
+    INTEGER_NOT_EQUAL              = 4,
+    DATETIME_LESS_THAN_OR_EQUAL    = 5,
+    DATETIME_GREATER_THAN_OR_EQUAL = 6,
+    BOOLEAN_EQUAL                  = 7,
+    BOOLEAN_NOT_EQUAL              = 8,
 }
 
 // entries are intentionally not aligned
@@ -835,6 +846,8 @@ export enum JSONErrorCodes {
     MAXIMUM_NUMBER_OF_PINNED_THREADS = 30047,
     MAXIMUM_NUMBER_OF_FORUM_TAGS = 30048,
     BITRATE_TOO_HIGH = 30052,
+    MAXIMUM_PREMIUM_EMOJIS = 30056,
+    MAXIMUM_GUILD_WEBHOOKS = 30058,
     RESOURCE_RATE_LIMITED = 31002,
     UNAUTHORIZED = 40001,
     ACCOUNT_VERIFICATION_REQUIRED = 40002,
@@ -906,6 +919,8 @@ export enum JSONErrorCodes {
     INVALID_JSON = 50109,
     OWNERSHIP_CANNOT_BE_TRANSFERRED_TO_BOT = 50132,
     FAILED_TO_RESIZE_ASSET = 50138,
+    CANNOT_MIX_SUBSCRIPTION_AND_NON_SUBSCRIPTION_ROLES = 50144,
+    CANNOT_CONVERT_BETWEEN_PREMIUM_AND_NORMAL_EMOJI = 50145,
     UPLOADED_FILE_NOT_FOUND = 50146,
     NO_PERMISSION_TO_SEND_STICKER = 50600,
     TWO_FACTOR_REQUIRED = 60003,

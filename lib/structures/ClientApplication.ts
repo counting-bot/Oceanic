@@ -1,8 +1,8 @@
 /** @module ClientApplication */
-import Base from "./Base.js";
-import type ApplicationCommand from "./ApplicationCommand.js";
-import type Client from "../Client.js";
-import type { RawClientApplication } from "../types/oauth.js";
+import Base from "./Base";
+import type ApplicationCommand from "./ApplicationCommand";
+import type Client from "../Client";
+import type { RawClientApplication } from "../types/oauth";
 import type {
     AnyApplicationCommand,
     ApplicationCommandOptionConversion,

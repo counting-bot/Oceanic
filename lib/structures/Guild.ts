@@ -99,7 +99,6 @@ export default class Guild extends Base {
         this.memberCount = data.member_count ?? data.approximate_member_count ?? 0;
         this.members = new TypedCollection(Member, client, typeof client.options.collectionLimits.members === "number" ? client.options.collectionLimits.members : client.options.collectionLimits.members[data.id] ?? client.options.collectionLimits.members.unknown ?? Infinity);
         this.name = data.name;
-        this.owner = client.users.get(data.owner_id)!;
         this.ownerID = data.owner_id;
         this.preferredLocale = data.preferred_locale;
         this.roles = new TypedCollection(Role, client);
@@ -144,7 +143,6 @@ export default class Guild extends Base {
         }
     }
 
-    // true = `memberCount`
     private updateMemberLimit(toAdd: true | number): void {
         if (this.members.limit === Infinity || this.client.options.disableMemberLimitScaling) {
             return;

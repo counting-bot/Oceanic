@@ -75,6 +75,7 @@ export interface RawGuild {
     region?: string | null;
     roles: Array<RawRole>;
     rules_channel_id: string | null;
+    safety_alerts_channel_id: string | null;
     splash: string | null;
     stickers?: Array<RawSticker>;
     system_channel_flags: number;
@@ -103,12 +104,17 @@ export interface RawRole {
     unicode_emoji?: string | null;
 }
 export interface RawRoleTags {
+    available_for_purchase?: null;
     bot_id?: string;
     premium_subscriber?: null;
+    subscription_listing_id?: string;
 }
 export interface RoleTags {
+    availableForPurchase: boolean;
     botID?: string;
+    integrationID?: string;
     premiumSubscriber?: null;
+    subscriptionListingID?: string;
 }
 export interface Emoji {
     animated?: boolean;
