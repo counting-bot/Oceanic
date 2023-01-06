@@ -134,7 +134,6 @@ export type GuildChannelTypesWithoutThreads = Exclude<GuildChannelTypes, ThreadC
 export type TextChannelTypes = ChannelTypes.GUILD_TEXT | ChannelTypes.DM | ChannelTypes.GROUP_DM | ChannelTypes.GUILD_ANNOUNCEMENT | ChannelTypes.ANNOUNCEMENT_THREAD | ChannelTypes.PUBLIC_THREAD | ChannelTypes.PRIVATE_THREAD;
 export type GuildTextChannelTypes = Exclude<TextChannelTypes, PrivateChannelTypes>;
 export type ThreadChannelTypes = ChannelTypes.ANNOUNCEMENT_THREAD | ChannelTypes.PUBLIC_THREAD | ChannelTypes.PRIVATE_THREAD;
-export type VoiceChannelTypes = ChannelTypes.GUILD_VOICE | ChannelTypes.GUILD_STAGE_VOICE;
 export declare enum OverwriteTypes {
     ROLE = 0,
     MEMBER = 1

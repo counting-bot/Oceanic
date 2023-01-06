@@ -1,6 +1,6 @@
 {
   "name": "oceanic.js",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A NodeJS library for interfacing with Discord.",
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
@@ -15,8 +15,9 @@
   "scripts": {
     "lint": "eslint lib --ext .ts",
     "lint:fix": "eslint lib --ext .ts --fix",
-    "prepublishOnly": "tsc -p tsconfig.json",
+    "prepublishOnly": "node scripts/build",
     "test:build": "npm run prepublishOnly",
+    "test:esm": "node --no-warnings --no-deprecation --experimental-specifier-resolution=node esm.mjs",
     "test:docs": "npm i --no-save --ignore-scripts typedoc typedoc-plugin-extras typedoc-plugin-rename-defaults && node scripts/doc-test.js && npx --yes typedoc"
   },
   "repository": {
@@ -46,7 +47,6 @@
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^8.27.0",
-    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-import-newlines": "^1.2.3",
     "eslint-plugin-jsdoc": "^39.6.2",
     "eslint-plugin-json": "^3.1.0",
@@ -56,11 +56,13 @@
     "typescript": "^4.9.3"
   },
   "dependencies": {
-    "tslib": "^2.4.1",
-    "undici": "^5.13.0",
+    "undici": "^5.12.0",
     "ws": "^8.11.0"
   },
   "engines": {
     "node": ">=16.16.0"
+  },
+  "optionalDependencies": {
+    "@discordjs/voice": "^0.13.0"
   }
 }
