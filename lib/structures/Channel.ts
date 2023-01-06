@@ -9,7 +9,10 @@ import type {
     RawPrivateChannel,
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
-    RawTextChannel
+    RawTextChannel,
+    RawCategoryChannel,
+    RawAnnouncementChannel,
+    RawAnnouncementThreadChannel
 } from "../types/channels.js";
 import type { JSONChannel } from "../types/json.js";
 
@@ -29,6 +32,15 @@ export default class Channel extends Base {
             }
             case ChannelTypes.DM: {
                 return new PrivateChannel(data as RawPrivateChannel, client) as T;
+            }
+            case ChannelTypes.GUILD_CATEGORY: {
+                return new CategoryChannel(data as RawCategoryChannel, client) as T;
+            }
+            case ChannelTypes.GUILD_ANNOUNCEMENT: {
+                return new AnnouncementChannel(data as RawAnnouncementChannel, client) as T;
+            }
+            case ChannelTypes.ANNOUNCEMENT_THREAD: {
+                return new AnnouncementThreadChannel(data as RawAnnouncementThreadChannel, client) as T;
             }
             case ChannelTypes.PUBLIC_THREAD: {
                 return new PublicThreadChannel(data as RawPublicThreadChannel, client) as T;
@@ -60,4 +72,7 @@ const PrivateChannel = (require("./PrivateChannel.js") as typeof import("./Priva
 const PublicThreadChannel = (require("./PublicThreadChannel.js") as typeof import("./PublicThreadChannel.js")).default;
 const PrivateThreadChannel = (require("./PrivateThreadChannel.js") as typeof import("./PrivateThreadChannel.js")).default;
 const ForumChannel = (require("./ForumChannel.js") as typeof import("./ForumChannel.js")).default;
+const CategoryChannel = (require("./CategoryChannel.js") as typeof import("./CategoryChannel.js")).default;
+const AnnouncementChannel = (require("./AnnouncementChannel.js") as typeof import("./AnnouncementChannel.js")).default;
+const AnnouncementThreadChannel = (require("./AnnouncementThreadChannel.js") as typeof import("./AnnouncementThreadChannel.js")).default;
 /* eslint-enable @typescript-eslint/no-var-requires, unicorn/prefer-module */

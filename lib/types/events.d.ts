@@ -127,6 +127,16 @@ export interface ClientEvents {
     warn: [info: string, shard?: number];
     /** @event Emitted when a guild's webhooks are updated. Requires the `GUILD_WEBHOOKS` intent. */
     webhooksUpdate: [guild: Guild | Uncached, channel: AnyGuildChannelWithoutThreads | Uncached];
+    /** @event Emitted when a thread is created. Requires the `GUILDS` intent. */
+    threadCreate: [thread: AnyThreadChannel];
+    /** @event Emitted when a thread is deleted. Requires the `GUILDS` intent. */
+    threadDelete: [thread: PossiblyUncachedThread];
+    /** @event Emitted when the client's thread member is updated. Requires the `GUILDS` intent. */
+    threadMemberUpdate: [thread: MinimalPossiblyUncachedThread, member: ThreadMember, oldMember: ThreadMember | null];
+    /** @event Emitted when the members of a thread are updated. Requires the `GUILDS` intent. The received information will be different if `GUILD_MEMBERS` is also used. */
+    threadMembersUpdate: [thread: MinimalPossiblyUncachedThread, addedMembers: Array<ThreadMember>, removedMembers: Array<ThreadMember | UncachedThreadMember>];
+    /** @event Emitted when a thread is updated. Requires the `GUILDS` intent. */
+    threadUpdate: [thread: AnnouncementThreadChannel, oldThread: JSONAnnouncementThreadChannel | null] | [thread: PublicThreadChannel, oldThread: JSONPublicThreadChannel | null] | [thread: PrivateThreadChannel, oldThread: JSONPrivateThreadChannel | null];
 }
 
 export interface ShardEvents {
