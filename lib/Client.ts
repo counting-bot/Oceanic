@@ -19,7 +19,7 @@ import Util from "./util/Util.js";
 import type { ClientEvents } from "./types/events.js";
 
 /** The primary class for interfacing with Discord. See {@link Events~ClientEvents | Client Events} for a list of events. */
-export default class Client extends TypedEmitter<ClientEvents> {
+export default class Client<E extends ClientEvents = ClientEvents> extends TypedEmitter<E> {
     private _application?: ClientApplication;
     private _user?: ExtendedUser;
     channelGuildMap: Record<string, string>;
@@ -77,10 +77,10 @@ export default class Client extends TypedEmitter<ClientEvents> {
 
     /** The client's partial application. This will throw an error if not using a gateway connection or no shard is READY. */
     get application(): ClientApplication {
-        if (!this._application) {
-            throw new Error(`${this.constructor.name}#application is not present if not using a gateway connection or no shard is READY. Consider making sure you have connected your client.`);
-        } else {
+        if (this._application) {
             return this._application;
+        } else {
+            throw new Error(`${this.constructor.name}#application is not present if not using a gateway connection or no shard is READY. Consider making sure you have connected your client.`);
         }
     }
 
@@ -90,10 +90,10 @@ export default class Client extends TypedEmitter<ClientEvents> {
 
     /** The client's user application. This will throw an error if not using a gateway connection or no shard is READY. */
     get user(): ExtendedUser {
-        if (!this._user) {
-            throw new Error(`${this.constructor.name}#user is not present if not using a gateway connection or no shard is READY. Consider making sure you have connected your client.`);
-        } else {
+        if (this._user) {
             return this._user;
+        } else {
+            throw new Error(`${this.constructor.name}#user is not present if not using a gateway connection or no shard is READY. Consider making sure you have connected your client.`);
         }
     }
 

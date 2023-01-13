@@ -43,8 +43,7 @@ import { is } from "../util/Util.js";
 import type Guild from "../structures/Guild.js";
 import type { ShardEvents } from "../types/events.js";
 import Role from "../structures/Role.js";
-import type { Data } from "ws";
-import WebSocket from "ws";
+import WebSocket, { type Data } from "ws";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { randomBytes } from "node:crypto";
@@ -243,7 +242,10 @@ export default class Shard extends TypedEmitter<ShardEvents> {
             }
 
             case "GUILD_CREATE": {
-                if (!packet.d.unavailable) {
+                if (packet.d.unavailable) {
+                    this.client.guilds.delete(packet.d.id);
+                    this.client.emit("unavailableGuildCreate", this.client.unavailableGuilds.update(packet.d));
+                } else {
                     const guild = this.createGuild(packet.d);
                     if (this.ready) {
                         if (this.client.unavailableGuilds.delete(guild.id)) {
@@ -255,9 +257,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                         this.client.unavailableGuilds.delete(guild.id);
                         void this.restartGuildCreateTimeout();
                     }
-                } else {
-                    this.client.guilds.delete(packet.d.id);
-                    this.client.emit("unavailableGuildCreate", this.client.unavailableGuilds.update(packet.d));
                 }
                 break;
             }
@@ -446,10 +445,10 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 this.status = "ready";
                 this.client.shards["_ready"](this.id);
                 this.client["_application"] = new ClientApplication(packet.d.application, this.client);
-                if (!this.client["_user"]) {
-                    this.client["_user"] = this.client.users.add(new ExtendedUser(packet.d.user as RawOAuthUser, this.client));
-                } else {
+                if (this.client["_user"]) {
                     this.client.users.update(packet.d.user as unknown as RawUser);
+                } else {
+                    this.client["_user"] = this.client.users.add(new ExtendedUser(packet.d.user as RawOAuthUser, this.client));
                 }
 
                 let url = packet.d.resume_gateway_url;
@@ -897,11 +896,11 @@ export default class Shard extends TypedEmitter<ShardEvents> {
             this.ws.removeAllListeners();
             try {
                 if (reconnect && this.sessionID) {
-                    if (this.ws.readyState !== WebSocket.OPEN) {
-                        this.ws.close(4999, "Reconnect");
-                    } else {
+                    if (this.ws.readyState === WebSocket.OPEN) {
                         this.client.emit("debug", `Closing websocket (state: ${this.ws.readyState})`, this.id);
                         this.ws.terminate();
+                    } else {
+                        this.ws.close(4999, "Reconnect");
                     }
                 } else {
                     this.ws.close(1000, "Normal Close");
@@ -1102,7 +1101,7 @@ export default class Shard extends TypedEmitter<ShardEvents> {
             const func = (): void => {
                 if (++i >= waitFor && this.ws && this.ws.readyState === WebSocket.OPEN) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-                    const d = JSON.stringify({ op, d: data });
+                    const d = Erlpack ? Erlpack.pack({ op, d: data }) : JSON.stringify({ op, d: data });
                     this.ws.send(d);
                     if (typeof data === "object" && data && "token" in data) {
                         (data as { token: string; }).token = "[REMOVED]";

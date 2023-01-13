@@ -1,13 +1,12 @@
 /** @module ThreadChannel */
-import GuildChannel from "./GuildChannel.js";
-import Message from "./Message.js";
-import type User from "./User.js";
-import type Member from "./Member.js";
-import type Permission from "./Permission.js";
-import type { ThreadChannelTypes } from "../Constants.js";
-import { ChannelTypes } from "../Constants.js";
-import type Client from "../Client.js";
-import TypedCollection from "../util/TypedCollection.js";
+import GuildChannel from "./GuildChannel";
+import Message from "./Message";
+import type User from "./User";
+import type Member from "./Member";
+import type Permission from "./Permission";
+import { ChannelTypes, type ThreadChannelTypes } from "../Constants";
+import type Client from "../Client";
+import TypedCollection from "../util/TypedCollection";
 import type {
     AnyThreadChannel,
     CreateMessageOptions,
@@ -64,7 +63,7 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
         this.threadMetadata = {
             archived:            !!data.thread_metadata.archived,
             autoArchiveDuration: data.thread_metadata.auto_archive_duration,
-            createTimestamp:     !data.thread_metadata.create_timestamp ? null : new Date(data.thread_metadata.create_timestamp),
+            createTimestamp:     data.thread_metadata.create_timestamp ? new Date(data.thread_metadata.create_timestamp) : null,
             locked:              !!data.thread_metadata.locked,
             invitable:           data.thread_metadata.invitable
         };
@@ -114,7 +113,7 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
             this.threadMetadata = {
                 archived:            !!data.thread_metadata.archived,
                 autoArchiveDuration: data.thread_metadata.auto_archive_duration,
-                createTimestamp:     !data.thread_metadata.create_timestamp ? null : new Date(data.thread_metadata.create_timestamp),
+                createTimestamp:     data.thread_metadata.create_timestamp ? new Date(data.thread_metadata.create_timestamp) : null,
                 locked:              !!data.thread_metadata.locked,
                 invitable:           data.thread_metadata.invitable
             };

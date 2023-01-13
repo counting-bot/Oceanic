@@ -63,7 +63,7 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
         this.code = data.code;
         this.guild = null;
         this.guildID = data.guild?.id ?? null;
-        this.expiresAt = (!data.expires_at ? undefined : new Date(data.expires_at)) as never;
+        this.expiresAt = (data.expires_at ? new Date(data.expires_at) : undefined) as never;
         this.targetType = data.target_type;
         this.update(data);
     }
@@ -82,7 +82,9 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
             this.guild = guild;
         }
 
-        if (this.channelID !== null) {
+        if (this.channelID === null) {
+            this._cachedChannel = null;
+        } else {
             let channel: Channel | PartialInviteChannel | undefined;
             channel = this.client.getChannel<InviteChannel>(this.channelID);
             if (data.channel !== undefined) {
@@ -93,8 +95,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
                 }
             }
             this._cachedChannel = channel as (CH extends InviteChannel ? CH : PartialInviteChannel) | null;
-        } else {
-            this._cachedChannel = null;
         }
 
         if (data.inviter !== undefined) {

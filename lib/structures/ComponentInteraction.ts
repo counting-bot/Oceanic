@@ -16,16 +16,15 @@ import type {
     MessageComponentInteractionResolvedData,
     MessageComponentSelectMenuInteractionData,
     RawMessageComponentInteraction
-} from "../types/interactions.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
-import type { JSONComponentInteraction } from "../types/json.js";
-import type { Uncached } from "../types/shared.js";
-import type { RawUser } from "../types/users.js";
-import type { RawMember } from "../types/guilds.js";
-import type { InteractionTypes } from "../Constants.js";
-import { ComponentTypes, InteractionResponseTypes, SelectMenuTypes } from "../Constants.js";
-import SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper.js";
-import TypedCollection from "../util/TypedCollection.js";
+} from "../types/interactions";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
+import type { JSONComponentInteraction } from "../types/json";
+import type { Uncached } from "../types/shared";
+import type { RawUser } from "../types/users";
+import type { RawMember } from "../types/guilds";
+import { ComponentTypes, InteractionResponseTypes, type SelectMenuTypes, type InteractionTypes } from "../Constants";
+import SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper";
+import TypedCollection from "../util/TypedCollection";
 
 /** Represents a component interaction. */
 export default class ComponentInteraction<V extends ComponentTypes.BUTTON | SelectMenuTypes = ComponentTypes.BUTTON | SelectMenuTypes, T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {
@@ -57,8 +56,9 @@ export default class ComponentInteraction<V extends ComponentTypes.BUTTON | Sele
         this.guildID = (data.guild_id ?? null) as T extends AnyGuildTextChannel ? string : string | null;
         this.guildLocale = data.guild_locale as T extends AnyGuildTextChannel ? string : string | undefined;
         this.locale = data.locale!;
-        this.member = (data.member !== undefined ? this.client.util.updateMember(data.guild_id!, data.member.user.id, data.member) : undefined) as T extends AnyGuildTextChannel ? Member : Member | undefined;
-        this.memberPermissions = (data.member !== undefined ? new Permission(data.member.permissions) : undefined) as T extends AnyGuildTextChannel ? Permission : Permission | undefined;
+        this.member = (data.member === undefined ? undefined : this.client.util.updateMember(data.guild_id!, data.member.user.id, data.member)) as T extends AnyGuildTextChannel ? Member : Member | undefined;
+        this.memberPermissions = (data.member === undefined ? undefined : new Permission(data.member.permissions)) as T extends AnyGuildTextChannel ? Permission : Permission | undefined;
+        this.message = this.channel?.messages?.update(data.message) as Message<T> ?? new Message(data.message, client) ;
         this.user = client.users.update((data.user ?? data.member!.user)!);
 
         switch (data.data.component_type) {

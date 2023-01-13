@@ -20,11 +20,17 @@ import type {
     RawOverwrite,
     RawPublicThreadChannel,
     StartThreadInForumOptions
-} from "../types/channels.js";
-import type { JSONForumChannel } from "../types/json.js";
-import TypedCollection from "../util/TypedCollection.js";
-import type { ChannelTypes, ThreadAutoArchiveDuration } from "../Constants.js";
-import { AllPermissions, Permissions, SortOrderTypes, ForumLayoutTypes } from "../Constants.js";
+} from "../types/channels";
+import type { JSONForumChannel } from "../types/json";
+import TypedCollection from "../util/TypedCollection";
+import {
+    AllPermissions,
+    Permissions,
+    type SortOrderTypes,
+    type ForumLayoutTypes,
+    type ChannelTypes,
+    type ThreadAutoArchiveDuration
+} from "../Constants";
 
 /** Represents a forum channel. */
 export default class ForumChannel extends GuildChannel {

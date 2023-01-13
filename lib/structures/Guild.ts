@@ -1,21 +1,33 @@
 /** @module Guild */
-import Role from "./Role.js";
-import Base from "./Base.js";
-import GuildChannel from "./GuildChannel.js";
-import Member from "./Member.js";
-import ThreadChannel from "./ThreadChannel.js";
-import type User from "./User.js";
-import type ClientApplication from "./ClientApplication.js";
-import type TextChannel from "./TextChannel.js";
-import type CategoryChannel from "./CategoryChannel.js";
-import Permission from "./Permission.js";
-import Channel from "./Channel.js";
-import type Webhook from "./Webhook.js";
-import type { ImageFormat, GuildChannelTypesWithoutThreads } from "../Constants.js";
-import { AllPermissions, Permissions } from "../Constants.js";
-import * as Routes from "../util/Routes.js";
-import type Client from "../Client.js";
-import TypedCollection from "../util/TypedCollection.js";
+import Role from "./Role";
+import Base from "./Base";
+import GuildChannel from "./GuildChannel";
+import Member from "./Member";
+import ThreadChannel from "./ThreadChannel";
+import type User from "./User";
+import type ClientApplication from "./ClientApplication";
+import type TextChannel from "./TextChannel";
+import Permission from "./Permission";
+import Channel from "./Channel";
+import type Webhook from "./Webhook";
+import {
+    AllPermissions,
+    Permissions,
+    type DefaultMessageNotificationLevels,
+    type ExplicitContentFilterLevels,
+    type GuildFeature,
+    type GuildNSFWLevels,
+    type ImageFormat,
+    type MFALevels,
+    type PremiumTiers,
+    type VerificationLevels,
+    type GuildChannelTypesWithoutThreads,
+    type GatewayOPCodes,
+    type MutableGuildFeatures
+} from "../Constants";
+import * as Routes from "../util/Routes";
+import type Client from "../Client";
+import TypedCollection from "../util/TypedCollection";
 import type {
     AnyGuildChannel,
     AnyGuildChannelWithoutThreads,

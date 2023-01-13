@@ -35,8 +35,8 @@ import type TextChannel from "../structures/TextChannel.js";
 import type User from "../structures/User.js";
 import type ForumChannel from "../structures/ForumChannel.js";
 import type Message from "../structures/Message.js";
-import Guild from "../structures/Guild.js";
-import Invite from "../structures/Invite.js";
+import type Guild from "../structures/Guild.js";
+import type Invite from "../structures/Invite.js";
 
 export interface RawChannel {
     application_id?: string;

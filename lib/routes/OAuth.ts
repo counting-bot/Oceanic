@@ -71,7 +71,7 @@ export default class OAuth {
             expiresIn:   data.expires_in,
             scopes:      data.scope.split(" "),
             tokenType:   data.token_type,
-            webhook:     !data.webhook ? null : new Webhook(data.webhook, this.#manager.client)
+            webhook:     data.webhook ? new Webhook(data.webhook, this.#manager.client) : null
         }));
     }
 
@@ -96,7 +96,7 @@ export default class OAuth {
             refreshToken: data.refresh_token,
             scopes:       data.scope.split(" "),
             tokenType:    data.token_type,
-            webhook:      !data.webhook ? null : new Webhook(data.webhook, this.#manager.client)
+            webhook:      data.webhook ? new Webhook(data.webhook, this.#manager.client) : null
         }));
     }
 

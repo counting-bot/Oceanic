@@ -1,26 +1,31 @@
 /** @module CommandInteraction */
-import Interaction from "./Interaction.js";
-import Attachment from "./Attachment.js";
-import Member from "./Member.js";
-import Message from "./Message.js";
-import Role from "./Role.js";
-import User from "./User.js";
-import type Guild from "./Guild.js";
-import Permission from "./Permission.js";
-import GuildChannel from "./GuildChannel.js";
-import type PrivateChannel from "./PrivateChannel.js";
-import InteractionResolvedChannel from "./InteractionResolvedChannel.js";
-import TypedCollection from "../util/TypedCollection.js";
-import type { InteractionTypes } from "../Constants.js";
-import { ApplicationCommandTypes, InteractionResponseTypes } from "../Constants.js";
-import type { ApplicationCommandInteractionData, InteractionContent, RawApplicationCommandInteraction, ApplicationCommandInteractionResolvedData } from "../types/interactions.js";
-import type Client from "../Client.js";
-import type { RawMember } from "../types/guilds.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
-import type { RawUser } from "../types/users.js";
-import type { JSONCommandInteraction } from "../types/json.js";
-import InteractionOptionsWrapper from "../util/InteractionOptionsWrapper.js";
-import type { Uncached } from "../types/shared.js";
+import Interaction from "./Interaction";
+import Attachment from "./Attachment";
+import Member from "./Member";
+import Message from "./Message";
+import Role from "./Role";
+import User from "./User";
+import type Guild from "./Guild";
+import Permission from "./Permission";
+import GuildChannel from "./GuildChannel";
+import type PrivateChannel from "./PrivateChannel";
+import InteractionResolvedChannel from "./InteractionResolvedChannel";
+import TypedCollection from "../util/TypedCollection";
+import { ApplicationCommandTypes, InteractionResponseTypes, type InteractionTypes } from "../Constants";
+import type {
+    ApplicationCommandInteractionData,
+    InteractionContent,
+    ModalData,
+    RawApplicationCommandInteraction,
+    ApplicationCommandInteractionResolvedData
+} from "../types/interactions";
+import type Client from "../Client";
+import type { RawMember } from "../types/guilds";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
+import type { RawUser } from "../types/users";
+import type { JSONCommandInteraction } from "../types/json";
+import InteractionOptionsWrapper from "../util/InteractionOptionsWrapper";
+import type { Uncached } from "../types/shared";
 
 /** Represents a command interaction. */
 export default class CommandInteraction<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {
@@ -60,8 +65,8 @@ export default class CommandInteraction<T extends AnyTextChannelWithoutGroup | U
         this.guildID = (data.guild_id ?? null) as T extends AnyGuildTextChannel ? string : string | null;
         this.guildLocale = data.guild_locale as T extends AnyGuildTextChannel ? string : string | undefined;
         this.locale = data.locale!;
-        this.member = (data.member !== undefined ? this.client.util.updateMember(data.guild_id!, data.member.user.id, data.member) : undefined) as T extends AnyGuildTextChannel ? Member : Member | undefined;
-        this.memberPermissions = (data.member !== undefined ? new Permission(data.member.permissions) : undefined) as T extends AnyGuildTextChannel ? Permission : Permission | undefined;
+        this.member = (data.member === undefined ? undefined : this.client.util.updateMember(data.guild_id!, data.member.user.id, data.member)) as T extends AnyGuildTextChannel ? Member : Member | undefined;
+        this.memberPermissions = (data.member === undefined ? undefined : new Permission(data.member.permissions)) as T extends AnyGuildTextChannel ? Permission : Permission | undefined;
         this.user = client.users.update((data.user ?? data.member!.user)!);
 
         if (data.data.resolved) {

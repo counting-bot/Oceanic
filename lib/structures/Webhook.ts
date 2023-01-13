@@ -1,15 +1,14 @@
 /** @module Webhook */
-import Base from "./Base.js";
-import type User from "./User.js";
-import type Message from "./Message.js";
-import type Guild from "./Guild.js";
-import type ClientApplication from "./ClientApplication.js";
-import type Client from "../Client.js";
-import type { ImageFormat, WebhookTypes } from "../Constants.js";
-import { BASE_URL } from "../Constants.js";
-import * as Routes from "../util/Routes.js";
-import type { AnyGuildTextChannel, RawChannel } from "../types/channels.js";
-import type { RawGuild } from "../types/guilds.js";
+import Base from "./Base";
+import type User from "./User";
+import type Message from "./Message";
+import type Guild from "./Guild";
+import type ClientApplication from "./ClientApplication";
+import type Client from "../Client";
+import { BASE_URL, type ImageFormat, type WebhookTypes } from "../Constants";
+import * as Routes from "../util/Routes";
+import type { AnyGuildTextChannel, RawChannel } from "../types/channels";
+import type { RawGuild } from "../types/guilds";
 import type {
     DeleteWebhookMessageOptions,
     EditWebhookMessageOptions,
@@ -235,7 +234,7 @@ export default class Webhook extends Base {
      * @param size The dimensions of the image.
      */
     sourceGuildIconURL(format?: ImageFormat, size?: number): string | null {
-        return !this.sourceGuild?.icon ? null : this.client.util.formatImage(Routes.GUILD_ICON(this.id, this.sourceGuild?.icon), format, size);
+        return this.sourceGuild?.icon ? this.client.util.formatImage(Routes.GUILD_ICON(this.id, this.sourceGuild?.icon), format, size) : null;
     }
 
     override toJSON(): JSONWebhook {

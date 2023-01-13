@@ -11,7 +11,7 @@ import type {
     ForumTag
 } from "./channels.js";
 import type { ClientStatus, PresenceUpdate, Activity as GatewayActivity } from "./gateway.js";
-import { File } from "./request-handler.js";
+import { type File } from "./request-handler.js";
 import type {
     ChannelTypes,
     DefaultMessageNotificationLevels,

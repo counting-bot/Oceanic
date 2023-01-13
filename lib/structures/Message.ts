@@ -12,7 +12,7 @@ import type PublicThreadChannel from "./PublicThreadChannel.js";
 import type TextChannel from "./TextChannel.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
-import { BASE_URL, MessageTypes } from "../Constants.js";
+import { BASE_URL, type MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
 import type {
     AnyGuildTextChannel,
@@ -101,14 +101,16 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         this.embeds = [];
         this.flags = 0;
         this.guildID = (data.guild_id === undefined ? null : data.guild_id) as T extends AnyGuildTextChannel ? string : string | null;
-        this.member = (data.member !== undefined ? this.client.util.updateMember(data.guild_id!, data.author.id, { ...data.member, user: data.author }) : undefined) as T extends AnyGuildTextChannel ? Member : Member | undefined;
+        this.member = (data.member === undefined ? undefined : this.client.util.updateMember(data.guild_id!, data.author.id, { ...data.member, user: data.author })) as T extends AnyGuildTextChannel ? Member : Member | undefined;
         this.reactions = {};
         this.timestamp = new Date(data.timestamp);
         this.type = data.type;
         this.webhookID = data.webhook_id;
         this.update(data);
-        this.author = data.author.discriminator !== "0000" ? client.users.update(data.author) : new User(data.author, client);
-        if (data.application_id !== undefined) {
+        this.author = data.author.discriminator === "0000" ? new User(data.author, client) : client.users.update(data.author);
+        if (data.application_id === undefined) {
+            this.applicationID = null;
+        } else {
             if (client["_application"] && client.application.id === data.application_id) {
                 if (data.application) {
                     client.application["update"](data.application);
@@ -118,8 +120,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
                 this.application = data.application ? new PartialApplication(data.application, client) : undefined;
             }
             this.applicationID = data.application_id;
-        } else {
-            this.applicationID = null;
         }
         if (data.attachments) {
             for (const attachment of data.attachments) {
@@ -284,7 +284,7 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
                 name:   this.interaction.name,
                 type:   this.interaction.type,
                 user:   this.interaction.user.toJSON()
-            },
+            } : undefined,
             mentionChannels:   this.mentionChannels,
             messageReference:  this.messageReference,
             nonce:             this.nonce,

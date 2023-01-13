@@ -27,7 +27,7 @@ import type Role from "../structures/Role.js";
 import type Invite from "../structures/Invite.js";
 import type Message from "../structures/Message.js";
 import type PrivateChannel from "../structures/PrivateChannel.js";
-import ForumChannel from "../structures/ForumChannel.js";
+import type ForumChannel from "../structures/ForumChannel.js";
 
 
 export interface ClientEvents {

@@ -1,14 +1,13 @@
 /** @module RequestHandler */
-import SequentialBucket from "./SequentialBucket.js";
-import DiscordRESTError from "./DiscordRESTError.js";
-import DiscordHTTPError from "./DiscordHTTPError.js";
-import type RESTManager from "./RESTManager.js";
-import type { RESTMethod } from "../Constants.js";
-import { API_URL, RESTMethods, USER_AGENT } from "../Constants.js";
-import Base from "../structures/Base.js";
-import type { LatencyRef, RequestHandlerInstanceOptions, RequestOptions } from "../types/request-handler.js";
-import type { RESTOptions } from "../types/client.js";
-import { FormData, fetch } from "undici";
+import SequentialBucket from "./SequentialBucket";
+import DiscordRESTError from "./DiscordRESTError";
+import DiscordHTTPError from "./DiscordHTTPError";
+import type RESTManager from "./RESTManager";
+import { API_URL, RESTMethods, USER_AGENT, type RESTMethod } from "../Constants";
+import Base from "../structures/Base";
+import type { LatencyRef, RequestHandlerInstanceOptions, RequestOptions } from "../types/request-handler";
+import type { RESTOptions } from "../types/client";
+import { FormData, fetch, File as UFile } from "undici";
 
 /**
  * Latency & ratelimit related things lovingly borrowed from eris
@@ -217,7 +216,7 @@ export default class RequestHandler {
                             `x-ratelimit-global = ${res.headers.get("x-ratelimit-global") ?? "null"}`].join("\n"));
                     }
 
-                    this.ratelimits[route].remaining = !res.headers.has("x-ratelimit-remaining") ? 1 : Number(res.headers.get("x-ratelimit-remaining")) ?? 0;
+                    this.ratelimits[route].remaining = res.headers.has("x-ratelimit-remaining") ? Number(res.headers.get("x-ratelimit-remaining")) ?? 0 : 1;
                     const retryAfter = Number(res.headers.get("x-ratelimit-reset-after") ?? res.headers.get("retry-after") ?? 0) * 1000;
                     if (retryAfter >= 0) {
                         if (res.headers.has("x-ratelimit-global")) {
