@@ -1,23 +1,20 @@
 /** @module Channel */
-import Base from "./Base";
-import { ChannelTypes } from "../Constants";
-import type Client from "../Client";
+import Base from "./Base.js";
+import { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
 import type {
     AnyChannel,
-    RawAnnouncementChannel,
-    RawAnnouncementThreadChannel,
-    RawCategoryChannel,
     RawChannel,
     RawForumChannel,
-    RawGroupChannel,
     RawPrivateChannel,
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
-    RawStageChannel,
     RawTextChannel,
-    RawVoiceChannel
-} from "../types/channels";
-import type { JSONChannel } from "../types/json";
+    RawCategoryChannel,
+    RawAnnouncementChannel,
+    RawAnnouncementThreadChannel
+} from "../types/channels.js";
+import type { JSONChannel } from "../types/json.js";
 
 /** Represents a channel. */
 export default class Channel extends Base {
@@ -36,12 +33,6 @@ export default class Channel extends Base {
             case ChannelTypes.DM: {
                 return new PrivateChannel(data as RawPrivateChannel, client) as T;
             }
-            case ChannelTypes.GUILD_VOICE: {
-                return new VoiceChannel(data as RawVoiceChannel, client) as T;
-            }
-            case ChannelTypes.GROUP_DM: {
-                return new GroupChannel(data as RawGroupChannel, client) as T;
-            }
             case ChannelTypes.GUILD_CATEGORY: {
                 return new CategoryChannel(data as RawCategoryChannel, client) as T;
             }
@@ -57,9 +48,6 @@ export default class Channel extends Base {
             case ChannelTypes.PRIVATE_THREAD: {
                 return new PrivateThreadChannel(data as RawPrivateThreadChannel, client) as T;
             }
-            case ChannelTypes.GUILD_STAGE_VOICE: {
-                return new StageChannel(data as RawStageChannel, client) as T;
-            }
             case ChannelTypes.GUILD_FORUM: {
                 return new ForumChannel(data as RawForumChannel, client) as T;
             }
@@ -67,18 +55,6 @@ export default class Channel extends Base {
                 return new Channel(data, client) as T;
             }
         }
-    }
-
-    /** A string that will mention this channel. */
-    get mention(): string {
-        return `<#${this.id}>`;
-    }
-
-    /**
-     * Close a direct message, leave a group channel, or delete a guild channel.
-     */
-    async delete(): Promise<void> {
-        await this.client.rest.channels.delete(this.id);
     }
 
     override toJSON(): JSONChannel {
@@ -91,15 +67,12 @@ export default class Channel extends Base {
 
 // Yes this sucks, but it works. That's the important part. Circular imports are hell.
 /* eslint-disable @typescript-eslint/no-var-requires, unicorn/prefer-module */
-const TextChannel = (require("./TextChannel") as typeof import("./TextChannel")).default;
-const PrivateChannel = (require("./PrivateChannel") as typeof import("./PrivateChannel")).default;
-const VoiceChannel = (require("./VoiceChannel") as typeof import("./VoiceChannel")).default;
-const CategoryChannel = (require("./CategoryChannel") as typeof import("./CategoryChannel")).default;
-const GroupChannel = (require("./GroupChannel") as typeof import("./GroupChannel")).default;
-const AnnouncementChannel = (require("./AnnouncementChannel") as typeof import("./AnnouncementChannel")).default;
-const PublicThreadChannel = (require("./PublicThreadChannel") as typeof import("./PublicThreadChannel")).default;
-const PrivateThreadChannel = (require("./PrivateThreadChannel") as typeof import("./PrivateThreadChannel")).default;
-const AnnouncementThreadChannel = (require("./AnnouncementThreadChannel") as typeof import("./AnnouncementThreadChannel")).default;
-const StageChannel = (require("./StageChannel") as typeof import("./StageChannel")).default;
-const ForumChannel = (require("./ForumChannel") as typeof import("./ForumChannel")).default;
+const TextChannel = (require("./TextChannel.js") as typeof import("./TextChannel.js")).default;
+const PrivateChannel = (require("./PrivateChannel.js") as typeof import("./PrivateChannel.js")).default;
+const PublicThreadChannel = (require("./PublicThreadChannel.js") as typeof import("./PublicThreadChannel.js")).default;
+const PrivateThreadChannel = (require("./PrivateThreadChannel.js") as typeof import("./PrivateThreadChannel.js")).default;
+const ForumChannel = (require("./ForumChannel.js") as typeof import("./ForumChannel.js")).default;
+const CategoryChannel = (require("./CategoryChannel.js") as typeof import("./CategoryChannel.js")).default;
+const AnnouncementChannel = (require("./AnnouncementChannel.js") as typeof import("./AnnouncementChannel.js")).default;
+const AnnouncementThreadChannel = (require("./AnnouncementThreadChannel.js") as typeof import("./AnnouncementThreadChannel.js")).default;
 /* eslint-enable @typescript-eslint/no-var-requires, unicorn/prefer-module */

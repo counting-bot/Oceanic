@@ -1,10 +1,10 @@
 /** @module Routes/Users */
-import type Channels from "./Channels";
-import type { EditSelfUserOptions, RawOAuthUser, RawUser } from "../types/users";
-import * as Routes from "../util/Routes";
-import ExtendedUser from "../structures/ExtendedUser";
-import type RESTManager from "../rest/RESTManager";
-import type User from "../structures/User";
+import type Channels from "./Channels.js";
+import type { EditSelfUserOptions, RawOAuthUser, RawUser } from "../types/users.js";
+import * as Routes from "../util/Routes.js";
+import ExtendedUser from "../structures/ExtendedUser.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type User from "../structures/User.js";
 
 /** Various methods for interacting with users. */
 export default class Users {

@@ -16,8 +16,8 @@ import type {
     ExecuteWebhookOptions,
     ExecuteWebhookWaitOptions,
     RawWebhook
-} from "../types/webhooks";
-import type { JSONWebhook } from "../types/json";
+} from "../types/webhooks.js";
+import type { JSONWebhook } from "../types/json.js";
 
 /** Represents a webhook. */
 export default class Webhook extends Base {

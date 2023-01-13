@@ -1,10 +1,10 @@
 /** @module Role */
-import Base from "./Base";
-import Permission from "./Permission";
-import type Guild from "./Guild";
-import type Client from "../Client";
-import type { RawRole, RoleTags, EditRoleOptions } from "../types/guilds";
-import type { JSONRole } from "../types/json";
+import Base from "./Base.js";
+import Permission from "./Permission.js";
+import type Guild from "./Guild.js";
+import type Client from "../Client.js";
+import type { RawRole, EditRoleOptions } from "../types/guilds.js";
+import type { JSONRole } from "../types/json.js";
 
 /** Represents a role in a guild. */
 export default class Role extends Base {
@@ -27,8 +27,6 @@ export default class Role extends Base {
     permissions: Permission;
     /** The position of this role. */
     position: number;
-    /** The [tags](https://discord.com/developers/docs/topics/permissions#role-object-role-tags-structure) of this role. */
-    tags: RoleTags;
     /** The unicode emoji of this role. */
     unicodeEmoji: string | null;
     constructor(data: RawRole, client: Client, guildID: string) {
@@ -42,23 +40,13 @@ export default class Role extends Base {
         this.name = data.name;
         this.permissions = new Permission(data.permissions);
         this.position = data.position;
-        this.tags = {
-            availableForPurchase: false,
-            premiumSubscriber:    false
-        };
         this.unicodeEmoji = null;
         this.update(data);
     }
 
     protected override update(data: Partial<RawRole>): void {
-        if (data.color !== undefined) {
-            this.color = data.color;
-        }
         if (data.hoist !== undefined) {
             this.hoist = data.hoist;
-        }
-        if (data.icon !== undefined) {
-            this.icon = data.icon ?? null;
         }
         if (data.mentionable !== undefined) {
             this.mentionable = data.mentionable;
@@ -71,15 +59,6 @@ export default class Role extends Base {
         }
         if (data.position !== undefined) {
             this.position = data.position;
-        }
-        if (data.tags !== undefined) {
-            this.tags = {
-                availableForPurchase:  data.tags.available_for_purchase === null,
-                botID:                 data.tags.bot_id,
-                integrationID:         data.tags.integration_id,
-                premiumSubscriber:     data.tags.premium_subscriber === null,
-                subscriptionListingID: data.tags.subscription_listing_id
-            };
         }
         if (data.unicode_emoji !== undefined) {
             this.unicodeEmoji = data.unicode_emoji ?? null;
@@ -97,19 +76,6 @@ export default class Role extends Base {
         }
 
         return this._cachedGuild;
-    }
-
-    /** A string that will mention this role. */
-    get mention(): string {
-        return `<@&${this.id}>`;
-    }
-
-    /**
-     * Delete this role.
-     * @param reason The reason for deleting the role.
-     */
-    async delete(reason?: string): Promise<void> {
-        return this.client.rest.guilds.deleteRole(this.guildID, this.id, reason);
     }
 
     /**
@@ -132,7 +98,6 @@ export default class Role extends Base {
             name:         this.name,
             permissions:  this.permissions.toJSON(),
             position:     this.position,
-            tags:         this.tags,
             unicodeEmoji: this.unicodeEmoji
         };
     }

@@ -15,9 +15,8 @@
   "scripts": {
     "lint": "eslint lib --ext .ts",
     "lint:fix": "eslint lib --ext .ts --fix",
-    "prepublishOnly": "node scripts/build",
+    "prepublishOnly": "tsc -p tsconfig.json",
     "test:build": "npm run prepublishOnly",
-    "test:esm": "node --no-warnings --no-deprecation --experimental-specifier-resolution=node esm.mjs",
     "test:docs": "npm i --no-save --ignore-scripts typedoc typedoc-plugin-extras typedoc-plugin-rename-defaults && node scripts/doc-test.js && npx --yes typedoc"
   },
   "repository": {
@@ -64,6 +63,6 @@
     "node": ">=16.16.0"
   },
   "optionalDependencies": {
-    "@discordjs/voice": "^0.14.0"
+    "@discordjs/voice": "^0.13.0"
   }
 }

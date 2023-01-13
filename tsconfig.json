@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist/lib",
     "lib": [
       "ES2015",
       "ES2016",

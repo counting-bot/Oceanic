@@ -1,7 +1,7 @@
 /** @module TypedCollection */
-import Collection from "./Collection";
-import type Client from "../Client";
-import Base from "../structures/Base";
+import Collection from "./Collection.js";
+import type Client from "../Client.js";
+import Base from "../structures/Base.js";
 
 export type AnyClass<T, I, E extends Array<unknown>> = new(data: T, client: Client, ...extra: E) => I;
 

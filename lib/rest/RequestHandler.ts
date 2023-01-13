@@ -129,12 +129,6 @@ export default class RequestHandler {
                         }
                         if (options.form || (options.files && options.files.length !== 0)) {
                             const data = options.form ?? new FormData();
-                            if (options.files) for (const [index, file] of options.files.entries()) {
-                                if (!file.contents) {
-                                    continue;
-                                }
-                                data.set(`files[${index}]`, new UFile([file.contents], file.name));
-                            }
                             if (stringBody) {
                                 data.set("payload_json", stringBody);
                             }

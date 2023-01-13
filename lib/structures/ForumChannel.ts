@@ -1,13 +1,13 @@
 /** @module ForumChannel */
-import GuildChannel from "./GuildChannel";
-import PermissionOverwrite from "./PermissionOverwrite";
-import PublicThreadChannel from "./PublicThreadChannel";
-import type Invite from "./Invite";
-import type Member from "./Member";
-import Permission from "./Permission";
-import type CategoryChannel from "./CategoryChannel";
-import type Webhook from "./Webhook";
-import type Client from "../Client";
+import GuildChannel from "./GuildChannel.js";
+import PermissionOverwrite from "./PermissionOverwrite.js";
+import PublicThreadChannel from "./PublicThreadChannel.js";
+import type Invite from "./Invite.js";
+import type Member from "./Member.js";
+import Permission from "./Permission.js";
+import type CategoryChannel from "./CategoryChannel.js";
+import type Webhook from "./Webhook.js";
+import type Client from "../Client.js";
 import type {
     ArchivedThreads,
     CreateInviteOptions,

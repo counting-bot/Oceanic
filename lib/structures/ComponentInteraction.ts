@@ -1,21 +1,20 @@
 /** @module ComponentInteraction */
-import Interaction from "./Interaction";
-import Message from "./Message";
-import type Guild from "./Guild";
-import Member from "./Member";
-import Permission from "./Permission";
-import GuildChannel from "./GuildChannel";
-import type PrivateChannel from "./PrivateChannel";
-import Role from "./Role";
-import User from "./User";
-import InteractionResolvedChannel from "./InteractionResolvedChannel";
-import type Client from "../Client";
+import Interaction from "./Interaction.js";
+import type Message from "./Message.js";
+import type Guild from "./Guild.js";
+import Member from "./Member.js";
+import Permission from "./Permission.js";
+import GuildChannel from "./GuildChannel.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import Role from "./Role.js";
+import User from "./User.js";
+import InteractionResolvedChannel from "./InteractionResolvedChannel.js";
+import type Client from "../Client.js";
 import type {
     InteractionContent,
     MessageComponentButtonInteractionData,
     MessageComponentInteractionResolvedData,
     MessageComponentSelectMenuInteractionData,
-    ModalData,
     RawMessageComponentInteraction
 } from "../types/interactions";
 import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
@@ -47,8 +46,6 @@ export default class ComponentInteraction<V extends ComponentTypes.BUTTON | Sele
     member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** The permissions of the member associated with the invoking user, if this interaction is sent from a guild. */
     memberPermissions: T extends AnyGuildTextChannel ? Permission : Permission | undefined;
-    /** The message the interaction is from. */
-    message: Message<T>;
     declare type: InteractionTypes.MESSAGE_COMPONENT;
     /** The user that invoked this interaction. */
     user: User;
@@ -163,18 +160,6 @@ export default class ComponentInteraction<V extends ComponentTypes.BUTTON | Sele
         }
         this.acknowledged = true;
         return this.client.rest.interactions.createInteractionResponse(this.id, this.token, { type: InteractionResponseTypes.CHANNEL_MESSAGE_WITH_SOURCE, data: options });
-    }
-
-    /**
-     * Respond to this interaction with a modal. This is an initial response, and more than one initial response cannot be used.
-     * @param options The options for the modal.
-     */
-    async createModal(options: ModalData): Promise<void> {
-        if (this.acknowledged) {
-            throw new Error("Interactions cannot have more than one initial response.");
-        }
-        this.acknowledged = true;
-        return this.client.rest.interactions.createInteractionResponse(this.id, this.token, { type: InteractionResponseTypes.MODAL, data: options });
     }
 
     /**

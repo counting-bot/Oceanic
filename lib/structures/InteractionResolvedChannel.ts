@@ -1,13 +1,13 @@
 /** @module InteractionResolvedChannel */
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type TextChannel from "./TextChannel";
-import Permission from "./Permission";
-import Channel from "./Channel";
-import type PrivateChannel from "./PrivateChannel";
-import type ForumChannel from "./ForumChannel";
-import type { ChannelTypes, GuildChannelTypes } from "../Constants";
-import type Client from "../Client";
-import type { RawInteractionResolvedChannel, ThreadMetadata, PrivateThreadMetadata, AnyGuildChannel } from "../types/channels";
+import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type TextChannel from "./TextChannel.js";
+import Permission from "./Permission.js";
+import Channel from "./Channel.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import type ForumChannel from "./ForumChannel.js";
+import type { ChannelTypes, GuildChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
+import type { RawInteractionResolvedChannel, ThreadMetadata, PrivateThreadMetadata, AnyGuildChannel } from "../types/channels.js";
 
 /** Represents a channel from an interaction option. This can be any guild channel, or a direct message. */
 export default class InteractionResolvedChannel extends Channel {
@@ -28,7 +28,6 @@ export default class InteractionResolvedChannel extends Channel {
         this.name = data.name;
         this.parentID = data.parent_id ?? null;
         this.threadMetadata = data.thread_metadata ? {
-            archiveTimestamp:    new Date(data.thread_metadata.archive_timestamp),
             archived:            !!data.thread_metadata.archived,
             autoArchiveDuration: data.thread_metadata.auto_archive_duration,
             createTimestamp:     data.thread_metadata.create_timestamp ? new Date(data.thread_metadata.create_timestamp) : null,

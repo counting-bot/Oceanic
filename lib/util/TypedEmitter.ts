@@ -1,6 +1,6 @@
 /** @module TypedEmitter */
 /* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
-import UncaughtError from "./UncaughtError";
+import UncaughtError from "./UncaughtError.js";
 import EventEmitter from "node:events";
 
 declare interface TypedEmitter<Events extends Record<string | symbol, any>> extends EventEmitter {

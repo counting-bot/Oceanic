@@ -1,28 +1,24 @@
 /** @module Message */
-import Base from "./Base";
-import Attachment from "./Attachment";
-import User from "./User";
-import type Guild from "./Guild";
-import type Member from "./Member";
-import PartialApplication from "./PartialApplication";
-import type ClientApplication from "./ClientApplication";
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type AnnouncementThreadChannel from "./AnnouncementThreadChannel";
-import type PublicThreadChannel from "./PublicThreadChannel";
-import type TextChannel from "./TextChannel";
-import GuildChannel from "./GuildChannel";
-import type PrivateChannel from "./PrivateChannel";
-import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
-import { BASE_URL, type MessageTypes } from "../Constants";
-import type { Uncached } from "../types/shared";
+import Base from "./Base.js";
+import Attachment from "./Attachment.js";
+import User from "./User.js";
+import type Guild from "./Guild.js";
+import type Member from "./Member.js";
+import PartialApplication from "./PartialApplication.js";
+import type ClientApplication from "./ClientApplication.js";
+import type AnnouncementChannel from "./AnnouncementChannel.js";
+import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
+import type PublicThreadChannel from "./PublicThreadChannel.js";
+import type TextChannel from "./TextChannel.js";
+import type Client from "../Client.js";
+import TypedCollection from "../util/TypedCollection.js";
+import { BASE_URL, type MessageTypes } from "../Constants.js";
+import type { Uncached } from "../types/shared.js";
 import type {
     AnyGuildTextChannel,
     AnyTextChannelWithoutGroup,
     ChannelMention,
-    EditMessageOptions,
     Embed,
-    GetReactionsOptions,
     MessageActivity,
     MessageInteraction,
     MessageReference,
@@ -31,13 +27,12 @@ import type {
     StartThreadFromMessageOptions,
     StickerItem,
     MessageReaction,
-    MessageActionRow,
     AnyThreadChannel
-} from "../types/channels";
-import type { RawMember } from "../types/guilds";
-import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks";
-import type { JSONMessage } from "../types/json";
-import * as Routes from "../util/Routes";
+} from "../types/channels.js";
+import type { RawMember } from "../types/guilds.js";
+import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks.js";
+import type { JSONMessage } from "../types/json.js";
+import * as Routes from "../util/Routes.js";
 
 /** Represents a message. */
 export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Base {
@@ -63,12 +58,8 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     author: User;
     /** The ID of the channel this message was created in. */
     channelID: string;
-    /** The components on this message. */
-    components: Array<MessageActionRow>;
     /** The content of this message. */
     content: string;
-    /** The timestamp at which this message was last edited. */
-    editedTimestamp: Date | null;
     /** The embeds on this message. */
     embeds: Array<Embed>;
     /** The [flags](https://discord.com/developers/docs/resources/channel#message-object-message-flags) on this message. */
@@ -81,25 +72,10 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** Channels mentioned in a `CROSSPOSTED` channel follower message. See [Discord's docs](https://discord.com/developers/docs/resources/channel#channel-mention-object) for more information. */
     mentionChannels?: Array<ChannelMention>;
-    /** The mentions in this message. */
-    mentions: {
-        /** The ids of the channels mentioned in this message. */
-        channels: Array<string>;
-        /** If @everyone/@here is mentioned in this message. */
-        everyone: boolean;
-        /** The members mentioned in this message. */
-        members: Array<Member>;
-        /** The ids of the roles mentioned in this message. */
-        roles: Array<string>;
-        /** The users mentioned in this message. */
-        users: Array<User>;
-    };
     /** If this message is a `REPLY` or `THREAD_STARTER_MESSAGE`, some info about the referenced message. */
     messageReference?: MessageReference;
     /** A nonce for ensuring a message was sent. */
     nonce?: number | string;
-    /** If this message is pinned. */
-    pinned: boolean;
     /** This message's relative position, if in a thread. */
     position?: number;
     /** The reactions on this message. */
@@ -113,8 +89,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     thread?: AnyThreadChannel;
     /** The timestamp at which this message was sent. */
     timestamp: Date;
-    /** If this message was read aloud. */
-    tts: boolean;
     /** The [type](https://discord.com/developers/docs/resources/channel#message-object-message-types) of this message. */
     type: MessageTypes;
     /** The webhook associated with this message, if sent via a webhook. This only has an `id` property. */
@@ -123,24 +97,13 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         super(data.id, client);
         this.attachments = new TypedCollection(Attachment, client);
         this.channelID = data.channel_id;
-        this.components = [];
         this.content = data.content;
-        this.editedTimestamp = null;
         this.embeds = [];
         this.flags = 0;
         this.guildID = (data.guild_id === undefined ? null : data.guild_id) as T extends AnyGuildTextChannel ? string : string | null;
         this.member = (data.member === undefined ? undefined : this.client.util.updateMember(data.guild_id!, data.author.id, { ...data.member, user: data.author })) as T extends AnyGuildTextChannel ? Member : Member | undefined;
-        this.mentions = {
-            channels: [],
-            everyone: false,
-            members:  [],
-            roles:    [],
-            users:    []
-        };
-        this.pinned = !!data.pinned;
         this.reactions = {};
         this.timestamp = new Date(data.timestamp);
-        this.tts = data.tts;
         this.type = data.type;
         this.webhookID = data.webhook_id;
         this.update(data);
@@ -166,22 +129,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     protected override update(data: Partial<RawMessage>): void {
-        if (data.mention_everyone !== undefined) {
-            this.mentions.everyone = data.mention_everyone;
-        }
-        if (data.mention_roles !== undefined) {
-            this.mentions.roles = data.mention_roles;
-        }
-        if (data.mentions !== undefined) {
-            const members: Array<Member> = [];
-            this.mentions.users = data.mentions.map(user => {
-                if (this.channel && "guildID" in (this.channel as T) && user.member) {
-                    members.push(this.client.util.updateMember((this.channel as AnyGuildTextChannel).guildID, user.id, { ...user.member, user }));
-                }
-                return this.client.users.update(user);
-            });
-            this.mentions.members = members;
-        }
         if (data.activity !== undefined) {
             this.activity = data.activity;
         }
@@ -196,15 +143,8 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
                 this.attachments.update(attachment);
             }
         }
-        if (data.components !== undefined) {
-            this.components = this.client.util.componentsToParsed(data.components);
-        }
         if (data.content !== undefined) {
             this.content = data.content;
-            this.mentions.channels = (data.content.match(/<#\d{17,21}>/g) ?? []).map(mention => mention.slice(2, -1));
-        }
-        if (data.edited_timestamp !== undefined) {
-            this.editedTimestamp = data.edited_timestamp ? new Date(data.edited_timestamp) : null;
         }
         if (data.embeds !== undefined) {
             this.embeds = this.client.util.embedsToParsed(data.embeds);
@@ -240,37 +180,15 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         if (data.nonce !== undefined) {
             this.nonce = data.nonce;
         }
-        if (data.pinned !== undefined) {
-            this.pinned = data.pinned;
-        }
         if (data.position !== undefined) {
             this.position = data.position;
         }
-        if (data.reactions) {
-            for (const reaction of data.reactions) {
-                const name = reaction.emoji.id ? `${reaction.emoji.name}:${reaction.emoji.id}` : reaction.emoji.name;
-                this.reactions[name] = {
-                    count: reaction.count,
-                    me:    reaction.me
-                };
-            }
-        }
-
-        if (data.referenced_message !== undefined) {
-            if (data.referenced_message === null) {
-                this.referencedMessage = null;
-            } else {
-                this.referencedMessage = this.channel ? this.channel.messages?.update(data.referenced_message) : new Message(data.referenced_message, this.client);
-            }
-        }
-
 
         if (data.sticker_items !== undefined) {
             this.stickerItems = data.sticker_items;
         }
         if (data.thread !== undefined) {
             this.thread = this.client.util.updateThread(data.thread);
-
         }
     }
 
@@ -310,35 +228,11 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     /**
-     * Crosspost this message in an announcement channel.
-     */
-    async crosspost(): Promise<Message<T>> {
-        return this.client.rest.channels.crosspostMessage<T>(this.channelID, this.id);
-    }
-
-    /**
      * Delete this message.
      * @param reason The reason for deleting the message.
      */
     async delete(reason?: string): Promise<void> {
         return this.client.rest.channels.deleteMessage(this.channelID, this.id, reason);
-    }
-
-    /**
-     * Remove a reaction from this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param user The user to remove the reaction from, `@me` for the current user (default).
-     */
-    async deleteReaction(emoji: string, user = "@me"): Promise<void> {
-        return this.client.rest.channels.deleteReaction(this.channelID, this.id, emoji, user);
-    }
-
-    /**
-     * Remove all, or a specific emoji's reactions from this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
-     */
-    async deleteReactions(emoji?: string): Promise<void> {
-        return this.client.rest.channels.deleteReactions(this.channelID, this.id, emoji);
     }
 
     /**
@@ -354,14 +248,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     /**
-     * Edit this message.
-     * @param options The options for editing the message.
-     */
-    async edit(options: EditMessageOptions):  Promise<Message<T>> {
-        return this.client.rest.channels.editMessage<T>(this.channelID, this.id, options);
-    }
-
-    /**
      * Edit this message as a webhook.
      * @param token The token of the webhook.
      * @param options The options for editing the message.
@@ -374,34 +260,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     }
 
     /**
-     * Get the users who reacted with a specific emoji on this message.
-     * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     * @param options The options for getting the reactions.
-     */
-    async getReactions(emoji: string, options?: GetReactionsOptions): Promise<Array<User>> {
-        return this.client.rest.channels.getReactions(this.channelID, this.id, emoji, options);
-    }
-
-    /** Whether this message belongs to a cached guild channel. The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */
-    inCachedGuildChannel(): this is Message<AnyGuildTextChannel> {
-        return this.channel instanceof GuildChannel;
-    }
-
-    /** Whether this message belongs to a direct message channel (PrivateChannel or uncached). The only difference on using this method over a simple if statement is to easily update all the message properties typing definitions based on the channel it belongs to. */
-    inDirectMessageChannel(): this is Message<PrivateChannel | Uncached> {
-        return this.guildID === null;
-    }
-
-    /**
-     * Pin this message.
-     * @param reason The reason for pinning the message.
-     */
-    async pin(reason?: string): Promise<void> {
-        return this.client.rest.channels.pinMessage(this.channelID, this.id, reason);
-    }
-
-
-    /**
      * Create a thread from this message.
      * @param options The options for creating the thread.
      */
@@ -411,52 +269,33 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     override toJSON(): JSONMessage {
         return {
             ...super.toJSON(),
-            activity:        this.activity,
-            applicationID:   this.applicationID ?? undefined,
-            attachments:     this.attachments.map(attachment => attachment.toJSON()),
-            author:          this.author.toJSON(),
-            channelID:       this.channelID,
-            components:      this.components,
-            content:         this.content,
-            editedTimestamp: this.editedTimestamp?.getTime() ?? null,
-            embeds:          this.embeds,
-            flags:           this.flags,
-            guildID:         this.guildID ?? undefined,
-            interaction:     this.interaction ? {
+            activity:      this.activity,
+            applicationID: this.applicationID ?? undefined,
+            attachments:   this.attachments.map(attachment => attachment.toJSON()),
+            author:        this.author.toJSON(),
+            channelID:     this.channelID,
+            content:       this.content,
+            embeds:        this.embeds,
+            flags:         this.flags,
+            guildID:       this.guildID ?? undefined,
+            interaction:   !this.interaction ? undefined : {
                 id:     this.interaction.id,
                 member: this.interaction.member?.toJSON(),
                 name:   this.interaction.name,
                 type:   this.interaction.type,
                 user:   this.interaction.user.toJSON()
             } : undefined,
-            mentionChannels: this.mentionChannels,
-            mentions:        {
-                channels: this.mentions.channels,
-                everyone: this.mentions.everyone,
-                members:  this.mentions.members.map(member => member.toJSON()),
-                roles:    this.mentions.roles,
-                users:    this.mentions.users.map(user => user.toJSON())
-            },
+            mentionChannels:   this.mentionChannels,
             messageReference:  this.messageReference,
             nonce:             this.nonce,
-            pinned:            this.pinned,
             position:          this.position,
             reactions:         this.reactions,
             referencedMessage: this.referencedMessage?.toJSON(),
             stickerItems:      this.stickerItems,
             thread:            this.thread?.toJSON(),
             timestamp:         this.timestamp.getTime(),
-            tts:               this.tts,
             type:              this.type,
             webhook:           this.webhookID
         };
-    }
-
-    /**
-     * Unpin this message.
-     * @param reason The reason for unpinning the message.
-     */
-    async unpin(reason?: string): Promise<void> {
-        return this.client.rest.channels.unpinMessage(this.channelID, this.id, reason);
     }
 }

@@ -1,10 +1,9 @@
 /** @module Types/Channels */
-import type { PartialEmoji, PartialGuild, RawMember } from "./guilds";
-import type { RawApplication, RawPartialApplication } from "./oauth";
-import type { RawUser, RawUserWithMember } from "./users";
-import type { File } from "./request-handler";
-import type { RawScheduledEvent } from "./scheduled-events";
-import { type  Uncached } from "./shared";
+import type { PartialEmoji, PartialGuild, RawMember } from "./guilds.js";
+import type { RawApplication, RawPartialApplication } from "./oauth.js";
+import type { RawUser, RawUserWithMember } from "./users.js";
+import type { File } from "./request-handler.js";
+import { type  Uncached } from "./shared.js";
 import type {
     ButtonStyles,
     ChannelTypes,
@@ -23,23 +22,21 @@ import type {
     ThreadChannelTypes,
     VideoQualityModes,
     ForumLayoutTypes
-} from "../Constants";
-import type CategoryChannel from "../structures/CategoryChannel";
-import type GroupChannel from "../structures/GroupChannel";
-import type Member from "../structures/Member";
-import type AnnouncementChannel from "../structures/AnnouncementChannel";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
-import type PrivateChannel from "../structures/PrivateChannel";
-import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import type PublicThreadChannel from "../structures/PublicThreadChannel";
-import type StageChannel from "../structures/StageChannel";
-import type TextChannel from "../structures/TextChannel";
-import type User from "../structures/User";
-import type VoiceChannel from "../structures/VoiceChannel";
-import type ForumChannel from "../structures/ForumChannel";
-import type Message from "../structures/Message";
-import type Guild from "../structures/Guild";
-import type Invite from "../structures/Invite";
+} from "../Constants.js";
+import type CategoryChannel from "../structures/CategoryChannel.js";
+import type Member from "../structures/Member.js";
+import type AnnouncementChannel from "../structures/AnnouncementChannel.js";
+import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel.js";
+import type PrivateChannel from "../structures/PrivateChannel.js";
+import type PrivateThreadChannel from "../structures/PrivateThreadChannel.js";
+import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
+import type StageChannel from "../structures/StageChannel.js";
+import type TextChannel from "../structures/TextChannel.js";
+import type User from "../structures/User.js";
+import type ForumChannel from "../structures/ForumChannel.js";
+import type Message from "../structures/Message.js";
+import type Guild from "../structures/Guild.js";
+import type Invite from "../structures/Invite.js";
 
 export interface RawChannel {
     application_id?: string;
@@ -85,12 +82,9 @@ export interface RawChannel {
 export type RawGuildChannel = Required<Pick<RawChannel, "id" | "guild_id" | "parent_id">> & { name: string; type: GuildChannelTypes; };
 export type RawPrivateChannel = Required<Pick<RawChannel, "id" | "last_message_id" | "recipients">> & { type: ChannelTypes.DM; };
 // managed and nicks are undocumented, creating a group dm DOES work, and they show in the client, so we're supporting them
-export type RawGroupChannel = Required<Pick<RawChannel, "id" | "recipients" | "application_id" | "icon" | "owner_id" | "nsfw" | "last_message_id">> & { managed: boolean; name: string; nicks?: Array<Record<"id" | "nick", string>>; type: ChannelTypes.GROUP_DM; };
 export type RawTextChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel, "default_auto_archive_duration" | "last_message_id" | "last_pin_timestamp" | "rate_limit_per_user" | "topic" | "nsfw" | "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_TEXT; };
 export type RawCategoryChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel,  "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_CATEGORY; };
 export type RawAnnouncementChannel = Omit<RawTextChannel, "type"> & { type: ChannelTypes.GUILD_ANNOUNCEMENT; };
-export type RawVoiceChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel, "bitrate" | "user_limit" | "video_quality_mode" | "rtc_region" | "nsfw" | "topic" | "permission_overwrites" | "position" | "last_message_id">> & { type: ChannelTypes.GUILD_VOICE; };
-export type RawStageChannel = Omit<RawGuildChannel, "type"> & Required<Pick<RawChannel, "bitrate" | "rtc_region" | "topic" | "permission_overwrites" | "position">> & { type: ChannelTypes.GUILD_STAGE_VOICE; };
 export type RawThreadChannel = RawAnnouncementThreadChannel | RawPublicThreadChannel | RawPrivateThreadChannel;
 export type RawAnnouncementThreadChannel = Required<Pick<RawChannel, "id" | "guild_id" | "parent_id" | "owner_id" | "last_message_id" | "thread_metadata" | "message_count" | "member_count" | "rate_limit_per_user" | "flags" | "total_message_sent" | "newly_created" | "member">> & { name: string; type: ChannelTypes.ANNOUNCEMENT_THREAD; };
 export type RawPublicThreadChannel = Omit<RawAnnouncementThreadChannel, "type"> & { type: ChannelTypes.PUBLIC_THREAD; } & Required<Pick<RawChannel, "applied_tags">>;
@@ -126,7 +120,6 @@ export interface OverwriteOptions {
 }
 
 export interface RawThreadMetadata {
-    archive_timestamp: string;
     archived: boolean;
     auto_archive_duration: ThreadAutoArchiveDuration;
     create_timestamp?: string | null;
@@ -156,10 +149,6 @@ export interface UncachedThreadMember {
     userID: string;
 }
 
-export interface GatewayThreadMember {
-    flags: number;
-    joinTimestamp: Date;
-}
 export interface EditGroupDMOptions {
     /** [Group DM] The icon of the channel. */
     icon?: string | Buffer;
@@ -227,21 +216,10 @@ export type EditChannelOptions = EditGroupDMOptions & EditGuildChannelOptions;
 export type EditAnyGuildChannelOptions = Pick<EditGuildChannelOptions, "name" | "position" | "permissionOverwrites">;
 export type EditTextChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "topic" | "nsfw" | "rateLimitPerUser" | "parentID" | "defaultAutoArchiveDuration"> & { type?: ChannelTypes.GUILD_ANNOUNCEMENT; };
 export type EditAnnouncementChannelOptions = Omit<EditTextChannelOptions, "rateLimitPerUser"> & { type?: ChannelTypes.GUILD_TEXT; };
-export type EditVoiceChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "nsfw" | "bitrate" | "userLimit" | "parentID" | "rtcRegion" | "videoQualityMode">;
-export type EditStageChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "bitrate" | "rtcRegion">;
 export type EditThreadChannelOptions = EditPublicThreadChannelOptions | EditPrivateThreadChannelOptions;
 export type EditPublicThreadChannelOptions = Pick<EditGuildChannelOptions, "name" | "archived" | "autoArchiveDuration" | "locked" | "rateLimitPerUser" | "flags" | "appliedTags">;
 export type EditPrivateThreadChannelOptions = EditPublicThreadChannelOptions & Pick<EditGuildChannelOptions, "invitable">;
 export type EditForumChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "availableTags" | "defaultReactionEmoji" | "defaultSortOrder" |"defaultThreadRateLimitPerUser" | "flags" | "nsfw"  | "rateLimitPerUser" | "topic">;
-
-export interface AddGroupRecipientOptions {
-    /** The access token of the user to add. */
-    accessToken: string;
-    /** The nickname of the user to add. */
-    nick?: string;
-    /** The id of the user to add. */
-    userID: string;
-}
 
 export interface CreateMessageOptions {
     /** An object that specifies the allowed mentions in this message. */
@@ -685,19 +663,18 @@ export interface StickerItem {
 }
 
 
-export type AnyChannel = TextChannel | PrivateChannel | VoiceChannel | GroupChannel | CategoryChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel | StageChannel | ForumChannel;
-export type AnyPrivateChannel = PrivateChannel | GroupChannel;
+export type AnyChannel = TextChannel | PrivateChannel | CategoryChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel | StageChannel | ForumChannel;
+export type AnyPrivateChannel = PrivateChannel;
 export type AnyEditableChannel = Exclude<AnyChannel, PrivateChannel>;
 export type AnyGuildChannel = Exclude<AnyChannel, AnyPrivateChannel>;
 export type AnyGuildChannelWithoutThreads = Exclude<AnyGuildChannel, AnyThreadChannel>;
 export type AnyTextChannelWithoutThreads = Exclude<AnyTextChannel, AnyThreadChannel>;
-export type AnyTextChannel = TextChannel | PrivateChannel | VoiceChannel | GroupChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel;
-export type AnyTextChannelWithoutGroup = Exclude<AnyTextChannel, GroupChannel>;
+export type AnyTextChannel = TextChannel | PrivateChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel;
+export type AnyTextChannelWithoutGroup = Exclude<AnyTextChannel>;
 export type AnyGuildTextChannel = Exclude<AnyTextChannel, AnyPrivateChannel>;
 export type AnyGuildTextChannelWithoutThreads = Exclude<AnyGuildTextChannel, AnyThreadChannel>;
 export type AnyThreadChannel = AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel;
-export type AnyVoiceChannel = VoiceChannel | StageChannel;
-export type InviteChannel = Exclude<AnyChannel, PrivateChannel | CategoryChannel | GroupChannel | AnyThreadChannel>;
+export type InviteChannel = Exclude<AnyChannel, PrivateChannel | CategoryChannel | AnyThreadChannel>;
 
 export interface PartialInviteChannel {
     icon?: string | null;
@@ -724,13 +701,6 @@ export interface GetChannelMessagesOptions {
     limit?: number;
 }
 
-export interface GetReactionsOptions {
-    /** The ID of the user to get reactions after. */
-    after?: string;
-    /** The maximum amount of reactions to get. Defaults to 100. Use Infinity if you wish to get as many reactions as possible. */
-    limit?: number;
-}
-
 export type EditMessageOptions = Pick<CreateMessageOptions, "content" | "embeds" | "allowedMentions" | "components" | "attachments" | "files" | "flags">;
 
 export interface EditPermissionOptions {
@@ -754,7 +724,6 @@ export interface RawInvite {
     code: string;
     expires_at?: string;
     guild?: PartialGuild;
-    guild_scheduled_event?: RawScheduledEvent;
     inviter?: RawUser;
     /** @deprecated */
     stage_instance?: RawInviteStageInstance;
@@ -806,16 +775,6 @@ export interface CreateInviteOptions {
     unique?: boolean;
 }
 
-export interface RawFollowedChannel {
-    channel_id: string;
-    webhook_id: string;
-}
-
-export interface FollowedChannel {
-    channelID: string;
-    webhookID: string;
-}
-
 export interface StartThreadFromMessageOptions {
     /** The duration of no activity after which this thread will be automatically archived. */
     autoArchiveDuration?: ThreadAutoArchiveDuration;
@@ -861,8 +820,6 @@ export interface ArchivedThreads<T extends AnnouncementThreadChannel | PublicThr
 }
 
 export interface GetInviteOptions {
-    /** The id of the guild scheduled event to include with the invite. */
-    guildScheduledEventID?: string;
     /** If the invite should contain approximate member counts. */
     withCounts?: boolean;
     /** If the invite should contain expiration data.  */
@@ -900,7 +857,6 @@ export type InviteInfoTypes = "withMetadata" | "withCounts" | "withoutCounts" | 
 
 
 export interface ThreadMetadata {
-    archiveTimestamp: Date;
     archived: boolean;
     autoArchiveDuration: ThreadAutoArchiveDuration;
     createTimestamp: Date | null;
@@ -938,25 +894,5 @@ export interface ForumEmoji {
 }
 
 export type PossiblyUncachedMessage = Message | { channel: AnyTextChannelWithoutGroup | Uncached; channelID: string; guild?: Guild; guildID?: string; } & Uncached;
-export type PossiblyUncachedThread = AnyThreadChannel | Pick<AnyThreadChannel, "id" | "type"> & { guild?: Guild; guildID: string; parent?: ThreadParentChannel; parentID: string; };
-export type MinimalPossiblyUncachedThread = AnyThreadChannel | { guild?: Guild; guildID: string; id: string; };
-
-export interface PurgeOptions<T extends AnyGuildTextChannel | Uncached> {
-    /** The ID of the message to purge after. */
-    after?: string;
-    /** The ID of the message to purge around. */
-    around?: string;
-    /** The ID of the message to purge before. */
-    before?: string;
-    /** The limit of messages to purge. */
-    limit: number;
-    /** The reason for purging the messages. */
-    reason?: string;
-    /**
-     * The filter to apply to messages to decide if they should be purged.
-     * @param message The message to filter.
-     */
-    filter?(message: Message<T>): boolean | PromiseLike<boolean>;
-}
 
 export type ThreadParentChannel = TextChannel | AnnouncementChannel | ForumChannel;

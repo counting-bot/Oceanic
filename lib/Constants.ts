@@ -1,15 +1,13 @@
 /* eslint-disable unicorn/prefer-math-trunc */
 /** @module Constants */
-import pkg from "../package.json";
-
 export const GATEWAY_VERSION = 10;
-export const REST_VERSION    = 10;
-export const BASE_URL        = "https://discord.com";
-export const API_URL         = `${BASE_URL}/api/v${REST_VERSION}`;
-export const VERSION         = pkg.version;
-export const USER_AGENT      = `Oceanic/${VERSION} (https://github.com/OceanicJS/Oceanic)`;
-export const MIN_IMAGE_SIZE  = 64;
-export const MAX_IMAGE_SIZE  = 4096;
+export const REST_VERSION = 10;
+export const BASE_URL = "https://discord.com";
+export const API_URL = `${BASE_URL}/api/v${REST_VERSION}`;
+export const VERSION = "1.3.1";
+export const USER_AGENT = `Oceanic/${VERSION} (https://github.com/OceanicJS/Oceanic)`;
+export const MIN_IMAGE_SIZE = 64;
+export const MAX_IMAGE_SIZE = 4096;
 
 export const RESTMethods = [
     "GET",
@@ -227,7 +225,6 @@ export type GuildChannelTypesWithoutThreads = Exclude<GuildChannelTypes, ThreadC
 export type TextChannelTypes = ChannelTypes.GUILD_TEXT | ChannelTypes.DM | ChannelTypes.GROUP_DM | ChannelTypes.GUILD_ANNOUNCEMENT | ChannelTypes.ANNOUNCEMENT_THREAD | ChannelTypes.PUBLIC_THREAD | ChannelTypes.PRIVATE_THREAD;
 export type GuildTextChannelTypes = Exclude<TextChannelTypes, PrivateChannelTypes>;
 export type ThreadChannelTypes = ChannelTypes.ANNOUNCEMENT_THREAD | ChannelTypes.PUBLIC_THREAD | ChannelTypes.PRIVATE_THREAD;
-export type VoiceChannelTypes = ChannelTypes.GUILD_VOICE | ChannelTypes.GUILD_STAGE_VOICE;
 
 export enum OverwriteTypes {
     ROLE   = 0,
@@ -410,11 +407,6 @@ export enum ForumLayoutTypes {
     GRID = 2,
 }
 
-export enum TeamMembershipState {
-    INVITED  = 1,
-    ACCEPTED = 2,
-}
-
 export enum OAuthScopes {
     /** allows your app to fetch data from a user's "Now Playing/Recently Played" list - requires Discord approval */
     ACTIVITIES_READ = "activities.read",
@@ -576,130 +568,10 @@ export enum InviteTargetTypes {
     ROLE_SUBSCRIPTIONS_PURCHASE = 3,
 }
 
-export enum GuildScheduledEventPrivacyLevels {
-    GUILD_ONLY = 2,
-}
-
-export enum GuildScheduledEventStatuses {
-    SCHEDULED = 1,
-    ACTIVE    = 2,
-    COMPLETED = 3,
-    CANCELED = 4,
-}
-
-export enum GuildScheduledEventEntityTypes {
-    STAGE_INSTANCE = 1,
-    VOICE          = 2,
-    EXTERNAL       = 3,
-}
-
 export enum StageInstancePrivacyLevels {
     /** @deprecated */
     PUBLIC     = 1,
     GUILD_ONLY = 2,
-}
-
-export enum AutoModerationEventTypes {
-    MESSAGE_SEND = 1,
-}
-
-export enum AutoModerationTriggerTypes {
-    KEYWORD        = 1,
-    SPAM           = 3,
-    KEYWORD_PRESET = 4,
-    MENTION_SPAM   = 5,
-}
-
-export enum AutoModerationKeywordPresetTypes {
-    PROFANITY      = 1,
-    SEXUAL_CONTENT = 2,
-    SLURS          = 3,
-}
-
-export enum AutoModerationActionTypes {
-    BLOCK_MESSAGE      = 1,
-    SEND_ALERT_MESSAGE = 2,
-    TIMEOUT            = 3,
-}
-
-export enum AuditLogActionTypes {
-    GUILD_UPDATE = 1,
-
-    CHANNEL_CREATE           = 10,
-    CHANNEL_UPDATE           = 11,
-    CHANNEL_DELETE           = 12,
-    CHANNEL_OVERWRITE_CREATE = 13,
-    CHANNEL_OVERWRITE_UPDATE = 14,
-    CHANNEL_OVERWRITE_DELETE = 15,
-
-    MEMBER_KICK        = 20,
-    MEMBER_PRUNE       = 21,
-    MEMBER_BAN_ADD     = 22,
-    MEMBER_BAN_REMOVE  = 23,
-    MEMBER_UPDATE      = 24,
-    MEMBER_ROLE_UPDATE = 25,
-    MEMBER_MOVE        = 26,
-    MEMBER_DISCONNECT  = 27,
-    BOT_ADD            = 28,
-
-    ROLE_CREATE = 30,
-    ROLE_UPDATE = 31,
-    ROLE_DELETE = 32,
-
-    INVITE_CREATE = 40,
-    INVITE_UPDATE = 41,
-    INVITE_DELETE = 42,
-
-    WEBHOOK_CREATE = 50,
-    WEBHOOK_UPDATE = 51,
-    WEBHOOK_DELETE = 52,
-
-    EMOJI_CREATE = 60,
-    EMOJI_UPDATE = 61,
-    EMOJI_DELETE = 62,
-
-    MESSAGE_DELETE      = 72,
-    MESSAGE_BULK_DELETE = 73,
-    MESSAGE_PIN         = 74,
-    MESSAGE_UNPIN       = 75,
-
-    INTEGRATION_CREATE    = 80,
-    INTEGRATION_UPDATE    = 81,
-    INTEGRATION_DELETE    = 82,
-    STAGE_INSTANCE_CREATE = 83,
-    STAGE_INSTANCE_UPDATE = 84,
-    STAGE_INSTANCE_DELETE = 85,
-
-    STICKER_CREATE = 90,
-    STICKER_UPDATE = 91,
-    STICKER_DELETE = 92,
-
-    GUILD_SCHEDULED_EVENT_CREATE = 100,
-    GUILD_SCHEDULED_EVENT_UPDATE = 101,
-    GUILD_SCHEDULED_EVENT_DELETE = 102,
-
-    THREAD_CREATE = 110,
-    THREAD_UPDATE = 111,
-    THREAD_DELETE = 112,
-
-    APPLICATION_COMMAND_PERMISSION_UPDATE = 121,
-
-    AUTO_MODERATION_RULE_CREATE                 = 140,
-    AUTO_MODERATION_RULE_UPDATE                 = 141,
-    AUTO_MODERATION_RULE_DELETE                 = 142,
-    AUTO_MODERATION_BLOCK_MESSAGE               = 143,
-    AUTO_MODERATION_FLAG_TO_CHANNEL             = 144,
-    AUTO_MODERATION_USER_COMMUNICATION_DISABLED = 145,
-
-    CREATOR_MONETIZATION_REQUEST_CREATED = 150,
-    CREATOR_MONETIZATION_TERMS_ACCEPTED  = 151,
-
-    ROLE_PROMPT_CREATE = 160,
-    ROLE_PROMPT_UPDATE = 161,
-    ROLE_PROMPT_DELETE = 162,
-
-    GUILD_HOME_FEATURE_ITEM = 171,
-    GUILD_HOME_REMOVE_ITEM  = 172,
 }
 
 export enum ApplicationCommandTypes {

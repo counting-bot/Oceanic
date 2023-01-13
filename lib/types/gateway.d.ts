@@ -1,8 +1,6 @@
 /** @module Types/Gateway */
-import type { RawUser } from "./users";
-import type { AutoModerationAction, RawAutoModerationAction } from "./auto-moderation";
-import type { ActivityTypes, AutoModerationTriggerTypes, ChannelTypes, IntentNames } from "../Constants";
-import type AutoModerationRule from "../structures/AutoModerationRule";
+import type { RawUser } from "./users.js";
+import type { ActivityTypes, ChannelTypes, IntentNames } from "../Constants.js";
 import type { ClientOptions as WSClientOptions } from "ws";
 
 export type ReconnectDelayFunction = (lastDelay: number, attempts: number) => number;
@@ -100,11 +98,6 @@ interface GatewayOptions {
      */
     reconnectDelay?: ReconnectDelayFunction;
     /**
-     * If existing voice connections should be populated. This will disconnect connections from other sessions.
-     * @defaultValue false
-     */
-    seedVoiceConnections?: boolean;
-    /**
      * An array of shard IDs to run for this client. Mutually exclusive with `firstShardID` & `lastShardID`.
      * @defaultValue based on `firstShardID` & `lastShardID`
      */
@@ -113,7 +106,7 @@ interface GatewayOptions {
     ws?: WSClientOptions;
 }
 
-export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOptions, "autoReconnect" | "compress" | "connectionTimeout" | "firstShardID" | "getAllUsers" | "guildCreateTimeout" | "largeThreshold" | "lastShardID" | "maxReconnectAttempts" | "maxResumeAttempts" | "reconnectDelay" | "seedVoiceConnections" | "shardIDs" | "ws">> {
+export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOptions, "autoReconnect" | "compress" | "connectionTimeout" | "firstShardID" | "getAllUsers" | "guildCreateTimeout" | "largeThreshold" | "lastShardID" | "maxReconnectAttempts" | "maxResumeAttempts" | "reconnectDelay" | "shardIDs" | "ws">> {
     concurrency: number;
     connectionProperties: Required<GatewayOptions["connectionProperties"]>;
     intents: number;
@@ -231,39 +224,6 @@ export interface ClientStatus {
     desktop?: string;
     mobile?: string;
     web?: string;
-}
-
-export interface UpdateVoiceStateOptions {
-    /** If the client should be self deafened. */
-    selfDeaf?: boolean;
-    /** If the client should be self muted. */
-    selfMute?: boolean;
-}
-
-export interface RawAutoModerationActionExecution {
-    action: RawAutoModerationAction;
-    alert_system_message_id?: string;
-    channel_id?: string;
-    content: string;
-    guild_id: string;
-    matched_content: string;
-    matched_keyword: string | null;
-    message_id?: string;
-    rule_id: string;
-    rule_trigger_type: AutoModerationTriggerTypes;
-    user_id: string;
-}
-
-export interface AutoModerationActionExecution {
-    action: AutoModerationAction;
-    alertSystemMessageID?: string;
-    content: string;
-    matchedContent: string;
-    matchedKeyword: string | null;
-    messageID?: string;
-    rule?: AutoModerationRule;
-    ruleID: string;
-    ruleTriggerType: AutoModerationTriggerTypes;
 }
 
 export type ShardStatus = "connecting" | "disconnected" | "handshaking" | "identifying" | "ready" | "resuming";

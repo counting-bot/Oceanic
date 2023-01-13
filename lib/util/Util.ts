@@ -8,7 +8,7 @@ import {
     MAX_IMAGE_SIZE,
     MIN_IMAGE_SIZE,
     type ImageFormat
-} from "../Constants";
+} from "../Constants.js";
 import type {
     AllowedMentions,
     AnyChannel,
@@ -30,11 +30,11 @@ import type {
     RawThreadChannel,
     ToComponentFromRaw,
     ToRawFromComponent
-} from "../types/channels";
-import type { RawMember, RawSticker, RESTMember, Sticker } from "../types/guilds";
-import type { ApplicationCommandOptions, CombinedApplicationCommandOption, RawApplicationCommandOption } from "../types/application-commands";
-import Member from "../structures/Member";
-import Channel from "../structures/Channel";
+} from "../types/channels.js";
+import type { RawMember, RawSticker, RESTMember, Sticker } from "../types/guilds.js";
+import type { ApplicationCommandOptions, CombinedApplicationCommandOption, RawApplicationCommandOption } from "../types/application-commands.js";
+import Member from "../structures/Member.js";
+import Channel from "../structures/Channel.js";
 
 /** A general set of utilities. These are intentionally poorly documented, as they serve almost no usefulness to outside developers. */
 export default class Util {

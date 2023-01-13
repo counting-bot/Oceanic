@@ -1,11 +1,11 @@
 /** @module User */
-import Base from "./Base";
-import type PrivateChannel from "./PrivateChannel";
-import type { ImageFormat } from "../Constants";
-import * as Routes from "../util/Routes";
-import type Client from "../Client";
-import type { RawUser } from "../types/users";
-import type { JSONUser } from "../types/json";
+import Base from "./Base.js";
+import type PrivateChannel from "./PrivateChannel.js";
+import type { ImageFormat } from "../Constants.js";
+import * as Routes from "../util/Routes.js";
+import type Client from "../Client.js";
+import type { RawUser } from "../types/users.js";
+import type { JSONUser } from "../types/json.js";
 
 /** Represents a user. */
 export default class User extends Base {
@@ -39,23 +39,14 @@ export default class User extends Base {
     }
 
     protected override update(data: Partial<RawUser>): void {
-        if (data.accent_color !== undefined) {
-            this.accentColor = data.accent_color;
-        }
         if (data.avatar !== undefined) {
             this.avatar = data.avatar;
-        }
-        if (data.avatar_decoration !== undefined) {
-            this.avatarDecoration = data.avatar_decoration;
         }
         if (data.banner !== undefined) {
             this.banner = data.banner;
         }
         if (data.discriminator !== undefined) {
             this.discriminator = data.discriminator;
-        }
-        if (data.public_flags !== undefined) {
-            this.publicFlags = data.public_flags;
         }
         if (data.username !== undefined) {
             this.username = data.username;

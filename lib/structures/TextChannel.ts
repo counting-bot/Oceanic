@@ -1,22 +1,20 @@
 /** @module TextChannel */
-import TextableChannel from "./TextableChannel";
-import type AnnouncementChannel from "./AnnouncementChannel";
-import type PublicThreadChannel from "./PublicThreadChannel";
-import type PrivateThreadChannel from "./PrivateThreadChannel";
-import ThreadChannel from "./ThreadChannel";
-import type { ChannelTypes } from "../Constants";
-import type Client from "../Client";
+import TextableChannel from "./TextableChannel.js";
+import type PublicThreadChannel from "./PublicThreadChannel.js";
+import type PrivateThreadChannel from "./PrivateThreadChannel.js";
+import ThreadChannel from "./ThreadChannel.js";
+import type { ChannelTypes } from "../Constants.js";
+import type Client from "../Client.js";
 import type {
     ArchivedThreads,
     EditTextChannelOptions,
-    FollowedChannel,
     GetArchivedThreadsOptions,
     RawPrivateThreadChannel,
     RawPublicThreadChannel,
     RawTextChannel
-} from "../types/channels";
-import type { JSONTextChannel } from "../types/json";
-import TypedCollection from "../util/TypedCollection";
+} from "../types/channels.js";
+import type { JSONTextChannel } from "../types/json.js";
+import TypedCollection from "../util/TypedCollection.js";
 
 /** Represents a guild text channel. */
 export default class TextChannel extends TextableChannel<TextChannel> {
@@ -28,12 +26,6 @@ export default class TextChannel extends TextableChannel<TextChannel> {
         this.threads = new TypedCollection(ThreadChannel, client) as TypedCollection<string, RawPublicThreadChannel | RawPrivateThreadChannel, PublicThreadChannel | PrivateThreadChannel>;
     }
 
-    /**
-     * Convert this text channel to a announcement channel.
-     */
-    override async convert(): Promise<AnnouncementChannel> {
-        return super.convert() as Promise<AnnouncementChannel>;
-    }
 
     /**
      * Edit this channel.
@@ -41,14 +33,6 @@ export default class TextChannel extends TextableChannel<TextChannel> {
      */
     override async edit(options: EditTextChannelOptions): Promise<this> {
         return this.client.rest.channels.edit<this>(this.id, options);
-    }
-
-    /**
-     * Follow an announcement channel to this channel.
-     * @param webhookChannelID The ID of the channel to follow the announcement channel to.
-     */
-    async followAnnouncement(webhookChannelID: string): Promise<FollowedChannel> {
-        return this.client.rest.channels.followAnnouncement(this.id, webhookChannelID);
     }
 
     /**
