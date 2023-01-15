@@ -10,31 +10,11 @@ import type TextChannel from "./TextChannel";
 import Permission from "./Permission";
 import Channel from "./Channel";
 import type Webhook from "./Webhook";
-import {
-    AllPermissions,
-    Permissions,
-    type DefaultMessageNotificationLevels,
-    type ExplicitContentFilterLevels,
-    type GuildFeature,
-    type GuildNSFWLevels,
-    type ImageFormat,
-    type MFALevels,
-    type PremiumTiers,
-    type VerificationLevels,
-    type GuildChannelTypesWithoutThreads,
-    type GatewayOPCodes,
-    type MutableGuildFeatures
-} from "../Constants";
+import { AllPermissions, Permissions, type ImageFormat, type GuildChannelTypesWithoutThreads } from "../Constants";
 import * as Routes from "../util/Routes";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
-import type {
-    AnyGuildChannel,
-    AnyGuildChannelWithoutThreads,
-    AnyThreadChannel,
-    RawGuildChannel,
-    RawThreadChannel
-} from "../types/channels.js";
+import type { AnyGuildChannelWithoutThreads, AnyThreadChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
 import type {
     CreateBanOptions,
     CreateChannelOptions,
@@ -97,13 +77,11 @@ export default class Guild extends Base {
     unavailable: boolean;
     /** The vanity url of this guild. Only present in guilds with the `VANITY_URL` feature. */
     vanityURLCode: string | null;
-    /** The channel the widget will generate an invite to, or `null` if set to no invite. */
-    widgetChannel?: Exclude<AnyGuildChannel, CategoryChannel> | null;
     /** If the widget is enabled. */
     widgetEnabled?: boolean;
     constructor(data: RawGuild, client: Client) {
         super(data.id, client);
-        this._shard = this.client.guildShardMap[this.id] !== undefined ? this.client.shards.get(this.client.guildShardMap[this.id]) : undefined;
+        this._shard = this.client.guildShardMap[this.id] === undefined ? undefined : this.client.shards.get(this.client.guildShardMap[this.id]);
         this.applicationID = data.application_id;
         this.channels = new TypedCollection(GuildChannel, client) as TypedCollection<string, RawGuildChannel, AnyGuildChannelWithoutThreads>;
         this.icon = null;

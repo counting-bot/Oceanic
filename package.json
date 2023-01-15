@@ -61,8 +61,5 @@
   },
   "engines": {
     "node": ">=16.16.0"
-  },
-  "optionalDependencies": {
-    "@discordjs/voice": "^0.13.0"
   }
 }

@@ -1101,7 +1101,7 @@ export default class Shard extends TypedEmitter<ShardEvents> {
             const func = (): void => {
                 if (++i >= waitFor && this.ws && this.ws.readyState === WebSocket.OPEN) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-                    const d = Erlpack ? Erlpack.pack({ op, d: data }) : JSON.stringify({ op, d: data });
+                    const d = JSON.stringify({ op, d: data });
                     this.ws.send(d);
                     if (typeof data === "object" && data && "token" in data) {
                         (data as { token: string; }).token = "[REMOVED]";

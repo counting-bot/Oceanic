@@ -6,13 +6,7 @@ import Permission from "./Permission";
 import type Client from "../Client";
 import { AllPermissions, Permissions, type ChannelTypes } from "../Constants";
 import TypedCollection from "../util/TypedCollection";
-import type {
-    EditAnyGuildChannelOptions,
-    EditPermissionOptions,
-    RawCategoryChannel,
-    RawGuildChannel,
-    RawOverwrite
-} from "../types/channels";
+import type { RawCategoryChannel, RawGuildChannel, RawOverwrite } from "../types/channels";
 import type { JSONCategoryChannel } from "../types/json";
 
 /** Represents a guild category channel. */

@@ -278,7 +278,7 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
             embeds:        this.embeds,
             flags:         this.flags,
             guildID:       this.guildID ?? undefined,
-            interaction:   !this.interaction ? undefined : {
+            interaction:   this.interaction ? {
                 id:     this.interaction.id,
                 member: this.interaction.member?.toJSON(),
                 name:   this.interaction.name,

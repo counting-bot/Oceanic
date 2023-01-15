@@ -12,13 +12,7 @@ import type PrivateChannel from "./PrivateChannel";
 import InteractionResolvedChannel from "./InteractionResolvedChannel";
 import TypedCollection from "../util/TypedCollection";
 import { ApplicationCommandTypes, InteractionResponseTypes, type InteractionTypes } from "../Constants";
-import type {
-    ApplicationCommandInteractionData,
-    InteractionContent,
-    ModalData,
-    RawApplicationCommandInteraction,
-    ApplicationCommandInteractionResolvedData
-} from "../types/interactions";
+import type { ApplicationCommandInteractionData, InteractionContent, RawApplicationCommandInteraction, ApplicationCommandInteractionResolvedData } from "../types/interactions";
 import type Client from "../Client";
 import type { RawMember } from "../types/guilds";
 import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
