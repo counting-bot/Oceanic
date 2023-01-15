@@ -1,8 +1,6 @@
 /** @module PartialApplication */
 import Base from "./Base.js";
 import type Client from "../Client.js";
-import type { ImageFormat } from "../Constants.js";
-import * as Routes from "../util/Routes.js";
 import type { RawPartialApplication } from "../types/oauth.js";
 import type { JSONPartialApplication } from "../types/json.js";
 
@@ -45,15 +43,6 @@ export default class PartialApplication extends Base {
         if (data.name !== undefined) {
             this.name = data.name;
         }
-    }
-
-    /**
-     * The url of this application's icon.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    iconURL(format?: ImageFormat, size?: number): string | null {
-        return this.icon === null ? null : this.client.util.formatImage(Routes.APPLICATION_COVER(this.id, this.icon), format, size);
     }
 
     override toJSON(): JSONPartialApplication {

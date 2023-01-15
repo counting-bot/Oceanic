@@ -30,7 +30,6 @@ import type {
     AnyThreadChannel
 } from "../types/channels.js";
 import type { RawMember } from "../types/guilds.js";
-import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks.js";
 import type { JSONMessage } from "../types/json.js";
 import * as Routes from "../util/Routes.js";
 
@@ -217,46 +216,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     /** A link to this message. */
     get jumpLink(): string {
         return `${BASE_URL}${Routes.MESSAGE_LINK(this.guildID ?? "@me", this.channelID, this.id)}`;
-    }
-
-    /**
-     * Add a reaction to this message.
-     * @param emoji The reaction to add to the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     */
-    async createReaction(emoji: string): Promise<void> {
-        return this.client.rest.channels.createReaction(this.channelID, this.id, emoji);
-    }
-
-    /**
-     * Delete this message.
-     * @param reason The reason for deleting the message.
-     */
-    async delete(reason?: string): Promise<void> {
-        return this.client.rest.channels.deleteMessage(this.channelID, this.id, reason);
-    }
-
-    /**
-     * Delete this message as a webhook.
-     * @param token The token of the webhook.
-     * @param options Options for deleting the message.
-     */
-    async deleteWebhook(token: string, options: DeleteWebhookMessageOptions): Promise<void> {
-        if (!this.webhookID) {
-            throw new Error("This message is not a webhook message.");
-        }
-        return this.client.rest.webhooks.deleteMessage(this.webhookID, token, this.id, options);
-    }
-
-    /**
-     * Edit this message as a webhook.
-     * @param token The token of the webhook.
-     * @param options The options for editing the message.
-     */
-    async editWebhook(token: string, options: EditWebhookMessageOptions): Promise<Message<T>> {
-        if (!this.webhookID) {
-            throw new Error("This message is not a webhook message.");
-        }
-        return this.client.rest.webhooks.editMessage<never>(this.webhookID, token, this.id, options);
     }
 
     /**

@@ -3,7 +3,7 @@ import Base from "./Base.js";
 import Permission from "./Permission.js";
 import type Guild from "./Guild.js";
 import type Client from "../Client.js";
-import type { RawRole, EditRoleOptions } from "../types/guilds.js";
+import type { RawRole } from "../types/guilds.js";
 import type { JSONRole } from "../types/json.js";
 
 /** Represents a role in a guild. */
@@ -76,14 +76,6 @@ export default class Role extends Base {
         }
 
         return this._cachedGuild;
-    }
-
-    /**
-     * Edit this role.
-     * @param options The options for editing the role.
-     */
-    async edit(options: EditRoleOptions): Promise<Role> {
-        return this.client.rest.guilds.editRole(this.guildID, this.id, options);
     }
 
     override toJSON(): JSONRole {

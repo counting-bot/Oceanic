@@ -4,29 +4,13 @@ import type AnnouncementChannel from "./AnnouncementChannel";
 import type TextChannel from "./TextChannel";
 import PermissionOverwrite from "./PermissionOverwrite";
 import Message from "./Message";
-import type Invite from "./Invite";
-import type PublicThreadChannel from "./PublicThreadChannel";
-import type AnnouncementThreadChannel from "./AnnouncementThreadChannel";
 import type CategoryChannel from "./CategoryChannel";
 import type Member from "./Member";
 import Permission from "./Permission";
-import type Webhook from "./Webhook";
 import { AllPermissions, Permissions, type ThreadAutoArchiveDuration } from "../Constants";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
-import type {
-    CreateInviteOptions,
-    CreateMessageOptions,
-    GetArchivedThreadsOptions,
-    GetChannelMessagesOptions,
-    RawMessage,
-    RawAnnouncementChannel,
-    RawOverwrite,
-    RawTextChannel,
-    StartThreadFromMessageOptions,
-    StartThreadWithoutMessageOptions,
-    ArchivedThreads
-} from "../types/channels.js";
+import type { RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel } from "../types/channels.js";
 import type { JSONTextableChannel } from "../types/json.js";
 
 /** Represents a guild textable channel. */
@@ -82,78 +66,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     }
 
     /**
-     * Create an invite for this channel.
-     * @param options The options for the invite.
-     */
-    async createInvite(options: CreateInviteOptions): Promise<Invite<"withMetadata", T>> {
-        return this.client.rest.channels.createInvite<"withMetadata", T>(this.id, options);
-    }
-
-    /**
-     * Create a message in this channel.
-     * @param options The options for the message.
-     */
-    async createMessage(options: CreateMessageOptions): Promise<Message<T>> {
-        return this.client.rest.channels.createMessage<T>(this.id, options);
-    }
-
-    /**
-     * Add a reaction to a message in this channel.
-     * @param messageID The ID of the message to add a reaction to.
-     * @param emoji The reaction to add to the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     */
-    async createReaction(messageID: string, emoji: string): Promise<void> {
-        return this.client.rest.channels.createReaction(this.id, messageID, emoji);
-    }
-
-    /**
-     * Delete a message in this channel.
-     * @param messageID The ID of the message to delete.
-     * @param reason The reason for deleting the message.
-     */
-    async deleteMessage(messageID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.deleteMessage(this.id, messageID, reason);
-    }
-
-    /**
-     * Get the invites of this channel.
-     */
-    async getInvites(): Promise<Array<Invite<"withMetadata", T>>> {
-        return this.client.rest.channels.getInvites<T>(this.id);
-    }
-
-    /**
-     * Get a message in this channel.
-     * @param messageID The ID of the message to get.
-     */
-    async getMessage(messageID: string): Promise<Message<T>> {
-        return this.client.rest.channels.getMessage<T>(this.id, messageID);
-    }
-
-    /**
-     * Get messages in this channel.
-     * @param options The options for getting the messages. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    async getMessages(options?: GetChannelMessagesOptions): Promise<Array<Message<T>>> {
-        return this.client.rest.channels.getMessages<T>(this.id, options);
-    }
-
-    /**
-     * Get the public archived threads in this channel.
-     * @param options The options for getting the public archived threads.
-     */
-    async getPublicArchivedThreads(options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T extends TextChannel ? PublicThreadChannel : AnnouncementThreadChannel>> {
-        return this.client.rest.channels.getPublicArchivedThreads<T extends TextChannel ? PublicThreadChannel : AnnouncementThreadChannel>(this.id, options);
-    }
-
-    /**
-     * Get the webhooks in this channel.
-     */
-    async getWebhooks(): Promise<Array<Webhook>> {
-        return this.client.rest.webhooks.getForChannel(this.id);
-    }
-
-    /**
      * Get the permissions of a member. If providing an id, the member must be cached.
      * @param member The member to get the permissions of.
      */
@@ -187,23 +99,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
             permission = (permission & ~overwrite.deny) | overwrite.allow;
         }
         return new Permission(permission);
-    }
-
-    /**
-     * Create a thread from an existing message in this channel.
-     * @param messageID The ID of the message to create a thread from.
-     * @param options The options for creating the thread.
-     */
-    async startThreadFromMessage(messageID: string, options: StartThreadFromMessageOptions): Promise<T extends TextChannel ? AnnouncementThreadChannel : PublicThreadChannel> {
-        return this.client.rest.channels.startThreadFromMessage<T extends TextChannel ? AnnouncementThreadChannel : PublicThreadChannel>(this.id, messageID, options);
-    }
-
-    /**
-     * Create a thread without an existing message in this channel.
-     * @param options The options for creating the thread.
-     */
-    async startThreadWithoutMessage(options: StartThreadWithoutMessageOptions): Promise<T extends TextChannel ? AnnouncementThreadChannel : PublicThreadChannel> {
-        return this.client.rest.channels.startThreadWithoutMessage<T extends TextChannel ? AnnouncementThreadChannel : PublicThreadChannel>(this.id, options);
     }
 
     override toJSON(): JSONTextableChannel {

@@ -9,10 +9,6 @@ import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
 import type {
     AnyThreadChannel,
-    CreateMessageOptions,
-    EditMessageOptions,
-    EditThreadChannelOptions,
-    GetChannelMessagesOptions,
     PrivateThreadMetadata,
     RawMessage,
     RawThreadChannel,
@@ -132,102 +128,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
     }
 
     /**
-     * Add a member to this thread.
-     * @param userID The ID of the user to add to the thread.
-     */
-    async addMember(userID: string): Promise<void> {
-        return this.client.rest.channels.addThreadMember(this.id, userID);
-    }
-
-    /**
-     * Create a message in this thread.
-     * @param options The options for creating the message.
-     */
-    async createMessage(options: CreateMessageOptions): Promise<Message<T>> {
-        return this.client.rest.channels.createMessage<T>(this.id, options);
-    }
-
-    /**
-     * Add a reaction to a message in this thread.
-     * @param messageID The ID of the message to add a reaction to.
-     * @param emoji The reaction to add to the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     */
-    async createReaction(messageID: string, emoji: string): Promise<void> {
-        return this.client.rest.channels.createReaction(this.id, messageID, emoji);
-    }
-
-    /**
-     * Delete a message in this thread.
-     * @param messageID The ID of the message to delete.
-     * @param reason The reason for deleting the message.
-     */
-    async deleteMessage(messageID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.deleteMessage(this.id, messageID, reason);
-    }
-
-    /**
-     * Edit this thread.
-     * @param options The options for editing the channel.
-     */
-    override async edit(options: EditThreadChannelOptions): Promise<AnyThreadChannel> {
-        return this.client.rest.channels.edit<AnyThreadChannel>(this.id, options);
-    }
-
-    /**
-     * Edit a message in this thread.
-     * @param messageID The ID of the message to edit.
-     * @param options The options for editing the message.
-     */
-    async editMessage(messageID: string, options: EditMessageOptions): Promise<Message<T>> {
-        return this.client.rest.channels.editMessage<T>(this.id, messageID, options);
-    }
-
-    /**
-     * Get a thread member in this thread.
-     * @param userID The ID of the user to get the thread member of.
-     */
-    async getMember(userID: string): Promise<ThreadMember> {
-        return this.client.rest.channels.getThreadMember(this.id, userID);
-    }
-
-    /**
-     * Get the members of this thread.
-     */
-    async getMembers(): Promise<Array<ThreadMember>> {
-        return this.client.rest.channels.getThreadMembers(this.id);
-    }
-
-    /**
-     * Get a message in this thread.
-     * @param messageID The ID of the message to get.
-     */
-    async getMessage(messageID: string): Promise<Message<T>> {
-        return this.client.rest.channels.getMessage<T>(this.id, messageID);
-    }
-
-    /**
-     * Get messages in this thread.
-     * @param options The options for getting the messages. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    async getMessages(options?: GetChannelMessagesOptions): Promise<Array<Message<T>>> {
-        return this.client.rest.channels.getMessages<T>(this.id, options);
-    }
-
-    /**
-     * Join this thread.
-     */
-    async join(): Promise<void> {
-        return this.client.rest.channels.joinThread(this.id);
-    }
-
-    /**
-     * Leave this thread.
-     */
-    async leave(): Promise<void> {
-        return this.client.rest.channels.leaveThread(this.id);
-    }
-
-    /**
      * Get the permissions of a member. If providing an id, the member must be cached. The parent channel must be cached as threads themselves do not have permissions.
      * @param member The member to get the permissions of.
      */
@@ -236,14 +136,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
             throw new Error(`Cannot use ${this.constructor.name}#permissionsOf without having the parent channel cached.`);
         }
         return this.parent.permissionsOf(member);
-    }
-
-    /**
-     * Remove a member from this thread.
-     * @param userID The ID of the user to remove from the thread.
-     */
-    async removeMember(userID: string): Promise<void> {
-        return this.client.rest.channels.removeThreadMember(this.id, userID);
     }
 
     override toJSON(): JSONThreadChannel {

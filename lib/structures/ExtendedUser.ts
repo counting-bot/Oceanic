@@ -1,7 +1,7 @@
 /** @module ExtendedUser */
 import User from "./User.js";
 import type Client from "../Client.js";
-import type { EditSelfUserOptions, RawOAuthUser } from "../types/users.js";
+import type { RawOAuthUser } from "../types/users.js";
 import type { JSONExtendedUser } from "../types/json.js";
 
 /** Represents the currently authenticated user. */
@@ -36,14 +36,6 @@ export default class ExtendedUser extends User {
         if (data.locale !== undefined) {
             this.locale = data.locale;
         }
-    }
-
-    /**
-     * Modify this user.
-     * @param options The options for editing the user.
-     */
-    async edit(options: EditSelfUserOptions): Promise<ExtendedUser> {
-        return this.client.rest.users.editSelf(options);
     }
 
     override toJSON(): JSONExtendedUser {

@@ -234,31 +234,6 @@ export default class Webhooks {
     }
 
     /**
-     * Execute a slack compatible webhook.
-     * @param webhookID The ID of the webhook.
-     * @param token The token of the webhook.
-     * @param options The options to send. See [Slack's Documentation](https://api.slack.com/incoming-webhooks) for more information.
-     */
-    async executeSlack(webhookID: string, token: string, options: Record<string, unknown> & { wait: false; }): Promise<void>;
-    async executeSlack<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: Record<string, unknown> & { wait?: true; }): Promise<Message<T>>;
-    async executeSlack<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: Record<string, unknown> & { wait?: boolean; }): Promise<Message<T> | void> {
-        const query = new URLSearchParams();
-        if (options.wait !== undefined) {
-            query.set("wait", options.wait.toString());
-        }
-        return this.#manager.authRequest<RawMessage | null>({
-            method: "POST",
-            path:   Routes.WEBHOOK_PLATFORM(webhookID, token, "slack"),
-            query,
-            json:   options
-        }).then(res => {
-            if (res !== null) {
-                return new Message(res, this.#manager.client);
-            }
-        });
-    }
-
-    /**
      * Get a webhook by ID (and optionally token).
      * @param webhookID The ID of the webhook.
      * @param token The token of the webhook.

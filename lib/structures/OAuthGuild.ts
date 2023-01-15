@@ -1,9 +1,8 @@
 import Base from "./Base.js";
 import Permission from "./Permission.js";
-import type { GuildFeature, ImageFormat } from "../Constants.js";
+import type { GuildFeature } from "../Constants.js";
 import type { RawOAuthGuild } from "../types/guilds.js";
 import type Client from "../Client.js";
-import * as Routes from "../util/Routes.js";
 
 /** Represents a guild retrieved via oauth. */
 export default class OAuthGuild extends Base {
@@ -30,14 +29,5 @@ export default class OAuthGuild extends Base {
         this.icon        = data.icon;
         this.owner       = data.owner;
         this.permissions = new Permission(data.permissions);
-    }
-
-    /**
-     * The url of this guild's icon.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    iconURL(format?: ImageFormat, size?: number): string | null {
-        return this.icon === null ? null : this.client.util.formatImage(Routes.GUILD_ICON(this.id, this.icon), format, size);
     }
 }

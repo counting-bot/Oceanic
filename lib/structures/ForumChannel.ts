@@ -2,24 +2,16 @@
 import GuildChannel from "./GuildChannel.js";
 import PermissionOverwrite from "./PermissionOverwrite.js";
 import PublicThreadChannel from "./PublicThreadChannel.js";
-import type Invite from "./Invite.js";
 import type Member from "./Member.js";
 import Permission from "./Permission.js";
 import type CategoryChannel from "./CategoryChannel.js";
-import type Webhook from "./Webhook.js";
 import type Client from "../Client.js";
 import type {
-    ArchivedThreads,
-    CreateInviteOptions,
-    EditForumChannelOptions,
-    EditPermissionOptions,
     ForumEmoji,
     ForumTag,
-    GetArchivedThreadsOptions,
     RawForumChannel,
     RawOverwrite,
-    RawPublicThreadChannel,
-    StartThreadInForumOptions
+    RawPublicThreadChannel
 } from "../types/channels";
 import type { JSONForumChannel } from "../types/json";
 import TypedCollection from "../util/TypedCollection";
@@ -153,62 +145,6 @@ export default class ForumChannel extends GuildChannel {
     }
 
     /**
-     * Create an invite for this channel.
-     * @param options The options for the invite.
-     */
-    async createInvite(options: CreateInviteOptions): Promise<Invite<"withMetadata", this>> {
-        return this.client.rest.channels.createInvite<"withMetadata", this>(this.id, options);
-    }
-
-    /**
-     * Delete a permission overwrite on this channel.
-     * @param overwriteID The ID of the permission overwrite to delete.
-     * @param reason The reason for deleting the permission overwrite.
-     */
-    async deletePermission(overwriteID: string, reason?: string): Promise<void> {
-        return this.client.rest.channels.deletePermission(this.id, overwriteID, reason);
-    }
-
-    /**
-     * Edit this channel.
-     * @param options The options for editing the channel
-     */
-    override async edit(options: EditForumChannelOptions): Promise<this> {
-        return this.client.rest.channels.edit<this>(this.id, options);
-    }
-
-    /**
-     * Edit a permission overwrite on this channel.
-     * @param overwriteID The ID of the permission overwrite to edit.
-     * @param options The options for editing the permission overwrite.
-     */
-    async editPermission(overwriteID: string, options: EditPermissionOptions): Promise<void> {
-        return this.client.rest.channels.editPermission(this.id, overwriteID, options);
-    }
-
-    /**
-     * Get the invites of this channel.
-     */
-    async getInvites(): Promise<Array<Invite<"withMetadata", this>>> {
-        return this.client.rest.channels.getInvites<this>(this.id);
-    }
-
-    /**
-     * Get the public archived threads in this channel.
-     * @param options The options for getting the public archived threads.
-     */
-    async getPublicArchivedThreads(options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<PublicThreadChannel>> {
-        return this.client.rest.channels.getPublicArchivedThreads<PublicThreadChannel>(this.id, options);
-    }
-
-    /**
-     * Get the webhooks in this channel.
-     */
-    async getWebhooks(): Promise<Array<Webhook>> {
-        return this.client.rest.webhooks.getForChannel(this.id);
-    }
-
-    /**
      * Get the permissions of a member.  If providing an id, the member must be cached.
      * @param member The member to get the permissions of.
      */
@@ -242,15 +178,6 @@ export default class ForumChannel extends GuildChannel {
             permission = (permission & ~overwrite.deny) | overwrite.allow;
         }
         return new Permission(permission);
-    }
-
-
-    /**
-     * Create a thread in a forum channel.
-     * @param options The options for starting the thread.
-     */
-    async startThread(options: StartThreadInForumOptions): Promise<PublicThreadChannel> {
-        return this.client.rest.channels.startThreadInForum(this.id, options);
     }
 
     override toJSON(): JSONForumChannel {

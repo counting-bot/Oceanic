@@ -9,23 +9,12 @@ import type ClientApplication from "./ClientApplication";
 import type TextChannel from "./TextChannel";
 import Permission from "./Permission";
 import Channel from "./Channel";
-import type Webhook from "./Webhook";
-import { AllPermissions, Permissions, type ImageFormat, type GuildChannelTypesWithoutThreads } from "../Constants";
+import { AllPermissions, Permissions, type ImageFormat } from "../Constants";
 import * as Routes from "../util/Routes";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
 import type { AnyGuildChannelWithoutThreads, AnyThreadChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
-import type {
-    CreateBanOptions,
-    CreateChannelOptions,
-    EditMemberOptions,
-    GetMembersOptions,
-    RawGuild,
-    RawMember,
-    RawRole,
-    CreateChannelReturn,
-    RESTMember
-} from "../types/guilds.js";
+import type { RawGuild, RawMember, RawRole, RESTMember } from "../types/guilds.js";
 import type { JSONGuild } from "../types/json.js";
 import type Shard from "../gateway/Shard.js";
 
@@ -206,79 +195,6 @@ export default class Guild extends Base {
             throw new Error(`${this.constructor.name}#shard is not present if the guild was received via REST, or you do not have the GUILDS intent.`);
         }
         return this._shard;
-    }
-
-    /**
-     * Add a role to a member.
-     * @param memberID The ID of the member.
-     * @param roleID The ID of the role to add.
-     * @param reason The reason for adding the role.
-     */
-    async addMemberRole(memberID: string, roleID: string, reason?: string): Promise<void> {
-        return this.client.rest.guilds.addMemberRole(this.id, memberID, roleID, reason);
-    }
-
-    /**
-     * Create a bon for a user.
-     * @param userID The ID of the user.
-     * @param options The options for creating the bon.
-     */
-    async createBan(userID: string, options?: CreateBanOptions): Promise<void> {
-        return this.client.rest.guilds.createBan(this.id, userID, options);
-    }
-
-    /**
-     * Create a channel in this guild.
-     * @param options The options for creating the channel.
-     */
-    async createChannel<T extends GuildChannelTypesWithoutThreads>(type: T, options: Omit<CreateChannelOptions, "type">): Promise<CreateChannelReturn<T>> {
-        return this.client.rest.guilds.createChannel(this.id, type, options);
-    }
-
-    /**
-     * Edit a member of this guild. Use \<Guild\>.editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the member.
-     */
-    async editMember(memberID: string, options: EditMemberOptions): Promise<Member> {
-        return this.client.rest.guilds.editMember(this.id, memberID, options);
-    }
-
-    /**
-     * Get the channels in a guild. Does not include threads. Only use this if you need to. See the `channels` collection.
-     */
-    async getChannels(): Promise<Array<AnyGuildChannelWithoutThreads>> {
-        return this.client.rest.guilds.getChannels(this.id);
-    }
-
-    /**
-     * Get a member of this guild.
-     * @param memberID The ID of the member.
-     */
-    async getMember(memberID: string): Promise<Member> {
-        return this.client.rest.guilds.getMember(this.id, memberID);
-    }
-
-    /**
-     * Get this guild's members. This requires the `GUILD_MEMBERS` intent.
-     * @param options The options for getting the members.
-     */
-    async getMembers(options?: GetMembersOptions): Promise<Array<Member>> {
-        return this.client.rest.guilds.getMembers(this.id, options);
-    }
-
-    /**
-     * Get the roles in this guild. Only use this if you need to. See the `roles` collection.
-     */
-    async getRoles(): Promise<Array<Role>> {
-        return this.client.rest.guilds.getRoles(this.id);
-    }
-
-    /**
-     * Get the webhooks in this guild.
-     */
-    async getWebhooks(): Promise<Array<Webhook>> {
-        return this.client.rest.webhooks.getForGuild(this.id);
     }
 
     /**

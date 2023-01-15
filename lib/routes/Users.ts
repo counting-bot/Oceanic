@@ -1,8 +1,8 @@
 /** @module Routes/Users */
 import type Channels from "./Channels.js";
-import type { EditSelfUserOptions, RawOAuthUser, RawUser } from "../types/users.js";
+import type { RawUser } from "../types/users.js";
 import * as Routes from "../util/Routes.js";
-import ExtendedUser from "../structures/ExtendedUser.js";
+import type ExtendedUser from "../structures/ExtendedUser.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type User from "../structures/User.js";
 
@@ -16,23 +16,6 @@ export default class Users {
     /** Alias for {@link Routes/Channels~Channels#createDM | Channels#createDM}. */
     get createDM(): typeof Channels.prototype.createDM {
         return this.#manager.channels.createDM.bind(this.#manager.channels);
-    }
-
-    /**
-     * Edit the currently authenticated user.
-     *
-     * Note: This does not touch the client's cache in any way.
-     * @param options The options to edit with.
-     */
-    async editSelf(options: EditSelfUserOptions): Promise<ExtendedUser> {
-        if (options.avatar) {
-            options.avatar = this.#manager.client.util._convertImage(options.avatar, "avatar");
-        }
-        return this.#manager.authRequest<RawOAuthUser>({
-            method: "PATCH",
-            path:   Routes.USER("@me"),
-            json:   options
-        }).then(data => new ExtendedUser(data, this.#manager.client));
     }
 
     /**

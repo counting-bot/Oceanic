@@ -3,16 +3,9 @@ import type {
     RawGuild,
     GetActiveThreadsResponse,
     GetMembersOptions,
-    SearchMembersOptions,
     AddMemberOptions,
-    EditMemberOptions,
-    EditCurrentMemberOptions,
     CreateBanOptions,
     RawRole,
-    CreateRoleOptions,
-    EditRoleOptions,
-    RawWelcomeScreen,
-    WelcomeScreen,
     GetVanityURLResponse,
     CreateChannelReturn,
     CreateChannelOptions,
@@ -145,108 +138,6 @@ export default class Guilds {
     }
 
     /**
-     * Create a role.
-     * @param guildID The ID of the guild.
-     * @param options The options for creating the role.
-     */
-    async createRole(guildID: string, options?: CreateRoleOptions): Promise<Role> {
-        const reason = options?.reason;
-        if (options?.reason) {
-            delete options.reason;
-        }
-        if (options?.icon) {
-            options.icon = this.#manager.client.util._convertImage(options.icon, "icon");
-        }
-        return this.#manager.authRequest<RawRole>({
-            method: "POST",
-            path:   Routes.GUILD_ROLES(guildID),
-            json:   {
-                color:         options?.color,
-                hoist:         options?.hoist,
-                icon:          options?.icon,
-                mentionable:   options?.mentionable,
-                name:          options?.name,
-                permissions:   options?.permissions,
-                unicode_emoji: options?.unicodeEmoji
-            },
-            reason
-        }).then(data => this.#manager.client.guilds.get(guildID)?.roles.update(data, guildID) ?? new Role(data, this.#manager.client, guildID));
-    }
-
-    /**
-     * Modify the current member in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the member.
-     */
-    async editCurrentMember(guildID: string, options: EditCurrentMemberOptions): Promise<Member> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RESTMember>({
-            method: "PATCH",
-            path:   Routes.GUILD_MEMBER(guildID, "@me"),
-            json:   { nick: options.nick },
-            reason
-        }).then(data => this.#manager.client.util.updateMember(guildID, data.user.id, data));
-    }
-
-    /**
-     * Edit a guild member. Use editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
-     * @param guildID The ID of the guild.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the member.
-     */
-    async editMember(guildID: string, memberID: string, options: EditMemberOptions): Promise<Member> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RESTMember>({
-            method: "PATCH",
-            path:   Routes.GUILD_MEMBER(guildID, memberID),
-            json:   {
-                channel_id:                   options.channelID,
-                communication_disabled_until: options.communicationDisabledUntil,
-                deaf:                         options.deaf,
-                mute:                         options.mute,
-                nick:                         options.nick,
-                roles:                        options.roles
-            },
-            reason
-        }).then(data => this.#manager.client.util.updateMember(guildID, memberID, data));
-    }
-
-    /**
-     * Edit an existing role.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the role.
-     */
-    async editRole(guildID: string, roleID: string, options: EditRoleOptions): Promise<Role> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        if (options.icon) {
-            options.icon = this.#manager.client.util._convertImage(options.icon, "icon");
-        }
-        return this.#manager.authRequest<RawRole>({
-            method: "PATCH",
-            path:   Routes.GUILD_ROLE(guildID, roleID),
-            json:   {
-                color:         options.color,
-                hoist:         options.hoist,
-                icon:          options.icon,
-                mentionable:   options.mentionable,
-                name:          options.name,
-                permissions:   options.permissions,
-                unicode_emoji: options.unicodeEmoji
-            },
-            reason
-        }).then(data => this.#manager.client.guilds.get(guildID)?.roles.update(data, guildID) ?? new Role(data, this.#manager.client, guildID));
-    }
-
-    /**
      * Get a guild.
      *
      * Note: If the guild is not already in the client's cache, this will not add it.
@@ -362,25 +253,6 @@ export default class Guilds {
     }
 
     /**
-     * Get the welcome screen for a guild.
-     * @param guildID The ID of the guild.
-     */
-    async getWelcomeScreen(guildID: string): Promise<WelcomeScreen> {
-        return this.#manager.authRequest<RawWelcomeScreen>({
-            method: "GET",
-            path:   Routes.GUILD_WELCOME_SCREEN(guildID)
-        }).then(data => ({
-            description:     data.description,
-            welcomeChannels: data.welcome_channels.map(channel => ({
-                channelID:   channel.channel_id,
-                description: channel.description,
-                emojiID:     channel.emoji_id,
-                emojiName:   channel.emoji_name
-            }))
-        }));
-    }
-
-    /**
      * Remove a member from a guild.
      * @param guildID The ID of the guild.
      * @param memberID The ID of the user to remove.
@@ -407,23 +279,5 @@ export default class Guilds {
             path:   Routes.GUILD_MEMBER_ROLE(guildID, memberID, roleID),
             reason
         });
-    }
-
-    /**
-     * Search the username & nicknames of members in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options to search with.
-     */
-    async searchMembers(guildID: string, options: SearchMembersOptions): Promise<Array<Member>> {
-        const query = new URLSearchParams();
-        query.set("query", options.query);
-        if (options.limit !== undefined) {
-            query.set("limit", options.limit.toString());
-        }
-        return this.#manager.authRequest<Array<RESTMember>>({
-            method: "GET",
-            path:   Routes.GUILD_SEARCH_MEMBERS(guildID),
-            query
-        }).then(data => data.map(d => this.#manager.client.util.updateMember(guildID, d.user.id, d)));
     }
 }

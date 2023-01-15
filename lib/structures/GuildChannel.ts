@@ -7,7 +7,7 @@ import type AnnouncementChannel from "./AnnouncementChannel.js";
 import type ForumChannel from "./ForumChannel.js";
 import type { GuildChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
-import type { AnyGuildChannel, EditGuildChannelOptions, RawGuildChannel } from "../types/channels.js";
+import type { RawGuildChannel } from "../types/channels.js";
 import type { JSONGuildChannel } from "../types/json.js";
 
 /** Represents a guild channel. */
@@ -61,14 +61,6 @@ export default class GuildChannel extends Channel {
         }
 
         return this._cachedParent === null ? this._cachedParent : (this._cachedParent = null);
-    }
-
-    /**
-     * Edit this channel.
-     * @param options The options for editing the channel.
-     */
-    async edit(options: EditGuildChannelOptions): Promise<AnyGuildChannel> {
-        return this.client.rest.channels.edit(this.id, options);
     }
 
     override toJSON(): JSONGuildChannel {

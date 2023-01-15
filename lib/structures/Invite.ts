@@ -1,8 +1,7 @@
 /** @module Invite */
-import Channel from "./Channel.js";
-import Guild from "./Guild.js";
+import type Guild from "./Guild.js";
 import type User from "./User.js";
-import PartialApplication from "./PartialApplication.js";
+import type PartialApplication from "./PartialApplication.js";
 import type {
     InviteChannel,
     InviteInfoTypes,
@@ -12,7 +11,6 @@ import type {
 } from "../types/channels.js";
 import type Client from "../Client.js";
 import type { InviteTargetTypes } from "../Constants.js";
-import type { RawGuild } from "../types/guilds.js";
 import type { JSONInvite } from "../types/json.js";
 import type { Uncached } from "../types/shared.js";
 
@@ -65,84 +63,6 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
         this.guildID = data.guild?.id ?? null;
         this.expiresAt = (data.expires_at ? new Date(data.expires_at) : undefined) as never;
         this.targetType = data.target_type;
-        this.update(data);
-    }
-
-    protected update(data: Partial<RawInvite> | Partial<RawInviteWithMetadata>): void {
-        if (data.approximate_member_count !== undefined) {
-            this.approximateMemberCount = data.approximate_member_count;
-        }
-        if (data.approximate_presence_count !== undefined) {
-            this.approximatePresenceCount = data.approximate_presence_count;
-        }
-
-        let guild: Guild | undefined;
-        if (data.guild) {
-            guild = this.client.guilds.has(data.guild.id) ? this.client.guilds.update(data.guild as RawGuild) : new Guild(data.guild as RawGuild, this.client);
-            this.guild = guild;
-        }
-
-        if (this.channelID === null) {
-            this._cachedChannel = null;
-        } else {
-            let channel: Channel | PartialInviteChannel | undefined;
-            channel = this.client.getChannel<InviteChannel>(this.channelID);
-            if (data.channel !== undefined) {
-                if (channel && channel instanceof Channel) {
-                    channel["update"](data.channel);
-                } else {
-                    channel = data.channel as PartialInviteChannel;
-                }
-            }
-            this._cachedChannel = channel as (CH extends InviteChannel ? CH : PartialInviteChannel) | null;
-        }
-
-        if (data.inviter !== undefined) {
-            this.inviter = this.client.users.update(data.inviter);
-        }
-        if (data.target_application !== undefined) {
-            this.targetApplication = new PartialApplication(data.target_application, this.client);
-        }
-        if (data.target_user !== undefined) {
-            this.targetUser = this.client.users.update(data.target_user);
-        }
-        if ("created_at" in data) {
-            if (data.created_at !== undefined) {
-                this.createdAt = new Date(data.created_at) as never;
-            }
-            if (data.uses !== undefined) {
-                this.uses = data.uses as never;
-            }
-            if (data.max_uses !== undefined) {
-                this.maxUses = data.max_uses as never;
-            }
-            if (data.max_age !== undefined) {
-                this.maxAge = data.max_age as never;
-            }
-            if (data.temporary !== undefined) {
-                this.temporary = data.temporary as never;
-            }
-        }
-    }
-
-    /** The channel this invite leads to. If the channel is not cached, this will be a partial with only `id`, `name, and `type`. */
-    get channel(): (CH extends InviteChannel ? CH : PartialInviteChannel) | null {
-        if (this.channelID !== null && this._cachedChannel !== null) {
-            if (this._cachedChannel instanceof Channel) {
-                return this._cachedChannel;
-            }
-
-            const cachedChannel = this.client.getChannel<InviteChannel>(this.channelID);
-
-            return (cachedChannel ? (this._cachedChannel = cachedChannel as CH extends InviteChannel ? CH : PartialInviteChannel) : this._cachedChannel);
-        }
-
-        return this._cachedChannel === null ? this._cachedChannel : (this._cachedChannel = null);
-    }
-
-    /** Whether this invite belongs to a cached channel. The only difference on using this method over a simple if statement is to easily update all the invite properties typing definitions based on the channel it belongs to. */
-    inCachedChannel(): this is Invite<T, InviteChannel> {
-        return this.channel instanceof Channel;
     }
 
     toJSON(): JSONInvite {
