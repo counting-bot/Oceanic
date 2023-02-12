@@ -198,22 +198,7 @@ export default class Webhook extends Base {
         }
         return this.client.rest.webhooks.executeGithub<T>(this.id, t, options as Record<string, unknown>);
     }
-
-    /**
-     * Execute this webhook as slack compatible.
-     * @param options The options to send. See [Slack's Documentation](https://api.slack.com/incoming-webhooks) for more information.
-     * @param token The token for the webhook, if not already present.
-     */
-    async executeSlack(options: Record<string, unknown> & { wait: false; }, token?: string): Promise<void>;
-    async executeSlack<T extends AnyGuildTextChannel>(options: Record<string, unknown> & { wait?: true; }, token?: string): Promise<Message<T>>;
-    async executeSlack<T extends AnyGuildTextChannel>(options: Record<string, unknown> & { wait?: boolean; }, token?: string): Promise<Message<T> | void> {
-        const t = this.token ?? token;
-        if (!t) {
-            throw new Error("Token is not present on webhook, and was not provided in options.");
-        }
-        return this.client.rest.webhooks.executeSlack<T>(this.id, t, options as Record<string, unknown>);
-    }
-
+    
     /**
      * Get a webhook message.
      * @param messageID The ID of the message.

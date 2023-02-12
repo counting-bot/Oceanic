@@ -214,21 +214,7 @@ export interface JSONInteraction extends JSONBase {
     version: 1;
 }
 export interface JSONInvite {
-    approximateMemberCount?: number;
-    approximatePresenceCount?: number;
-    channelID?: string;
     code: string;
-    createdAt?: number;
-    expiresAt?: number;
-    guildID?: string;
-    inviter?: string;
-    maxAge?: number;
-    maxUses?: number;
-    targetApplication?: JSONPartialApplication;
-    targetType?: InviteTargetTypes;
-    targetUser?: string;
-    temporary?: boolean;
-    uses?: number;
 }
 export interface JSONMember extends JSONBase {
     guildID: string;
@@ -284,7 +270,6 @@ export interface JSONPingInteraction extends JSONInteraction {
     type: InteractionTypes.PING;
 }
 export interface JSONPrivateChannel extends JSONChannel {
-    lastMessageID: string | null;
     messages: Array<string>;
     recipient: JSONUser;
     type: ChannelTypes.DM;
@@ -299,27 +284,20 @@ export interface JSONPublicThreadChannel extends JSONThreadChannel {
     type: ChannelTypes.PUBLIC_THREAD;
 }
 export interface JSONRole extends JSONBase {
-    color: number;
     guildID: string;
     hoist: boolean;
-    icon: string | null;
     managed: boolean;
     mentionable: boolean;
     name: string;
     permissions: JSONPermission;
     position: number;
-    unicodeEmoji: string | null;
 }
 
 export interface JSONTextableChannel extends JSONGuildChannel {
-    defaultAutoArchiveDuration: ThreadAutoArchiveDuration;
     lastMessageID: string | null;
     messages: Array<string>;
-    nsfw: boolean;
     permissionOverwrites: Array<JSONPermissionOverwrite>;
-    position: number;
     rateLimitPerUser: number;
-    topic: string | null;
     type: Exclude<TextChannelTypes, PrivateChannelTypes>;
 }
 export interface JSONTextChannel extends JSONTextableChannel {
@@ -334,7 +312,6 @@ export interface JSONThreadChannel extends JSONGuildChannel {
     messages: Array<string>;
     ownerID: string;
     rateLimitPerUser: number;
-    threadMetadata: ThreadMetadata | PrivateThreadMetadata;
     totalMessageSent: number;
     type: ThreadChannelTypes;
 }

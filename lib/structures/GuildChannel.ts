@@ -3,7 +3,6 @@ import Channel from "./Channel.js";
 import type Guild from "./Guild.js";
 import type CategoryChannel from "./CategoryChannel.js";
 import type TextChannel from "./TextChannel.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
 import type ForumChannel from "./ForumChannel.js";
 import type { GuildChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
@@ -13,7 +12,7 @@ import type { JSONGuildChannel } from "../types/json.js";
 /** Represents a guild channel. */
 export default class GuildChannel extends Channel {
     private _cachedGuild?: Guild;
-    private _cachedParent?: TextChannel | AnnouncementChannel | CategoryChannel | ForumChannel | null;
+    private _cachedParent?: TextChannel | CategoryChannel | ForumChannel | null;
     /** The id of the guild this channel is in. */
     guildID: string;
     /** The name of this channel. */
@@ -55,9 +54,9 @@ export default class GuildChannel extends Channel {
     }
 
     /** The parent of this channel, if applicable. This will be a text/announcement/forum channel if we're in a thread, category otherwise. */
-    get parent(): TextChannel | AnnouncementChannel | CategoryChannel | ForumChannel | null | undefined {
+    get parent(): TextChannel | CategoryChannel | ForumChannel | null | undefined {
         if (this.parentID !== null && this._cachedParent !== null) {
-            return this._cachedParent ?? (this._cachedParent = this.client.getChannel<TextChannel | AnnouncementChannel | CategoryChannel | ForumChannel>(this.parentID));
+            return this._cachedParent ?? (this._cachedParent = this.client.getChannel<TextChannel | CategoryChannel | ForumChannel>(this.parentID));
         }
 
         return this._cachedParent === null ? this._cachedParent : (this._cachedParent = null);

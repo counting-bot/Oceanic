@@ -4,17 +4,14 @@ import Message from "./Message";
 import type User from "./User";
 import type Member from "./Member";
 import type Permission from "./Permission";
-import { ChannelTypes, type ThreadChannelTypes } from "../Constants";
+import type { ThreadChannelTypes } from "../Constants";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
 import type {
     AnyThreadChannel,
-    PrivateThreadMetadata,
     RawMessage,
     RawThreadChannel,
-    ThreadMember,
-    ThreadMetadata,
-    ThreadParentChannel
+    ThreadMember
 } from "../types/channels.js";
 import type { JSONThreadChannel } from "../types/json.js";
 
@@ -41,8 +38,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
     declare parentID: string;
     /** The amount of seconds between non-moderators sending messages. */
     rateLimitPerUser: number;
-    /** The [thread metadata](https://discord.com/developers/docs/resources/channel#thread-metadata-object-thread-metadata-structure) associated with this thread. */
-    threadMetadata: ThreadMetadata | PrivateThreadMetadata;
     /** The total number of messages ever sent in the thread. Includes deleted messages. */
     totalMessageSent: number;
     declare type: ThreadChannelTypes;
@@ -56,17 +51,7 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
         this.messages = new TypedCollection(Message<T>, client, client.options.collectionLimits.messages);
         this.ownerID = data.owner_id;
         this.rateLimitPerUser = data.rate_limit_per_user;
-        this.threadMetadata = {
-            archived:            !!data.thread_metadata.archived,
-            autoArchiveDuration: data.thread_metadata.auto_archive_duration,
-            createTimestamp:     data.thread_metadata.create_timestamp ? new Date(data.thread_metadata.create_timestamp) : null,
-            locked:              !!data.thread_metadata.locked,
-            invitable:           data.thread_metadata.invitable
-        };
         this.totalMessageSent = 0;
-        if (data.type === ChannelTypes.PRIVATE_THREAD && data.thread_metadata.invitable !== undefined) {
-            (this.threadMetadata as PrivateThreadMetadata).invitable = !!data.thread_metadata.invitable;
-        }
         this.update(data);
     }
 
@@ -105,26 +90,9 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
         if (data.rate_limit_per_user !== undefined) {
             this.rateLimitPerUser = data.rate_limit_per_user;
         }
-        if (data.thread_metadata !== undefined) {
-            this.threadMetadata = {
-                archived:            !!data.thread_metadata.archived,
-                autoArchiveDuration: data.thread_metadata.auto_archive_duration,
-                createTimestamp:     data.thread_metadata.create_timestamp ? new Date(data.thread_metadata.create_timestamp) : null,
-                locked:              !!data.thread_metadata.locked,
-                invitable:           data.thread_metadata.invitable
-            };
-            if (data.type === ChannelTypes.PRIVATE_THREAD && data.thread_metadata.invitable !== undefined) {
-                (this.threadMetadata as PrivateThreadMetadata).invitable = !!data.thread_metadata.invitable;
-            }
-
-        }
         if (data.total_message_sent !== undefined) {
             this.totalMessageSent = data.total_message_sent;
         }
-    }
-
-    override get parent(): ThreadParentChannel | undefined {
-        return super.parent as ThreadParentChannel | undefined;
     }
 
     /**
@@ -148,7 +116,6 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
             messages:         this.messages.map(m => m.id),
             ownerID:          this.ownerID,
             rateLimitPerUser: this.rateLimitPerUser,
-            threadMetadata:   this.threadMetadata,
             totalMessageSent: this.totalMessageSent,
             type:             this.type
         };

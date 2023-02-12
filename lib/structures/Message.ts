@@ -2,17 +2,12 @@
 import Base from "./Base.js";
 import Attachment from "./Attachment.js";
 import User from "./User.js";
-import type Guild from "./Guild.js";
 import type Member from "./Member.js";
 import PartialApplication from "./PartialApplication.js";
 import type ClientApplication from "./ClientApplication.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
-import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
-import type PublicThreadChannel from "./PublicThreadChannel.js";
-import type TextChannel from "./TextChannel.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
-import { BASE_URL, type MessageTypes } from "../Constants.js";
+import type { MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
 import type {
     AnyGuildTextChannel,
@@ -24,19 +19,15 @@ import type {
     MessageReference,
     RawAttachment,
     RawMessage,
-    StartThreadFromMessageOptions,
     StickerItem,
     MessageReaction,
     AnyThreadChannel
 } from "../types/channels.js";
 import type { RawMember } from "../types/guilds.js";
 import type { JSONMessage } from "../types/json.js";
-import * as Routes from "../util/Routes.js";
 
 /** Represents a message. */
 export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Base {
-    private _cachedChannel!: T extends AnyTextChannelWithoutGroup ? T : undefined;
-    private _cachedGuild?: T extends AnyGuildTextChannel ? Guild : Guild | null;
     /** The [activity](https://discord.com/developers/docs/resources/channel#message-object-message-activity-structure) associated with this message. */
     activity?: MessageActivity;
     /**
@@ -191,40 +182,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         }
     }
 
-    /** The channel this message was created in. */
-    get channel(): T extends AnyTextChannelWithoutGroup ? T : undefined {
-        return this._cachedChannel ?? (this._cachedChannel = this.client.getChannel(this.channelID) as T extends AnyTextChannelWithoutGroup ? T : undefined);
-    }
-
-    /** The guild this message is in. This will throw an error if the guild is not cached. */
-    get guild(): T extends AnyGuildTextChannel ? Guild : Guild | null {
-        if (this.guildID !== null && this._cachedGuild !== null) {
-            if (!this._cachedGuild) {
-                this._cachedGuild = this.client.guilds.get(this.guildID);
-
-                if (!this._cachedGuild) {
-                    throw new Error(`${this.constructor.name}#guild is not present if you don't have the GUILDS intent.`);
-                }
-            }
-
-            return this._cachedGuild;
-        }
-
-        return this._cachedGuild === null ? this._cachedGuild : (this._cachedGuild = null as T extends AnyGuildTextChannel ? Guild : Guild | null);
-    }
-
-    /** A link to this message. */
-    get jumpLink(): string {
-        return `${BASE_URL}${Routes.MESSAGE_LINK(this.guildID ?? "@me", this.channelID, this.id)}`;
-    }
-
-    /**
-     * Create a thread from this message.
-     * @param options The options for creating the thread.
-     */
-    async startThread(options: StartThreadFromMessageOptions): Promise<T extends AnnouncementChannel ? AnnouncementThreadChannel : T extends TextChannel ? PublicThreadChannel : never> {
-        return this.client.rest.channels.startThreadFromMessage<T extends AnnouncementChannel ? AnnouncementThreadChannel : T extends TextChannel ? PublicThreadChannel : never>(this.channelID, this.id, options);
-    }
     override toJSON(): JSONMessage {
         return {
             ...super.toJSON(),

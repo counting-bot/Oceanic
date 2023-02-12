@@ -4,10 +4,9 @@ import type AnnouncementChannel from "./AnnouncementChannel";
 import type TextChannel from "./TextChannel";
 import PermissionOverwrite from "./PermissionOverwrite";
 import Message from "./Message";
-import type CategoryChannel from "./CategoryChannel";
 import type Member from "./Member";
 import Permission from "./Permission";
-import { AllPermissions, Permissions, type ThreadAutoArchiveDuration } from "../Constants";
+import { AllPermissions, Permissions } from "../Constants";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
 import type { RawMessage, RawAnnouncementChannel, RawOverwrite, RawTextChannel } from "../types/channels.js";
@@ -15,35 +14,23 @@ import type { JSONTextableChannel } from "../types/json.js";
 
 /** Represents a guild textable channel. */
 export default class TextableChannel<T extends TextChannel | AnnouncementChannel = TextChannel | AnnouncementChannel> extends GuildChannel {
-    /** The default auto archive duration for threads created in this channel. */
-    defaultAutoArchiveDuration: ThreadAutoArchiveDuration;
     /** The last message sent in this channel. This will only be present if a message has been sent within the current session. */
     lastMessage?: Message<T> | null;
     /** The ID of last message sent in this channel. */
     lastMessageID: string | null;
     /** The cached messages in this channel. */
     messages: TypedCollection<string, RawMessage, Message<T>>;
-    /** If this channel is age gated. */
-    nsfw: boolean;
     /** The permission overwrites of this channel. */
     permissionOverwrites: TypedCollection<string, RawOverwrite, PermissionOverwrite>;
-    /** The position of this channel on the sidebar. */
-    position: number;
     /** The amount of seconds between non-moderators sending messages. */
     rateLimitPerUser: number;
-    /** The topic of the channel. */
-    topic: string | null;
     declare type: T["type"];
     constructor(data: RawTextChannel | RawAnnouncementChannel, client: Client) {
         super(data, client);
-        this.defaultAutoArchiveDuration = data.default_auto_archive_duration;
         this.lastMessageID = data.last_message_id;
         this.messages = new TypedCollection(Message<T>, client, client.options.collectionLimits.messages);
-        this.nsfw = data.nsfw;
         this.permissionOverwrites = new TypedCollection(PermissionOverwrite, client);
-        this.position = data.position;
         this.rateLimitPerUser = data.rate_limit_per_user;
-        this.topic = data.topic;
         this.update(data);
     }
 
@@ -61,9 +48,6 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
         }
     }
 
-    override get parent(): CategoryChannel | undefined | null {
-        return super.parent as CategoryChannel | undefined | null;
-    }
 
     /**
      * Get the permissions of a member. If providing an id, the member must be cached.
@@ -104,14 +88,10 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     override toJSON(): JSONTextableChannel {
         return {
             ...super.toJSON(),
-            defaultAutoArchiveDuration: this.defaultAutoArchiveDuration,
             lastMessageID:              this.lastMessageID,
             messages:                   this.messages.map(message => message.id),
-            nsfw:                       this.nsfw,
             permissionOverwrites:       this.permissionOverwrites.map(overwrite => overwrite.toJSON()),
-            position:                   this.position,
             rateLimitPerUser:           this.rateLimitPerUser,
-            topic:                      this.topic,
             type:                       this.type
         };
     }

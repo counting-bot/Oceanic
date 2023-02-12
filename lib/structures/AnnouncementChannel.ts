@@ -1,6 +1,5 @@
 /** @module AnnouncementChannel */
 import TextableChannel from "./TextableChannel.js";
-import type CategoryChannel from "./CategoryChannel.js";
 import AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
 import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
@@ -18,10 +17,6 @@ export default class AnnouncementChannel extends TextableChannel<AnnouncementCha
     constructor(data: RawAnnouncementChannel, client: Client) {
         super(data, client);
         this.threads = new TypedCollection(AnnouncementThreadChannel, client);
-    }
-
-    override get parent(): CategoryChannel | null | undefined {
-        return super.parent;
     }
 
     override toJSON(): JSONAnnouncementChannel {
