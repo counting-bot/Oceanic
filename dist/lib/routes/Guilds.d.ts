@@ -1,5 +1,5 @@
 /** @module Routes/Guilds */
-import type { GetActiveThreadsResponse, GetMembersOptions, SearchMembersOptions, AddMemberOptions, EditMemberOptions, EditCurrentMemberOptions, CreateBanOptions, CreateRoleOptions, EditRoleOptions, WelcomeScreen, GetVanityURLResponse, CreateChannelReturn, CreateChannelOptions } from "../types/guilds.js";
+import type { GetActiveThreadsResponse, GetMembersOptions, AddMemberOptions, CreateBanOptions, GetVanityURLResponse, CreateChannelReturn, CreateChannelOptions } from "../types/guilds.js";
 import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
 import type { AnyGuildChannelWithoutThreads, InviteChannel, PartialInviteChannel } from "../types/channels.js";
 import Role from "../structures/Role.js";
@@ -42,31 +42,6 @@ export default class Guilds {
      * @param options The options for creating the channel.
      */
     createChannel<T extends GuildChannelTypesWithoutThreads>(guildID: string, type: T, options: Omit<CreateChannelOptions, "type">): Promise<CreateChannelReturn<T>>;
-    /**
-     * Create a role.
-     * @param guildID The ID of the guild.
-     * @param options The options for creating the role.
-     */
-    createRole(guildID: string, options?: CreateRoleOptions): Promise<Role>;
-    /**
-     * Modify the current member in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the member.
-     */
-    editCurrentMember(guildID: string, options: EditCurrentMemberOptions): Promise<Member>;
-    /**
-     * Edit a guild member. Use editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
-     * @param guildID The ID of the guild.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the member.
-     */
-    editMember(guildID: string, memberID: string, options: EditMemberOptions): Promise<Member>;
-    /**
-     * Edit an existing role.
-     * @param guildID The ID of the guild.
-     * @param options The options for editing the role.
-     */
-    editRole(guildID: string, roleID: string, options: EditRoleOptions): Promise<Role>;
     /**
      * Get a guild.
      *
@@ -113,11 +88,6 @@ export default class Guilds {
      */
     getVanityURL(guildID: string): Promise<GetVanityURLResponse>;
     /**
-     * Get the welcome screen for a guild.
-     * @param guildID The ID of the guild.
-     */
-    getWelcomeScreen(guildID: string): Promise<WelcomeScreen>;
-    /**
      * Remove a member from a guild.
      * @param guildID The ID of the guild.
      * @param memberID The ID of the user to remove.
@@ -132,10 +102,4 @@ export default class Guilds {
      * @param reason The reason for removing the role.
      */
     removeMemberRole(guildID: string, memberID: string, roleID: string, reason?: string): Promise<void>;
-    /**
-     * Search the username & nicknames of members in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options to search with.
-     */
-    searchMembers(guildID: string, options: SearchMembersOptions): Promise<Array<Member>>;
 }

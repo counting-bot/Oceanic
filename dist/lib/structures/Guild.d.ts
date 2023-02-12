@@ -1,18 +1,16 @@
 /** @module Guild */
-import Role from "./Role.js";
-import Base from "./Base.js";
-import Member from "./Member.js";
-import type User from "./User.js";
-import type ClientApplication from "./ClientApplication.js";
-import type TextChannel from "./TextChannel.js";
-import type CategoryChannel from "./CategoryChannel.js";
-import Permission from "./Permission.js";
-import type Webhook from "./Webhook.js";
-import type { ImageFormat, GuildChannelTypesWithoutThreads } from "../Constants.js";
-import type Client from "../Client.js";
-import TypedCollection from "../util/TypedCollection.js";
-import type { AnyGuildChannel, AnyGuildChannelWithoutThreads, AnyThreadChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
-import type { CreateBanOptions, CreateChannelOptions, EditMemberOptions, GetMembersOptions, RawGuild, RawMember, RawRole, CreateChannelReturn, RESTMember } from "../types/guilds.js";
+import Role from "./Role";
+import Base from "./Base";
+import Member from "./Member";
+import type User from "./User";
+import type ClientApplication from "./ClientApplication";
+import type TextChannel from "./TextChannel";
+import Permission from "./Permission";
+import { type ImageFormat } from "../Constants";
+import type Client from "../Client";
+import TypedCollection from "../util/TypedCollection";
+import type { AnyGuildChannelWithoutThreads, AnyThreadChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
+import type { RawGuild, RawMember, RawRole, RESTMember } from "../types/guilds.js";
 import type { JSONGuild } from "../types/json.js";
 import type Shard from "../gateway/Shard.js";
 /** Represents a Discord server. */
@@ -63,8 +61,6 @@ export default class Guild extends Base {
     unavailable: boolean;
     /** The vanity url of this guild. Only present in guilds with the `VANITY_URL` feature. */
     vanityURLCode: string | null;
-    /** The channel the widget will generate an invite to, or `null` if set to no invite. */
-    widgetChannel?: Exclude<AnyGuildChannel, CategoryChannel> | null;
     /** If the widget is enabled. */
     widgetEnabled?: boolean;
     constructor(data: RawGuild, client: Client);
@@ -74,52 +70,6 @@ export default class Guild extends Base {
     get clientMember(): Member;
     /** The shard this guild is on. Gateway only. */
     get shard(): Shard;
-    /**
-     * Add a role to a member.
-     * @param memberID The ID of the member.
-     * @param roleID The ID of the role to add.
-     * @param reason The reason for adding the role.
-     */
-    addMemberRole(memberID: string, roleID: string, reason?: string): Promise<void>;
-    /**
-     * Create a bon for a user.
-     * @param userID The ID of the user.
-     * @param options The options for creating the bon.
-     */
-    createBan(userID: string, options?: CreateBanOptions): Promise<void>;
-    /**
-     * Create a channel in this guild.
-     * @param options The options for creating the channel.
-     */
-    createChannel<T extends GuildChannelTypesWithoutThreads>(type: T, options: Omit<CreateChannelOptions, "type">): Promise<CreateChannelReturn<T>>;
-    /**
-     * Edit a member of this guild. Use \<Guild\>.editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
-     * @param memberID The ID of the member.
-     * @param options The options for editing the member.
-     */
-    editMember(memberID: string, options: EditMemberOptions): Promise<Member>;
-    /**
-     * Get the channels in a guild. Does not include threads. Only use this if you need to. See the `channels` collection.
-     */
-    getChannels(): Promise<Array<AnyGuildChannelWithoutThreads>>;
-    /**
-     * Get a member of this guild.
-     * @param memberID The ID of the member.
-     */
-    getMember(memberID: string): Promise<Member>;
-    /**
-     * Get this guild's members. This requires the `GUILD_MEMBERS` intent.
-     * @param options The options for getting the members.
-     */
-    getMembers(options?: GetMembersOptions): Promise<Array<Member>>;
-    /**
-     * Get the roles in this guild. Only use this if you need to. See the `roles` collection.
-     */
-    getRoles(): Promise<Array<Role>>;
-    /**
-     * Get the webhooks in this guild.
-     */
-    getWebhooks(): Promise<Array<Webhook>>;
     /**
      * The url of this guild's icon.
      * @param format The format the url should be.

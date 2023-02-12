@@ -1,13 +1,13 @@
 /** @module Webhook */
-import Base from "./Base.js";
-import type User from "./User.js";
-import type Message from "./Message.js";
-import type Guild from "./Guild.js";
-import type ClientApplication from "./ClientApplication.js";
-import type Client from "../Client.js";
-import type { ImageFormat, WebhookTypes } from "../Constants.js";
-import type { AnyGuildTextChannel, RawChannel } from "../types/channels.js";
-import type { RawGuild } from "../types/guilds.js";
+import Base from "./Base";
+import type User from "./User";
+import type Message from "./Message";
+import type Guild from "./Guild";
+import type ClientApplication from "./ClientApplication";
+import type Client from "../Client";
+import { type ImageFormat, type WebhookTypes } from "../Constants";
+import type { AnyGuildTextChannel, RawChannel } from "../types/channels";
+import type { RawGuild } from "../types/guilds";
 import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions, RawWebhook } from "../types/webhooks.js";
 import type { JSONWebhook } from "../types/json.js";
 /** Represents a webhook. */
@@ -100,17 +100,6 @@ export default class Webhook extends Base {
         wait: false;
     }, token?: string): Promise<void>;
     executeGithub<T extends AnyGuildTextChannel>(options: Record<string, unknown> & {
-        wait?: true;
-    }, token?: string): Promise<Message<T>>;
-    /**
-     * Execute this webhook as slack compatible.
-     * @param options The options to send. See [Slack's Documentation](https://api.slack.com/incoming-webhooks) for more information.
-     * @param token The token for the webhook, if not already present.
-     */
-    executeSlack(options: Record<string, unknown> & {
-        wait: false;
-    }, token?: string): Promise<void>;
-    executeSlack<T extends AnyGuildTextChannel>(options: Record<string, unknown> & {
         wait?: true;
     }, token?: string): Promise<Message<T>>;
     /**

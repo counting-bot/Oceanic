@@ -2,7 +2,7 @@
 import ThreadChannel from "./ThreadChannel.js";
 import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
-import type { EditPublicThreadChannelOptions, RawPublicThreadChannel, ThreadMetadata } from "../types/channels.js";
+import type { RawPublicThreadChannel, ThreadMetadata } from "../types/channels.js";
 import type { JSONPublicThreadChannel } from "../types/json.js";
 /** Represents a public thread channel. */
 export default class PublicThreadChannel extends ThreadChannel<PublicThreadChannel> {
@@ -12,10 +12,5 @@ export default class PublicThreadChannel extends ThreadChannel<PublicThreadChann
     type: ChannelTypes.PUBLIC_THREAD;
     constructor(data: RawPublicThreadChannel, client: Client);
     protected update(data: Partial<RawPublicThreadChannel>): void;
-    /**
-     * Edit this channel.
-     * @param options The options to edit the channel with.
-     */
-    edit(options: EditPublicThreadChannelOptions): Promise<this>;
     toJSON(): JSONPublicThreadChannel;
 }

@@ -53,3 +53,6 @@ export { default as UncaughtError } from "./util/UncaughtError.js";
 export { default as User } from "./structures/User.js";
 export { default as Util } from "./util/Util.js";
 export { default as Webhook } from "./structures/Webhook.js";
+export type { ClientOptions } from "./types/client";
+export type { RequestOptions } from "./types/request-handler";
+export type { BotActivity } from "./types/gateway";

@@ -1,7 +1,6 @@
 /** @module User */
 import Base from "./Base.js";
 import type PrivateChannel from "./PrivateChannel.js";
-import type { ImageFormat } from "../Constants.js";
 import type Client from "../Client.js";
 import type { RawUser } from "../types/users.js";
 import type { JSONUser } from "../types/json.js";
@@ -34,25 +33,8 @@ export default class User extends Base {
     /** a combination of this user's username and discriminator. */
     get tag(): string;
     /**
-     * The url of this user's avatar decoration. This will always be a png.
-     * Discord does not combine the decoration and their current avatar for you. This is ONLY the decoration.
-     * @note As of 12/8/2022 (Dec 8) `avatar_decoration` is only visible to bots if they set an `X-Super-Properties` header with a `client_build_number` ~162992. You can do this via the {@link Types/Client~RESTOptions#superProperties | rest.superProperties} option.
-     * @param size The dimensions of the image.
-     */
-    avatarDecorationURL(size?: number): string | null;
-    /**
-     * The url of this user's avatar (or default avatar, if they have not set an avatar).
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    avatarURL(format?: ImageFormat, size?: number): string;
-    /**
      * Create a direct message with this user.
      */
     createDM(): Promise<PrivateChannel>;
-    /**
-     * The url of this user's default avatar.
-     */
-    defaultAvatarURL(): string;
     toJSON(): JSONUser;
 }

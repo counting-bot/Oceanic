@@ -1,7 +1,7 @@
 /** @module ExtendedUser */
 import User from "./User.js";
 import type Client from "../Client.js";
-import type { EditSelfUserOptions, RawOAuthUser } from "../types/users.js";
+import type { RawOAuthUser } from "../types/users.js";
 import type { JSONExtendedUser } from "../types/json.js";
 /** Represents the currently authenticated user. */
 export default class ExtendedUser extends User {
@@ -17,10 +17,5 @@ export default class ExtendedUser extends User {
     verified: boolean;
     constructor(data: RawOAuthUser, client: Client);
     protected update(data: Partial<RawOAuthUser>): void;
-    /**
-     * Modify this user.
-     * @param options The options for editing the user.
-     */
-    edit(options: EditSelfUserOptions): Promise<ExtendedUser>;
     toJSON(): JSONExtendedUser;
 }

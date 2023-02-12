@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import type Client from "../Client.js";
-import type { ImageFormat } from "../Constants.js";
+import type Client from "../Client";
+import { type ImageFormat } from "../Constants.js";
 import type { AllowedMentions, AnyChannel, AnyThreadChannel, Component, Embed, EmbedOptions, MessageActionRow, ModalActionRow, RawAllowedMentions, RawChannel, RawComponent, RawEmbed, RawEmbedOptions, RawMessageActionRow, RawModalActionRow, RawThreadChannel, ToComponentFromRaw, ToRawFromComponent } from "../types/channels.js";
 import type { RawMember, RawSticker, RESTMember, Sticker } from "../types/guilds.js";
 import type { ApplicationCommandOptions, RawApplicationCommandOption } from "../types/application-commands.js";

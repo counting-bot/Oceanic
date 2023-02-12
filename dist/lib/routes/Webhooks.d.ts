@@ -76,18 +76,6 @@ export default class Webhooks {
         wait?: true;
     }): Promise<Message<T>>;
     /**
-     * Execute a slack compatible webhook.
-     * @param webhookID The ID of the webhook.
-     * @param token The token of the webhook.
-     * @param options The options to send. See [Slack's Documentation](https://api.slack.com/incoming-webhooks) for more information.
-     */
-    executeSlack(webhookID: string, token: string, options: Record<string, unknown> & {
-        wait: false;
-    }): Promise<void>;
-    executeSlack<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: Record<string, unknown> & {
-        wait?: true;
-    }): Promise<Message<T>>;
-    /**
      * Get a webhook by ID (and optionally token).
      * @param webhookID The ID of the webhook.
      * @param token The token of the webhook.

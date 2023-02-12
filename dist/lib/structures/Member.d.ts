@@ -4,7 +4,7 @@ import type User from "./User";
 import type Guild from "./Guild";
 import type Permission from "./Permission";
 import type Client from "../Client";
-import type { CreateBanOptions, EditMemberOptions, RawMember, RESTMember } from "../types/guilds";
+import type { RawMember, RESTMember } from "../types/guilds";
 import type { JSONMember } from "../types/json";
 /** Represents a member of a guild. */
 export default class Member extends Base {
@@ -33,31 +33,5 @@ export default class Member extends Base {
     get tag(): string;
     /** The username associated with this member's user. */
     get username(): string;
-    /**
-     * Add a role to this member.
-     * @param roleID The ID of the role to add.
-     */
-    addRole(roleID: string, reason?: string): Promise<void>;
-    /**
-     * Create a ban for this member.
-     * @param options The options for the ban.
-     */
-    ban(options?: CreateBanOptions): Promise<void>;
-    /**
-     * Edit this member. Use \<Guild\>.editCurrentMember if you wish to update the nick of this client using the CHANGE_NICKNAME permission.
-     * @param options The options for editing the member.
-     */
-    edit(options: EditMemberOptions): Promise<Member>;
-    /**
-     * Remove a member from the guild.
-     * @param reason The reason for the kick.
-     */
-    kick(reason?: string): Promise<void>;
-    /**
-     * remove a role from this member.
-     * @param roleID The ID of the role to remove.
-     * @param reason The reason for removing the role.
-     */
-    removeRole(roleID: string, reason?: string): Promise<void>;
     toJSON(): JSONMember;
 }

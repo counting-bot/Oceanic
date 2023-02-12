@@ -111,7 +111,8 @@ export declare enum StickerTypes {
 export declare enum StickerFormatTypes {
     PNG = 1,
     APNG = 2,
-    LOTTIE = 3
+    LOTTIE = 3,
+    GIF = 4
 }
 export declare enum ChannelTypes {
     GUILD_TEXT = 0,

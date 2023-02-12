@@ -1,6 +1,6 @@
 import Base from "./Base.js";
 import Permission from "./Permission.js";
-import type { GuildFeature, ImageFormat } from "../Constants.js";
+import type { GuildFeature } from "../Constants.js";
 import type { RawOAuthGuild } from "../types/guilds.js";
 import type Client from "../Client.js";
 /** Represents a guild retrieved via oauth. */
@@ -20,10 +20,4 @@ export default class OAuthGuild extends Base {
     /** The permissions of the user in this guild. */
     permissions: Permission;
     constructor(data: RawOAuthGuild, client: Client);
-    /**
-     * The url of this guild's icon.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    iconURL(format?: ImageFormat, size?: number): string | null;
 }

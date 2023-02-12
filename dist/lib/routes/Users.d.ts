@@ -1,7 +1,6 @@
 /** @module Routes/Users */
 import type Channels from "./Channels.js";
-import type { EditSelfUserOptions } from "../types/users.js";
-import ExtendedUser from "../structures/ExtendedUser.js";
+import type ExtendedUser from "../structures/ExtendedUser.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type User from "../structures/User.js";
 /** Various methods for interacting with users. */
@@ -10,13 +9,6 @@ export default class Users {
     constructor(manager: RESTManager);
     /** Alias for {@link Routes/Channels~Channels#createDM | Channels#createDM}. */
     get createDM(): typeof Channels.prototype.createDM;
-    /**
-     * Edit the currently authenticated user.
-     *
-     * Note: This does not touch the client's cache in any way.
-     * @param options The options to edit with.
-     */
-    editSelf(options: EditSelfUserOptions): Promise<ExtendedUser>;
     /**
      * Get a user.
      * @param userID the ID of the user

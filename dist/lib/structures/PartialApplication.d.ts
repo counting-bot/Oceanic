@@ -1,7 +1,6 @@
 /** @module PartialApplication */
 import Base from "./Base.js";
 import type Client from "../Client.js";
-import type { ImageFormat } from "../Constants.js";
 import type { RawPartialApplication } from "../types/oauth.js";
 import type { JSONPartialApplication } from "../types/json.js";
 /** Represents a partial application. */
@@ -20,11 +19,5 @@ export default class PartialApplication extends Base {
     verifyKey?: string;
     constructor(data: RawPartialApplication, client: Client);
     protected update(data: RawPartialApplication): void;
-    /**
-     * The url of this application's icon.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    iconURL(format?: ImageFormat, size?: number): string | null;
     toJSON(): JSONPartialApplication;
 }

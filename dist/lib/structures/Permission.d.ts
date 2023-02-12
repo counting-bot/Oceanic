@@ -1,7 +1,6 @@
 /** @module Permission */
-import type { PermissionName as PermissionNames } from "../Constants.js";
-import { Permissions } from "../Constants.js";
-import type { JSONPermission } from "../types/json.js";
+import { Permissions, type PermissionName as PermissionNames } from "../Constants";
+import type { JSONPermission } from "../types/json";
 /** Represents a permission. */
 export default class Permission {
     #private;

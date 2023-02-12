@@ -7,12 +7,11 @@ import Permission from "./Permission.js";
 import type PrivateChannel from "./PrivateChannel.js";
 import User from "./User.js";
 import type Client from "../Client.js";
-import type { InteractionContent, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData, RawMessageComponentInteraction } from "../types/interactions.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels.js";
-import type { JSONComponentInteraction } from "../types/json.js";
-import type { Uncached } from "../types/shared.js";
-import type { InteractionTypes } from "../Constants.js";
-import { ComponentTypes, SelectMenuTypes } from "../Constants.js";
+import type { InteractionContent, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData, RawMessageComponentInteraction } from "../types/interactions";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup } from "../types/channels";
+import type { JSONComponentInteraction } from "../types/json";
+import type { Uncached } from "../types/shared";
+import { ComponentTypes, type SelectMenuTypes, type InteractionTypes } from "../Constants";
 /** Represents a component interaction. */
 export default class ComponentInteraction<V extends ComponentTypes.BUTTON | SelectMenuTypes = ComponentTypes.BUTTON | SelectMenuTypes, T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Interaction {
     private _cachedChannel;

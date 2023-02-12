@@ -2,25 +2,17 @@
 import Base from "./Base.js";
 import Attachment from "./Attachment.js";
 import User from "./User.js";
-import type Guild from "./Guild.js";
 import type Member from "./Member.js";
 import PartialApplication from "./PartialApplication.js";
 import type ClientApplication from "./ClientApplication.js";
-import type AnnouncementChannel from "./AnnouncementChannel.js";
-import type AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
-import type PublicThreadChannel from "./PublicThreadChannel.js";
-import type TextChannel from "./TextChannel.js";
 import type Client from "../Client.js";
 import TypedCollection from "../util/TypedCollection.js";
-import { MessageTypes } from "../Constants.js";
+import type { MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, Embed, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StartThreadFromMessageOptions, StickerItem, MessageReaction, AnyThreadChannel } from "../types/channels.js";
-import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions } from "../types/webhooks.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, Embed, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StickerItem, MessageReaction, AnyThreadChannel } from "../types/channels.js";
 import type { JSONMessage } from "../types/json.js";
 /** Represents a message. */
 export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Base {
-    private _cachedChannel;
-    private _cachedGuild?;
     /** The [activity](https://discord.com/developers/docs/resources/channel#message-object-message-activity-structure) associated with this message. */
     activity?: MessageActivity;
     /**
@@ -77,38 +69,5 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     webhookID?: string;
     constructor(data: RawMessage, client: Client);
     protected update(data: Partial<RawMessage>): void;
-    /** The channel this message was created in. */
-    get channel(): T extends AnyTextChannelWithoutGroup ? T : undefined;
-    /** The guild this message is in. This will throw an error if the guild is not cached. */
-    get guild(): T extends AnyGuildTextChannel ? Guild : Guild | null;
-    /** A link to this message. */
-    get jumpLink(): string;
-    /**
-     * Add a reaction to this message.
-     * @param emoji The reaction to add to the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
-     */
-    createReaction(emoji: string): Promise<void>;
-    /**
-     * Delete this message.
-     * @param reason The reason for deleting the message.
-     */
-    delete(reason?: string): Promise<void>;
-    /**
-     * Delete this message as a webhook.
-     * @param token The token of the webhook.
-     * @param options Options for deleting the message.
-     */
-    deleteWebhook(token: string, options: DeleteWebhookMessageOptions): Promise<void>;
-    /**
-     * Edit this message as a webhook.
-     * @param token The token of the webhook.
-     * @param options The options for editing the message.
-     */
-    editWebhook(token: string, options: EditWebhookMessageOptions): Promise<Message<T>>;
-    /**
-     * Create a thread from this message.
-     * @param options The options for creating the thread.
-     */
-    startThread(options: StartThreadFromMessageOptions): Promise<T extends AnnouncementChannel ? AnnouncementThreadChannel : T extends TextChannel ? PublicThreadChannel : never>;
     toJSON(): JSONMessage;
 }

@@ -1,6 +1,5 @@
 /** @module AnnouncementChannel */
 import TextableChannel from "./TextableChannel.js";
-import type CategoryChannel from "./CategoryChannel.js";
 import AnnouncementThreadChannel from "./AnnouncementThreadChannel.js";
 import type { ChannelTypes } from "../Constants.js";
 import type Client from "../Client.js";
@@ -15,6 +14,5 @@ export default class AnnouncementChannel extends TextableChannel<AnnouncementCha
     threads: TypedCollection<string, RawAnnouncementThreadChannel, AnnouncementThreadChannel>;
     type: ChannelTypes.GUILD_ANNOUNCEMENT;
     constructor(data: RawAnnouncementChannel, client: Client);
-    get parent(): CategoryChannel | null | undefined;
     toJSON(): JSONAnnouncementChannel;
 }
