@@ -1,15 +1,13 @@
 /** @module Message */
 import Base from "./Base.js";
-import Attachment from "./Attachment.js";
 import User from "./User.js";
 import type Member from "./Member.js";
 import PartialApplication from "./PartialApplication.js";
 import type ClientApplication from "./ClientApplication.js";
 import type Client from "../Client.js";
-import TypedCollection from "../util/TypedCollection.js";
 import type { MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
-import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, Embed, MessageActivity, MessageInteraction, MessageReference, RawAttachment, RawMessage, StickerItem, MessageReaction, AnyThreadChannel } from "../types/channels.js";
+import type { AnyGuildTextChannel, AnyTextChannelWithoutGroup, ChannelMention, Embed, MessageActivity, MessageInteraction, MessageReference, RawMessage, StickerItem, MessageReaction, AnyThreadChannel } from "../types/channels.js";
 import type { JSONMessage } from "../types/json.js";
 /** Represents a message. */
 export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached> extends Base {
@@ -27,8 +25,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      * * If the message has a rich presence embed ({@link PartialApplication})
      */
     applicationID: string | null;
-    /** The attachments on this message. */
-    attachments: TypedCollection<string, RawAttachment, Attachment>;
     /** The author of this message. */
     author: User;
     /** The ID of the channel this message was created in. */
