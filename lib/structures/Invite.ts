@@ -1,10 +1,5 @@
 /** @module Invite */
-import type {
-    InviteChannel,
-    InviteInfoTypes,
-    RawInvite,
-    RawInviteWithMetadata
-} from "../types/channels.js";
+import type { InviteChannel, InviteInfoTypes, RawInvite, RawInviteWithMetadata } from "../types/channels.js";
 import type Client from "../Client.js";
 import type { JSONInvite } from "../types/json.js";
 import type { Uncached } from "../types/shared.js";
@@ -26,7 +21,7 @@ export default class Invite<T extends InviteInfoTypes = "withMetadata", CH exten
 
     toJSON(): JSONInvite {
         return {
-            code:                     this.code
+            code: this.code
         };
     }
 }

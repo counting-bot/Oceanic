@@ -1,12 +1,10 @@
 /** @module Message */
 import Base from "./Base.js";
-import Attachment from "./Attachment.js";
 import User from "./User.js";
 import type Member from "./Member.js";
 import PartialApplication from "./PartialApplication.js";
 import type ClientApplication from "./ClientApplication.js";
 import type Client from "../Client.js";
-import TypedCollection from "../util/TypedCollection.js";
 import type { MessageTypes } from "../Constants.js";
 import type { Uncached } from "../types/shared.js";
 import type {
@@ -17,7 +15,6 @@ import type {
     MessageActivity,
     MessageInteraction,
     MessageReference,
-    RawAttachment,
     RawMessage,
     StickerItem,
     MessageReaction,
@@ -42,8 +39,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      * * If the message has a rich presence embed ({@link PartialApplication})
      */
     applicationID: string | null;
-    /** The attachments on this message. */
-    attachments: TypedCollection<string, RawAttachment, Attachment>;
     /** The author of this message. */
     author: User;
     /** The ID of the channel this message was created in. */
@@ -85,7 +80,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     webhookID?: string;
     constructor(data: RawMessage, client: Client) {
         super(data.id, client);
-        this.attachments = new TypedCollection(Attachment, client);
         this.channelID = data.channel_id;
         this.content = data.content;
         this.embeds = [];
@@ -111,27 +105,11 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
             }
             this.applicationID = data.application_id;
         }
-        if (data.attachments) {
-            for (const attachment of data.attachments) {
-                this.attachments.update(attachment);
-            }
-        }
     }
 
     protected override update(data: Partial<RawMessage>): void {
         if (data.activity !== undefined) {
             this.activity = data.activity;
-        }
-        if (data.attachments !== undefined) {
-            for (const id of this.attachments.keys()) {
-                if (!data.attachments.some(attachment => attachment.id === id)) {
-                    this.attachments.delete(id);
-                }
-            }
-
-            for (const attachment of data.attachments) {
-                this.attachments.update(attachment);
-            }
         }
         if (data.content !== undefined) {
             this.content = data.content;
@@ -187,7 +165,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
             ...super.toJSON(),
             activity:      this.activity,
             applicationID: this.applicationID ?? undefined,
-            attachments:   this.attachments.map(attachment => attachment.toJSON()),
             author:        this.author.toJSON(),
             channelID:     this.channelID,
             content:       this.content,

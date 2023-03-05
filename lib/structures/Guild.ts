@@ -70,7 +70,6 @@ export default class Guild extends Base {
     widgetEnabled?: boolean;
     constructor(data: RawGuild, client: Client) {
         super(data.id, client);
-        this._shard = this.client.guildShardMap[this.id] === undefined ? undefined : this.client.shards.get(this.client.guildShardMap[this.id]);
         this.applicationID = data.application_id;
         this.channels = new TypedCollection(GuildChannel, client) as TypedCollection<string, RawGuildChannel, AnyGuildChannelWithoutThreads>;
         this.icon = null;

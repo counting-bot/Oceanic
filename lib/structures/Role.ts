@@ -69,13 +69,13 @@ export default class Role extends Base {
     override toJSON(): JSONRole {
         return {
             ...super.toJSON(),
-            guildID:      this.guildID,
-            hoist:        this.hoist,
-            managed:      this.managed,
-            mentionable:  this.mentionable,
-            name:         this.name,
-            permissions:  this.permissions.toJSON(),
-            position:     this.position,
+            guildID:     this.guildID,
+            hoist:       this.hoist,
+            managed:     this.managed,
+            mentionable: this.mentionable,
+            name:        this.name,
+            permissions: this.permissions.toJSON(),
+            position:    this.position
         };
     }
 }

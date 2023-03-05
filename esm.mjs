@@ -1,18 +1,13 @@
 // Channel and Interaction MUST be at the top due to circular imports
 const Channel = (await import("./dist/lib/structures/Channel.js")).default.default;
-const Interaction = (await import("./dist/lib/structures/Interaction.js")).default.default;
 const ApplicationCommand = (await import("./dist/lib/structures/ApplicationCommand.js")).default.default;
-const Attachment = (await import("./dist/lib/structures/Attachment.js")).default.default;
-const AutocompleteInteraction = (await import("./dist/lib/structures/AutocompleteInteraction.js")).default.default;
 const Base = (await import("./dist/lib/structures/Base.js")).default.default;
 const Bucket = (await import("./dist/lib/rest/Bucket.js")).default.default;
 const CategoryChannel = (await import("./dist/lib/structures/CategoryChannel.js")).default.default;
 const Client = (await import("./dist/lib/Client.js")).default.default;
 const ClientApplication = (await import("./dist/lib/structures/ClientApplication.js")).default.default;
 const Constants = (await import("./dist/lib/Constants.js")).default;
-const CommandInteraction = (await import("./dist/lib/structures/CommandInteraction.js")).default.default;
 const Collection = (await import("./dist/lib/util/Collection.js")).default.default;
-const ComponentInteraction = (await import("./dist/lib/structures/ComponentInteraction.js")).default.default;
 const DiscordHTTPError = (await import("./dist/lib/rest/DiscordHTTPError.js")).default.default;
 const DiscordRESTError = (await import("./dist/lib/rest/DiscordRESTError.js")).default.default;
 const ExtendedUser = (await import("./dist/lib/structures/ExtendedUser.js")).default.default;
@@ -20,8 +15,6 @@ const ForumChannel = (await import("./dist/lib/structures/ForumChannel.js")).def
 const GatewayError = (await import("./dist/lib/gateway/GatewayError.js")).default.default;
 const Guild = (await import("./dist/lib/structures/Guild.js")).default.default;
 const GuildChannel = (await import("./dist/lib/structures/GuildChannel.js")).default.default;
-const InteractionResolvedChannel = (await import("./dist/lib/structures/InteractionResolvedChannel.js")).default.default;
-const InteractionOptionsWrapper = (await import("./dist/lib/util/InteractionOptionsWrapper.js")).default.default;
 const Invite = (await import("./dist/lib/structures/Invite.js")).default.default;
 const Member = (await import("./dist/lib/structures/Member.js")).default.default;
 const Message = (await import("./dist/lib/structures/Message.js")).default.default;
@@ -37,7 +30,6 @@ const PublicThreadChannel = (await import("./dist/lib/structures/PublicThreadCha
 const RESTManager = (await import("./dist/lib/rest/RESTManager.js")).default.default;
 const Role = (await import("./dist/lib/structures/Role.js")).default.default;
 const Routes = (await import("./dist/lib/util/Routes.js")).default;
-const SelectMenuValuesWrapper = (await import ("./dist/lib/util/SelectMenuValuesWrapper.js")).default.default;
 const SequentialBucket = (await import("./dist/lib/rest/SequentialBucket.js")).default.default;
 const Shard = (await import("./dist/lib/gateway/Shard.js")).default.default;
 const ShardManager = (await import("./dist/lib/gateway/ShardManager.js")).default.default;
@@ -56,19 +48,14 @@ export * from "./dist/lib/Constants.js";
 
 export {
     Channel,
-    Interaction,
     ApplicationCommand,
-    Attachment,
-    AutocompleteInteraction,
     Base,
     Bucket,
     CategoryChannel,
     Client,
     ClientApplication,
     Constants,
-    CommandInteraction,
     Collection,
-    ComponentInteraction,
     DiscordHTTPError,
     DiscordRESTError,
     ExtendedUser,
@@ -76,8 +63,6 @@ export {
     GatewayError,
     Guild,
     GuildChannel,
-    InteractionResolvedChannel,
-    InteractionOptionsWrapper,
     Invite,
     Member,
     Message,
@@ -93,7 +78,6 @@ export {
     RESTManager,
     Role,
     Routes,
-    SelectMenuValuesWrapper,
     SequentialBucket,
     Shard,
     ShardManager,

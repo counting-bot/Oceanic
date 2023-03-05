@@ -88,11 +88,11 @@ export default class TextableChannel<T extends TextChannel | AnnouncementChannel
     override toJSON(): JSONTextableChannel {
         return {
             ...super.toJSON(),
-            lastMessageID:              this.lastMessageID,
-            messages:                   this.messages.map(message => message.id),
-            permissionOverwrites:       this.permissionOverwrites.map(overwrite => overwrite.toJSON()),
-            rateLimitPerUser:           this.rateLimitPerUser,
-            type:                       this.type
+            lastMessageID:        this.lastMessageID,
+            messages:             this.messages.map(message => message.id),
+            permissionOverwrites: this.permissionOverwrites.map(overwrite => overwrite.toJSON()),
+            rateLimitPerUser:     this.rateLimitPerUser,
+            type:                 this.type
         };
     }
 }

@@ -22,7 +22,6 @@ import type {
     ChannelTypes,
     GuildChannelTypes,
     InteractionTypes,
-    InviteTargetTypes,
     MessageTypes,
     OverwriteTypes,
     PrivateChannelTypes,
@@ -224,7 +223,6 @@ export interface JSONMember extends JSONBase {
 export interface JSONMessage extends JSONBase {
     activity?: MessageActivity;
     applicationID?: string;
-    attachments: Array<JSONAttachment>;
     author: JSONUser;
     channelID: string;
     content: string;

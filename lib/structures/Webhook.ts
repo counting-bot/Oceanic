@@ -198,7 +198,7 @@ export default class Webhook extends Base {
         }
         return this.client.rest.webhooks.executeGithub<T>(this.id, t, options as Record<string, unknown>);
     }
-    
+
     /**
      * Get a webhook message.
      * @param messageID The ID of the message.

@@ -7,12 +7,7 @@ import type Permission from "./Permission";
 import type { ThreadChannelTypes } from "../Constants";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
-import type {
-    AnyThreadChannel,
-    RawMessage,
-    RawThreadChannel,
-    ThreadMember
-} from "../types/channels.js";
+import type { AnyThreadChannel, RawMessage, RawThreadChannel, ThreadMember } from "../types/channels.js";
 import type { JSONThreadChannel } from "../types/json.js";
 
 /** Represents a guild thread channel. */
