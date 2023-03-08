@@ -5,7 +5,6 @@ import type {
     GetMembersOptions,
     AddMemberOptions,
     CreateBanOptions,
-    RawRole,
     GetVanityURLResponse,
     CreateChannelReturn,
     CreateChannelOptions,
@@ -13,21 +12,10 @@ import type {
 } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
 import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
-import type {
-    AnyGuildChannelWithoutThreads,
-    InviteChannel,
-    PartialInviteChannel,
-    RawGuildChannel,
-    RawInvite,
-    RawThreadChannel,
-    RawThreadMember
-} from "../types/channels.js";
-import Role from "../structures/Role.js";
-import Invite from "../structures/Invite.js";
+import type { AnyGuildChannelWithoutThreads, RawGuildChannel, RawThreadChannel, RawThreadMember } from "../types/channels.js";
 import type RESTManager from "../rest/RESTManager.js";
 import Guild from "../structures/Guild.js";
 import type Member from "../structures/Member.js";
-import type { Uncached } from "../types/shared.js";
 
 /** Various methods for interacting with guilds. */
 export default class Guilds {
@@ -187,17 +175,6 @@ export default class Guilds {
     }
 
     /**
-     * Get the invites of a guild.
-     * @param guildID The ID of the guild to get the invites of.
-     */
-    async getInvites<CH extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(guildID: string): Promise<Array<Invite<"withMetadata", CH>>> {
-        return this.#manager.authRequest<Array<RawInvite>>({
-            method: "GET",
-            path:   Routes.GUILD_INVITES(guildID)
-        }).then(data => data.map(invite => new Invite<"withMetadata", CH>(invite, this.#manager.client)));
-    }
-
-    /**
      * Get a guild member.
      * @param guildID The ID of the guild.
      * @param memberID The ID of the member.
@@ -227,18 +204,6 @@ export default class Guilds {
             path:   Routes.GUILD_MEMBERS(guildID),
             query
         }).then(data => data.map(d => this.#manager.client.util.updateMember(guildID, d.user.id, d)));
-    }
-
-    /**
-     * Get the roles in a guild.
-     * @param guildID The ID of the guild.
-     */
-    async getRoles(guildID: string): Promise<Array<Role>> {
-        const guild = this.#manager.client.guilds.get(guildID);
-        return this.#manager.authRequest<Array<RawRole>>({
-            method: "GET",
-            path:   Routes.GUILD_ROLES(guildID)
-        }).then(data => data.map(role => guild ? guild.roles.update(role, guildID) : new Role(role, this.#manager.client, guildID)));
     }
 
     /**

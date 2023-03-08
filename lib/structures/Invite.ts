@@ -1,11 +1,10 @@
 /** @module Invite */
-import type { InviteChannel, InviteInfoTypes, RawInvite, RawInviteWithMetadata } from "../types/channels.js";
+import type { RawInvite, RawInviteWithMetadata } from "../types/channels.js";
 import type Client from "../Client.js";
 import type { JSONInvite } from "../types/json.js";
-import type { Uncached } from "../types/shared.js";
 
 /** Represents an invite. */
-export default class Invite<T extends InviteInfoTypes = "withMetadata", CH extends InviteChannel | Uncached = InviteChannel | Uncached> {
+export default class Invite {
     client!: Client;
     /** The code of this invite. */
     code: string;

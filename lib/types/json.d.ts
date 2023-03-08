@@ -13,8 +13,6 @@ import type {
     MessageReaction,
     ThreadMetadata,
     PrivateThreadMetadata,
-    ForumTag,
-    ForumEmoji,
     Embed
 } from "./channels.js";
 import type {
@@ -27,11 +25,8 @@ import type {
     PrivateChannelTypes,
     RESTMethod,
     TextChannelTypes,
-    ThreadAutoArchiveDuration,
     ThreadChannelTypes,
-    WebhookTypes,
-    SortOrderTypes,
-    ForumLayoutTypes
+    WebhookTypes
 } from "../Constants.js";
 
 export interface JSONAnnouncementChannel extends JSONTextableChannel {
@@ -102,12 +97,6 @@ export interface JSONBase {
     createdAt: number;
     id: string;
 }
-export interface JSONCategoryChannel extends JSONGuildChannel {
-    channels: Array<string>;
-    permissionOverwrites: Array<JSONPermissionOverwrite>;
-    position: number;
-    type: ChannelTypes.GUILD_CATEGORY;
-}
 export interface JSONChannel extends JSONBase {
     type: ChannelTypes;
 }
@@ -165,20 +154,7 @@ export interface JSONExtendedUser extends JSONUser {
     verified: boolean;
 }
 export interface JSONForumChannel extends JSONGuildChannel {
-    availableTags: Array<ForumTag>;
-    defaultAutoArchiveDuration: ThreadAutoArchiveDuration;
-    defaultForumLayout: ForumLayoutTypes;
-    defaultReactionEmoji: ForumEmoji | null;
-    defaultSortOrder: SortOrderTypes | null;
-    defaultThreadRateLimitPerUser: number;
-    flags: number;
-    lastThreadID: string | null;
-    permissionOverwrites: Array<JSONPermissionOverwrite>;
-    position: number;
-    rateLimitPerUser: number;
-    template: string;
     threads: Array<string>;
-    topic: string | null;
 }
 export interface JSONGuild extends JSONBase {
     application?: string;
@@ -195,10 +171,8 @@ export interface JSONGuild extends JSONBase {
     ownerID: string;
     preferredLocale: string;
     region?: string | null;
-    roles: Array<JSONRole>;
     threads: Array<string>;
     unavailable: boolean;
-    vanityURLCode: string | null;
 }
 export interface JSONGuildChannel extends JSONChannel {
     guildID: string;
@@ -217,7 +191,6 @@ export interface JSONInvite {
 }
 export interface JSONMember extends JSONBase {
     guildID: string;
-    roles: Array<string>;
     user: JSONUser;
 }
 export interface JSONMessage extends JSONBase {
@@ -268,7 +241,6 @@ export interface JSONPingInteraction extends JSONInteraction {
     type: InteractionTypes.PING;
 }
 export interface JSONPrivateChannel extends JSONChannel {
-    messages: Array<string>;
     recipient: JSONUser;
     type: ChannelTypes.DM;
 }
@@ -292,10 +264,6 @@ export interface JSONRole extends JSONBase {
 }
 
 export interface JSONTextableChannel extends JSONGuildChannel {
-    lastMessageID: string | null;
-    messages: Array<string>;
-    permissionOverwrites: Array<JSONPermissionOverwrite>;
-    rateLimitPerUser: number;
     type: Exclude<TextChannelTypes, PrivateChannelTypes>;
 }
 export interface JSONTextChannel extends JSONTextableChannel {
@@ -322,7 +290,6 @@ export interface JSONUser extends JSONBase {
     banner?: string | null;
     bot: boolean;
     discriminator: string;
-    publicFlags: number;
     system: boolean;
     username: string;
 }

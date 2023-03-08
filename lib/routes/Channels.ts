@@ -10,7 +10,6 @@ import type {
     EditPermissionOptions,
     GetChannelMessagesOptions,
     GetArchivedThreadsOptions,
-    InviteChannel,
     RawArchivedThreads,
     RawChannel,
     RawInvite,
@@ -21,16 +20,9 @@ import type {
     StartThreadFromMessageOptions,
     StartThreadInForumOptions,
     StartThreadWithoutMessageOptions,
-    GetInviteOptions,
-    GetInviteWithCountsAndExpirationOptions,
-    GetInviteWithCountsOptions,
-    GetInviteWithExpirationOptions,
-    GetInviteWithNoneOptions,
     RawThreadMember,
-    InviteInfoTypes,
     RawPrivateChannel,
     AnyEditableChannel,
-    PartialInviteChannel,
     RawThreadChannel
 } from "../types/channels";
 import * as Routes from "../util/Routes";
@@ -84,7 +76,7 @@ export default class Channels {
      * @param channelID The ID of the channel to create an invite for.
      * @param options The options for creating the invite.
      */
-    async createInvite<T extends InviteInfoTypes, CH extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(channelID: string, options: CreateInviteOptions): Promise<Invite<T, CH>> {
+    async createInvite(channelID: string, options: CreateInviteOptions): Promise<Invite> {
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -102,7 +94,7 @@ export default class Channels {
                 unique:                options.unique
             },
             reason
-        }).then(data => new Invite<T, CH>(data, this.#manager.client));
+        }).then(data => new Invite(data, this.#manager.client));
     }
 
     /**
@@ -165,19 +157,6 @@ export default class Channels {
             path:   Routes.CHANNEL(channelID),
             reason
         });
-    }
-
-    /**
-     * Delete an invite.
-     * @param code The code of the invite to delete.
-     * @param reason The reason for deleting the invite.
-     */
-    async deleteInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, reason?: string): Promise<Invite<"withMetadata", T>> {
-        return this.#manager.authRequest<RawInvite>({
-            method: "DELETE",
-            path:   Routes.INVITE(code),
-            reason
-        }).then(data => new Invite<"withMetadata", T>(data, this.#manager.client));
     }
 
     /**
@@ -358,41 +337,6 @@ export default class Channels {
             method: "GET",
             path:   Routes.CHANNEL(channelID)
         }).then(data => this.#manager.client.util.updateChannel<T>(data));
-    }
-
-    /**
-     * Get an invite.
-     * @param code The code of the invite to get.
-     * @param options The options for getting the invite.
-     */
-    async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithNoneOptions): Promise<Invite<"withMetadata", T>>;
-    async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithCountsAndExpirationOptions): Promise<Invite<"withMetadata" | "withCounts" | "withExpiration", T>>;
-    async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithCountsOptions): Promise<Invite<"withMetadata" | "withCounts", T>>;
-    async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithExpirationOptions): Promise<Invite<"withMetadata" | "withExpiration", T>>;
-    async getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options?: GetInviteOptions): Promise<Invite<never, T>> {
-        const query = new URLSearchParams();
-        if (options?.withCounts !== undefined) {
-            query.set("with_counts", options.withCounts.toString());
-        }
-        if (options?.withExpiration !== undefined) {
-            query.set("with_expiration", options.withExpiration.toString());
-        }
-        return this.#manager.authRequest<RawInvite>({
-            method: "GET",
-            path:   Routes.INVITE(code),
-            query
-        }).then(data => new Invite<never, T>(data, this.#manager.client));
-    }
-
-    /**
-     * Get the invites of a channel.
-     * @param channelID The ID of the channel to get the invites of.
-     */
-    async getInvites<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(channelID: string): Promise<Array<Invite<"withMetadata", T>>> {
-        return this.#manager.authRequest<Array<RawInvite>>({
-            method: "GET",
-            path:   Routes.CHANNEL_INVITES(channelID)
-        }).then(data => data.map(invite => new Invite<"withMetadata", T>(invite, this.#manager.client)));
     }
 
     /**

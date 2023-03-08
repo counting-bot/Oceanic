@@ -1,5 +1,4 @@
 /** @module Guild */
-import Role from "./Role";
 import Base from "./Base";
 import GuildChannel from "./GuildChannel";
 import Member from "./Member";
@@ -7,14 +6,13 @@ import ThreadChannel from "./ThreadChannel";
 import type User from "./User";
 import type ClientApplication from "./ClientApplication";
 import type TextChannel from "./TextChannel";
-import Permission from "./Permission";
 import Channel from "./Channel";
-import { AllPermissions, Permissions, type ImageFormat } from "../Constants";
+import type { ImageFormat } from "../Constants";
 import * as Routes from "../util/Routes";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
 import type { AnyGuildChannelWithoutThreads, AnyThreadChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
-import type { RawGuild, RawMember, RawRole, RESTMember } from "../types/guilds.js";
+import type { RawGuild, RawMember, RESTMember } from "../types/guilds.js";
 import type { JSONGuild } from "../types/json.js";
 import type Shard from "../gateway/Shard.js";
 
@@ -54,8 +52,6 @@ export default class Guild extends Base {
     preferredLocale: string;
     /** @deprecated The region of this guild.*/
     region?: string | null;
-    /** The roles in this guild. */
-    roles: TypedCollection<string, RawRole, Role, [guildID: string]>;
     /** The channel where rules/guidelines are displayed. Only present in guilds with the `COMMUNITY` feature. */
     rulesChannel?: TextChannel | null;
     /** The channel where welcome messages and boosts notices are posted. */
@@ -64,8 +60,6 @@ export default class Guild extends Base {
     threads: TypedCollection<string, RawThreadChannel, AnyThreadChannel>;
     /** If this guild is unavailable. */
     unavailable: boolean;
-    /** The vanity url of this guild. Only present in guilds with the `VANITY_URL` feature. */
-    vanityURLCode: string | null;
     /** If the widget is enabled. */
     widgetEnabled?: boolean;
     constructor(data: RawGuild, client: Client) {
@@ -79,13 +73,8 @@ export default class Guild extends Base {
         this.name = data.name;
         this.ownerID = data.owner_id;
         this.preferredLocale = data.preferred_locale;
-        this.roles = new TypedCollection(Role, client);
         this.threads = new TypedCollection(ThreadChannel, client) as TypedCollection<string, RawThreadChannel, AnyThreadChannel>;
         this.unavailable = !!data.unavailable;
-        this.vanityURLCode = data.vanity_url_code;
-        for (const role of data.roles) {
-            this.roles.update(role, data.id);
-        }
         this.update(data);
 
         if (data.channels) {
@@ -179,23 +168,6 @@ export default class Guild extends Base {
         }
     }
 
-    /** The client's member for this guild. This will throw an error if the guild was obtained via rest and the member is not cached.*/
-    get clientMember(): Member {
-        if (!this._clientMember) {
-            throw new Error(`${this.constructor.name}#clientMember is not present if the guild was obtained via rest and the member is not cached.`);
-        }
-
-        return this._clientMember;
-    }
-
-    /** The shard this guild is on. Gateway only. */
-    get shard(): Shard {
-        if (!this._shard) {
-            throw new Error(`${this.constructor.name}#shard is not present if the guild was received via REST, or you do not have the GUILDS intent.`);
-        }
-        return this._shard;
-    }
-
     /**
      * The url of this guild's icon.
      * @param format The format the url should be.
@@ -203,40 +175,6 @@ export default class Guild extends Base {
      */
     iconURL(format?: ImageFormat, size?: number): string | null {
         return this.icon === null ? null : this.client.util.formatImage(Routes.GUILD_ICON(this.id, this.icon), format, size);
-    }
-
-    /**
-     * Get the permissions of a member. If providing an id, the member must be cached.
-     * @param member The member to get the permissions of.
-     */
-    permissionsOf(member: string | Member): Permission {
-        if (typeof member === "string") {
-            member = this.members.get(member)!;
-        }
-        if (!member) {
-            throw new Error("Member not found");
-        }
-        if (member.id === this.ownerID) {
-            return new Permission(AllPermissions);
-        } else {
-            let permissions = this.roles.get(this.id)!.permissions.allow;
-            if (permissions & Permissions.ADMINISTRATOR) {
-                return new Permission(AllPermissions);
-            }
-            for (const id of member.roles) {
-                const role = this.roles.get(id);
-                if (!role) {
-                    continue;
-                }
-                if (role.permissions.allow & Permissions.ADMINISTRATOR) {
-                    permissions = AllPermissions;
-                    break;
-                } else {
-                    permissions |= role.permissions.allow;
-                }
-            }
-            return new Permission(permissions);
-        }
     }
 
     override toJSON(): JSONGuild {
@@ -256,10 +194,8 @@ export default class Guild extends Base {
             ownerID:                  this.ownerID,
             preferredLocale:          this.preferredLocale,
             region:                   this.region,
-            roles:                    this.roles.map(role => role.toJSON()),
             threads:                  this.threads.map(thread => thread.id),
-            unavailable:              this.unavailable,
-            vanityURLCode:            this.vanityURLCode
+            unavailable:              this.unavailable
         };
     }
 }

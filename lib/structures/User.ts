@@ -1,6 +1,5 @@
 /** @module User */
 import Base from "./Base.js";
-import type PrivateChannel from "./PrivateChannel.js";
 import type Client from "../Client.js";
 import type { RawUser } from "../types/users.js";
 import type { JSONUser } from "../types/json.js";
@@ -19,8 +18,6 @@ export default class User extends Base {
     bot: boolean;
     /** The 4 digits after the user's username. */
     discriminator: string;
-    /** The user's public [flags](https://discord.com/developers/docs/resources/user#user-object-user-flags). */
-    publicFlags: number;
     /** If this user is an official discord system user. */
     system: boolean;
     /** The user's username. */
@@ -30,7 +27,6 @@ export default class User extends Base {
         this.avatar = null;
         this.bot = !!data.bot;
         this.discriminator = data.discriminator;
-        this.publicFlags = 0;
         this.system = !!data.system;
         this.username = data.username;
         this.update(data);
@@ -51,28 +47,6 @@ export default class User extends Base {
         }
     }
 
-    /** The default avatar value of this user (discriminator modulo 5). */
-    get defaultAvatar(): number {
-        return Number(this.discriminator) % 5;
-    }
-
-    /** A string that will mention this user. */
-    get mention(): string {
-        return `<@${this.id}>`;
-    }
-
-    /** a combination of this user's username and discriminator. */
-    get tag(): string {
-        return `${this.username}#${this.discriminator}`;
-    }
-
-    /**
-     * Create a direct message with this user.
-     */
-    async createDM(): Promise<PrivateChannel> {
-        return this.client.rest.channels.createDM(this.id);
-    }
-
     override toJSON(): JSONUser {
         return {
             ...super.toJSON(),
@@ -81,7 +55,6 @@ export default class User extends Base {
             banner:        this.banner,
             bot:           this.bot,
             discriminator: this.discriminator,
-            publicFlags:   this.publicFlags,
             system:        this.system,
             username:      this.username
         };

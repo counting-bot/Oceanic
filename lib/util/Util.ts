@@ -31,7 +31,7 @@ import type {
     ToComponentFromRaw,
     ToRawFromComponent
 } from "../types/channels.js";
-import type { RawMember, RawSticker, RESTMember, Sticker } from "../types/guilds.js";
+import type { RawMember, RESTMember } from "../types/guilds.js";
 import type { ApplicationCommandOptions, CombinedApplicationCommandOption, RawApplicationCommandOption } from "../types/application-commands.js";
 import Member from "../structures/Member.js";
 import Channel from "../structures/Channel.js";
@@ -205,23 +205,6 @@ export default class Util {
             throw new Error("Invalid image provided. Ensure you are providing a valid, fully-qualified base64 url.");
         }
         return img;
-    }
-
-    convertSticker(raw: RawSticker): Sticker {
-        return {
-            asset:       raw.asset,
-            available:   raw.available,
-            description: raw.description,
-            formatType:  raw.format_type,
-            guildID:     raw.guild_id,
-            id:          raw.id,
-            name:        raw.name,
-            packID:      raw.pack_id,
-            sortValue:   raw.sort_value,
-            tags:        raw.tags,
-            type:        raw.type,
-            user:        raw.user ? this.#client.users.update(raw.user) : undefined
-        };
     }
 
     embedsToParsed(embeds: Array<RawEmbed>): Array<Embed> {
