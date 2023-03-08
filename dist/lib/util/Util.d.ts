@@ -2,7 +2,7 @@
 import type Client from "../Client";
 import { type ImageFormat } from "../Constants.js";
 import type { AllowedMentions, AnyChannel, AnyThreadChannel, Component, Embed, EmbedOptions, MessageActionRow, ModalActionRow, RawAllowedMentions, RawChannel, RawComponent, RawEmbed, RawEmbedOptions, RawMessageActionRow, RawModalActionRow, RawThreadChannel, ToComponentFromRaw, ToRawFromComponent } from "../types/channels.js";
-import type { RawMember, RawSticker, RESTMember, Sticker } from "../types/guilds.js";
+import type { RawMember, RESTMember } from "../types/guilds.js";
 import type { ApplicationCommandOptions, RawApplicationCommandOption } from "../types/application-commands.js";
 import Member from "../structures/Member.js";
 /** A general set of utilities. These are intentionally poorly documented, as they serve almost no usefulness to outside developers. */
@@ -17,7 +17,6 @@ export default class Util {
     componentsToParsed<T extends RawModalActionRow | RawMessageActionRow>(components: Array<T>): T extends RawModalActionRow ? Array<ModalActionRow> : T extends RawMessageActionRow ? Array<MessageActionRow> : never;
     componentsToRaw<T extends ModalActionRow | MessageActionRow>(components: Array<T>): T extends ModalActionRow ? Array<RawModalActionRow> : T extends MessageActionRow ? Array<RawMessageActionRow> : never;
     convertImage(img: Buffer | string): string;
-    convertSticker(raw: RawSticker): Sticker;
     embedsToParsed(embeds: Array<RawEmbed>): Array<Embed>;
     embedsToRaw(embeds: Array<EmbedOptions>): Array<RawEmbedOptions>;
     formatAllowedMentions(allowed?: AllowedMentions): RawAllowedMentions;

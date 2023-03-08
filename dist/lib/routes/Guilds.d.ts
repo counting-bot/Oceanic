@@ -1,13 +1,10 @@
 /** @module Routes/Guilds */
 import type { GetActiveThreadsResponse, GetMembersOptions, AddMemberOptions, CreateBanOptions, GetVanityURLResponse, CreateChannelReturn, CreateChannelOptions } from "../types/guilds.js";
 import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
-import type { AnyGuildChannelWithoutThreads, InviteChannel, PartialInviteChannel } from "../types/channels.js";
-import Role from "../structures/Role.js";
-import Invite from "../structures/Invite.js";
+import type { AnyGuildChannelWithoutThreads } from "../types/channels.js";
 import type RESTManager from "../rest/RESTManager.js";
 import Guild from "../structures/Guild.js";
 import type Member from "../structures/Member.js";
-import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with guilds. */
 export default class Guilds {
     #private;
@@ -61,11 +58,6 @@ export default class Guilds {
      */
     getChannels(guildID: string): Promise<Array<AnyGuildChannelWithoutThreads>>;
     /**
-     * Get the invites of a guild.
-     * @param guildID The ID of the guild to get the invites of.
-     */
-    getInvites<CH extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(guildID: string): Promise<Array<Invite<"withMetadata", CH>>>;
-    /**
      * Get a guild member.
      * @param guildID The ID of the guild.
      * @param memberID The ID of the member.
@@ -77,11 +69,6 @@ export default class Guilds {
      * @param options The options for getting the members.
      */
     getMembers(guildID: string, options?: GetMembersOptions): Promise<Array<Member>>;
-    /**
-     * Get the roles in a guild.
-     * @param guildID The ID of the guild.
-     */
-    getRoles(guildID: string): Promise<Array<Role>>;
     /**
      * Get the vanity url of a guild.
      * @param guildID The ID of the guild.

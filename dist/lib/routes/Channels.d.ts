@@ -1,5 +1,5 @@
 /** @module Routes/Channels */
-import type { AnyChannel, AnyTextChannelWithoutGroup, ArchivedThreads, CreateInviteOptions, CreateMessageOptions, EditChannelOptions, EditMessageOptions, EditPermissionOptions, GetChannelMessagesOptions, GetArchivedThreadsOptions, InviteChannel, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions, GetInviteWithCountsAndExpirationOptions, GetInviteWithCountsOptions, GetInviteWithExpirationOptions, GetInviteWithNoneOptions, InviteInfoTypes, AnyEditableChannel, PartialInviteChannel } from "../types/channels";
+import type { AnyChannel, AnyTextChannelWithoutGroup, ArchivedThreads, CreateInviteOptions, CreateMessageOptions, EditChannelOptions, EditMessageOptions, EditPermissionOptions, GetChannelMessagesOptions, GetArchivedThreadsOptions, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions, AnyEditableChannel } from "../types/channels";
 import Message from "../structures/Message";
 import Invite from "../structures/Invite";
 import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
@@ -28,7 +28,7 @@ export default class Channels {
      * @param channelID The ID of the channel to create an invite for.
      * @param options The options for creating the invite.
      */
-    createInvite<T extends InviteInfoTypes, CH extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(channelID: string, options: CreateInviteOptions): Promise<Invite<T, CH>>;
+    createInvite(channelID: string, options: CreateInviteOptions): Promise<Invite>;
     /**
      * Create a message in a channel.
      * @param channelID The ID of the channel to create the message in.
@@ -48,12 +48,6 @@ export default class Channels {
      * @param reason The reason to be displayed in the audit log.
      */
     delete(channelID: string, reason?: string): Promise<void>;
-    /**
-     * Delete an invite.
-     * @param code The code of the invite to delete.
-     * @param reason The reason for deleting the invite.
-     */
-    deleteInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, reason?: string): Promise<Invite<"withMetadata", T>>;
     /**
      * Delete a message.
      * @param channelID The ID of the channel to delete the message in.
@@ -108,20 +102,6 @@ export default class Channels {
      * @param channelID The ID of the channel to get.
      */
     get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<T>;
-    /**
-     * Get an invite.
-     * @param code The code of the invite to get.
-     * @param options The options for getting the invite.
-     */
-    getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithNoneOptions): Promise<Invite<"withMetadata", T>>;
-    getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithCountsAndExpirationOptions): Promise<Invite<"withMetadata" | "withCounts" | "withExpiration", T>>;
-    getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithCountsOptions): Promise<Invite<"withMetadata" | "withCounts", T>>;
-    getInvite<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(code: string, options: GetInviteWithExpirationOptions): Promise<Invite<"withMetadata" | "withExpiration", T>>;
-    /**
-     * Get the invites of a channel.
-     * @param channelID The ID of the channel to get the invites of.
-     */
-    getInvites<T extends InviteChannel | PartialInviteChannel | Uncached = InviteChannel | PartialInviteChannel | Uncached>(channelID: string): Promise<Array<Invite<"withMetadata", T>>>;
     /**
      * Get the private archived threads the current user has joined in a channel.
      * @param channelID The ID of the channel to get the archived threads from.

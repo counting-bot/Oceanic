@@ -2,8 +2,6 @@
 import GuildChannel from "./GuildChannel";
 import Message from "./Message";
 import type User from "./User";
-import type Member from "./Member";
-import type Permission from "./Permission";
 import type { ThreadChannelTypes } from "../Constants";
 import type Client from "../Client";
 import TypedCollection from "../util/TypedCollection";
@@ -37,10 +35,5 @@ export default class ThreadChannel<T extends AnyThreadChannel = AnyThreadChannel
     type: ThreadChannelTypes;
     constructor(data: RawThreadChannel, client: Client);
     protected update(data: Partial<RawThreadChannel>): void;
-    /**
-     * Get the permissions of a member. If providing an id, the member must be cached. The parent channel must be cached as threads themselves do not have permissions.
-     * @param member The member to get the permissions of.
-     */
-    permissionsOf(member: string | Member): Permission;
     toJSON(): JSONThreadChannel;
 }
