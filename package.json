@@ -57,6 +57,7 @@
     "typescript": "<5.5 >=5.x"
   },
   "dependencies": {
+    "tslib": "^2.5.0",
     "undici": "^5.21.2",
     "ws": "^8.13.0"
   },
