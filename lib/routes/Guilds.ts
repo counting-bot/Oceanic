@@ -1,21 +1,14 @@
 /** @module Routes/Guilds */
 import type {
     RawGuild,
-    GetActiveThreadsResponse,
-    GetMembersOptions,
     AddMemberOptions,
     CreateBanOptions,
     GetVanityURLResponse,
-    CreateChannelReturn,
-    CreateChannelOptions,
     RESTMember
 } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
-import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
-import type { AnyGuildChannelWithoutThreads, RawGuildChannel, RawThreadChannel, RawThreadMember } from "../types/channels.js";
+import type { RawGuildChannel, RawThreadChannel, RawThreadMember } from "../types/channels.js";
 import type RESTManager from "../rest/RESTManager.js";
-import Guild from "../structures/Guild.js";
-import type Member from "../structures/Member.js";
 
 /** Various methods for interacting with guilds. */
 export default class Guilds {
@@ -32,8 +25,8 @@ export default class Guilds {
      * @param userID The ID of the user to add.
      * @param options The options for adding the member.
      */
-    async addMember(guildID: string, userID: string, options: AddMemberOptions): Promise<void | Member> {
-        const res = await this.#manager.authRequest<RESTMember | null>({
+    async addMember(guildID: string, userID: string, options: AddMemberOptions): Promise<object> {
+        return this.#manager.authRequest<object>({
             method: "PUT",
             path:   Routes.GUILD_MEMBER(guildID, userID),
             json:   {
@@ -43,10 +36,7 @@ export default class Guilds {
                 nick:         options.nick,
                 roles:        options.roles
             }
-        }).then(data => data === null ? undefined : this.#manager.client.util.updateMember(guildID, userID, data));
-        if (res !== undefined) {
-            return res;
-        }
+        });
     }
 
     /**
@@ -87,52 +77,13 @@ export default class Guilds {
     }
 
     /**
-     * Create a channel in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for creating the channel.
-     */
-    async createChannel<T extends GuildChannelTypesWithoutThreads>(guildID: string, type: T, options: Omit<CreateChannelOptions, "type">): Promise<CreateChannelReturn<T>> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        return this.#manager.authRequest<RawGuildChannel>({
-            method: "POST",
-            path:   Routes.GUILD_CHANNELS(guildID),
-            json:   {
-                available_tags: options.availableTags ? options.availableTags.map(tag => ({
-                    emoji_id:   tag.emoji?.id,
-                    emoji_name: tag.emoji?.name,
-                    moderated:  tag.moderated,
-                    name:       tag.name
-                })) : options.availableTags,
-                default_auto_archive_duration: options.defaultAutoArchiveDuration,
-                default_forum_layout:          options.defaultForumLayout,
-                default_reaction_emoji:        options.defaultReactionEmoji ? { emoji_id: options.defaultReactionEmoji.id, emoji_name: options.defaultReactionEmoji.name } : options.defaultReactionEmoji,
-                default_sort_order:            options.defaultSortOrder,
-                name:                          options.name,
-                nsfw:                          options.nsfw,
-                parent_id:                     options.parentID,
-                permission_overwrites:         options.permissionOverwrites,
-                position:                      options.position,
-                rate_limit_per_user:           options.rateLimitPerUser,
-                topic:                         options.topic,
-                type,
-                user_limit:                    options.userLimit,
-                video_quality_mode:            options.videoQualityMode
-            },
-            reason
-        }).then(data => this.#manager.client.util.updateChannel(data)) as never;
-    }
-
-    /**
      * Get a guild.
      *
      * Note: If the guild is not already in the client's cache, this will not add it.
      * @param guildID The ID of the guild.
      * @param withCounts If the approximate number of members and online members should be included.
      */
-    async get(guildID: string, withCounts?: boolean): Promise<Guild> {
+    async get(guildID: string, withCounts?: boolean): Promise<object> {
         const query = new URLSearchParams();
         if (withCounts !== undefined) {
             query.set("with_counts", withCounts.toString());
@@ -141,37 +92,29 @@ export default class Guilds {
             method: "GET",
             path:   Routes.GUILD(guildID),
             query
-        }).then(data => this.#manager.client.guilds.has(guildID) ? this.#manager.client.guilds.update(data) : new Guild(data, this.#manager.client));
+        });
     }
 
     /**
      * Get the active threads in a guild.
      * @param guildID The ID of the guild.
      */
-    async getActiveThreads(guildID: string): Promise<GetActiveThreadsResponse> {
+    async getActiveThreads(guildID: string): Promise<object> {
         return this.#manager.authRequest<{ members: Array<RawThreadMember>; threads: Array<RawThreadChannel>; }>({
             method: "GET",
             path:   Routes.GUILD_ACTIVE_THREADS(guildID)
-        }).then(data => ({
-            members: data.members.map(member => ({
-                flags:         member.flags,
-                id:            member.id,
-                joinTimestamp: new Date(member.join_timestamp),
-                userID:        member.user_id
-            })),
-            threads: data.threads.map(rawThread => this.#manager.client.util.updateThread(rawThread))
-        }));
+        });
     }
 
     /**
      * Get the channels in a guild. Does not include threads.
      * @param guildID The ID of the guild.
      */
-    async getChannels(guildID: string): Promise<Array<AnyGuildChannelWithoutThreads>> {
+    async getChannels(guildID: string): Promise<Array<object>> {
         return this.#manager.authRequest<Array<RawGuildChannel>>({
             method: "GET",
             path:   Routes.GUILD_CHANNELS(guildID)
-        }).then(data => data.map(d => this.#manager.client.util.updateChannel(d)));
+        });
     }
 
     /**
@@ -179,31 +122,11 @@ export default class Guilds {
      * @param guildID The ID of the guild.
      * @param memberID The ID of the member.
      */
-    async getMember(guildID: string, memberID: string): Promise<Member> {
+    async getMember(guildID: string, memberID: string): Promise<object> {
         return this.#manager.authRequest<RESTMember>({
             method: "GET",
             path:   Routes.GUILD_MEMBER(guildID, memberID)
-        }).then(data => this.#manager.client.util.updateMember(guildID, memberID, data));
-    }
-
-    /**
-     * Get a guild's members. This requires the `GUILD_MEMBERS` intent.
-     * @param guildID The ID of the guild.
-     * @param options The options for getting the members.
-     */
-    async getMembers(guildID: string, options?: GetMembersOptions): Promise<Array<Member>> {
-        const query = new URLSearchParams();
-        if (options?.after !== undefined) {
-            query.set("after", options.after);
-        }
-        if (options?.limit !== undefined) {
-            query.set("limit", options.limit.toString());
-        }
-        return this.#manager.authRequest<Array<RESTMember>>({
-            method: "GET",
-            path:   Routes.GUILD_MEMBERS(guildID),
-            query
-        }).then(data => data.map(d => this.#manager.client.util.updateMember(guildID, d.user.id, d)));
+        });
     }
 
     /**

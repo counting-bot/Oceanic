@@ -1,7 +1,5 @@
 /** @module Message */
 import Base from "./Base.js";
-import User from "./User.js";
-import type Member from "./Member.js";
 import PartialApplication from "./PartialApplication.js";
 import type ClientApplication from "./ClientApplication.js";
 import type Client from "../Client.js";
@@ -20,7 +18,6 @@ import type {
     MessageReaction,
     AnyThreadChannel
 } from "../types/channels.js";
-import type { RawMember } from "../types/guilds.js";
 import type { JSONMessage } from "../types/json.js";
 
 /** Represents a message. */
@@ -39,8 +36,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      * * If the message has a rich presence embed ({@link PartialApplication})
      */
     applicationID: string | null;
-    /** The author of this message. */
-    author: User;
     /** The ID of the channel this message was created in. */
     channelID: string;
     /** The content of this message. */
@@ -53,8 +48,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     guildID: T extends AnyGuildTextChannel ? string : string | null;
     /** The interaction info, if this message was the result of an interaction. */
     interaction?: MessageInteraction;
-    /** The member that created this message, if this message is in a guild. */
-    member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** Channels mentioned in a `CROSSPOSTED` channel follower message. See [Discord's docs](https://discord.com/developers/docs/resources/channel#channel-mention-object) for more information. */
     mentionChannels?: Array<ChannelMention>;
     /** If this message is a `REPLY` or `THREAD_STARTER_MESSAGE`, some info about the referenced message. */
@@ -85,13 +78,11 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         this.embeds = [];
         this.flags = 0;
         this.guildID = (data.guild_id === undefined ? null : data.guild_id) as T extends AnyGuildTextChannel ? string : string | null;
-        this.member = (data.member === undefined ? undefined : this.client.util.updateMember(data.guild_id!, data.author.id, { ...data.member, user: data.author })) as T extends AnyGuildTextChannel ? Member : Member | undefined;
         this.reactions = {};
         this.timestamp = new Date(data.timestamp);
         this.type = data.type;
         this.webhookID = data.webhook_id;
         this.update(data);
-        this.author = data.author.discriminator === "0000" ? new User(data.author, client) : client.users.update(data.author);
         if (data.application_id === undefined) {
             this.applicationID = null;
         } else {
@@ -114,27 +105,8 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         if (data.content !== undefined) {
             this.content = data.content;
         }
-        if (data.embeds !== undefined) {
-            this.embeds = this.client.util.embedsToParsed(data.embeds);
-        }
         if (data.flags !== undefined) {
             this.flags = data.flags;
-        }
-        if (data.interaction !== undefined) {
-            let member: RawMember | undefined;
-            if (data.interaction.member) {
-                member = {
-                    ...data.interaction.member,
-                    user: data.interaction.user
-                };
-            }
-            this.interaction = {
-                id:     data.interaction.id,
-                member: member ? this.client.util.updateMember(data.guild_id!, member.user!.id, member) : undefined,
-                name:   data.interaction.name,
-                type:   data.interaction.type,
-                user:   this.client.users.update(data.interaction.user)
-            };
         }
         if (data.message_reference) {
             this.messageReference = {
@@ -155,29 +127,18 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
         if (data.sticker_items !== undefined) {
             this.stickerItems = data.sticker_items;
         }
-        if (data.thread !== undefined) {
-            this.thread = this.client.util.updateThread(data.thread);
-        }
     }
 
     override toJSON(): JSONMessage {
         return {
             ...super.toJSON(),
-            activity:      this.activity,
-            applicationID: this.applicationID ?? undefined,
-            author:        this.author.toJSON(),
-            channelID:     this.channelID,
-            content:       this.content,
-            embeds:        this.embeds,
-            flags:         this.flags,
-            guildID:       this.guildID ?? undefined,
-            interaction:   this.interaction ? {
-                id:     this.interaction.id,
-                member: this.interaction.member?.toJSON(),
-                name:   this.interaction.name,
-                type:   this.interaction.type,
-                user:   this.interaction.user.toJSON()
-            } : undefined,
+            activity:          this.activity,
+            applicationID:     this.applicationID ?? undefined,
+            channelID:         this.channelID,
+            content:           this.content,
+            embeds:            this.embeds,
+            flags:             this.flags,
+            guildID:           this.guildID ?? undefined,
             mentionChannels:   this.mentionChannels,
             messageReference:  this.messageReference,
             nonce:             this.nonce,

@@ -51,11 +51,6 @@ interface GatewayOptions {
      */
     firstShardID?: number;
     /**
-     * If the members of all guilds should be requested. Requires the `GUILD_MEMBERS` intent.
-     * @defaultValue false
-     */
-    getAllUsers?: boolean;
-    /**
      * The time in milliseconds after which the client will consider all guilds to have been received.
      * @defaultValue 2000
      */
@@ -106,7 +101,7 @@ interface GatewayOptions {
     ws?: WSClientOptions;
 }
 
-export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOptions, "autoReconnect" | "compress" | "connectionTimeout" | "firstShardID" | "getAllUsers" | "guildCreateTimeout" | "largeThreshold" | "lastShardID" | "maxReconnectAttempts" | "maxResumeAttempts" | "reconnectDelay" | "shardIDs" | "ws">> {
+export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOptions, "autoReconnect" | "compress" | "connectionTimeout" | "firstShardID" | "guildCreateTimeout" | "largeThreshold" | "lastShardID" | "maxReconnectAttempts" | "maxResumeAttempts" | "reconnectDelay" | "shardIDs" | "ws">> {
     concurrency: number;
     connectionProperties: Required<GatewayOptions["connectionProperties"]>;
     intents: number;

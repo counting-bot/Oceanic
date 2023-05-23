@@ -32,9 +32,6 @@ export default class Webhooks {
         if (options.reason) {
             delete options.reason;
         }
-        if (options.avatar) {
-            options.avatar = this.#manager.client.util._convertImage(options.avatar, "avatar");
-        }
         return this.#manager.authRequest<RawWebhook>({
             method: "POST",
             path:   Routes.CHANNEL_WEBHOOKS(channelID),
@@ -99,9 +96,6 @@ export default class Webhooks {
         if (options.reason) {
             delete options.reason;
         }
-        if (options.avatar) {
-            options.avatar = this.#manager.client.util._convertImage(options.avatar, "avatar");
-        }
         return this.#manager.authRequest<RawWebhook>({
             method: "PATCH",
             path:   Routes.WEBHOOK(webhookID),
@@ -136,9 +130,9 @@ export default class Webhooks {
             json:   {
                 allowed_mentions: options.allowedMentions ? this.#manager.client.util.formatAllowedMentions(options.allowedMentions) : undefined,
                 attachments:      options.attachments,
-                components:       options.components ? this.#manager.client.util.componentsToRaw(options.components) : undefined,
+                components:       options.components ? options.components : undefined,
                 content:          options.content,
-                embeds:           options.embeds ? this.#manager.client.util.embedsToRaw(options.embeds) : undefined
+                embeds:           options.embeds ? options.embeds : undefined
             },
             query,
             files
@@ -151,9 +145,6 @@ export default class Webhooks {
      * @param options The options for editing the webhook.
      */
     async editToken(webhookID: string, token: string, options: EditWebhookTokenOptions): Promise<Webhook> {
-        if (options.avatar) {
-            options.avatar = this.#manager.client.util._convertImage(options.avatar, "avatar");
-        }
         return this.#manager.authRequest<RawWebhook>({
             method: "PATCH",
             path:   Routes.WEBHOOK(webhookID, token),
@@ -192,9 +183,9 @@ export default class Webhooks {
                 allowed_mentions: this.#manager.client.util.formatAllowedMentions(options.allowedMentions),
                 attachments:      options.attachments,
                 avatar_url:       options.avatarURL,
-                components:       options.components ? this.#manager.client.util.componentsToRaw(options.components) : undefined,
+                components:       options.components ? options.components : undefined,
                 content:          options.content,
-                embeds:           options.embeds ? this.#manager.client.util.embedsToRaw(options.embeds) : undefined,
+                embeds:           options.embeds ? options.embeds : undefined,
                 flags:            options.flags,
                 thread_name:      options.threadName,
                 tts:              options.tts,

@@ -2,10 +2,8 @@
 import type {
     AnyChannel,
     AnyTextChannelWithoutGroup,
-    ArchivedThreads,
     CreateInviteOptions,
     CreateMessageOptions,
-    EditChannelOptions,
     EditMessageOptions,
     EditPermissionOptions,
     GetChannelMessagesOptions,
@@ -22,19 +20,12 @@ import type {
     StartThreadWithoutMessageOptions,
     RawThreadMember,
     RawPrivateChannel,
-    AnyEditableChannel,
     RawThreadChannel
-} from "../types/channels";
-import * as Routes from "../util/Routes";
-import Message from "../structures/Message";
-import Invite from "../structures/Invite";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
-import type PublicThreadChannel from "../structures/PublicThreadChannel";
-import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import Channel from "../structures/Channel";
-import type RESTManager from "../rest/RESTManager";
-import type PrivateChannel from "../structures/PrivateChannel";
-import type { Uncached } from "../types/shared";
+} from "../types/channels.js";
+import * as Routes from "../util/Routes.js";
+import Message from "../structures/Message.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type { Uncached } from "../types/shared.js";
 
 /** Various methods for interacting with channels. */
 export default class Channels {
@@ -58,17 +49,12 @@ export default class Channels {
      * Create a direct message. This will not create a new channel if you have already started a dm with the user.
      * @param recipient The ID of the recipient of the direct message.
      */
-    async createDM(recipient: string): Promise<PrivateChannel> {
-        let cache: PrivateChannel | undefined;
-        if ((cache = this.#manager.client.privateChannels.find(ch => ch.recipient.id === recipient))) {
-            return cache;
-        }
+    async createDM(recipient: string): Promise<object> {
         return this.#manager.authRequest<RawPrivateChannel>({
             method: "POST",
             path:   Routes.OAUTH_CHANNELS,
             json:   { recipient_id: recipient }
-        }
-        ).then(data => this.#manager.client.privateChannels.update(data));
+        });
     }
 
     /**
@@ -76,7 +62,7 @@ export default class Channels {
      * @param channelID The ID of the channel to create an invite for.
      * @param options The options for creating the invite.
      */
-    async createInvite(channelID: string, options: CreateInviteOptions): Promise<Invite> {
+    async createInvite(channelID: string, options: CreateInviteOptions): Promise<object> {
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -94,7 +80,7 @@ export default class Channels {
                 unique:                options.unique
             },
             reason
-        }).then(data => new Invite(data, this.#manager.client));
+        });
     }
 
     /**
@@ -102,7 +88,7 @@ export default class Channels {
      * @param channelID The ID of the channel to create the message in.
      * @param options The options for creating the message.
      */
-    async createMessage<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, options: CreateMessageOptions): Promise<Message<T>> {
+    async createMessage(channelID: string, options: CreateMessageOptions): Promise<object> {
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -113,9 +99,9 @@ export default class Channels {
             json:   {
                 allowed_mentions:  this.#manager.client.util.formatAllowedMentions(options.allowedMentions),
                 attachments:       options.attachments,
-                components:        options.components ? this.#manager.client.util.componentsToRaw(options.components) : undefined,
+                components:        options.components ? options.components : undefined,
                 content:           options.content,
-                embeds:            options.embeds ? this.#manager.client.util.embedsToRaw(options.embeds) : undefined,
+                embeds:            options.embeds,
                 flags:             options.flags,
                 sticker_ids:       options.stickerIDs,
                 message_reference: options.messageReference ? {
@@ -127,7 +113,7 @@ export default class Channels {
                 tts: options.tts
             },
             files
-        }).then(data => new Message<T>(data, this.#manager.client));
+        });
     }
 
     /**
@@ -221,65 +207,6 @@ export default class Channels {
     }
 
     /**
-     * Edit a channel.
-     * @param channelID The ID of the channel to edit.
-     * @param options The options for editing the channel.
-     */
-    async edit<T extends AnyEditableChannel = AnyEditableChannel>(channelID: string, options: EditChannelOptions): Promise<T> {
-        const reason = options.reason;
-        if (options.reason) {
-            delete options.reason;
-        }
-        if (options.icon) {
-            try {
-                options.icon = this.#manager.client.util.convertImage(options.icon);
-            } catch (err) {
-                throw new Error("Invalid icon provided. Ensure you are providing a valid, fully-qualified base64 url.", { cause: err as Error });
-            }
-        }
-
-
-        return this.#manager.authRequest<RawChannel>({
-            method: "PATCH",
-            path:   Routes.CHANNEL(channelID),
-            json:   {
-                applied_tags:          options.appliedTags,
-                archived:              options.archived,
-                auto_archive_duration: options.autoArchiveDuration,
-                available_tags:        options.availableTags?.map(tag => ({
-                    emoji_id:   tag.emoji?.id,
-                    emoji_name: tag.emoji?.name,
-                    moderated:  tag.moderated,
-                    name:       tag.name,
-                    id:         tag.id
-                })),
-                bitrate:                            options.bitrate,
-                default_auto_archive_duration:      options.defaultAutoArchiveDuration,
-                default_forum_layout:               options.defaultForumLayout,
-                default_reaction_emoji:             options.defaultReactionEmoji ? { emoji_id: options.defaultReactionEmoji.id, emoji_name: options.defaultReactionEmoji.name } : options.defaultReactionEmoji,
-                default_sort_order:                 options.defaultSortOrder,
-                default_thread_rate_limit_per_user: options.defaultThreadRateLimitPerUser,
-                flags:                              options.flags,
-                icon:                               options.icon,
-                invitable:                          options.invitable,
-                locked:                             options.locked,
-                name:                               options.name,
-                nsfw:                               options.nsfw,
-                parent_id:                          options.parentID,
-                permission_overwrites:              options.permissionOverwrites,
-                position:                           options.position,
-                rate_limit_per_user:                options.rateLimitPerUser,
-                rtc_region:                         options.rtcRegion,
-                topic:                              options.topic,
-                type:                               options.type,
-                user_limit:                         options.userLimit,
-                video_quality_mode:                 options.videoQualityMode
-            },
-            reason
-        }).then(data => Channel.from<T>(data, this.#manager.client));
-    }
-
-    /**
      * Edit a message.
      * @param channelID The ID of the channel the message is in.
      * @param messageID The ID of the message to edit.
@@ -296,9 +223,9 @@ export default class Channels {
             json:   {
                 allowed_mentions: options.allowedMentions ? this.#manager.client.util.formatAllowedMentions(options.allowedMentions) : undefined,
                 attachments:      options.attachments,
-                components:       options.components ? this.#manager.client.util.componentsToRaw(options.components) : undefined,
+                components:       options.components ? options.components : undefined,
                 content:          options.content,
-                embeds:           options.embeds ? this.#manager.client.util.embedsToRaw(options.embeds) : undefined,
+                embeds:           options.embeds,
                 flags:            options.flags
             },
             files
@@ -332,11 +259,11 @@ export default class Channels {
      * Get a channel.
      * @param channelID The ID of the channel to get.
      */
-    async get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<T> {
+    async get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<object> {
         return this.#manager.authRequest<RawChannel>({
             method: "GET",
             path:   Routes.CHANNEL(channelID)
-        }).then(data => this.#manager.client.util.updateChannel<T>(data));
+        });
     }
 
     /**
@@ -344,24 +271,15 @@ export default class Channels {
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
      */
-    async getJoinedPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<PrivateThreadChannel>> {
-        return this.#manager.authRequest<RawArchivedThreads<RawPrivateThreadChannel>>({
+    async getJoinedPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object> {
+        return this.#manager.authRequest<object>({
             method: "GET",
             path:   Routes.CHANNEL_PRIVATE_ARCHIVED_THREADS(channelID),
             json:   {
                 before: options?.before,
                 limit:  options?.limit
             }
-        }).then(data => ({
-            hasMore: data.has_more,
-            members: data.members.map(m => ({
-                flags:         m.flags,
-                id:            m.id,
-                joinTimestamp: new Date(m.join_timestamp),
-                userID:        m.user_id
-            }) as ThreadMember),
-            threads: data.threads.map(d => this.#manager.client.util.updateThread(d))
-        }));
+        });
     }
 
     /**
@@ -453,7 +371,7 @@ export default class Channels {
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
      */
-    async getPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<PrivateThreadChannel>> {
+    async getPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object> {
         return this.#manager.authRequest<RawArchivedThreads<RawPrivateThreadChannel>>({
             method: "GET",
             path:   Routes.CHANNEL_PRIVATE_ARCHIVED_THREADS(channelID),
@@ -461,16 +379,7 @@ export default class Channels {
                 before: options?.before,
                 limit:  options?.limit
             }
-        }).then(data => ({
-            hasMore: data.has_more,
-            members: data.members.map(m => ({
-                flags:         m.flags,
-                id:            m.id,
-                joinTimestamp: new Date(m.join_timestamp),
-                userID:        m.user_id
-            }) as ThreadMember),
-            threads: data.threads.map(d => this.#manager.client.util.updateThread(d))
-        }));
+        });
     }
 
     /**
@@ -478,7 +387,7 @@ export default class Channels {
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
      */
-    async getPublicArchivedThreads<T extends AnnouncementThreadChannel | PublicThreadChannel = AnnouncementThreadChannel | PublicThreadChannel>(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T>> {
+    async getPublicArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object> {
         return this.#manager.authRequest<RawArchivedThreads<RawPublicThreadChannel>>({
             method: "GET",
             path:   Routes.CHANNEL_PUBLIC_ARCHIVED_THREADS(channelID),
@@ -486,16 +395,7 @@ export default class Channels {
                 before: options?.before,
                 limit:  options?.limit
             }
-        }).then(data => ({
-            hasMore: data.has_more,
-            members: data.members.map(m => ({
-                flags:         m.flags,
-                id:            m.id,
-                joinTimestamp: new Date(m.join_timestamp),
-                userID:        m.user_id
-            }) as ThreadMember),
-            threads: data.threads.map(d => this.#manager.client.util.updateThread(d))
-        }));
+        });
     }
 
     /**
@@ -571,7 +471,7 @@ export default class Channels {
      * @param messageID The ID of the message to create the thread from.
      * @param options The options for starting the thread.
      */
-    async startThreadFromMessage<T extends AnnouncementThreadChannel | PublicThreadChannel = AnnouncementThreadChannel | PublicThreadChannel>(channelID: string, messageID: string, options: StartThreadFromMessageOptions): Promise<T> {
+    async startThreadFromMessage(channelID: string, messageID: string, options: StartThreadFromMessageOptions): Promise<object> {
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -585,7 +485,7 @@ export default class Channels {
                 rate_limit_per_user:   options.rateLimitPerUser
             },
             reason
-        }).then(data => this.#manager.client.util.updateThread<T>(data));
+        });
     }
 
     /**
@@ -593,7 +493,7 @@ export default class Channels {
      * @param channelID The ID of the channel to start the thread in.
      * @param options The options for starting the thread.
      */
-    async startThreadInForum(channelID: string, options: StartThreadInForumOptions): Promise<PublicThreadChannel> {
+    async startThreadInForum(channelID: string, options: StartThreadInForumOptions): Promise<object> {
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -610,9 +510,9 @@ export default class Channels {
                 message:               {
                     allowed_mentions: this.#manager.client.util.formatAllowedMentions(options.message.allowedMentions),
                     attachments:      options.message.attachments,
-                    components:       options.message.components ? this.#manager.client.util.componentsToRaw(options.message.components) : undefined,
+                    components:       options.message.components ? options.message.components : undefined,
                     content:          options.message.content,
-                    embeds:           options.message.embeds ? this.#manager.client.util.embedsToRaw(options.message.embeds) : undefined,
+                    embeds:           options.message.embeds ? options.message.embeds : undefined,
                     flags:            options.message.flags,
                     sticker_ids:      options.message.stickerIDs
                 },
@@ -621,7 +521,7 @@ export default class Channels {
             },
             reason,
             files
-        }).then(data => this.#manager.client.util.updateThread<PublicThreadChannel>(data));
+        });
     }
 
     /**
@@ -629,7 +529,7 @@ export default class Channels {
      * @param channelID The ID of the channel to start the thread in.
      * @param options The options for starting the thread.
      */
-    async startThreadWithoutMessage<T extends AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel = AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel>(channelID: string, options: StartThreadWithoutMessageOptions): Promise<T> {
+    async startThreadWithoutMessage(channelID: string, options: StartThreadWithoutMessageOptions): Promise<object> {
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -645,6 +545,6 @@ export default class Channels {
                 type:                  options.type
             },
             reason
-        }).then(data => this.#manager.client.util.updateThread<T>(data));
+        });
     }
 }

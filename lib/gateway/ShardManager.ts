@@ -29,7 +29,6 @@ export default class ShardManager extends Collection<number, Shard> {
             concurrency:          options.concurrency === "auto" || options.concurrency && options.concurrency < 1 ? -1 : options.concurrency ?? -1,
             connectionTimeout:    options.connectionTimeout ?? 30000,
             firstShardID:         options.firstShardID && options.firstShardID < 0 ? 0 : options.firstShardID ?? 0,
-            getAllUsers:          options.getAllUsers ?? false,
             guildCreateTimeout:   options.guildCreateTimeout ?? 2000,
             intents:              typeof options.intents === "number" ? options.intents : 0,
             largeThreshold:       options.largeThreshold ?? 250,
@@ -74,11 +73,6 @@ export default class ShardManager extends Collection<number, Shard> {
         } else {
             this.options.intents = AllNonPrivilegedIntents;
         }
-
-        if (this.options.getAllUsers && !(this.options.intents & Intents.GUILD_MEMBERS)) {
-            throw new Error("Guild members cannot be requested without the GUILD_MEMBERS intent");
-        }
-
     }
 
     private _ready(id: number): void {

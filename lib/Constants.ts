@@ -33,40 +33,6 @@ export enum WebhookTypes {
     APPLICATION      = 3,
 }
 
-export enum PremiumTypes {
-    NONE          = 0,
-    NITRO_CLASSIC = 1,
-    NITRO         = 2,
-    NITRO_BASIC   = 3,
-}
-
-export enum UserFlags {
-    STAFF             = 1 << 0,
-    PARTNER           = 1 << 1,
-    HYPESQUAD         = 1 << 2,
-    /** @deprecated Use {@link Constants~UserFlags#BUG_HUNTER_LEVEL_1 | BUG_HUNTER_LEVEL_1}. This will be removed in `1.5.0`. */
-    BUGHUNTER_LEVEL_1  = 1 << 3,
-    BUG_HUNTER_LEVEL_1 = 1 << 3,
-
-    HYPESQUAD_BRAVERY    = 1 << 6,
-    HYPESQUAD_BRILLIANCE = 1 << 7,
-    HYPESQUAD_BALANCE    = 1 << 8,
-    EARLY_SUPPORTER      = 1 << 9,
-    PSEUDO_TEAM_USER     = 1 << 10,
-
-    SYSTEM = 1 << 12,
-
-    BUG_HUNTER_LEVEL_2 = 1 << 14,
-
-    VERIFIED_BOT          = 1 << 16,
-    VERIFIED_DEVELOPER    = 1 << 17,
-    CERTIFIED_MODERATOR   = 1 << 18,
-    BOT_HTTP_INTERACTIONS = 1 << 19,
-    SPAMMER               = 1 << 20,
-
-    ACTIVE_DEVELOPER = 1 << 22,
-}
-
 export enum ApplicationFlags {
     EMBEDDED_RELEASED                = 1 << 1,
     MANAGED_EMOJI                    = 1 << 2,
@@ -83,63 +49,6 @@ export enum ApplicationFlags {
     APPLICATION_COMMAND_BADGE        = 1 << 21,
     ACTIVE                           = 1 << 24,
 }
-
-export const GuildFeatures = [
-    "APPLICATION_COMMAND_PERMISSIONS_V2",
-    "ANIMATED_BANNER",
-    "ANIMATED_ICON",
-    "AUTO_MODERATION",
-    "BANNER",
-    "BOT_DEVELOPER_EARLY_ACCESS",
-    "COMMUNITY",
-    "CREATOR_MONETIZABLE",
-    "CREATOR_MONETIZABLE_DISABLED",
-    "CREATOR_MONETIZABLE_PROVISIONAL",
-    "CREATOR_STORE_PAGE",
-    "DEVELOPER_SUPPORT_SERVER",
-    "DISCOVERABLE",
-    "DISCOVERABLE_DISABLED",
-    "ENABLED_DISCOVERABLE_BEFORE",
-    "EXPOSED_TO_ACTIVITIES_WTP_EXPERIMENT",
-    "FEATURABLE",
-    "GUILD_HOME_TEST",
-    "HAD_EARLY_ACTIVITIES_ACCESS",
-    "HAS_DIRECTORY_ENTRY",
-    "HUB",
-    "INCREASED_THREAD_LIMIT",
-    "INTERNAL_EMPLOYEE_ONLY",
-    "INVITES_DISABLED",
-    "INVITE_SPLASH",
-    "LINKED_TO_HUB",
-    "MEMBER_PROFILES",
-    "MEMBER_VERIFICATION_GATE_ENABLED",
-    "MONETIZATION_ENABLED",
-    "MORE_EMOJI",
-    "MORE_EMOJIS",
-    "MORE_STICKERS",
-    "NEWS",
-    "NEW_THREAD_PERMISSIONS",
-    "PARTNERED",
-    "PREVIEW_ENABLED",
-    "PREVIOUSLY_DISCOVERABLE",
-    "PRIVATE_THREADS",
-    "RAID_ALERTS_ENABLED",
-    "ROLE_ICONS",
-    "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE",
-    "ROLE_SUBSCRIPTIONS_ENABLED",
-    "SEVEN_DAY_THREAD_ARCHIVE",
-    "TEXT_IN_VOICE_ENABLED",
-    "THREADS_ENABLED",
-    "THREADS_ENABLED_TESTING",
-    "THREE_DAY_THREAD_ARCHIVE",
-    "TICKETED_EVENTS_ENABLED",
-    "VANITY_URL",
-    "VERIFIED",
-    "VIP_REGIONS",
-    "WELCOME_SCREEN_ENABLED"
-] as const;
-export type GuildFeature = typeof GuildFeatures[number];
-export type MutableGuildFeatures = "COMMUNITY" | "DISCOVERABLE" | "INVITES_DISABLED" | "RAID_ALERTS_ENABLED";
 
 export enum DefaultMessageNotificationLevels {
     ALL_MESSAGES  = 0,
@@ -247,41 +156,6 @@ export type ThreadAutoArchiveDuration = typeof ThreadAutoArchiveDurations[number
 export enum VisibilityTypes {
     NONE     = 0,
     EVERYONE = 1,
-}
-
-export const ConnectionServices = [
-    "battlenet",
-    "ebay",
-    "epicgames",
-    "facebook",
-    "github",
-    "leagueoflegends",
-    "paypal",
-    "playstation",
-    "reddit",
-    "riotgames",
-    "spotify",
-    "skype",
-    "steam",
-    "tiktok",
-    "twitch",
-    "twitter",
-    "xbox",
-    "youtube"
-] as const;
-export type ConnectionService = typeof ConnectionServices[number];
-
-export const IntegrationTypes = [
-    "twitch",
-    "youtube",
-    "discord",
-    "guild_subscription"
-] as const;
-export type IntegrationType = typeof IntegrationTypes[number];
-
-export enum IntegrationExpireBehaviors {
-    REMOVE_ROLE = 0,
-    KICK        = 1,
 }
 
 // values won't be statically typed if we use bit shifting, and enums can't use bigints
@@ -407,66 +281,6 @@ export enum ForumLayoutTypes {
     GRID = 2,
 }
 
-export enum OAuthScopes {
-    /** allows your app to fetch data from a user's "Now Playing/Recently Played" list - requires Discord approval */
-    ACTIVITIES_READ = "activities.read",
-    /** allows your app to update a user's activity - requires Discord approval (NOT REQUIRED FOR [GAMESDK ACTIVITY MANAGER](https://discord.com/developers/docs/game-sdk/activities)) */
-    ACTIVITIES_WRITE = "activities.write",
-    /** allows your app to read build data for a user's applications */
-    APPLICATIONS_BUILDS_READ = "applications.builds.read",
-    /** allows your app to upload/update builds for a user's applications - requires Discord approval */
-    APPLICATIONS_BUILDS_UPLOAD = "applications.builds.upload",
-    /** allows your app to use [commands](https://discord.com/developers/docs/interactions/application-commands) in a guild */
-    APPLICATIONS_COMMANDS = "applications.commands",
-    APPLICATIONS_COMMANDS_PERMISSIONS_UPDATE = "applications.commands.permissions.update",
-    /** allows your app to update its [commands](https://discord.com/developers/docs/interactions/application-commands) using a Bearer token - [client credentials grant](https://discord.com/developers/docs/topics/oauth2#client-credentials-grant) only */
-    APPLICATIONS_COMMANDS_UPDATE = "applications.commands.update",
-    /** allows your app to read entitlements for a user's applications */
-    APPLICATIONS_ENTITLEMENTS = "applications.entitlements",
-    /** allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user's applications */
-    APPLICATIONS_STORE_UPDATE = "applications.store.update",
-    /** for oauth2 bots, this puts the bot in the user's selected guild by default */
-    BOT = "bot",
-    /** allows [/users/@me/connections](https://discord.com/developers/docs/resources/user#get-user-connections) to return linked third-party accounts */
-    CONNECTIONS = "connections",
-    /** allows your app to see information about the user's DMs and group DMs - requires Discord approval */
-    DM_CHANNELS_READ = "dm_channels.read",
-    /** enables [/users/@me](https://discord.com/developers/docs/resources/user#get-current-user) to return an `email` */
-    EMAIL = "email",
-    /** allows your app to [join users to a group dm](https://discord.com/developers/docs/resources/channel#group-dm-add-recipient) */
-    GDM_JOIN = "gdm.join",
-    /** allows [/users/@me/guilds](https://discord.com/developers/docs/resources/user#get-current-user-guilds) to return basic information about all of a user's guilds */
-    GUILDS = "guilds",
-    /** allows [/guilds/\{guild.id\}/members/\{user.id\}](https://discord.com/developers/docs/resources/guild#add-guild-member) to be used for joining users to a guild */
-    GUILDS_JOIN = "guilds.join",
-    /** allows [/users/@me/guilds/\{guild.id\}/member](https://discord.com/developers/docs/resources/user#get-current-user-guild-member) to return a user's member information in a guild */
-    GUILDS_MEMBERS_READ = "guilds.members.read",
-    /** allows [/users/@me](https://discord.com/developers/docs/resources/user#get-current-user) without `email` */
-    IDENTIFY = "identify",
-    /** for local rpc server api access, this allows you to read messages from all client channels (otherwise restricted to channels/guilds your app creates) */
-    MESSAGES_READ = "messages.read",
-    /** allows your app to know a user's friends and implicit relationships - requires Discord approval */
-    RELATIONSHIPS_READ = "relationships.read",
-    /** allows your app to update a user's connection and metadata for the app */
-    ROLE_CONNECTIONS_WRITE = "role_connection.write",
-    /** for local rpc server access, this allows you to control a user's local Discord client - requires Discord approval */
-    RPC = "rpc",
-    /** for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval */
-    RPC_ACTIVITIES_READ = "rpc.activities.read",
-    /** for local rpc server access, this allows you to update a user's activity - requires Discord approval */
-    RPC_ACTIVITIES_WRITE = "rpc.activities.write",
-    /** for local rpc server access, this allows you to receive notifications pushed out to the user - requires Discord approval */
-    RPC_NOTIFICATIONS_READ = "rpc.notifications.read",
-    /** for local rpc server access, this allows you to read a user's voice settings and listen for voice events - requires Discord approval */
-    RPC_VOICE_READ = "rpc.voice.read",
-    /** for local rpc server access, this allows you to update a user's voice settings - requires Discord approval */
-    RPC_VOICE_WRITE = "rpc.voice.write",
-    /** allows your app to connect to voice on user's behalf and see all the voice members - requires Discord approval */
-    VOICE = "voice",
-    /** This generates a webhook that is returned in the oauth token response for authorization code grants. */
-    WEBHOOK_INCOMING = "webhook.incoming",
-}
-
 export enum ComponentTypes {
     ACTION_ROW         = 1,
     BUTTON             = 2,
@@ -482,9 +296,6 @@ export type SelectMenuNonResolvedTypes = ComponentTypes.STRING_SELECT;
 export type SelectMenuResolvedTypes = ComponentTypes.USER_SELECT | ComponentTypes.ROLE_SELECT | ComponentTypes.MENTIONABLE_SELECT | ComponentTypes.CHANNEL_SELECT;
 export type SelectMenuTypes = SelectMenuNonResolvedTypes | SelectMenuResolvedTypes;
 
-export type MessageComponentTypes = ComponentTypes.BUTTON | SelectMenuTypes;
-export type ModalComponentTypes = ComponentTypes.TEXT_INPUT;
-
 export enum ButtonStyles {
     PRIMARY   = 1,
     SECONDARY = 2,
@@ -496,19 +307,6 @@ export enum ButtonStyles {
 export enum TextInputStyles {
     SHORT     = 1,
     PARAGRAPH = 2,
-}
-
-export enum MessageFlags {
-    CROSSPOSTED                            = 1 << 0,
-    IS_CROSSPOST                           = 1 << 1,
-    SUPPRESS_EMBEDS                        = 1 << 2,
-    SOURCE_MESSAGE_DELETED                 = 1 << 3,
-    URGENT                                 = 1 << 4,
-    HAS_THREAD                             = 1 << 5,
-    EPHEMERAL                              = 1 << 6,
-    LOADING                                = 1 << 7,
-    FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 1 << 8,
-    SHOULD_SHOW_LINK_NOT_DISCORD_WARNING   = 1 << 10,
 }
 
 export enum MessageTypes {
@@ -688,41 +486,6 @@ export enum GatewayCloseCodes {
     DISALLOWED_INTENTS    = 4014,
 }
 
-export enum VoiceOPCodes {
-    IDENTIFY            = 0,
-    SELECT_PROTOCOL     = 1,
-    READY               = 2,
-    HEARTBEAT           = 3,
-    SESSION_DESCRIPTION = 4,
-    SPEAKING            = 5,
-    HEARTBEAT_ACK       = 6,
-    RESUME              = 7,
-    HELLO               = 8,
-    RESUMED             = 9,
-    CLIENT_DISCONNECT   = 13,
-}
-
-export enum VoiceCloseCodes {
-    UNKNOWN_OPCODE          = 4001,
-    DECODE_ERROR            = 4002,
-    NOT_AUTHENTICATED       = 4003,
-    AUTHENTICATION_FAILED   = 4004,
-    ALREADY_AUTHENTICATED   = 4005,
-    INVALID_SESSION         = 4006,
-    SESSION_TIMEOUT         = 4009,
-    SERVER_NOT_FOUND        = 4011,
-    UNKNOWN_PROTOCOL        = 4012,
-    DISCONNECTED            = 4013,
-    VOICE_SERVER_CRASHED    = 4014,
-    UNKNOWN_ENCRYPTION_MODE = 4015,
-}
-
-export enum HubTypes {
-    DEFAULT     = 0,
-    HIGH_SCHOOL = 1,
-    COLLEGE     = 2,
-}
-
 export enum ActivityTypes {
     GAME      = 0,
     STREAMING = 1,
@@ -730,25 +493,6 @@ export enum ActivityTypes {
     WATCHING  = 3,
     CUSTOM    = 4,
     COMPETING = 5,
-}
-
-export enum ActivityFlags {
-    INSTANCE                    = 1 << 0,
-    JOIN                        = 1 << 1,
-    SPECTATE                    = 1 << 2,
-    JOIN_REQUEST                = 1 << 3,
-    SYNC                        = 1 << 4,
-    PLAY                        = 1 << 5,
-    PARTY_PRIVACY_FRIENDS_ONLY  = 1 << 6,
-    PARTY_PRIVACY_VOICE_CHANNEL = 1 << 7,
-    EMBEDDED                    = 1 << 8,
-}
-
-export enum ThreadMemberFlags {
-    HAS_INTERACTED = 1 << 0,
-    ALL_MESSAGES   = 1 << 1,
-    ONLY_MENTIONS  = 1 << 2,
-    NO_MESSAGES    = 1 << 3,
 }
 
 export enum RoleConnectionMetadataTypes {

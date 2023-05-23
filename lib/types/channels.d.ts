@@ -36,7 +36,6 @@ import type User from "../structures/User.js";
 import type ForumChannel from "../structures/ForumChannel.js";
 import type Message from "../structures/Message.js";
 import type Guild from "../structures/Guild.js";
-import type Invite from "../structures/Invite.js";
 
 export interface RawChannel {
     application_id?: string;
@@ -148,78 +147,6 @@ export interface UncachedThreadMember {
     /** The ID of the associated user. */
     userID: string;
 }
-
-export interface EditGroupDMOptions {
-    /** [Group DM] The icon of the channel. */
-    icon?: string | Buffer;
-    /** The name of the channel. */
-    name?: string;
-}
-
-export interface EditGuildChannelOptions {
-    /** [Forum Thread] The ID of the forum available tags applied on the channel. A maximum of 5 can be applied. */
-    appliedTags?: Array<string>;
-    /** [Thread] If the thread is archived. */
-    archived?: boolean;
-    /** [Thread] The duration after which the thread will be archived. */
-    autoArchiveDuration?: ThreadAutoArchiveDuration;
-    /** [Forum] The {@link Types/Channels.ForumTag | tags} available in the channel. A maximum of 20 can be present. */
-    availableTags?: Array<Omit<ForumTag, "id"> & {
-        /** The ID of this tag. Omit if you want to create a new tag. */
-        id?: string;
-    }>;
-    /** [Stage, Voice] The bitrate of the channel. Minimum 8000. */
-    bitrate?: number | null;
-    /** [Announcement, Text] The default auto archive duration for threads made in this channel. */
-    defaultAutoArchiveDuration?: ThreadAutoArchiveDuration | null;
-    /** [Forum] The default forum layout used to display threads. */
-    defaultForumLayout?: ForumLayoutTypes;
-    /** [Forum] The default reaction emoji for threads. */
-    defaultReactionEmoji?: ForumEmoji | null;
-    /** [Forum] The default sort order mode used to sort forum threads. */
-    defaultSortOrder?: SortOrderTypes;
-    /** [Text, Forum] The default reaction emoji for threads. */
-    defaultThreadRateLimitPerUser?: number;
-    /** [Forum, Forum Thread] The {@link Constants.ChannelFlags | Channel Flags} to set on the channel. */
-    flags?: number;
-    /** [Private Thread] If non-moderators can add other non-moderators to the thread. */
-    invitable?: boolean;
-    /** [Thread] If the thread should be locked. */
-    locked?: boolean;
-    /** The name of the channel. */
-    name?: string;
-    /** [Announcement, Text, Voice] If the channel is age gated. */
-    nsfw?: string | null;
-    /** [Announcement, Forum, Text, Voice] The id of the parent category channel. */
-    parentID?: string | null;
-    /** Channel or category specific permissions. */
-    permissionOverwrites?: Array<RawOverwrite> | null;
-    /** The position of the channel in the channel list. */
-    position?: number | null;
-    /** [Forum, Text, Thread] The seconds between sending messages for users. Between 0 and 21600. */
-    rateLimitPerUser?: number | null;
-    /** The reason to be displayed in the audit log. */
-    reason?: string;
-    /** [Stage, Voice] The voice region id of the channel, null for automatic. */
-    rtcRegion?: string | null;
-    /** [Announcement, Forum, Text, Voice] The topic of the channel. In forum channels, this is the `Guidelines` section. */
-    topic?: string | null;
-    /** [Announcement, Text] Provide the opposite type to convert the channel. */
-    type?: ChannelTypes.GUILD_TEXT | ChannelTypes.GUILD_ANNOUNCEMENT;
-    /** [Voice] The maximum amount of users in the channel. `0` is unlimited, values range 1-99. */
-    userLimit?: number | null;
-    /** [Voice] The [video quality mode](https://discord.com/developers/docs/resources/channel#channel-object-video-quality-modes) of the channel. */
-    videoQualityMode?: VideoQualityModes | null;
-}
-
-export type EditChannelOptions = EditGroupDMOptions & EditGuildChannelOptions;
-export type EditAnyGuildChannelOptions = Pick<EditGuildChannelOptions, "name" | "position" | "permissionOverwrites">;
-export type EditTextChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "topic" | "nsfw" | "rateLimitPerUser" | "parentID" | "defaultAutoArchiveDuration"> & { type?: ChannelTypes.GUILD_ANNOUNCEMENT; };
-export type EditAnnouncementChannelOptions = Omit<EditTextChannelOptions, "rateLimitPerUser"> & { type?: ChannelTypes.GUILD_TEXT; };
-export type EditThreadChannelOptions = EditPublicThreadChannelOptions | EditPrivateThreadChannelOptions;
-export type EditPublicThreadChannelOptions = Pick<EditGuildChannelOptions, "name" | "archived" | "autoArchiveDuration" | "locked" | "rateLimitPerUser" | "flags" | "appliedTags">;
-export type EditPrivateThreadChannelOptions = EditPublicThreadChannelOptions & Pick<EditGuildChannelOptions, "invitable">;
-export type EditForumChannelOptions = EditAnyGuildChannelOptions & Pick<EditGuildChannelOptions, "availableTags" | "defaultReactionEmoji" | "defaultSortOrder" |"defaultThreadRateLimitPerUser" | "flags" | "nsfw"  | "rateLimitPerUser" | "topic">;
 
 export interface CreateMessageOptions {
     /** An object that specifies the allowed mentions in this message. */
@@ -683,7 +610,7 @@ export interface PartialInviteChannel {
     type: Exclude<ChannelTypes, ChannelTypes.DM | ChannelTypes.GUILD_CATEGORY | ChannelTypes.GROUP_DM | ThreadChannelTypes>;
 }
 
-export type PossiblyUncachedInvite = Invite | UncachedInvite;
+export type PossiblyUncachedInvite = UncachedInvite;
 export interface UncachedInvite {
     channel?: InviteChannel | Uncached;
     code: string;

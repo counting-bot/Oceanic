@@ -3,36 +3,16 @@ import GatewayError from "./GatewayError.js";
 import type Client from "../Client.js";
 import TypedEmitter from "../util/TypedEmitter.js";
 import Bucket from "../rest/Bucket.js";
-import {
-    ChannelTypes,
-    GatewayCloseCodes,
-    GatewayOPCodes,
-    GATEWAY_VERSION,
-    Intents
-} from "../Constants.js";
-import type {
-    UpdatePresenceOptions,
-    RequestGuildMembersOptions,
-    SendStatuses,
-    BotActivity,
-    ShardStatus
-} from "../types/gateway.js";
-import type Member from "../structures/Member.js";
+import { GatewayCloseCodes, GatewayOPCodes, GATEWAY_VERSION } from "../Constants.js";
+import type { UpdatePresenceOptions, SendStatuses, BotActivity, ShardStatus } from "../types/gateway.js";
 import Base from "../structures/Base.js";
 import type { AnyDispatchPacket, AnyReceivePacket } from "../types/gateway-raw.js";
 import ClientApplication from "../structures/ClientApplication.js";
-import type { RawOAuthUser, RawUser } from "../types/users.js";
-import type { RawGuild } from "../types/guilds.js";
-import ExtendedUser from "../structures/ExtendedUser.js";
-import type { AnyGuildChannelWithoutThreads } from "../types/channels.js";
-import type TextChannel from "../structures/TextChannel.js";
 import { is } from "../util/Util.js";
-import type Guild from "../structures/Guild.js";
 import type { ShardEvents } from "../types/events.js";
 import WebSocket, { type Data } from "ws";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { randomBytes } from "node:crypto";
 import { inspect } from "node:util";
 import assert from "node:assert";
 
@@ -42,8 +22,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     connectAttempts: number;
     #connectTimeout: NodeJS.Timeout | null;
     connecting: boolean;
-    #getAllUsersCount: Record<string, true>;
-    #getAllUsersQueue: Array<string>;
     globalBucket!: Bucket;
     #guildCreateTimeout: NodeJS.Timeout | null;
     #heartbeatInterval: NodeJS.Timeout | null;
@@ -57,7 +35,7 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     presenceUpdateBucket!: Bucket;
     ready: boolean;
     reconnectInterval: number;
-    #requestMembersPromise: Record<string, { members: Array<Member>; received: number; timeout: NodeJS.Timeout; reject(reason?: unknown): void; resolve(value: unknown): void; }>;
+    #requestMembersPromise: Record<string, { members: Array<object>; received: number; timeout: NodeJS.Timeout; reject(reason?: unknown): void; resolve(value: unknown): void; }>;
     resumeURL: string | null;
     sequence: number;
     sessionID: string | null;
@@ -89,8 +67,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         this.connectAttempts = 0;
         this.#connectTimeout = null;
         this.connecting = false;
-        this.#getAllUsersCount = {};
-        this.#getAllUsersQueue = [];
         this.#guildCreateTimeout = null;
         this.#heartbeatInterval = null;
         this.id = id;
@@ -110,29 +86,18 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     }
 
     private async checkReady(): Promise<void> {
-        if (!this.ready) {
-            if (this.#getAllUsersQueue.length !== 0) {
-                const id = this.#getAllUsersQueue.shift()!;
-                await this.requestGuildMembers(id);
-                this.#getAllUsersQueue.splice(this.#getAllUsersQueue.indexOf(id), 1);
-                return;
-            }
-            if (Object.keys(this.#getAllUsersCount).length === 0) {
-                this.ready = true;
-                this.emit("ready");
-            }
-        }
-    }
-
-    private createGuild(data: RawGuild): Guild {
-        this.client.guildShardMap[data.id] = this.id;
-        const guild = this.client.guilds.update(data);
-        if (this.client.shards.options.getAllUsers && guild.members.size < guild.memberCount) {
-            void this.requestGuildMembers(guild.id, { presences: (this.client.shards.options.intents & Intents.GUILD_PRESENCES) === Intents.GUILD_PRESENCES });
-        }
-
-
-        return guild;
+    //     if (!this.ready) {
+    //         if (this.#getAllUsersQueue.length !== 0) {
+    //             const id = this.#getAllUsersQueue.shift()!;
+    //             await this.requestGuildMembers(id);
+    //             this.#getAllUsersQueue.splice(this.#getAllUsersQueue.indexOf(id), 1);
+    //             return;
+    //         }
+    //         if (Object.keys(this.#getAllUsersCount).length === 0) {
+        this.ready = true;
+        this.emit("ready");
+    //         }
+    //     }
     }
 
     private initialize(): void {
@@ -169,157 +134,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     private async onDispatch(packet: AnyDispatchPacket): Promise<void> {
         this.client.emit("packet", packet, this.id);
         switch (packet.t) {
-            case "CHANNEL_CREATE": {
-                const channel = this.client.util.updateChannel<AnyGuildChannelWithoutThreads>(packet.d);
-                this.client.emit("channelCreate", channel);
-                break;
-            }
-
-            case "CHANNEL_DELETE": {
-                if (packet.d.type === ChannelTypes.DM) {
-                    const channel = this.client.privateChannels.get(packet.d.id);
-                    this.client.privateChannels.delete(packet.d.id);
-                    this.client.emit("channelDelete", channel ?? {
-                        id:            packet.d.id,
-                        flags:         packet.d.flags,
-                        lastMessageID: packet.d.last_message_id,
-                        type:          packet.d.type
-                    });
-                    break;
-                }
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const channel = this.client.util.updateChannel<AnyGuildChannelWithoutThreads>(packet.d);
-                guild?.channels.delete(packet.d.id);
-                this.client.emit("channelDelete", channel);
-                break;
-            }
-
-            case "CHANNEL_UPDATE": {
-                const oldChannel = this.client.getChannel<TextChannel>(packet.d.id)?.toJSON() ?? null;
-                const channel = this.client.util.updateChannel<TextChannel>(packet.d);
-                this.client.emit("channelUpdate", channel, oldChannel);
-                break;
-            }
-
-            case "GUILD_BAN_ADD": {
-                this.client.emit("guildBanAdd", this.client.guilds.get(packet.d.guild_id) ?? { id: packet.d.guild_id }, this.client.users.update(packet.d.user));
-                break;
-            }
-
-            case "GUILD_BAN_REMOVE": {
-                this.client.emit("guildBanRemove", this.client.guilds.get(packet.d.guild_id) ?? { id: packet.d.guild_id }, this.client.users.update(packet.d.user));
-                break;
-            }
-
-            case "GUILD_CREATE": {
-                if (packet.d.unavailable) {
-                    this.client.guilds.delete(packet.d.id);
-                    this.client.emit("unavailableGuildCreate", this.client.unavailableGuilds.update(packet.d));
-                } else {
-                    const guild = this.createGuild(packet.d);
-                    if (this.ready) {
-                        if (this.client.unavailableGuilds.delete(guild.id)) {
-                            this.client.emit("guildAvailable", guild);
-                        } else {
-                            this.client.emit("guildCreate", guild);
-                        }
-                    } else {
-                        if (this.client.unavailableGuilds.delete(guild.id)) {
-                            void this.restartGuildCreateTimeout();
-                        } else {
-                            this.client.emit("guildCreate", guild);
-                        }
-                    }
-                }
-                break;
-            }
-
-            case "GUILD_DELETE": {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                delete this.client.guildShardMap[packet.d.id];
-                const guild = this.client.guilds.get(packet.d.id);
-                if (guild?.channels) {
-                    for (const [,channel] of guild.channels) delete this.client.channelGuildMap[channel.id];
-                }
-                this.client.guilds.delete(packet.d.id);
-                if (packet.d.unavailable) {
-                    this.client.emit("guildUnavailable", this.client.unavailableGuilds.update(packet.d));
-                } else {
-                    this.client.emit("guildDelete", guild ?? { id: packet.d.id });
-                }
-                break;
-            }
-
-            case "GUILD_MEMBER_ADD": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                if (guild) {
-                    guild.memberCount++;
-                }
-                const member = this.client.util.updateMember(packet.d.guild_id, packet.d.user!.id, packet.d);
-                this.client.emit("guildMemberAdd", member);
-                break;
-            }
-
-            case "GUILD_MEMBERS_CHUNK": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                // eslint-disable-next-line @typescript-eslint/dot-notation
-                guild?.["updateMemberLimit"](packet.d.members.length);
-                const members = packet.d.members.map(member => this.client.util.updateMember(packet.d.guild_id, member.user!.id, member));
-                if (!packet.d.nonce) {
-                    this.client.emit("warn", "Received GUILD_MEMBERS_CHUNK without a nonce.");
-                    break;
-                }
-                if (this.#requestMembersPromise[packet.d.nonce]) {
-                    this.#requestMembersPromise[packet.d.nonce].members.push(...members);
-                }
-
-                if (packet.d.chunk_index >= packet.d.chunk_count - 1) {
-                    if (this.#requestMembersPromise[packet.d.nonce]) {
-                        clearTimeout(this.#requestMembersPromise[packet.d.nonce].timeout);
-                        this.#requestMembersPromise[packet.d.nonce].resolve(this.#requestMembersPromise[packet.d.nonce].members);
-                        delete this.#requestMembersPromise[packet.d.nonce];
-                    }
-                    if (this.#getAllUsersCount[packet.d.guild_id]) {
-                        delete this.#getAllUsersCount[packet.d.guild_id];
-                        void this.checkReady();
-                    }
-                }
-
-                this.client.emit("guildMemberChunk", members);
-                this.lastHeartbeatAck = true;
-                break;
-            }
-
-            case "GUILD_MEMBER_REMOVE": {
-                if (packet.d.user.id === this.client.user.id) {
-                    break;
-                }
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                // eslint-disable-next-line @typescript-eslint/dot-notation
-                const member = guild?.members.get(packet.d.user.id)?.["update"]({ user: packet.d.user }) ?? this.client.users.update(packet.d.user);
-                if (guild) {
-                    guild.memberCount--;
-                    guild.members.delete(packet.d.user.id);
-                }
-                this.client.emit("guildMemberRemove", member, guild ?? { id: packet.d.guild_id });
-                break;
-            }
-
-            case "GUILD_MEMBER_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.guild_id);
-                const oldMember = guild?.members.get(packet.d.user.id)?.toJSON() ?? null;
-                const member = this.client.util.updateMember(packet.d.guild_id, packet.d.user.id, { ...packet.d });
-                this.client.emit("guildMemberUpdate", member, oldMember);
-                break;
-            }
-
-            case "GUILD_UPDATE": {
-                const guild = this.client.guilds.get(packet.d.id);
-                const oldGuild = guild?.toJSON() ?? null;
-                this.client.emit("guildUpdate", this.client.guilds.update(packet.d), oldGuild);
-                break;
-            }
-
             case "READY": {
                 this.connectAttempts = 0;
                 this.reconnectInterval = 1000;
@@ -330,11 +144,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 this.status = "ready";
                 this.client.shards["_ready"](this.id);
                 this.client["_application"] = new ClientApplication(packet.d.application, this.client);
-                if (this.client["_user"]) {
-                    this.client.users.update(packet.d.user as unknown as RawUser);
-                } else {
-                    this.client["_user"] = this.client.users.add(new ExtendedUser(packet.d.user as RawOAuthUser, this.client));
-                }
 
                 let url = packet.d.resume_gateway_url;
                 if (url.includes("?")) {
@@ -346,19 +155,20 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 this.resumeURL = `${url}?v=${GATEWAY_VERSION}&encoding=json`;
                 this.sessionID = packet.d.session_id;
 
-                for (const guild of packet.d.guilds) {
-                    this.client.guilds.delete(guild.id);
-                    this.client.unavailableGuilds.update(guild);
-                }
+                // for (const guild of packet.d.guilds) {
+                //     this.client.guilds.delete(guild.id);
+                //     this.client.unavailableGuilds.update(guild);
+                // }
 
                 this.preReady = true;
                 this.emit("preReady");
 
-                if (this.client.unavailableGuilds.size !== 0 && packet.d.guilds.length !== 0) {
-                    void this.restartGuildCreateTimeout();
-                } else {
-                    void this.checkReady();
-                }
+
+                // if (this.client.unavailableGuilds.size !== 0 && packet.d.guilds.length !== 0) {
+                // void this.restartGuildCreateTimeout();
+                // } else {
+                void this.checkReady();
+                // }
                 break;
             }
 
@@ -577,19 +387,19 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         this.lastHeartbeatAck = true;
     }
 
-    private async restartGuildCreateTimeout(): Promise<void> {
-        if (this.#guildCreateTimeout) {
-            clearTimeout(this.#guildCreateTimeout);
-            this.#guildCreateTimeout = null;
-        }
-        if (!this.ready) {
-            if (this.client.unavailableGuilds.size === 0) {
-                return this.checkReady();
-            }
+    // private async restartGuildCreateTimeout(): Promise<void> {
+    //     if (this.#guildCreateTimeout) {
+    //         clearTimeout(this.#guildCreateTimeout);
+    //         this.#guildCreateTimeout = null;
+    //     }
+    //     if (!this.ready) {
+    //         if (this.client.unavailableGuilds.size === 0) {
+    //             return this.checkReady();
+    //         }
 
-            this.#guildCreateTimeout = setTimeout(this.checkReady.bind(this), this.client.shards.options.guildCreateTimeout);
-        }
-    }
+    //         this.#guildCreateTimeout = setTimeout(this.checkReady.bind(this), this.client.shards.options.guildCreateTimeout);
+    //     }
+    // }
 
     private sendPresenceUpdate(): void {
         this.send(GatewayOPCodes.PRESENCE_UPDATE, {
@@ -745,51 +555,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         return Base.prototype[inspect.custom].call(this) as never;
     }
 
-    /**
-     * Request the members of a guild.
-     * @param guildID The ID of the guild to request the members of.
-     * @param options The options for requesting the members.
-     */
-    async requestGuildMembers(guildID: string, options?: RequestGuildMembersOptions): Promise<Array<Member>> {
-        const opts = {
-            guild_id:  guildID,
-            limit:     options?.limit ?? 0,
-            user_ids:  options?.userIDs,
-            query:     options?.query,
-            nonce:     randomBytes(16).toString("hex"),
-            presences: options?.presences ?? false
-        };
-        if (!opts.user_ids && !opts.query) {
-            opts.query = "";
-        }
-        if (!opts.query && !opts.user_ids) {
-            if (!(this.client.shards.options.intents & Intents.GUILD_MEMBERS)) {
-                throw new Error("Cannot request all members without the GUILD_MEMBERS intent.");
-            }
-            const guild = this.client.guilds.get(guildID);
-            if (guild) {
-                guild["updateMemberLimit"](true);
-            }
-        }
-        if (opts.presences && (!(this.client.shards.options.intents & Intents.GUILD_PRESENCES))) {
-            throw new Error("Cannot request presences without the GUILD_PRESENCES intent.");
-        }
-        if (opts.user_ids && opts.user_ids.length > 100) {
-            throw new Error("Cannot request more than 100 users at once.");
-        }
-        this.send(GatewayOPCodes.REQUEST_GUILD_MEMBERS, opts);
-        return new Promise<Array<Member>>((resolve, reject) => this.#requestMembersPromise[opts.nonce] = {
-            members:  [],
-            received: 0,
-            timeout:  setTimeout(() => {
-                resolve(this.#requestMembersPromise[opts.nonce].members);
-                delete this.#requestMembersPromise[opts.nonce];
-            }, options?.timeout ?? this.client.rest.options.requestTimeout),
-            resolve,
-            reject
-        });
-    }
-
     reset(): void {
         this.connecting = false;
         this.ready = false;
@@ -806,8 +571,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         }
 
         this.#requestMembersPromise = {};
-        this.#getAllUsersCount = {};
-        this.#getAllUsersQueue = [];
         this.latency = Infinity;
         this.lastHeartbeatAck = true;
         this.lastHeartbeatReceived = 0;

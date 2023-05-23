@@ -1,5 +1,5 @@
 /** @module ClientApplication */
-import Base from "./Base";
+import Base from "./Base.js";
 import type ApplicationCommand from "./ApplicationCommand";
 import type Client from "../Client";
 import type { RawClientApplication } from "../types/oauth";

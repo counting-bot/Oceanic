@@ -31,7 +31,7 @@ import type {
 
 export interface JSONAnnouncementChannel extends JSONTextableChannel {
     rateLimitPerUser: 0;
-    threads: Array<string>;
+    // threads: Array<string>;
     type: ChannelTypes.GUILD_ANNOUNCEMENT;
 }
 export interface JSONAnnouncementThreadChannel extends JSONThreadChannel {
@@ -154,24 +154,23 @@ export interface JSONExtendedUser extends JSONUser {
     verified: boolean;
 }
 export interface JSONForumChannel extends JSONGuildChannel {
-    threads: Array<string>;
+    // threads: Array<string>;
 }
 export interface JSONGuild extends JSONBase {
     application?: string;
     approximateMemberCount?: number;
     approximatePresenceCount?: number;
-    channels: Array<string>;
+    // channels: Array<string>;
     icon: string | null;
     large: boolean;
     maxMembers?: number;
     maxPresences?: number;
     memberCount: number;
-    members: Array<string>;
     name: string;
     ownerID: string;
     preferredLocale: string;
     region?: string | null;
-    threads: Array<string>;
+    // threads: Array<string>;
     unavailable: boolean;
 }
 export interface JSONGuildChannel extends JSONChannel {
@@ -191,12 +190,10 @@ export interface JSONInvite {
 }
 export interface JSONMember extends JSONBase {
     guildID: string;
-    user: JSONUser;
 }
 export interface JSONMessage extends JSONBase {
     activity?: MessageActivity;
     applicationID?: string;
-    author: JSONUser;
     channelID: string;
     content: string;
     embeds: Array<Embed>;
@@ -241,7 +238,6 @@ export interface JSONPingInteraction extends JSONInteraction {
     type: InteractionTypes.PING;
 }
 export interface JSONPrivateChannel extends JSONChannel {
-    recipient: JSONUser;
     type: ChannelTypes.DM;
 }
 export interface JSONPrivateThreadChannel extends JSONThreadChannel {
@@ -267,7 +263,6 @@ export interface JSONTextableChannel extends JSONGuildChannel {
     type: Exclude<TextChannelTypes, PrivateChannelTypes>;
 }
 export interface JSONTextChannel extends JSONTextableChannel {
-    threads: Array<string>;
     type: ChannelTypes.GUILD_TEXT;
 }
 export interface JSONThreadChannel extends JSONGuildChannel {
@@ -275,7 +270,6 @@ export interface JSONThreadChannel extends JSONGuildChannel {
     lastMessageID: string | null;
     memberCount: number;
     messageCount: number;
-    messages: Array<string>;
     ownerID: string;
     rateLimitPerUser: number;
     totalMessageSent: number;

@@ -99,9 +99,4 @@ export interface CollectionLimitsOptions {
      * @defaultValue 100
      */
     messages?: number;
-    /**
-     * The maximum number of users to cache globally.
-     * @defaultValue Infinity
-     */
-    users?: number;
 }

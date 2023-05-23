@@ -1,19 +1,11 @@
 /** @module Client */
 import { GATEWAY_VERSION } from "./Constants.js";
 import RESTManager from "./rest/RESTManager.js";
-import TypedCollection from "./util/TypedCollection.js";
-import PrivateChannel from "./structures/PrivateChannel.js";
-import User from "./structures/User.js";
-import Guild from "./structures/Guild.js";
-import type { AnyChannel, RawPrivateChannel } from "./types/channels.js";
-import type { RawGuild, RawUnavailableGuild } from "./types/guilds.js";
-import type { RawUser } from "./types/users.js";
 import type {  ClientInstanceOptions, ClientOptions } from "./types/client.js";
 import TypedEmitter from "./util/TypedEmitter.js";
 import type ClientApplication from "./structures/ClientApplication.js";
 import ShardManager from "./gateway/ShardManager.js";
 import type { BotActivity, GetBotGatewayResponse, SendStatuses } from "./types/gateway.js";
-import UnavailableGuild from "./structures/UnavailableGuild.js";
 import type ExtendedUser from "./structures/ExtendedUser.js";
 import Util from "./util/Util.js";
 import type { ClientEvents } from "./types/events.js";
@@ -25,16 +17,14 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
     channelGuildMap: Record<string, string>;
     gatewayURL!: string;
     guildShardMap: Record<string, number>;
-    guilds: TypedCollection<string, RawGuild, Guild>;
+    // guilds: Collection<Guild, Client>;
     options: ClientInstanceOptions;
-    privateChannels: TypedCollection<string, RawPrivateChannel, PrivateChannel>;
     ready: boolean;
     rest: RESTManager;
     shards: ShardManager;
     startTime = 0;
     threadGuildMap: Record<string, string>;
-    unavailableGuilds: TypedCollection<string, RawUnavailableGuild, UnavailableGuild>;
-    users: TypedCollection<string, RawUser, User>;
+    // unavailableGuilds: Collection<UnavailableGuild, Client>;
     util: Util;
     /**
      * @constructor
@@ -55,23 +45,20 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
                     unknown: Infinity,
                     ...options.collectionLimits.members
                 } : options.collectionLimits.members),
-                messages: options?.collectionLimits?.messages ?? 100,
-                users:    options?.collectionLimits?.users ?? Infinity
+                messages: options?.collectionLimits?.messages ?? 100
             },
             defaultImageFormat:        options?.defaultImageFormat ?? "png",
             defaultImageSize:          options?.defaultImageSize ?? 4096,
             disableMemberLimitScaling: options?.disableMemberLimitScaling ?? false
         };
         this.channelGuildMap = {};
-        this.guilds = new TypedCollection(Guild, this);
-        this.privateChannels = new TypedCollection(PrivateChannel, this, 25);
+        // this.guilds = new Collection();
         this.ready = false;
         this.guildShardMap = {};
         this.rest = new RESTManager(this, options?.rest);
         this.shards = new ShardManager(this, options?.gateway);
         this.threadGuildMap = {};
-        this.unavailableGuilds = new TypedCollection(UnavailableGuild, this);
-        this.users = new TypedCollection(User, this, this.options.collectionLimits.users);
+        // this.unavailableGuilds = new Collection();
         this.util = new Util(this);
     }
 
@@ -152,7 +139,6 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
             }
         }
 
-
         for (const id of this.shards.options.shardIDs) {
             this.shards.spawn(id);
         }
@@ -175,18 +161,5 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
      */
     async editStatus(status: SendStatuses, activities: Array<BotActivity> = []): Promise<void>{
         for (const [,shard] of this.shards) await shard.editStatus(status, activities);
-    }
-
-    /**
-     * Get a channel from an ID. This will return undefined if the channel is not cached.
-     * @param channelID The id of the channel.
-     */
-    getChannel<T extends AnyChannel = AnyChannel>(channelID: string): T | undefined {
-        if (this.channelGuildMap[channelID]) {
-            return this.guilds.get(this.channelGuildMap[channelID])?.channels.get(channelID) as T;
-        } else if (this.threadGuildMap[channelID]) {
-            return this.guilds.get(this.threadGuildMap[channelID])?.threads.get(channelID) as T;
-        }
-        return this.privateChannels.get(channelID) as T;
     }
 }

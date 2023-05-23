@@ -1,19 +1,8 @@
 /** @module OAuthHelper */
 import type RESTManager from "./RESTManager.js";
-import type {
-    AuthorizationInformation,
-    Connection,
-    OAuthURLOptions,
-    RawAuthorizationInformation,
-    RawConnection,
-    RevokeTokenOptions
-} from "../types/oauth.js";
+import type { OAuthURLOptions, RevokeTokenOptions } from "../types/oauth.js";
 import type { RawOAuthGuild, RESTMember } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
-import PartialApplication from "../structures/PartialApplication.js";
-import Member from "../structures/Member.js";
-import OAuthGuild from "../structures/OAuthGuild.js";
-import ExtendedUser from "../structures/ExtendedUser.js";
 import type { RawOAuthUser } from "../types/users.js";
 import { BASE_URL } from "../Constants.js";
 import { FormData } from "undici";
@@ -61,40 +50,12 @@ export default class OAuthHelper {
     /**
      * Get information about the current authorization.
      */
-    async getCurrentAuthorizationInformation(): Promise<AuthorizationInformation> {
-        return this.#manager.request<RawAuthorizationInformation>({
+    async getCurrentAuthorizationInformation(): Promise<object> {
+        return this.#manager.request<object>({
             method: "GET",
             path:   Routes.OAUTH_INFO,
             auth:   this.#token
-        }).then(data => ({
-            application: new PartialApplication(data.application, this.#manager.client),
-            expires:     new Date(data.expires),
-            scopes:      data.scopes,
-            user:        this.#manager.client.users.update(data.user)
-        }));
-    }
-
-    /**
-     * Get the connections of the currently authenticated user.
-     *
-     * Note: Requires the `connections` scope.
-     */
-    async getCurrentConnections(): Promise<Array<Connection>> {
-        return this.#manager.request<Array<RawConnection>>({
-            method: "GET",
-            path:   Routes.OAUTH_CONNECTIONS,
-            auth:   this.#token
-        }).then(data => data.map(connection => ({
-            friendSync:   connection.friend_sync,
-            id: 	         connection.id,
-            name:         connection.name,
-            revoked:      connection.revoked,
-            showActivity: connection.show_activity,
-            twoWayLink:   connection.two_way_link,
-            type:         connection.type,
-            verified:     connection.verified,
-            visibility:   connection.visibility
-        })));
+        });
     }
 
     /**
@@ -103,23 +64,23 @@ export default class OAuthHelper {
      * Note: Requires the `guilds.members.read` scope.
      * @param guild the ID of the guild
      */
-    async getCurrentGuildMember(guild: string): Promise<Member> {
+    async getCurrentGuildMember(guild: string): Promise<object> {
         return this.#manager.request<RESTMember>({
             method: "GET",
             path:   Routes.OAUTH_GUILD_MEMBER(guild),
             auth:   this.#token
-        }).then(data => new Member(data, this.#manager.client, guild));
+        });
     }
 
     /**
      * Get the currently authenticated user's guilds. Note these are missing several properties gateway guilds have.
      */
-    async getCurrentGuilds(): Promise<Array<OAuthGuild>> {
+    async getCurrentGuilds(): Promise<Array<object>> {
         return this.#manager.request<Array<RawOAuthGuild>>({
             method: "GET",
             path:   Routes.OAUTH_GUILDS,
             auth:   this.#token
-        }).then(data => data.map(d => new OAuthGuild(d, this.#manager.client)));
+        });
     }
 
     /**
@@ -127,12 +88,12 @@ export default class OAuthHelper {
      *
      * Note: This does not touch the client's cache in any way.
      */
-    async getCurrentUser(): Promise<ExtendedUser> {
+    async getCurrentUser(): Promise<object> {
         return this.#manager.request<RawOAuthUser>({
             method: "GET",
             path:   Routes.OAUTH_CURRENT_USER,
             auth:   this.#token
-        }).then(data => new ExtendedUser(data, this.#manager.client));
+        });
     }
 
 

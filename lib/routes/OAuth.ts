@@ -1,13 +1,11 @@
 /** @module Routes/OAuth */
 import type {
-    AuthorizationInformation,
     ClientCredentialsTokenOptions,
     ClientCredentialsTokenResponse,
     Connection,
     ExchangeCodeOptions,
     ExchangeCodeResponse,
     OAuthURLOptions,
-    RawAuthorizationInformation,
     RawClientCredentialsTokenResponse,
     RawConnection,
     RawExchangeCodeResponse,
@@ -19,8 +17,6 @@ import type {
 } from "../types/oauth.js";
 import type { RawOAuthGuild, RESTMember } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
-import PartialApplication from "../structures/PartialApplication.js";
-import Member from "../structures/Member.js";
 import Webhook from "../structures/Webhook.js";
 import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
@@ -105,16 +101,11 @@ export default class OAuth {
      *
      * Note: OAuth only. Bots cannot use this.
      */
-    async getCurrentAuthorizationInformation(): Promise<AuthorizationInformation> {
-        return this.#manager.authRequest<RawAuthorizationInformation>({
+    async getCurrentAuthorizationInformation(): Promise<object> {
+        return this.#manager.authRequest<object>({
             method: "GET",
             path:   Routes.OAUTH_INFO
-        }).then(data => ({
-            application: new PartialApplication(data.application, this.#manager.client),
-            expires:     new Date(data.expires),
-            scopes:      data.scopes,
-            user:        this.#manager.client.users.update(data.user)
-        }));
+        });
     }
 
     /**
@@ -145,11 +136,12 @@ export default class OAuth {
      * Note: OAuth only. Requires the `guilds.members.read` scope. Bots cannot use this.
      * @param guild the ID of the guild
      */
-    async getCurrentGuildMember(guild: string): Promise<Member> {
+    async getCurrentGuildMember(guild: string): Promise<object> {
         return this.#manager.authRequest<RESTMember>({
             method: "GET",
             path:   Routes.OAUTH_GUILD_MEMBER(guild)
-        }).then(data => new Member(data, this.#manager.client, guild));
+        });
+        // .then(data => new Member(data, this.#manager.client, guild));
     }
 
     /**

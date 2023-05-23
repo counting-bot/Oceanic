@@ -1,12 +1,11 @@
 /** @module Webhook */
-import Base from "./Base";
-import type User from "./User";
+import Base from "./Base.js";
 import type Message from "./Message";
 import type Guild from "./Guild";
 import type ClientApplication from "./ClientApplication";
 import type Client from "../Client";
-import { BASE_URL, type ImageFormat, type WebhookTypes } from "../Constants";
-import * as Routes from "../util/Routes";
+import { BASE_URL, type WebhookTypes } from "../Constants.js";
+import * as Routes from "../util/Routes.js";
 import type { AnyGuildTextChannel, RawChannel } from "../types/channels";
 import type { RawGuild } from "../types/guilds";
 import type {
@@ -43,8 +42,6 @@ export default class Webhook extends Base {
     token?: string;
     /** The [type](https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-types) of this webhook. */
     type: WebhookTypes;
-    /** The user that created this webhook. */
-    user: User | null;
     constructor(data: RawWebhook, client: Client) {
         super(data.id, client);
         this.application = client["_application"] && data.application_id === null ? null : (client.application.id === data.application_id ? client.application : undefined);
@@ -57,47 +54,12 @@ export default class Webhook extends Base {
         this.sourceGuild = data.source_guild;
         this.token = data.token;
         this.type = data.type;
-        this.user = data.user === undefined ? null : client.users.update(data.user);
-    }
-
-    /** The channel this webhook is for, if applicable. */
-    get channel(): AnyGuildTextChannel | null | undefined {
-        if (this.channelID !== null && this._cachedChannel !== null) {
-            return this._cachedChannel ?? (this._cachedChannel = this.client.getChannel<AnyGuildTextChannel>(this.channelID));
-        }
-
-        return this._cachedChannel === null ? this._cachedChannel : (this._cachedChannel = null);
-    }
-
-    /** The guild this webhook is for, if applicable. This will throw an error if the guild is not cached. */
-    get guild(): Guild | null {
-        if (this.guildID !== null && this._cachedGuild !== null) {
-            if (!this._cachedGuild) {
-                this._cachedGuild = this.client.guilds.get(this.guildID);
-
-                if (!this._cachedGuild) {
-                    throw new Error(`${this.constructor.name}#guild is not present if you don't have the GUILDS intent.`);
-                }
-            }
-
-            return this._cachedGuild;
-        }
-
-        return this._cachedGuild === null ? this._cachedGuild : (this._cachedGuild = null);
     }
 
     get url(): string {
         return `${BASE_URL}${Routes.WEBHOOK(this.id, this.token)}`;
     }
 
-    /**
-     * The url of this webhook's avatar.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    avatarURL(format?: ImageFormat, size?: number): string | null {
-        return this.avatar === null ? null : this.client.util.formatImage(Routes.USER_AVATAR(this.id, this.avatar), format, size);
-    }
 
     /**
      * Delete this webhook (requires a bot user, see `deleteToken`).
@@ -213,15 +175,6 @@ export default class Webhook extends Base {
         return this.client.rest.webhooks.getMessage<T>(this.id, t, messageID, threadID);
     }
 
-    /**
-     * The url of this webhook's `sourceGuild` icon (only present on channel follower webhooks).
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    sourceGuildIconURL(format?: ImageFormat, size?: number): string | null {
-        return this.sourceGuild?.icon ? this.client.util.formatImage(Routes.GUILD_ICON(this.id, this.sourceGuild?.icon), format, size) : null;
-    }
-
     override toJSON(): JSONWebhook {
         return {
             ...super.toJSON(),
@@ -233,8 +186,7 @@ export default class Webhook extends Base {
             sourceChannel: this.sourceChannel,
             sourceGuild:   this.sourceGuild,
             token:         this.token,
-            type:          this.type,
-            user:          this.user?.toJSON()
+            type:          this.type
         };
     }
 }

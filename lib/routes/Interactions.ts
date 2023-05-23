@@ -43,8 +43,8 @@ export default class Interactions {
                     allowed_mentions: this.#manager.client.util.formatAllowedMentions(options.data.allowedMentions),
                     attachments:      options.data.attachments,
                     content:          options.data.content,
-                    components:       options.data.components ? this.#manager.client.util.componentsToRaw(options.data.components) : undefined,
-                    embeds:           options.data.embeds ? this.#manager.client.util.embedsToRaw(options.data.embeds) : undefined,
+                    components:       options.data.components ? options.data.components : undefined,
+                    embeds:           options.data.embeds,
                     flags:            options.data.flags
                 };
                 break;
@@ -61,14 +61,14 @@ export default class Interactions {
                 break;
             }
 
-            case InteractionResponseTypes.MODAL: {
-                data = {
-                    custom_id:  options.data.customID,
-                    components: this.#manager.client.util.componentsToRaw(options.data.components),
-                    title:      options.data.title
-                };
-                break;
-            }
+            // case InteractionResponseTypes.MODAL: {
+            //     data = {
+            //         custom_id:  options.data.customID,
+            //         components: this.#manager.client.util.componentsToRaw(options.data.components),
+            //         title:      options.data.title
+            //     };
+            //     break;
+            // }
 
             default: {
                 data = options.data;
