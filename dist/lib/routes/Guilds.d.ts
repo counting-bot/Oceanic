@@ -1,10 +1,6 @@
 /** @module Routes/Guilds */
-import type { GetActiveThreadsResponse, GetMembersOptions, AddMemberOptions, CreateBanOptions, GetVanityURLResponse, CreateChannelReturn, CreateChannelOptions } from "../types/guilds.js";
-import type { GuildChannelTypesWithoutThreads } from "../Constants.js";
-import type { AnyGuildChannelWithoutThreads } from "../types/channels.js";
+import type { AddMemberOptions, CreateBanOptions, GetVanityURLResponse } from "../types/guilds.js";
 import type RESTManager from "../rest/RESTManager.js";
-import Guild from "../structures/Guild.js";
-import type Member from "../structures/Member.js";
 /** Various methods for interacting with guilds. */
 export default class Guilds {
     #private;
@@ -17,7 +13,7 @@ export default class Guilds {
      * @param userID The ID of the user to add.
      * @param options The options for adding the member.
      */
-    addMember(guildID: string, userID: string, options: AddMemberOptions): Promise<void | Member>;
+    addMember(guildID: string, userID: string, options: AddMemberOptions): Promise<object>;
     /**
      * Add a role to a member.
      * @param guildID The ID of the guild.
@@ -34,41 +30,29 @@ export default class Guilds {
      */
     createBan(guildID: string, userID: string, options?: CreateBanOptions): Promise<void>;
     /**
-     * Create a channel in a guild.
-     * @param guildID The ID of the guild.
-     * @param options The options for creating the channel.
-     */
-    createChannel<T extends GuildChannelTypesWithoutThreads>(guildID: string, type: T, options: Omit<CreateChannelOptions, "type">): Promise<CreateChannelReturn<T>>;
-    /**
      * Get a guild.
      *
      * Note: If the guild is not already in the client's cache, this will not add it.
      * @param guildID The ID of the guild.
      * @param withCounts If the approximate number of members and online members should be included.
      */
-    get(guildID: string, withCounts?: boolean): Promise<Guild>;
+    get(guildID: string, withCounts?: boolean): Promise<object>;
     /**
      * Get the active threads in a guild.
      * @param guildID The ID of the guild.
      */
-    getActiveThreads(guildID: string): Promise<GetActiveThreadsResponse>;
+    getActiveThreads(guildID: string): Promise<object>;
     /**
      * Get the channels in a guild. Does not include threads.
      * @param guildID The ID of the guild.
      */
-    getChannels(guildID: string): Promise<Array<AnyGuildChannelWithoutThreads>>;
+    getChannels(guildID: string): Promise<Array<object>>;
     /**
      * Get a guild member.
      * @param guildID The ID of the guild.
      * @param memberID The ID of the member.
      */
-    getMember(guildID: string, memberID: string): Promise<Member>;
-    /**
-     * Get a guild's members. This requires the `GUILD_MEMBERS` intent.
-     * @param guildID The ID of the guild.
-     * @param options The options for getting the members.
-     */
-    getMembers(guildID: string, options?: GetMembersOptions): Promise<Array<Member>>;
+    getMember(guildID: string, memberID: string): Promise<object>;
     /**
      * Get the vanity url of a guild.
      * @param guildID The ID of the guild.

@@ -3,8 +3,7 @@ import type Client from "../Client.js";
 import TypedEmitter from "../util/TypedEmitter.js";
 import Bucket from "../rest/Bucket.js";
 import { GatewayOPCodes } from "../Constants.js";
-import type { UpdatePresenceOptions, RequestGuildMembersOptions, SendStatuses, BotActivity, ShardStatus } from "../types/gateway.js";
-import type Member from "../structures/Member.js";
+import type { UpdatePresenceOptions, SendStatuses, BotActivity, ShardStatus } from "../types/gateway.js";
 import type { ShardEvents } from "../types/events.js";
 import WebSocket from "ws";
 import { inspect } from "node:util";
@@ -32,7 +31,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     ws: WebSocket | null;
     constructor(id: number, client: Client);
     private checkReady;
-    private createGuild;
     private initialize;
     private onDispatch;
     private onPacket;
@@ -40,7 +38,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     private onWSError;
     private onWSMessage;
     private onWSOpen;
-    private restartGuildCreateTimeout;
     private sendPresenceUpdate;
     private get _token();
     /** Connect this shard. */
@@ -56,12 +53,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     heartbeat(requested?: boolean): void;
     identify(): void;
     [inspect.custom](): this;
-    /**
-     * Request the members of a guild.
-     * @param guildID The ID of the guild to request the members of.
-     * @param options The options for requesting the members.
-     */
-    requestGuildMembers(guildID: string, options?: RequestGuildMembersOptions): Promise<Array<Member>>;
     reset(): void;
     resume(): void;
     send(op: GatewayOPCodes, data: unknown, priority?: boolean): void;

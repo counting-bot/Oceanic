@@ -1,18 +1,12 @@
 /** @module Guild */
-import Base from "./Base";
-import Member from "./Member";
+import Base from "./Base.js";
 import type User from "./User";
 import type ClientApplication from "./ClientApplication";
-import type TextChannel from "./TextChannel";
-import type { ImageFormat } from "../Constants";
 import type Client from "../Client";
-import TypedCollection from "../util/TypedCollection";
-import type { AnyGuildChannelWithoutThreads, AnyThreadChannel, RawGuildChannel, RawThreadChannel } from "../types/channels.js";
-import type { RawGuild, RawMember, RESTMember } from "../types/guilds.js";
+import type { RawGuild } from "../types/guilds.js";
 import type { JSONGuild } from "../types/json.js";
 /** Represents a Discord server. */
 export default class Guild extends Base {
-    private _clientMember?;
     private _shard?;
     /** The application that created this guild, if applicable. */
     application?: ClientApplication | null;
@@ -22,8 +16,6 @@ export default class Guild extends Base {
     approximateMemberCount?: number;
     /** The approximate number of non-offline members in this guild (if retrieved with counts). */
     approximatePresenceCount?: number;
-    /** The channels in this guild. */
-    channels: TypedCollection<string, RawGuildChannel, AnyGuildChannelWithoutThreads>;
     /** The icon hash of this guild. */
     icon: string | null;
     /** If this guild is considered large. */
@@ -34,8 +26,6 @@ export default class Guild extends Base {
     maxPresences?: number;
     /** The number of members in this guild. */
     memberCount: number;
-    /** The cached members in this guild. */
-    members: TypedCollection<string, RawMember | RESTMember, Member, [guildID: string]>;
     /** The name of this guild. */
     name: string;
     /** The owner of this guild. */
@@ -46,24 +36,11 @@ export default class Guild extends Base {
     preferredLocale: string;
     /** @deprecated The region of this guild.*/
     region?: string | null;
-    /** The channel where rules/guidelines are displayed. Only present in guilds with the `COMMUNITY` feature. */
-    rulesChannel?: TextChannel | null;
-    /** The channel where welcome messages and boosts notices are posted. */
-    systemChannel?: TextChannel | null;
-    /** The threads in this guild. */
-    threads: TypedCollection<string, RawThreadChannel, AnyThreadChannel>;
     /** If this guild is unavailable. */
     unavailable: boolean;
     /** If the widget is enabled. */
     widgetEnabled?: boolean;
     constructor(data: RawGuild, client: Client);
-    private updateMemberLimit;
     protected update(data: Partial<RawGuild>): void;
-    /**
-     * The url of this guild's icon.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    iconURL(format?: ImageFormat, size?: number): string | null;
     toJSON(): JSONGuild;
 }

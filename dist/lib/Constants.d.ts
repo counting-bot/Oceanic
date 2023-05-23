@@ -16,33 +16,6 @@ export declare enum WebhookTypes {
     CHANNEL_FOLLOWER = 2,
     APPLICATION = 3
 }
-export declare enum PremiumTypes {
-    NONE = 0,
-    NITRO_CLASSIC = 1,
-    NITRO = 2,
-    NITRO_BASIC = 3
-}
-export declare enum UserFlags {
-    STAFF = 1,
-    PARTNER = 2,
-    HYPESQUAD = 4,
-    /** @deprecated Use {@link Constants~UserFlags#BUG_HUNTER_LEVEL_1 | BUG_HUNTER_LEVEL_1}. This will be removed in `1.5.0`. */
-    BUGHUNTER_LEVEL_1 = 8,
-    BUG_HUNTER_LEVEL_1 = 8,
-    HYPESQUAD_BRAVERY = 64,
-    HYPESQUAD_BRILLIANCE = 128,
-    HYPESQUAD_BALANCE = 256,
-    EARLY_SUPPORTER = 512,
-    PSEUDO_TEAM_USER = 1024,
-    SYSTEM = 4096,
-    BUG_HUNTER_LEVEL_2 = 16384,
-    VERIFIED_BOT = 65536,
-    VERIFIED_DEVELOPER = 131072,
-    CERTIFIED_MODERATOR = 262144,
-    BOT_HTTP_INTERACTIONS = 524288,
-    SPAMMER = 1048576,
-    ACTIVE_DEVELOPER = 4194304
-}
 export declare enum ApplicationFlags {
     EMBEDDED_RELEASED = 2,
     MANAGED_EMOJI = 4,
@@ -59,9 +32,6 @@ export declare enum ApplicationFlags {
     APPLICATION_COMMAND_BADGE = 2097152,
     ACTIVE = 16777216
 }
-export declare const GuildFeatures: readonly ["APPLICATION_COMMAND_PERMISSIONS_V2", "ANIMATED_BANNER", "ANIMATED_ICON", "AUTO_MODERATION", "BANNER", "BOT_DEVELOPER_EARLY_ACCESS", "COMMUNITY", "CREATOR_MONETIZABLE", "CREATOR_MONETIZABLE_DISABLED", "CREATOR_MONETIZABLE_PROVISIONAL", "CREATOR_STORE_PAGE", "DEVELOPER_SUPPORT_SERVER", "DISCOVERABLE", "DISCOVERABLE_DISABLED", "ENABLED_DISCOVERABLE_BEFORE", "EXPOSED_TO_ACTIVITIES_WTP_EXPERIMENT", "FEATURABLE", "GUILD_HOME_TEST", "HAD_EARLY_ACTIVITIES_ACCESS", "HAS_DIRECTORY_ENTRY", "HUB", "INCREASED_THREAD_LIMIT", "INTERNAL_EMPLOYEE_ONLY", "INVITES_DISABLED", "INVITE_SPLASH", "LINKED_TO_HUB", "MEMBER_PROFILES", "MEMBER_VERIFICATION_GATE_ENABLED", "MONETIZATION_ENABLED", "MORE_EMOJI", "MORE_EMOJIS", "MORE_STICKERS", "NEWS", "NEW_THREAD_PERMISSIONS", "PARTNERED", "PREVIEW_ENABLED", "PREVIOUSLY_DISCOVERABLE", "PRIVATE_THREADS", "RAID_ALERTS_ENABLED", "ROLE_ICONS", "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE", "ROLE_SUBSCRIPTIONS_ENABLED", "SEVEN_DAY_THREAD_ARCHIVE", "TEXT_IN_VOICE_ENABLED", "THREADS_ENABLED", "THREADS_ENABLED_TESTING", "THREE_DAY_THREAD_ARCHIVE", "TICKETED_EVENTS_ENABLED", "VANITY_URL", "VERIFIED", "VIP_REGIONS", "WELCOME_SCREEN_ENABLED"];
-export type GuildFeature = typeof GuildFeatures[number];
-export type MutableGuildFeatures = "COMMUNITY" | "DISCOVERABLE" | "INVITES_DISABLED" | "RAID_ALERTS_ENABLED";
 export declare enum DefaultMessageNotificationLevels {
     ALL_MESSAGES = 0,
     ONLY_MENTIONS = 1,
@@ -149,8 +119,6 @@ export declare enum VisibilityTypes {
     NONE = 0,
     EVERYONE = 1
 }
-export declare const ConnectionServices: readonly ["battlenet", "ebay", "epicgames", "facebook", "github", "leagueoflegends", "paypal", "playstation", "reddit", "riotgames", "spotify", "skype", "steam", "tiktok", "twitch", "twitter", "xbox", "youtube"];
-export type ConnectionService = typeof ConnectionServices[number];
 export declare const IntegrationTypes: readonly ["twitch", "youtube", "discord", "guild_subscription"];
 export type IntegrationType = typeof IntegrationTypes[number];
 export declare enum IntegrationExpireBehaviors {
@@ -482,25 +450,6 @@ export declare enum VoiceOPCodes {
     HELLO = 8,
     RESUMED = 9,
     CLIENT_DISCONNECT = 13
-}
-export declare enum VoiceCloseCodes {
-    UNKNOWN_OPCODE = 4001,
-    DECODE_ERROR = 4002,
-    NOT_AUTHENTICATED = 4003,
-    AUTHENTICATION_FAILED = 4004,
-    ALREADY_AUTHENTICATED = 4005,
-    INVALID_SESSION = 4006,
-    SESSION_TIMEOUT = 4009,
-    SERVER_NOT_FOUND = 4011,
-    UNKNOWN_PROTOCOL = 4012,
-    DISCONNECTED = 4013,
-    VOICE_SERVER_CRASHED = 4014,
-    UNKNOWN_ENCRYPTION_MODE = 4015
-}
-export declare enum HubTypes {
-    DEFAULT = 0,
-    HIGH_SCHOOL = 1,
-    COLLEGE = 2
 }
 export declare enum ActivityTypes {
     GAME = 0,

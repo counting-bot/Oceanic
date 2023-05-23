@@ -1,7 +1,6 @@
 /** @module Role */
 import Base from "./Base.js";
 import Permission from "./Permission.js";
-import type Guild from "./Guild.js";
 import type Client from "../Client.js";
 import type { RawRole } from "../types/guilds.js";
 import type { JSONRole } from "../types/json.js";
@@ -24,7 +23,5 @@ export default class Role extends Base {
     position: number;
     constructor(data: RawRole, client: Client, guildID: string);
     protected update(data: Partial<RawRole>): void;
-    /** The guild this role is in. This will throw an error if the guild is not cached. */
-    get guild(): Guild;
     toJSON(): JSONRole;
 }

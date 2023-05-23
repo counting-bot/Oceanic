@@ -1,13 +1,8 @@
 /** @module Routes/Channels */
-import type { AnyChannel, AnyTextChannelWithoutGroup, ArchivedThreads, CreateInviteOptions, CreateMessageOptions, EditChannelOptions, EditMessageOptions, EditPermissionOptions, GetChannelMessagesOptions, GetArchivedThreadsOptions, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions, AnyEditableChannel } from "../types/channels";
-import Message from "../structures/Message";
-import Invite from "../structures/Invite";
-import type AnnouncementThreadChannel from "../structures/AnnouncementThreadChannel";
-import type PublicThreadChannel from "../structures/PublicThreadChannel";
-import type PrivateThreadChannel from "../structures/PrivateThreadChannel";
-import type RESTManager from "../rest/RESTManager";
-import type PrivateChannel from "../structures/PrivateChannel";
-import type { Uncached } from "../types/shared";
+import type { AnyChannel, AnyTextChannelWithoutGroup, CreateInviteOptions, CreateMessageOptions, EditMessageOptions, EditPermissionOptions, GetChannelMessagesOptions, GetArchivedThreadsOptions, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions } from "../types/channels.js";
+import Message from "../structures/Message.js";
+import type RESTManager from "../rest/RESTManager.js";
+import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with channels. */
 export default class Channels {
     #private;
@@ -22,19 +17,19 @@ export default class Channels {
      * Create a direct message. This will not create a new channel if you have already started a dm with the user.
      * @param recipient The ID of the recipient of the direct message.
      */
-    createDM(recipient: string): Promise<PrivateChannel>;
+    createDM(recipient: string): Promise<object>;
     /**
      * Create an invite for a channel.
      * @param channelID The ID of the channel to create an invite for.
      * @param options The options for creating the invite.
      */
-    createInvite(channelID: string, options: CreateInviteOptions): Promise<Invite>;
+    createInvite(channelID: string, options: CreateInviteOptions): Promise<object>;
     /**
      * Create a message in a channel.
      * @param channelID The ID of the channel to create the message in.
      * @param options The options for creating the message.
      */
-    createMessage<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, options: CreateMessageOptions): Promise<Message<T>>;
+    createMessage(channelID: string, options: CreateMessageOptions): Promise<object>;
     /**
      * Add a reaction to a message.
      * @param channelID The ID of the channel the message is in.
@@ -78,12 +73,6 @@ export default class Channels {
      */
     deleteReactions(channelID: string, messageID: string, emoji?: string): Promise<void>;
     /**
-     * Edit a channel.
-     * @param channelID The ID of the channel to edit.
-     * @param options The options for editing the channel.
-     */
-    edit<T extends AnyEditableChannel = AnyEditableChannel>(channelID: string, options: EditChannelOptions): Promise<T>;
-    /**
      * Edit a message.
      * @param channelID The ID of the channel the message is in.
      * @param messageID The ID of the message to edit.
@@ -101,13 +90,13 @@ export default class Channels {
      * Get a channel.
      * @param channelID The ID of the channel to get.
      */
-    get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<T>;
+    get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<object>;
     /**
      * Get the private archived threads the current user has joined in a channel.
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
      */
-    getJoinedPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<PrivateThreadChannel>>;
+    getJoinedPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object>;
     /**
      * Get a message in a channel.
      * @param channelID The ID of the channel the message is in
@@ -125,13 +114,13 @@ export default class Channels {
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
      */
-    getPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<PrivateThreadChannel>>;
+    getPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object>;
     /**
      * Get the public archived threads in a channel.
      * @param channelID The ID of the channel to get the archived threads from.
      * @param options The options for getting the archived threads.
      */
-    getPublicArchivedThreads<T extends AnnouncementThreadChannel | PublicThreadChannel = AnnouncementThreadChannel | PublicThreadChannel>(channelID: string, options?: GetArchivedThreadsOptions): Promise<ArchivedThreads<T>>;
+    getPublicArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object>;
     /**
      * Get a thread member.
      * @param channelID The ID of the thread.
@@ -165,17 +154,17 @@ export default class Channels {
      * @param messageID The ID of the message to create the thread from.
      * @param options The options for starting the thread.
      */
-    startThreadFromMessage<T extends AnnouncementThreadChannel | PublicThreadChannel = AnnouncementThreadChannel | PublicThreadChannel>(channelID: string, messageID: string, options: StartThreadFromMessageOptions): Promise<T>;
+    startThreadFromMessage(channelID: string, messageID: string, options: StartThreadFromMessageOptions): Promise<object>;
     /**
      * Create a thread in a forum channel.
      * @param channelID The ID of the channel to start the thread in.
      * @param options The options for starting the thread.
      */
-    startThreadInForum(channelID: string, options: StartThreadInForumOptions): Promise<PublicThreadChannel>;
+    startThreadInForum(channelID: string, options: StartThreadInForumOptions): Promise<object>;
     /**
      * Create a thread without an existing message.
      * @param channelID The ID of the channel to start the thread in.
      * @param options The options for starting the thread.
      */
-    startThreadWithoutMessage<T extends AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel = AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel>(channelID: string, options: StartThreadWithoutMessageOptions): Promise<T>;
+    startThreadWithoutMessage(channelID: string, options: StartThreadWithoutMessageOptions): Promise<object>;
 }

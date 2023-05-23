@@ -1,6 +1,5 @@
 /** @module Types/Users */
 import type { RawMember } from "./guilds.js";
-import type { PremiumTypes } from "../Constants.js";
 
 // avatar_decoration, (self) bio
 export interface RESTUser {
@@ -16,7 +15,6 @@ export interface RESTUser {
     locale?: string;
     member?: RawMember;
     mfa_enabled?: boolean;
-    premium_type?: PremiumTypes;
     public_flags?: number;
     system?: boolean;
     username: string;

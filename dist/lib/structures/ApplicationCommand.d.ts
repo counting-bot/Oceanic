@@ -1,7 +1,6 @@
 /** @module ApplicationCommand */
 import Base from "./Base.js";
 import Permission from "./Permission.js";
-import type Guild from "./Guild.js";
 import type ClientApplication from "./ClientApplication.js";
 import type Client from "../Client.js";
 import { ApplicationCommandTypes } from "../Constants.js";
@@ -41,8 +40,6 @@ export default class ApplicationCommand<T extends ApplicationCommandTypes = Appl
     /** Autoincrementing version identifier updated during substantial record changes. */
     version: string;
     constructor(data: RawApplicationCommand, client: Client);
-    /** The guild this command is in (guild commands only). This will throw an error if the guild is not cached. */
-    get guild(): Guild | null;
     /**
      * Delete this command.
      */

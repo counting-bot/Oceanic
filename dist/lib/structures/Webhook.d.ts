@@ -1,11 +1,9 @@
 /** @module Webhook */
-import Base from "./Base";
-import type User from "./User";
+import Base from "./Base.js";
 import type Message from "./Message";
-import type Guild from "./Guild";
 import type ClientApplication from "./ClientApplication";
 import type Client from "../Client";
-import { type ImageFormat, type WebhookTypes } from "../Constants";
+import { type WebhookTypes } from "../Constants.js";
 import type { AnyGuildTextChannel, RawChannel } from "../types/channels";
 import type { RawGuild } from "../types/guilds";
 import type { DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions, RawWebhook } from "../types/webhooks.js";
@@ -34,20 +32,8 @@ export default class Webhook extends Base {
     token?: string;
     /** The [type](https://discord.com/developers/docs/resources/webhook#webhook-object-webhook-types) of this webhook. */
     type: WebhookTypes;
-    /** The user that created this webhook. */
-    user: User | null;
     constructor(data: RawWebhook, client: Client);
-    /** The channel this webhook is for, if applicable. */
-    get channel(): AnyGuildTextChannel | null | undefined;
-    /** The guild this webhook is for, if applicable. This will throw an error if the guild is not cached. */
-    get guild(): Guild | null;
     get url(): string;
-    /**
-     * The url of this webhook's avatar.
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    avatarURL(format?: ImageFormat, size?: number): string | null;
     /**
      * Delete this webhook (requires a bot user, see `deleteToken`).
      * @param reason The reason for deleting this webhook.
@@ -109,11 +95,5 @@ export default class Webhook extends Base {
      * @param token The token for the webhook, if not already present.
      */
     getMessage<T extends AnyGuildTextChannel>(messageID: string, threadID?: string, token?: string): Promise<Message<T>>;
-    /**
-     * The url of this webhook's `sourceGuild` icon (only present on channel follower webhooks).
-     * @param format The format the url should be.
-     * @param size The dimensions of the image.
-     */
-    sourceGuildIconURL(format?: ImageFormat, size?: number): string | null;
     toJSON(): JSONWebhook;
 }

@@ -5,6 +5,7 @@
   "main": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
   "module": "./esm.mjs",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/lib/index.d.ts",

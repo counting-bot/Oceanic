@@ -1,17 +1,9 @@
 import RESTManager from "./rest/RESTManager.js";
-import TypedCollection from "./util/TypedCollection.js";
-import PrivateChannel from "./structures/PrivateChannel.js";
-import User from "./structures/User.js";
-import Guild from "./structures/Guild.js";
-import type { AnyChannel, RawPrivateChannel } from "./types/channels.js";
-import type { RawGuild, RawUnavailableGuild } from "./types/guilds.js";
-import type { RawUser } from "./types/users.js";
 import type { ClientInstanceOptions, ClientOptions } from "./types/client.js";
 import TypedEmitter from "./util/TypedEmitter.js";
 import type ClientApplication from "./structures/ClientApplication.js";
 import ShardManager from "./gateway/ShardManager.js";
 import type { BotActivity, SendStatuses } from "./types/gateway.js";
-import UnavailableGuild from "./structures/UnavailableGuild.js";
 import type ExtendedUser from "./structures/ExtendedUser.js";
 import Util from "./util/Util.js";
 import type { ClientEvents } from "./types/events.js";
@@ -22,16 +14,12 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
     channelGuildMap: Record<string, string>;
     gatewayURL: string;
     guildShardMap: Record<string, number>;
-    guilds: TypedCollection<string, RawGuild, Guild>;
     options: ClientInstanceOptions;
-    privateChannels: TypedCollection<string, RawPrivateChannel, PrivateChannel>;
     ready: boolean;
     rest: RESTManager;
     shards: ShardManager;
     startTime: number;
     threadGuildMap: Record<string, string>;
-    unavailableGuilds: TypedCollection<string, RawUnavailableGuild, UnavailableGuild>;
-    users: TypedCollection<string, RawUser, User>;
     util: Util;
     /**
      * @constructor
@@ -56,9 +44,4 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
      * @param activities An array of activities.
      */
     editStatus(status: SendStatuses, activities?: Array<BotActivity>): Promise<void>;
-    /**
-     * Get a channel from an ID. This will return undefined if the channel is not cached.
-     * @param channelID The id of the channel.
-     */
-    getChannel<T extends AnyChannel = AnyChannel>(channelID: string): T | undefined;
 }

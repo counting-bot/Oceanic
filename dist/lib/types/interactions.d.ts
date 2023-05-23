@@ -1,13 +1,7 @@
 /** @module Types/Interactions */
 import type { ExecuteWebhookOptions } from "./webhooks.js";
-import type {
-    AnyGuildTextChannel,
-    ModalActionRow,
-    RawAttachment,
-    RawInteractionResolvedChannel,
-    RawMessage
-} from "./channels.js";
-import type { InteractionMember, RawMember, RawRole } from "./guilds.js";
+import type { AnyGuildTextChannel, ModalActionRow, RawMessage } from "./channels.js";
+import type { InteractionMember } from "./guilds.js";
 import type { RawUser } from "./users.js";
 import type { Uncached } from "./shared.js";
 import type { LocaleMap } from "./application-commands.js";
@@ -17,13 +11,9 @@ import type {
     ComponentTypes,
     InteractionResponseTypes,
     InteractionTypes,
-    MessageComponentTypes,
     SelectMenuTypes
 } from "../Constants";
-import type Attachment from "../structures/Attachment";
-import type Member from "../structures/Member";
 import type Message from "../structures/Message";
-import type Role from "../structures/Role";
 import type User from "../structures/User";
 import type PingInteraction from "../structures/PingInteraction";
 import type CommandInteraction from "../structures/CommandInteraction";
@@ -32,8 +22,6 @@ import type AutocompleteInteraction from "../structures/AutocompleteInteraction"
 import type ModalSubmitInteraction from "../structures/ModalSubmitInteraction";
 import type InteractionOptionsWrapper from "../util/InteractionOptionsWrapper";
 import type PrivateChannel from "../structures/PrivateChannel";
-import type TypedCollection from "../util/TypedCollection";
-import type InteractionResolvedChannel from "../structures/InteractionResolvedChannel";
 import type SelectMenuValuesWrapper from "../util/SelectMenuValuesWrapper";
 
 export type InteractionContent = Pick<ExecuteWebhookOptions, "tts" | "content" | "embeds" | "allowedMentions" | "flags" | "components" | "attachments" | "files">;
@@ -124,27 +112,6 @@ export interface ApplicationCommandInteractionData {
 export type RawAutocompleteInteractionData = Omit<RawApplicationCommandInteractionData, "resolved" | "target_id">;
 export type AutocompleteInteractionData = Omit<ApplicationCommandInteractionData, "resolved" | "targetID">;
 
-export interface RawMessageComponentInteractionResolvedData {
-    channels?: Record<string, RawInteractionResolvedChannel>;
-    members?: Record<string, Omit<RawMember, "user" | "deaf" | "mute">>;
-    roles?: Record<string, RawRole>;
-    users?: Record<string, RawUser>;
-}
-
-export interface MessageComponentInteractionResolvedData {
-    channels: TypedCollection<string, RawInteractionResolvedChannel, InteractionResolvedChannel>;
-    members: TypedCollection<string, RawMember, Member, [guildID: string]>;
-    roles: TypedCollection<string, RawRole, Role, [guildID: string]>;
-    users: TypedCollection<string, RawUser, User>;
-}
-
-export interface RawMessageComponentInteractionData {
-    component_type: MessageComponentTypes;
-    custom_id: string;
-    resolved?: RawMessageComponentInteractionResolvedData;
-    values?: Array<string>;
-}
-
 export type MessageComponentInteractionData = MessageComponentButtonInteractionData | MessageComponentSelectMenuInteractionData;
 export interface MessageComponentButtonInteractionData {
     componentType: ComponentTypes.BUTTON;
@@ -156,24 +123,6 @@ export interface MessageComponentSelectMenuInteractionData {
     customID: string;
     resolved: MessageComponentInteractionResolvedData;
     values: SelectMenuValuesWrapper;
-}
-
-export interface RawApplicationCommandInteractionResolvedData {
-    attachments?: Record<string, RawAttachment>;
-    channels?: Record<string, RawInteractionResolvedChannel>;
-    members?: Record<string, Omit<RawMember, "user" | "deaf" | "mute">>;
-    messages?: Record<string, RawMessage>;
-    roles?: Record<string, RawRole>;
-    users?: Record<string, RawUser>;
-}
-
-export interface ApplicationCommandInteractionResolvedData {
-    attachments: TypedCollection<string, RawAttachment, Attachment>;
-    channels: TypedCollection<string, RawInteractionResolvedChannel, InteractionResolvedChannel>;
-    members: TypedCollection<string, RawMember, Member, [guildID: string]>;
-    messages: TypedCollection<string, RawMessage, Message>;
-    roles: TypedCollection<string, RawRole, Role, [guildID: string]>;
-    users: TypedCollection<string, RawUser, User>;
 }
 
 export type InteractionOptions = InteractionOptionsWithOptions | InteractionOptionsWithValue;

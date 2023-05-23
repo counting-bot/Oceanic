@@ -1,6 +1,5 @@
 /** @module Routes/OAuth */
-import type { AuthorizationInformation, ClientCredentialsTokenOptions, ClientCredentialsTokenResponse, Connection, ExchangeCodeOptions, ExchangeCodeResponse, OAuthURLOptions, RefreshTokenOptions, RefreshTokenResponse, RevokeTokenOptions, GetCurrentGuildsOptions } from "../types/oauth.js";
-import Member from "../structures/Member.js";
+import type { ClientCredentialsTokenOptions, ClientCredentialsTokenResponse, Connection, ExchangeCodeOptions, ExchangeCodeResponse, OAuthURLOptions, RefreshTokenOptions, RefreshTokenResponse, RevokeTokenOptions, GetCurrentGuildsOptions } from "../types/oauth.js";
 import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
@@ -35,7 +34,7 @@ export default class OAuth {
      *
      * Note: OAuth only. Bots cannot use this.
      */
-    getCurrentAuthorizationInformation(): Promise<AuthorizationInformation>;
+    getCurrentAuthorizationInformation(): Promise<object>;
     /**
      * Get the connections of the currently authenticated user.
      *
@@ -48,7 +47,7 @@ export default class OAuth {
      * Note: OAuth only. Requires the `guilds.members.read` scope. Bots cannot use this.
      * @param guild the ID of the guild
      */
-    getCurrentGuildMember(guild: string): Promise<Member>;
+    getCurrentGuildMember(guild: string): Promise<object>;
     /**
      * Get the currently authenticated user's guilds. Note these are missing several properties gateway guilds have.
      * @param options The options for getting the current user's guilds.

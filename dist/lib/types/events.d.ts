@@ -1,35 +1,10 @@
 /** @module Events */
-import type { AnyGuildChannelWithoutThreads } from "./channels.js";
 import type { RawRequest } from "./request-handler.js";
 import type { AnyDispatchPacket } from "./gateway-raw.js";
-import type { DeletedPrivateChannel } from "./gateway.js";
 import type { Uncached } from "./shared.js";
-import type {
-    JSONCategoryChannel,
-    JSONForumChannel,
-    JSONGuild,
-    JSONMember,
-    JSONTextChannel,
-    JSONUser
-} from "./json.js";
-import type Guild from "../structures/Guild.js";
-import type UnavailableGuild from "../structures/UnavailableGuild.js";
-import type TextChannel from "../structures/TextChannel.js";
-import type CategoryChannel from "../structures/CategoryChannel.js";
-import type User from "../structures/User.js";
-import type Member from "../structures/Member.js";
-import type PrivateChannel from "../structures/PrivateChannel.js";
-import type ForumChannel from "../structures/ForumChannel.js";
-
+import type { JSONGuild, JSONUser } from "./json.js";
 
 export interface ClientEvents {
-    /** @event Emitted when a channel is created. Requires the `GUILDS` intent. */
-    channelCreate: [channel: AnyGuildChannelWithoutThreads];
-    /** @event Emitted when channel is deleted. Requires the `GUILDS` intent. */
-    channelDelete: [channel: AnyGuildChannelWithoutThreads | PrivateChannel | DeletedPrivateChannel];
-    /** @event Emitted when a channel is updated. Requires the `GUILDS` intent. */
-    channelUpdate: [channel: TextChannel, oldChannel: JSONTextChannel | null] | [channel: CategoryChannel, oldChannel: JSONCategoryChannel | null] | [channel: ForumChannel, oldChannel: JSONForumChannel | null];
-    /** @event Emitted when a shard connects. */
     connect: [id: number];
     /** @event Emitted with various information for debugging. */
     debug: [info: string, shard?: number];
@@ -39,23 +14,10 @@ export interface ClientEvents {
     error: [info: Error | string, shard?: number];
     /** @event Emitted when a guild becomes available. Requires the `GUILDS` intent. */
     guildAvailable: [guild: Guild];
-    /** @event Emitted when a guild ban is created. Requires the `GUILD_BANS` intent. */
-    guildBanAdd: [guild: Guild | Uncached, user: User];
-    /** @event Emitted when a guild ban is revoked. Requires the `GUILD_BANS` intent. */
-    guildBanRemove: [guild: Guild | Uncached, user: User];
     /** @event Emitted when the client joins a new guild. Requires the `GUILDS` intent. */
     guildCreate: [guild: Guild];
     /** @event Emitted when the client leaves a guild. Requires the `GUILDS` intent. */
     guildDelete: [guild: Guild | Uncached];
-    /** @event Emitted when a member joins a guild. Requires the `GUILD_MEMBERS` intent. */
-    guildMemberAdd: [member: Member];
-    /** @event Emitted when a chunk of guild members is received from Discord. */
-    guildMemberChunk: [members: Array<Member>];
-    /** @event Emitted when a member leaves a guild. Requires the `GUILD_MEMBERS` intent. If the member is uncached, the first parameter will be a user. If the guild is uncached, the first parameter will be a user, and the second will be an object with only an `id`. */
-    guildMemberRemove: [member: Member | User, guild: Guild | Uncached];
-    /** @event Emitted when a guild member is updates. Requires the `GUILD_MEMBERS` intent.*/
-    guildMemberUpdate: [member: Member, oldMember: JSONMember | null];
-    /** @event Emitted when a guild becomes unavailable. Requires the `GUILDS` intent. */
     guildUnavailable: [guild: UnavailableGuild];
     /** @event Emitted when a guild is updated. Requires the `GUILDS` intent. */
     guildUpdate: [guild: Guild, oldGuild: JSONGuild | null];

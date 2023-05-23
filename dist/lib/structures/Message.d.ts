@@ -1,7 +1,5 @@
 /** @module Message */
 import Base from "./Base.js";
-import User from "./User.js";
-import type Member from "./Member.js";
 import PartialApplication from "./PartialApplication.js";
 import type ClientApplication from "./ClientApplication.js";
 import type Client from "../Client.js";
@@ -25,8 +23,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
      * * If the message has a rich presence embed ({@link PartialApplication})
      */
     applicationID: string | null;
-    /** The author of this message. */
-    author: User;
     /** The ID of the channel this message was created in. */
     channelID: string;
     /** The content of this message. */
@@ -39,8 +35,6 @@ export default class Message<T extends AnyTextChannelWithoutGroup | Uncached = A
     guildID: T extends AnyGuildTextChannel ? string : string | null;
     /** The interaction info, if this message was the result of an interaction. */
     interaction?: MessageInteraction;
-    /** The member that created this message, if this message is in a guild. */
-    member: T extends AnyGuildTextChannel ? Member : Member | undefined;
     /** Channels mentioned in a `CROSSPOSTED` channel follower message. See [Discord's docs](https://discord.com/developers/docs/resources/channel#channel-mention-object) for more information. */
     mentionChannels?: Array<ChannelMention>;
     /** If this message is a `REPLY` or `THREAD_STARTER_MESSAGE`, some info about the referenced message. */

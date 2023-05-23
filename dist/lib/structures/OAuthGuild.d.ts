@@ -1,6 +1,5 @@
 import Base from "./Base.js";
 import Permission from "./Permission.js";
-import type { GuildFeature } from "../Constants.js";
 import type { RawOAuthGuild } from "../types/guilds.js";
 import type Client from "../Client.js";
 /** Represents a guild retrieved via oauth. */
@@ -9,8 +8,6 @@ export default class OAuthGuild extends Base {
     approximateMemberCount?: number;
     /** The approximate number of non-offline members in this guild (if retrieved with counts). */
     approximatePresenceCount?: number;
-    /** The [features](https://discord.com/developers/docs/resources/guild#guild-object-guild-features) this guild has. */
-    features: Array<GuildFeature>;
     /** The icon hash of this guild. */
     icon: string | null;
     /** The name of this guild. */
