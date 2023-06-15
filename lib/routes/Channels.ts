@@ -1,12 +1,9 @@
 /** @module Routes/Channels */
 import type {
-    AnyChannel,
-    AnyTextChannelWithoutGroup,
     CreateInviteOptions,
     CreateMessageOptions,
     EditMessageOptions,
     EditPermissionOptions,
-    GetChannelMessagesOptions,
     GetArchivedThreadsOptions,
     RawArchivedThreads,
     RawChannel,
@@ -23,9 +20,7 @@ import type {
     RawThreadChannel
 } from "../types/channels.js";
 import * as Routes from "../util/Routes.js";
-import Message from "../structures/Message.js";
 import type RESTManager from "../rest/RESTManager.js";
-import type { Uncached } from "../types/shared.js";
 
 /** Various methods for interacting with channels. */
 export default class Channels {
@@ -212,7 +207,7 @@ export default class Channels {
      * @param messageID The ID of the message to edit.
      * @param options The options for editing the message.
      */
-    async editMessage<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, messageID: string, options: EditMessageOptions): Promise<Message<T>> {
+    async editMessage(channelID: string, messageID: string, options: EditMessageOptions): Promise<object> {
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -229,7 +224,7 @@ export default class Channels {
                 flags:            options.flags
             },
             files
-        }).then(data => new Message<T>(data, this.#manager.client));
+        });
     }
 
     /**
@@ -259,7 +254,7 @@ export default class Channels {
      * Get a channel.
      * @param channelID The ID of the channel to get.
      */
-    async get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<object> {
+    async get(channelID: string): Promise<object> {
         return this.#manager.authRequest<RawChannel>({
             method: "GET",
             path:   Routes.CHANNEL(channelID)
@@ -287,83 +282,11 @@ export default class Channels {
      * @param channelID The ID of the channel the message is in
      * @param messageID The ID of the message to get.
      */
-    async getMessage<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, messageID: string): Promise<Message<T>> {
+    async getMessage(channelID: string, messageID: string): Promise<object> {
         return this.#manager.authRequest<RawMessage>({
             method: "GET",
             path:   Routes.CHANNEL_MESSAGE(channelID, messageID)
-        }).then(data => new Message<T>(data, this.#manager.client));
-    }
-
-    /**
-     * Get messages in a channel.
-     * @param channelID The ID of the channel to get messages from.
-     * @param options The options for getting messages. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    async getMessages<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, options?: GetChannelMessagesOptions): Promise<Array<Message<T>>> {
-        const _getMessages = async (_options?: GetChannelMessagesOptions): Promise<Array<Message<T>>> => {
-            const query = new URLSearchParams();
-            if (_options?.after !== undefined) {
-                query.set("after", _options.after);
-            }
-            if (_options?.around !== undefined) {
-                query.set("around", _options.around);
-            }
-            if (_options?.before !== undefined) {
-                query.set("before", _options.before);
-            }
-            if (_options?.limit !== undefined) {
-                query.set("limit", _options.limit.toString());
-            }
-            return this.#manager.authRequest<Array<RawMessage>>({
-                method: "GET",
-                path:   Routes.CHANNEL_MESSAGES(channelID),
-                query
-            }).then(data => data.map(d => new Message<T>(d, this.#manager.client)));
-        };
-
-        const limit = options?.limit ?? 100;
-        let chosenOption: "after" | "around" | "before";
-        if (options?.after) {
-            chosenOption = "after";
-        } else if (options?.around) {
-            chosenOption = "around";
-        } else if (options?.before) {
-            chosenOption = "before";
-        } else {
-            chosenOption = "before";
-        }
-        let optionValue = options?.[chosenOption] ?? undefined;
-
-        let messages: Array<Message<T>> = [];
-        while (messages.length < limit) {
-            const limitLeft = limit - messages.length;
-            const limitToFetch = limitLeft <= 100 ? limitLeft : 100;
-            if (options?.limit && options?.limit > 100) {
-                this.#manager.client.emit("debug", `Getting ${limitLeft} more message${limitLeft === 1 ? "" : "s"} for ${channelID}: ${optionValue ?? ""}`);
-            }
-            const messagesChunk = await _getMessages({
-                limit:          limitToFetch,
-                [chosenOption]: optionValue
-            });
-
-            if (messagesChunk.length === 0) {
-                break;
-            }
-
-            messages = messages.concat(messagesChunk);
-
-            if (chosenOption === "around") {
-                break;
-            } else {
-                optionValue = messages.at(-1)!.id;
-            }
-
-            if (messagesChunk.length < 100) {
-                break;
-            }
-        }
-
-        return messages;
+        });
     }
 
     /**

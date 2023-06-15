@@ -15,7 +15,6 @@ import type {
     EditGuildApplicationCommandOptions,
     GetApplicationCommandOptions
 } from "../types/application-commands.js";
-import ApplicationCommand from "../structures/ApplicationCommand.js";
 import type { RequestOptions } from "../types/request-handler.js";
 import type RESTManager from "../rest/RESTManager.js";
 
@@ -31,9 +30,9 @@ export default class ApplicationCommands {
      * @param applicationID The ID of the application.
      * @param options The commands.
      */
-    async bulkEditGlobalCommands(applicationID: string, options: Array<CreateApplicationCommandOptions>): Promise<Array<ApplicationCommand>> {
+    async bulkEditGlobalCommands(applicationID: string, options: Array<CreateApplicationCommandOptions>): Promise<Array<object>> {
         const opts = options as Array<CreateChatInputApplicationCommandOptions>;
-        return this.#manager.authRequest<Array<RawApplicationCommand>>({
+        return this.#manager.authRequest<Array<object>>({
             method: "PUT",
             path:   Routes.APPLICATION_COMMANDS(applicationID),
             json:   opts.map(opt => ({
@@ -47,7 +46,7 @@ export default class ApplicationCommands {
                 options:                    opt.options?.map(o => this.#manager.client.util.optionToRaw(o)),
                 type:                       opt.type
             }))
-        }).then(data => data.map(d => new ApplicationCommand(d, this.#manager.client)));
+        });
     }
 
     /**
@@ -56,7 +55,7 @@ export default class ApplicationCommands {
      * @param guildID The ID of the guild.
      * @param options The commands.
      */
-    async bulkEditGuildCommands(applicationID: string, guildID: string, options: Array<CreateGuildApplicationCommandOptions>): Promise<Array<ApplicationCommand>> {
+    async bulkEditGuildCommands(applicationID: string, guildID: string, options: Array<CreateGuildApplicationCommandOptions>): Promise<Array<object>> {
         const opts = options as Array<CreateChatInputApplicationCommandOptions>;
         return this.#manager.authRequest<Array<RawApplicationCommand>>({
             method: "PUT",
@@ -73,7 +72,7 @@ export default class ApplicationCommands {
                 options:                    opt.options?.map(o => this.#manager.client.util.optionToRaw(o)),
                 type:                       opt.type
             }))
-        }).then(data => data.map(d => new ApplicationCommand(d, this.#manager.client)));
+        });
     }
 
     /**
@@ -83,7 +82,7 @@ export default class ApplicationCommands {
      */
     async createGlobalCommand<T extends CreateApplicationCommandOptions = CreateApplicationCommandOptions>(applicationID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
         const opt = options as CreateChatInputApplicationCommandOptions;
-        return this.#manager.authRequest<RawApplicationCommand>({
+        return this.#manager.authRequest({
             method: "POST",
             path:   Routes.APPLICATION_COMMANDS(applicationID),
             json:   {
@@ -97,7 +96,7 @@ export default class ApplicationCommands {
                 options:                    opt.options?.map(o => this.#manager.client.util.optionToRaw(o)),
                 type:                       opt.type
             }
-        }).then(data => new ApplicationCommand(data, this.#manager.client) as never);
+        });
     }
 
     /**
@@ -108,7 +107,7 @@ export default class ApplicationCommands {
      */
     async createGuildCommand<T extends CreateGuildApplicationCommandOptions = CreateGuildApplicationCommandOptions>(applicationID: string, guildID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
         const opt = options as CreateChatInputApplicationCommandOptions;
-        return this.#manager.authRequest<RawApplicationCommand>({
+        return this.#manager.authRequest({
             method: "POST",
             path:   Routes.GUILD_APPLICATION_COMMANDS(applicationID, guildID),
             json:   {
@@ -122,7 +121,7 @@ export default class ApplicationCommands {
                 options:                    opt.options?.map(o => this.#manager.client.util.optionToRaw(o)),
                 type:                       opt.type
             }
-        }).then(data => new ApplicationCommand(data, this.#manager.client) as never);
+        });
     }
 
     /**
@@ -158,7 +157,7 @@ export default class ApplicationCommands {
      */
     async editGlobalCommand<T extends EditApplicationCommandOptions = EditApplicationCommandOptions>(applicationID: string, commandID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
         const opt = options as EditChatInputApplicationCommandOptions;
-        return this.#manager.authRequest<RawApplicationCommand>({
+        return this.#manager.authRequest({
             method: "PATCH",
             path:   Routes.APPLICATION_COMMAND(applicationID, commandID),
             json:   {
@@ -171,7 +170,7 @@ export default class ApplicationCommands {
                 nsfw:                       opt.nsfw,
                 options:                    opt.options?.map(o => this.#manager.client.util.optionToRaw(o))
             }
-        }).then(data => new ApplicationCommand(data, this.#manager.client) as never);
+        });
     }
 
     /**
@@ -183,7 +182,7 @@ export default class ApplicationCommands {
      */
     async editGuildCommand<T extends EditGuildApplicationCommandOptions = EditGuildApplicationCommandOptions>(applicationID: string, guildID: string, commandID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
         const opt = options as EditChatInputApplicationCommandOptions;
-        return this.#manager.authRequest<RawApplicationCommand>({
+        return this.#manager.authRequest({
             method: "PATCH",
             path:   Routes.GUILD_APPLICATION_COMMAND(applicationID, guildID, commandID),
             json:   {
@@ -196,7 +195,7 @@ export default class ApplicationCommands {
                 nsfw:                       opt.nsfw,
                 options:                    opt.options?.map(o => this.#manager.client.util.optionToRaw(o))
             }
-        }).then(data => new ApplicationCommand(data, this.#manager.client) as never);
+        });
     }
 
     /**
@@ -234,12 +233,12 @@ export default class ApplicationCommands {
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
         }
-        return this.#manager.authRequest<RawApplicationCommand>({
+        return this.#manager.authRequest({
             method:  "GET",
             path:    Routes.APPLICATION_COMMAND(applicationID, commandID),
             query,
             headers: options?.locale === undefined ? undefined : { "X-Discord-Locale": options.locale }
-        }).then(data => new ApplicationCommand(data, this.#manager.client) as never);
+        });
     }
 
     /**
@@ -247,7 +246,7 @@ export default class ApplicationCommands {
      * @param applicationID The ID of the application.
      * @param options The options for getting the command.
      */
-    async getGlobalCommands(applicationID: string, options?: GetApplicationCommandOptions): Promise<Array<AnyApplicationCommand>> {
+    async getGlobalCommands(applicationID: string, options?: GetApplicationCommandOptions): Promise<Array<object>> {
         const query = new URLSearchParams();
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
@@ -257,7 +256,7 @@ export default class ApplicationCommands {
             path:    Routes.APPLICATION_COMMANDS(applicationID),
             query,
             headers: options?.locale === undefined ? undefined : { "X-Discord-Locale": options.locale }
-        }).then(data => data.map(d => new ApplicationCommand(d, this.#manager.client)) as never);
+        });
     }
 
     /**
@@ -272,12 +271,12 @@ export default class ApplicationCommands {
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
         }
-        return this.#manager.authRequest<RawApplicationCommand>({
+        return this.#manager.authRequest({
             method:  "GET",
             path:    Routes.GUILD_APPLICATION_COMMAND(applicationID, commandID, guildID),
             query,
             headers: options?.locale === undefined ? undefined : { "X-Discord-Locale": options.locale }
-        }).then(data => new ApplicationCommand(data, this.#manager.client) as never);
+        });
     }
 
     /**
@@ -286,7 +285,7 @@ export default class ApplicationCommands {
      * @param guildID The ID of the guild.
      * @param options The options for getting the command.
      */
-    async getGuildCommands(applicationID: string, guildID: string, options?: GetApplicationCommandOptions): Promise<Array<AnyApplicationCommand>> {
+    async getGuildCommands(applicationID: string, guildID: string, options?: GetApplicationCommandOptions): Promise<Array<object>> {
         const query = new URLSearchParams();
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
@@ -296,7 +295,7 @@ export default class ApplicationCommands {
             path:    Routes.GUILD_APPLICATION_COMMANDS(applicationID, guildID),
             query,
             headers: options?.locale === undefined ? undefined : { "X-Discord-Locale": options.locale }
-        }).then(data => data.map(d => new ApplicationCommand(d, this.#manager.client)) as never);
+        });
     }
 
     /**

@@ -7,7 +7,6 @@ import { GatewayCloseCodes, GatewayOPCodes, GATEWAY_VERSION } from "../Constants
 import type { UpdatePresenceOptions, SendStatuses, BotActivity, ShardStatus } from "../types/gateway.js";
 import Base from "../structures/Base.js";
 import type { AnyDispatchPacket, AnyReceivePacket } from "../types/gateway-raw.js";
-import ClientApplication from "../structures/ClientApplication.js";
 import { is } from "../util/Util.js";
 import type { ShardEvents } from "../types/events.js";
 import WebSocket, { type Data } from "ws";
@@ -143,7 +142,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
                 }
                 this.status = "ready";
                 this.client.shards["_ready"](this.id);
-                this.client["_application"] = new ClientApplication(packet.d.application, this.client);
 
                 let url = packet.d.resume_gateway_url;
                 if (url.includes("?")) {

@@ -3,8 +3,6 @@ import type { RawUser } from "./users";
 import type { OAuthWebhook } from "./webhooks";
 import type { LocaleMap } from "./application-commands";
 import type { ConnectionService, PermissionName, RoleConnectionMetadataTypes, VisibilityTypes } from "../Constants";
-import type PartialApplication from "../structures/PartialApplication";
-import type User from "../structures/User";
 import type Webhook from "../structures/Webhook";
 
 export interface RawApplication {
@@ -44,13 +42,6 @@ export interface RawAuthorizationInformation {
     expires: string;
     scopes: Array<string>;
     user: RawUser;
-}
-
-export interface AuthorizationInformation {
-    application: PartialApplication;
-    expires: Date;
-    scopes: Array<string>;
-    user: User;
 }
 
 export interface RawConnection {

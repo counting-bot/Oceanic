@@ -12,7 +12,6 @@ import type {
 import type { AnyTextChannelWithoutGroup, RawMessage } from "../types/channels.js";
 import * as Routes from "../util/Routes.js";
 import Webhook from "../structures/Webhook.js";
-import Message from "../structures/Message.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type { Uncached } from "../types/shared.js";
 
@@ -115,7 +114,7 @@ export default class Webhooks {
      * @param messageID The ID of the message to edit.
      * @param options The options for editing the message.
      */
-    async editMessage<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, messageID: string, options: EditWebhookMessageOptions): Promise<Message<T>> {
+    async editMessage(webhookID: string, token: string, messageID: string, options: EditWebhookMessageOptions): Promise<object> {
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -136,7 +135,7 @@ export default class Webhooks {
             },
             query,
             files
-        }).then(data => new Message<T>(data, this.#manager.client));
+        });
     }
 
     /**
@@ -161,9 +160,9 @@ export default class Webhooks {
      * @param token The token of the webhook.
      * @param options The options for executing the webhook.
      */
-    async execute<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: ExecuteWebhookWaitOptions): Promise<Message<T>>;
+    async execute<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: ExecuteWebhookWaitOptions): Promise<object>;
     async execute(webhookID: string, token: string, options: ExecuteWebhookOptions): Promise<void>;
-    async execute<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: ExecuteWebhookOptions): Promise<Message<T> | void> {
+    async execute(webhookID: string, token: string, options: ExecuteWebhookOptions): Promise<object| void> {
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -175,7 +174,7 @@ export default class Webhooks {
         if (options.threadID !== undefined) {
             query.set("thread_id", options.threadID);
         }
-        return this.#manager.authRequest<RawMessage | null>({
+        return this.#manager.authRequest<object>({
             method: "POST",
             path:   Routes.WEBHOOK(webhookID, token),
             query,
@@ -192,35 +191,6 @@ export default class Webhooks {
                 username:         options.username
             },
             files
-        }).then(res => {
-            if (res !== null) {
-                return new Message(res, this.#manager.client);
-            }
-        });
-    }
-
-    /**
-     * Execute a GitHub compatible webhook.
-     * @param webhookID The ID of the webhook.
-     * @param token The token of the webhook.
-     * @param options The options to send. See GitHub's documentation for more information.
-     */
-    async executeGithub(webhookID: string, token: string, options: Record<string, unknown> & { wait: false; }): Promise<void>;
-    async executeGithub<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: Record<string, unknown> & { wait?: true; }): Promise<Message<T>>;
-    async executeGithub<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: Record<string, unknown> & { wait?: boolean; }): Promise<Message<T> | void> {
-        const query = new URLSearchParams();
-        if (options.wait !== undefined) {
-            query.set("wait", options.wait.toString());
-        }
-        return this.#manager.authRequest<RawMessage | null>({
-            method: "POST",
-            path:   Routes.WEBHOOK_PLATFORM(webhookID, token, "github"),
-            query,
-            json:   options
-        }).then(res => {
-            if (res !== null) {
-                return new Message(res, this.#manager.client);
-            }
         });
     }
 
@@ -265,7 +235,7 @@ export default class Webhooks {
      * @param messageID The ID of the message.
      * @param threadID The ID of the thread the message is in.
      */
-    async getMessage<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, messageID: string, threadID?: string): Promise<Message<T>> {
+    async getMessage(webhookID: string, token: string, messageID: string, threadID?: string): Promise<object> {
         const query = new URLSearchParams();
         if (threadID !== undefined) {
             query.set("thread_id", threadID);
@@ -273,6 +243,6 @@ export default class Webhooks {
         return this.#manager.authRequest<RawMessage>({
             method: "GET",
             path:   Routes.WEBHOOK_MESSAGE(webhookID, token, messageID)
-        }).then(data => new Message<T>(data, this.#manager.client));
+        });
     }
 }

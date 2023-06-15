@@ -4,23 +4,12 @@ import type { InstallParams } from "./oauth.js";
 import type { ApplicationCommandOptions, LocaleMap } from "./application-commands.js";
 import type { ApplicationCommandInteractionData, AutocompleteInteractionData, MessageComponentButtonInteractionData, MessageComponentSelectMenuInteractionData } from "./interactions.js";
 import type { RawGuild } from "./guilds.js";
-import type {
-    ChannelMention,
-    MessageActivity,
-    MessageReference,
-    RawChannel,
-    StickerItem,
-    MessageReaction,
-    ThreadMetadata,
-    PrivateThreadMetadata,
-    Embed
-} from "./channels.js";
+import type { RawChannel, ThreadMetadata, PrivateThreadMetadata } from "./channels.js";
 import type {
     ApplicationCommandTypes,
     ChannelTypes,
     GuildChannelTypes,
     InteractionTypes,
-    MessageTypes,
     OverwriteTypes,
     PrivateChannelTypes,
     RESTMethod,
@@ -192,31 +181,7 @@ export interface JSONMember extends JSONBase {
     guildID: string;
 }
 export interface JSONMessage extends JSONBase {
-    activity?: MessageActivity;
-    applicationID?: string;
-    channelID: string;
-    content: string;
-    embeds: Array<Embed>;
-    flags?: number;
-    guildID?: string;
-    interaction?: {
-        id: string;
-        member?: JSONMember;
-        name: string;
-        type: InteractionTypes;
-        user: JSONUser;
-    };
-    mentionChannels?: Array<ChannelMention>;
-    messageReference?: MessageReference;
-    nonce?: number | string;
-    position?: number;
-    reactions: Record<string, MessageReaction>;
-    referencedMessage?: JSONMessage | null;
-    stickerItems?: Array<StickerItem>;
-    thread?: JSONAnnouncementThreadChannel | JSONPublicThreadChannel | JSONPrivateThreadChannel;
-    timestamp: number;
-    type: MessageTypes;
-    webhook?: string;
+
 }
 export interface JSONPartialApplication extends JSONBase {
     botPublic?: boolean;

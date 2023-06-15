@@ -16,7 +16,6 @@ import type {
     OverwriteTypes,
     SelectMenuTypes,
     SortOrderTypes,
-    StickerFormatTypes,
     TextInputStyles,
     ThreadAutoArchiveDuration,
     ThreadChannelTypes,
@@ -32,7 +31,6 @@ import type PrivateThreadChannel from "../structures/PrivateThreadChannel.js";
 import type PublicThreadChannel from "../structures/PublicThreadChannel.js";
 import type StageChannel from "../structures/StageChannel.js";
 import type TextChannel from "../structures/TextChannel.js";
-import type User from "../structures/User.js";
 import type ForumChannel from "../structures/ForumChannel.js";
 import type Message from "../structures/Message.js";
 import type Guild from "../structures/Guild.js";
@@ -573,22 +571,6 @@ export interface RawMessageInteraction {
     type: InteractionTypes;
     user: RawUser;
 }
-
-export interface MessageInteraction {
-    id: string;
-    member?: Member;
-    name: string;
-    type: InteractionTypes;
-    user: User;
-}
-
-
-export interface StickerItem {
-    format_type: StickerFormatTypes;
-    id: string;
-    name: string;
-}
-
 
 export type AnyChannel = TextChannel | PrivateChannel | CategoryChannel | AnnouncementChannel | AnnouncementThreadChannel | PublicThreadChannel | PrivateThreadChannel | StageChannel | ForumChannel;
 export type AnyPrivateChannel = PrivateChannel;

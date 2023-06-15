@@ -21,7 +21,6 @@ import Webhook from "../structures/Webhook.js";
 import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
-import ExtendedUser from "../structures/ExtendedUser.js";
 import type { RawOAuthUser } from "../types/users.js";
 import { FormData } from "undici";
 
@@ -61,7 +60,7 @@ export default class OAuth {
             method: "POST",
             path:   Routes.OAUTH_TOKEN,
             form,
-            auth:   (options.clientID ?? this.#manager.client["_application"]) && options.clientSecret ? `Basic ${Buffer.from(`${options.clientID ?? this.#manager.client["_application"]!.id}:${options.clientSecret}`).toString("base64")}` : true
+            auth:   options.clientID && options.clientSecret ? `Basic ${Buffer.from(`${options.clientID}:${options.clientSecret}`).toString("base64")}` : true
         }).then(data => ({
             accessToken: data.access_token,
             expiresIn:   data.expires_in,
@@ -174,11 +173,11 @@ export default class OAuth {
      *
      * Note: This does not touch the client's cache in any way.
      */
-    async getCurrentUser(): Promise<ExtendedUser> {
+    async getCurrentUser(): Promise<object> {
         return this.#manager.authRequest<RawOAuthUser>({
             method: "GET",
             path:   Routes.OAUTH_CURRENT_USER
-        }).then(data => new ExtendedUser(data, this.#manager.client));
+        });
     }
 
     /** Get a helper instance that can be used with a specific bearer token. */
