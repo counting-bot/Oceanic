@@ -3,7 +3,6 @@ import type { ClientCredentialsTokenOptions, ClientCredentialsTokenResponse, Con
 import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
-import ExtendedUser from "../structures/ExtendedUser.js";
 /** Various methods for interacting with oauth. */
 export default class OAuth {
     #private;
@@ -58,7 +57,7 @@ export default class OAuth {
      *
      * Note: This does not touch the client's cache in any way.
      */
-    getCurrentUser(): Promise<ExtendedUser>;
+    getCurrentUser(): Promise<object>;
     /** Get a helper instance that can be used with a specific bearer token. */
     getHelper(token: string): OAuthHelper;
     /**

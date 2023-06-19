@@ -1,5 +1,4 @@
 import type { AnyApplicationCommand, ApplicationCommandOptionConversion, CreateApplicationCommandOptions, EditApplicationCommandOptions, EditApplicationCommandPermissionsOptions, RESTGuildApplicationCommandPermissions, CreateGuildApplicationCommandOptions, EditGuildApplicationCommandOptions, GetApplicationCommandOptions } from "../types/application-commands.js";
-import ApplicationCommand from "../structures/ApplicationCommand.js";
 import type RESTManager from "../rest/RESTManager.js";
 /** Various methods for interacting with application commands. */
 export default class ApplicationCommands {
@@ -10,14 +9,14 @@ export default class ApplicationCommands {
      * @param applicationID The ID of the application.
      * @param options The commands.
      */
-    bulkEditGlobalCommands(applicationID: string, options: Array<CreateApplicationCommandOptions>): Promise<Array<ApplicationCommand>>;
+    bulkEditGlobalCommands(applicationID: string, options: Array<CreateApplicationCommandOptions>): Promise<Array<object>>;
     /**
      * Overwrite all existing application commands in a guild.
      * @param applicationID The ID of the application.
      * @param guildID The ID of the guild.
      * @param options The commands.
      */
-    bulkEditGuildCommands(applicationID: string, guildID: string, options: Array<CreateGuildApplicationCommandOptions>): Promise<Array<ApplicationCommand>>;
+    bulkEditGuildCommands(applicationID: string, guildID: string, options: Array<CreateGuildApplicationCommandOptions>): Promise<Array<object>>;
     /**
      * Create a global application command.
      * @param applicationID The ID of the application.
@@ -79,7 +78,7 @@ export default class ApplicationCommands {
      * @param applicationID The ID of the application.
      * @param options The options for getting the command.
      */
-    getGlobalCommands(applicationID: string, options?: GetApplicationCommandOptions): Promise<Array<AnyApplicationCommand>>;
+    getGlobalCommands(applicationID: string, options?: GetApplicationCommandOptions): Promise<Array<object>>;
     /**
      * Get a global application command.
      * @param applicationID The ID of the application.
@@ -94,7 +93,7 @@ export default class ApplicationCommands {
      * @param guildID The ID of the guild.
      * @param options The options for getting the command.
      */
-    getGuildCommands(applicationID: string, guildID: string, options?: GetApplicationCommandOptions): Promise<Array<AnyApplicationCommand>>;
+    getGuildCommands(applicationID: string, guildID: string, options?: GetApplicationCommandOptions): Promise<Array<object>>;
     /**
      * Get an application command's permissions in a guild.
      * @param applicationID The ID of the application.

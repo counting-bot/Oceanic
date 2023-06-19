@@ -2,7 +2,6 @@
 import type { CreateWebhookOptions, DeleteWebhookMessageOptions, EditWebhookMessageOptions, EditWebhookOptions, EditWebhookTokenOptions, ExecuteWebhookOptions, ExecuteWebhookWaitOptions } from "../types/webhooks.js";
 import type { AnyTextChannelWithoutGroup } from "../types/channels.js";
 import Webhook from "../structures/Webhook.js";
-import Message from "../structures/Message.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with webhooks. */
@@ -48,7 +47,7 @@ export default class Webhooks {
      * @param messageID The ID of the message to edit.
      * @param options The options for editing the message.
      */
-    editMessage<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, messageID: string, options: EditWebhookMessageOptions): Promise<Message<T>>;
+    editMessage(webhookID: string, token: string, messageID: string, options: EditWebhookMessageOptions): Promise<object>;
     /**
      * Edit a webhook via its token.
      * @param webhookID The ID of the webhook.
@@ -61,20 +60,8 @@ export default class Webhooks {
      * @param token The token of the webhook.
      * @param options The options for executing the webhook.
      */
-    execute<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: ExecuteWebhookWaitOptions): Promise<Message<T>>;
+    execute<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: ExecuteWebhookWaitOptions): Promise<object>;
     execute(webhookID: string, token: string, options: ExecuteWebhookOptions): Promise<void>;
-    /**
-     * Execute a GitHub compatible webhook.
-     * @param webhookID The ID of the webhook.
-     * @param token The token of the webhook.
-     * @param options The options to send. See GitHub's documentation for more information.
-     */
-    executeGithub(webhookID: string, token: string, options: Record<string, unknown> & {
-        wait: false;
-    }): Promise<void>;
-    executeGithub<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: Record<string, unknown> & {
-        wait?: true;
-    }): Promise<Message<T>>;
     /**
      * Get a webhook by ID (and optionally token).
      * @param webhookID The ID of the webhook.
@@ -98,5 +85,5 @@ export default class Webhooks {
      * @param messageID The ID of the message.
      * @param threadID The ID of the thread the message is in.
      */
-    getMessage<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, messageID: string, threadID?: string): Promise<Message<T>>;
+    getMessage(webhookID: string, token: string, messageID: string, threadID?: string): Promise<object>;
 }

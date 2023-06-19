@@ -1,8 +1,6 @@
 /** @module Routes/Channels */
-import type { AnyChannel, AnyTextChannelWithoutGroup, CreateInviteOptions, CreateMessageOptions, EditMessageOptions, EditPermissionOptions, GetChannelMessagesOptions, GetArchivedThreadsOptions, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions } from "../types/channels.js";
-import Message from "../structures/Message.js";
+import type { CreateInviteOptions, CreateMessageOptions, EditMessageOptions, EditPermissionOptions, GetArchivedThreadsOptions, ThreadMember, StartThreadFromMessageOptions, StartThreadInForumOptions, StartThreadWithoutMessageOptions } from "../types/channels.js";
 import type RESTManager from "../rest/RESTManager.js";
-import type { Uncached } from "../types/shared.js";
 /** Various methods for interacting with channels. */
 export default class Channels {
     #private;
@@ -78,7 +76,7 @@ export default class Channels {
      * @param messageID The ID of the message to edit.
      * @param options The options for editing the message.
      */
-    editMessage<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, messageID: string, options: EditMessageOptions): Promise<Message<T>>;
+    editMessage(channelID: string, messageID: string, options: EditMessageOptions): Promise<object>;
     /**
      * Edit a permission overwrite.
      * @param channelID The ID of the channel to edit the permission overwrite for.
@@ -90,7 +88,7 @@ export default class Channels {
      * Get a channel.
      * @param channelID The ID of the channel to get.
      */
-    get<T extends AnyChannel = AnyChannel>(channelID: string): Promise<object>;
+    get(channelID: string): Promise<object>;
     /**
      * Get the private archived threads the current user has joined in a channel.
      * @param channelID The ID of the channel to get the archived threads from.
@@ -102,13 +100,7 @@ export default class Channels {
      * @param channelID The ID of the channel the message is in
      * @param messageID The ID of the message to get.
      */
-    getMessage<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, messageID: string): Promise<Message<T>>;
-    /**
-     * Get messages in a channel.
-     * @param channelID The ID of the channel to get messages from.
-     * @param options The options for getting messages. `before`, `after`, and `around `All are mutually exclusive.
-     */
-    getMessages<T extends AnyTextChannelWithoutGroup | Uncached = AnyTextChannelWithoutGroup | Uncached>(channelID: string, options?: GetChannelMessagesOptions): Promise<Array<Message<T>>>;
+    getMessage(channelID: string, messageID: string): Promise<object>;
     /**
      * Get the private archived threads in a channel.
      * @param channelID The ID of the channel to get the archived threads from.

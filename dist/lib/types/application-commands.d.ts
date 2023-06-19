@@ -1,7 +1,6 @@
 /** @module Types/ApplicationCommands */
 import type { ExclusifyUnion } from "./shared.js";
 import type { ApplicationCommandOptionTypes, ApplicationCommandPermissionTypes, ApplicationCommandTypes, GuildChannelTypes } from "../Constants.js";
-import type ApplicationCommand from "../structures/ApplicationCommand.js";
 import type ClientApplication from "../structures/ClientApplication.js";
 
 export interface RawApplicationCommand {
@@ -68,9 +67,6 @@ export type AnyApplicationCommand = ChatInputApplicationCommand | UserApplicatio
 export type ApplicationCommandOptions = ApplicationCommandOptionsWithOptions | ApplicationCommandOptionsWithValue;
 export type ApplicationCommandOptionsWithOptions = ApplicationCommandOptionsSubCommand | ApplicationCommandOptionsSubCommandGroup;
 export type ApplicationCommandOptionsWithValue = ApplicationCommandOptionsString | ApplicationCommandOptionsInteger | ApplicationCommandOptionsBoolean | ApplicationCommandOptionsUser | ApplicationCommandOptionsChannel | ApplicationCommandOptionsRole | ApplicationCommandOptionsMentionable | ApplicationCommandOptionsNumber | ApplicationCommandOptionsAttachment;
-export type ChatInputApplicationCommand = ApplicationCommand<ApplicationCommandTypes.CHAT_INPUT>;
-export type UserApplicationCommand = ApplicationCommand<ApplicationCommandTypes.USER>;
-export type MessageApplicationCommand = ApplicationCommand<ApplicationCommandTypes.MESSAGE>;
 
 export type ApplicationCommandOptionConversion<T extends EditApplicationCommandOptions | CreateApplicationCommandOptions> =
     T extends EditChatInputApplicationCommandOptions | CreateChatInputApplicationCommandOptions ? ChatInputApplicationCommand :
