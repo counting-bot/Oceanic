@@ -40,7 +40,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     sessionID: string | null;
     status: ShardStatus;
     ws!: WebSocket | null;
-    guilds: number;
     constructor(id: number, client: Client) {
         super();
         Object.defineProperties(this, {
@@ -82,7 +81,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         this.sequence = 0;
         this.sessionID = null;
         this.status = "disconnected";
-        this.guilds = 0;
         this.hardReset();
     }
 
@@ -518,7 +516,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         this.presence = JSON.parse(JSON.stringify(this.client.shards.options.presence)) as Shard["presence"];
         this.presenceUpdateBucket = new Bucket(5, 20000);
         this.resumeURL = null;
-        this.guilds = 0;
     }
 
     heartbeat(requested = false): void {
@@ -580,7 +577,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
         this.lastHeartbeatAck = true;
         this.lastHeartbeatReceived = 0;
         this.lastHeartbeatSent = 0;
-        this.guilds = 0;
         this.status = "disconnected";
         if (this.#connectTimeout) {
             clearTimeout(this.#connectTimeout);
