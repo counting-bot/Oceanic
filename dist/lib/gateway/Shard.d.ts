@@ -29,7 +29,6 @@ export default class Shard extends TypedEmitter<ShardEvents> {
     sessionID: string | null;
     status: ShardStatus;
     ws: WebSocket | null;
-    guilds: number;
     constructor(id: number, client: Client);
     private checkReady;
     private initialize;
