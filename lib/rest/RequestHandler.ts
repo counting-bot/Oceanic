@@ -7,7 +7,6 @@ import { API_URL, RESTMethods, USER_AGENT, type RESTMethod } from "../Constants.
 import Base from "../structures/Base.js";
 import type { LatencyRef, RequestHandlerInstanceOptions, RequestOptions } from "../types/request-handler.js";
 import type { RESTOptions } from "../types/client.js";
-import { FormData, fetch } from "undici";
 
 /**
  * Latency & ratelimit related things lovingly borrowed from eris

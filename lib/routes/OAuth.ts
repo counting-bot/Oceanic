@@ -22,7 +22,6 @@ import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
 import type { RawOAuthUser } from "../types/users.js";
-import { FormData } from "undici";
 
 /** Various methods for interacting with oauth. */
 export default class OAuth {

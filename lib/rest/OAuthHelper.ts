@@ -5,7 +5,6 @@ import type { RawOAuthGuild, RESTMember } from "../types/guilds.js";
 import * as Routes from "../util/Routes.js";
 import type { RawOAuthUser } from "../types/users.js";
 import { BASE_URL } from "../Constants.js";
-import { FormData } from "undici";
 
 /** A helper to make using authenticated oauth requests without needing a new client instance. */
 export default class OAuthHelper {
