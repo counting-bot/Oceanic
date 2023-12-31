@@ -2,9 +2,9 @@
 export declare const GATEWAY_VERSION = 10;
 export declare const REST_VERSION = 10;
 export declare const BASE_URL = "https://discord.com";
-export declare const API_URL: string;
+export declare const API_URL = "https://discord.com/api/v10";
 export declare const VERSION = "1.3.1";
-export declare const USER_AGENT: string;
+export declare const USER_AGENT = "Oceanic/1.3.1 (https://github.com/OceanicJS/Oceanic)";
 export declare const MIN_IMAGE_SIZE = 64;
 export declare const MAX_IMAGE_SIZE = 4096;
 export declare const RESTMethods: readonly ["GET", "POST", "PUT", "PATCH", "DELETE"];
