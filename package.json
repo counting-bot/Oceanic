@@ -58,7 +58,7 @@
     "eslint-plugin-unused-imports": "^3.0.0",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
-    "undici-types": "^6.2.1",
+    "undici-types": "^6.3.0",
     "ws": "^8.16.0"
   },
   "dependencies": {
