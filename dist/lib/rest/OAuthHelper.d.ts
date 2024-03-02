@@ -32,6 +32,10 @@ export default class OAuthHelper {
      */
     getCurrentUser(): Promise<object>;
     /**
+     * Check if the currently authenticated owns an application.
+    */
+    ownsApplication(applicationID: string): Promise<boolean>;
+    /**
      * Revoke the used access token.
      * @param options The options for revoking the token.
      */

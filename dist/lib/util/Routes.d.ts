@@ -67,6 +67,7 @@ export declare const OAUTH_GUILDS: "/users/@me/guilds";
 export declare const OAUTH_TOKEN: "/oauth2/token";
 export declare const OAUTH_TOKEN_REVOKE: "/oauth2/token/revoke";
 export declare const OAUTH_ROLE_CONNECTION: (applicationID: string) => `/users/@me/applications/${string}/role-connection`;
+export declare const APPLICATION_BRANCHES: (applicationID: string) => `/applications/${string}/branches`;
 export declare const ACHIEVEMENT_ICON: (applicationID: string, achievementID: string, hash: string) => `/app-assets/${string}/achievements/${string}/icons/${string}`;
 export declare const APPLICATION_ASSET: (applicationID: string, assetID: string) => `/applications/${string}/assets/${string}`;
 export declare const APPLICATION_COVER: (applicationID: string, hash: string) => `/app-icons/${string}/${string}`;
