@@ -95,6 +95,16 @@ export default class OAuthHelper {
         });
     }
 
+    /**
+     * Check if the currently authenticated owns an application.
+    */
+    async ownsApplication(applicationID: string): Promise<boolean> {
+        return this.#manager.request<RawOAuthUser>({
+            method: "GET",
+            path:   Routes.APPLICATION_BRANCHES(applicationID),
+            auth:   this.#token
+        }).then(()=>true, ()=>false);
+    }
 
     /**
      * Revoke the used access token.

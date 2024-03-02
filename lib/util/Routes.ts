@@ -76,6 +76,7 @@ export const OAUTH_GUILDS          = "/users/@me/guilds" as const;
 export const OAUTH_TOKEN           = "/oauth2/token" as const;
 export const OAUTH_TOKEN_REVOKE    = "/oauth2/token/revoke" as const;
 export const OAUTH_ROLE_CONNECTION = (applicationID: string) => `/users/@me/applications/${applicationID}/role-connection` as const;
+export const APPLICATION_BRANCHES = (applicationID: string) => `/applications/${applicationID}/branches` as const;
 
 // Images
 export const ACHIEVEMENT_ICON            = (applicationID: string, achievementID: string, hash: string) => `/app-assets/${applicationID}/achievements/${achievementID}/icons/${hash}` as const;
