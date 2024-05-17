@@ -118,9 +118,6 @@ export default class Channels {
      * @param emoji The reaction to add to the message. `name:id` for custom emojis, and the unicode codepoint for default emojis.
      */
     async createReaction(channelID: string, messageID: string, emoji: string): Promise<void> {
-        if (emoji === decodeURIComponent(emoji)) {
-            emoji = encodeURIComponent(emoji);
-        }
         await this.#manager.authRequest<null>({
             method: "PUT",
             path:   Routes.CHANNEL_REACTION_USER(channelID, messageID, emoji, "@me")
@@ -176,9 +173,6 @@ export default class Channels {
      * @param user The user to remove the reaction from, `@me` for the current user (default).
      */
     async deleteReaction(channelID: string, messageID: string, emoji: string, user = "@me"): Promise<void> {
-        if (emoji === decodeURIComponent(emoji)) {
-            emoji = encodeURIComponent(emoji);
-        }
         await this.#manager.authRequest<null>({
             method: "DELETE",
             path:   Routes.CHANNEL_REACTION_USER(channelID, messageID, emoji, user)
@@ -192,9 +186,6 @@ export default class Channels {
      * @param emoji The reaction to remove from the message. `name:id` for custom emojis, and the unicode codepoint for default emojis. Omit to remove all reactions.
      */
     async deleteReactions(channelID: string, messageID: string, emoji?: string): Promise<void> {
-        if (emoji && emoji === decodeURIComponent(emoji)) {
-            emoji = encodeURIComponent(emoji);
-        }
         await this.#manager.authRequest<null>({
             method: "DELETE",
             path:   emoji ? Routes.CHANNEL_REACTION(channelID, messageID, emoji) : Routes.CHANNEL_REACTIONS(channelID, messageID)
