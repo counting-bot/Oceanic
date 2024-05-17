@@ -156,7 +156,7 @@ export default class RequestHandler {
                         method:     options.method,
                         headers,
                         body:       reqBody,
-                        dispatcher: this.options.agent || undefined,
+                        // dispatcher: this.options.agent || undefined,
                         signal:     controller.signal,
                         redirect:   this.options.followRedirects ? "follow" : "manual"
                     });
