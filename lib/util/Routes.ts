@@ -81,6 +81,7 @@ export const OAUTH_TOKEN               = "/oauth2/token";
 export const OAUTH_TOKEN_REVOKE        = "/oauth2/token/revoke";
 export const OAUTH_ROLE_CONNECTION     = (applicationID: string) => encode`/users/@me/applications/${applicationID}/role-connection`;
 export const ROLE_CONNECTIONS_METADATA = (applicationID: string) => encode`/applications/${applicationID}/role-connections/metadata`;
+export const APPLICATION_BRANCHES = (applicationID: string) => encode`/applications/${applicationID}/branches`;
 
 // Images
 export const ACHIEVEMENT_ICON            = (applicationID: string, achievementID: string, hash: string) => encode`/app-assets/${applicationID}/achievements/${achievementID}/icons/${hash}`;
