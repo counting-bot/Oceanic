@@ -53,6 +53,11 @@ export interface RESTOptions {
      */
     disableLatencyCompensation?: boolean;
     /**
+     * If redirects should be followed.
+     * @defaultValue false
+     */
+    followRedirects?: boolean;
+    /**
      * The `Host` header to use for requests.
      * @defaultValue Parsed from `baseURL`
      */
