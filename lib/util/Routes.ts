@@ -2,20 +2,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const CDN_URL = "https://cdn.discordapp.com";
 
-const SAFE_CHARACTERS = new Set([":", "?", "@"]);
 function encode(strings: TemplateStringsArray, ...args: Array<string | number>): string {
-    return strings.reduce((acc, str, i) => {
-        acc += str;
-
-        if (args[i] !== undefined && args[i] !== null) {
-            acc += String(args[i])
-                .split("")
-                .map(char => SAFE_CHARACTERS.has(char) ? char : encodeURIComponent(char))
-                .join("");
-        }
-
-        return acc;
-    }, "");
+    return strings.reduce((acc, str, i) => `${acc}${str}${encodeURIComponent(args[i] ?? "")}`, "");
 }
 
 // Webhooks
