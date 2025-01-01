@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/OceanicJS/Oceanic#readme",
   "devDependencies": {
-    "@favware/npm-deprecate": "^1.0.7",
+    "@favware/npm-deprecate": "^2.0.0",
     "@types/node": "^22.8.6",
     "@types/pako": "^2.0.3",
     "@types/ws": "^8.5.12",
