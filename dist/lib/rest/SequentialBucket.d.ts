@@ -3,7 +3,6 @@
  * Latency & ratelimit related things lovingly borrowed from eris
  * https://github.com/abalabahaha/eris/blob/dev/lib/util/SequentialBucket.js (eb403730855714eafa36c541dbe2cb84c9979158)
  */
-/// <reference types="node" />
 import type { LatencyRef } from "../types/request-handler.js";
 /** A ratelimit bucket. */
 export default class SequentialBucket {

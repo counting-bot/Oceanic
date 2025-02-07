@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import type Client from "../Client.js";
 import TypedEmitter from "../util/TypedEmitter.js";
 import Bucket from "../rest/Bucket.js";

@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import EventEmitter from "node:events";
 declare interface TypedEmitter<Events extends Record<string | symbol, any>> extends EventEmitter {
     addListener<K extends keyof Events>(event: K, listener: (...args: Events[K]) => void): this;

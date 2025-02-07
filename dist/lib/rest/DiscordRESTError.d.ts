@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /** @module DiscordRESTError */
 import type { RESTMethod } from "../Constants.js";
 import type { JSONDiscordRESTError } from "../types/json.js";

@@ -3,7 +3,6 @@
  * lovingly borrowed from eris
  * https://github.com/abalabahaha/eris/blob/dev/lib/util/Bucket.js (eb403730855714eafa36c541dbe2cb84c9979158)
  */
-/// <reference types="node" />
 /** A bucket. */
 export default class Bucket {
     #private;
