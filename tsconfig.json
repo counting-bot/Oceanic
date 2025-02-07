@@ -19,7 +19,6 @@
     "ignoreDeprecations": "5.0",
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
-    "importsNotUsedAsValues": "error",
     "checkJs": true,
     "strictPropertyInitialization": true,
     "strictBindCallApply": true,
