@@ -2,15 +2,15 @@
   "name": "oceanic.js",
   "version": "1.6.0",
   "description": "A NodeJS library for interfacing with Discord.",
-  "main": "./dist/lib/index.js",
-  "types": "./dist/lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "module": "./esm.mjs",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/lib/index.d.ts",
-      "bun": "./dist/lib/index.js",
-      "require": "./dist/lib/index.js",
+      "types": "./lib/index.d.ts",
+      "bun": "./lib/index.js",
+      "require": "./lib/index.js",
       "import": "./esm.mjs"
     }
   },
