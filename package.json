@@ -43,7 +43,7 @@
   "homepage": "https://github.com/OceanicJS/Oceanic#readme",
   "devDependencies": {
     "@favware/npm-deprecate": "^2.0.0",
-    "@types/node": "^22.13.1",
+    "@types/node": "^22.13.8",
     "@types/pako": "^2.0.3",
     "@types/ws": "^8.5.14",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
