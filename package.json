@@ -45,7 +45,7 @@
     "@favware/npm-deprecate": "^2.0.0",
     "@types/node": "^22.13.8",
     "@types/pako": "^2.0.3",
-    "@types/ws": "^8.5.14",
+    "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^9.19.0",
@@ -59,11 +59,11 @@
     "tslib": "^2.8.1",
     "typescript": "^5.8.2",
     "undici-types": "^7.5.0",
-    "ws": "^8.18.0"
+    "ws": "^8.18.1"
   },
   "dependencies": {
     "tslib": "^2.8.1",
-    "ws": "^8.18.0"
+    "ws": "^8.18.1"
   },
   "engines": {
     "node": ">=18.13.0"
