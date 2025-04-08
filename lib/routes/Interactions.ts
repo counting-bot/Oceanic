@@ -6,6 +6,8 @@ import { InteractionResponseTypes } from "../Constants.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type { AnyTextChannelWithoutGroup } from "../types/channels.js";
 import type { Uncached } from "../types/shared.js";
+import type { File } from "../types";
+
 
 /** Various methods for interacting with interactions. */
 export default class Interactions {
@@ -31,6 +33,12 @@ export default class Interactions {
      * @param options The options for creating the interaction response.
      */
     async createInteractionResponse(interactionID: string, interactionToken: string, options: InteractionResponse): Promise<void> {
+        let files: Array<File> | undefined;
+        if ("data" in options && options.data && "files" in options.data) {
+            files = options.data.files;
+            delete options.data.files;
+        }
+
         let data: unknown | undefined;
         switch (options.type) {
             case InteractionResponseTypes.PONG: {
@@ -81,7 +89,8 @@ export default class Interactions {
             json:   {
                 data,
                 type: options.type
-            }
+            },
+            files
         });
     }
 

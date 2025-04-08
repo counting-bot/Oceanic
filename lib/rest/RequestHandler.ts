@@ -129,6 +129,19 @@ export default class RequestHandler {
                         }
                         if (options.form || (options.files && options.files.length !== 0)) {
                             const data = options.form ?? new FormData();
+                            let index = 0;
+                            if (options.files) for (const file of options.files.values()) {
+                                index++;
+                                // @ts-ignore 
+                                if (file.index !== undefined) {
+                                    // @ts-ignore 
+                                    index = file.index;
+                                }
+                                if (!file.contents) {
+                                    continue;
+                                }
+                                data.set(`files[${index}]`, new Blob([file.contents]), file.name);
+                            }                            
                             if (stringBody) {
                                 data.set("payload_json", stringBody);
                             }
