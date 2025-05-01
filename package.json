@@ -46,7 +46,7 @@
     "@types/node": "^22.13.8",
     "@types/pako": "^2.0.3",
     "@types/ws": "^8.18.1",
-    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.29.0",
     "eslint": "^9.25.1",
     "eslint-plugin-import": "^2.31.0",
