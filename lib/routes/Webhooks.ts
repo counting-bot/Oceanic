@@ -131,7 +131,8 @@ export default class Webhooks {
                 attachments:      options.attachments,
                 components:       options.components ? options.components : undefined,
                 content:          options.content,
-                embeds:           options.embeds ? options.embeds : undefined
+                embeds:           options.embeds ? options.embeds : undefined,
+                flags:            options.flags,
             },
             query,
             files

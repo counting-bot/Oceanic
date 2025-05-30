@@ -65,7 +65,7 @@ export interface GetWebhookMessageOptions {
     threadID?: string;
 }
 
-export type EditWebhookMessageOptions = Pick<ExecuteWebhookOptions, "content" | "embeds" | "allowedMentions" | "components" | "attachments" | "threadID" | "files">;
+export type EditWebhookMessageOptions = Pick<ExecuteWebhookOptions, "content" | "embeds" | "allowedMentions" | "components" | "attachments" | "threadID" | "files" | "flags">;
 
 export interface DeleteWebhookMessageOptions {
     /** The id of the thread the message is in. */
