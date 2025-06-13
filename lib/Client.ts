@@ -10,16 +10,16 @@ import type { ClientEvents } from "./types/events.js";
 
 /** The primary class for interfacing with Discord. See {@link Events~ClientEvents | Client Events} for a list of events. */
 export default class Client<E extends ClientEvents = ClientEvents> extends TypedEmitter<E> {
-    channelGuildMap: Record<string, string>;
+    channelGuildMap = new Map<string, string>();
     gatewayURL!: string;
-    guildShardMap: Record<string, number>;
+    guildShardMap = new Map<string, number>();
     // guilds: Collection<Guild, Client>;
     options: ClientInstanceOptions;
     ready: boolean;
     rest: RESTManager;
     shards: ShardManager;
     startTime = 0;
-    threadGuildMap: Record<string, string>;
+    threadGuildMap = new Map<string, string>();
     // unavailableGuilds: Collection<UnavailableGuild, Client>;
     util: Util;
     /**
@@ -47,13 +47,10 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
             defaultImageSize:          options?.defaultImageSize ?? 4096,
             disableMemberLimitScaling: options?.disableMemberLimitScaling ?? false
         };
-        this.channelGuildMap = {};
         // this.guilds = new Collection();
         this.ready = false;
-        this.guildShardMap = {};
         this.rest = new RESTManager(this, options?.rest);
         this.shards = new ShardManager(this, options?.gateway);
-        this.threadGuildMap = {};
         // this.unavailableGuilds = new Collection();
         this.util = new Util(this);
     }
