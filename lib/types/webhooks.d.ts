@@ -57,6 +57,7 @@ export type ExecuteWebhookOptions = Pick<CreateMessageOptions, "content" | "tts"
     username?: string;
     /** If the created message should be returned. */
     wait?: boolean;
+    withComponents?: boolean;
 };
 export type ExecuteWebhookWaitOptions = Omit<ExecuteWebhookOptions, "wait">  & { wait: true; };
 

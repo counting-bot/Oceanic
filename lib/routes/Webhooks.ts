@@ -173,6 +173,7 @@ export default class Webhooks {
         const query = new QueryBuilder();
         query.setIfPresent("wait", options.wait);
         query.setIfPresent("thread_id", options.threadID);
+        query.setIfPresent("with_components", options.withComponents);
         return this.#manager.authRequest<object>({
             method: "POST",
             path:   Routes.WEBHOOK(webhookID, token),
