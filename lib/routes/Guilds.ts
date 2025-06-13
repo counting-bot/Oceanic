@@ -9,6 +9,7 @@ import type {
 import * as Routes from "../util/Routes.js";
 import type { RawGuildChannel, RawThreadChannel, RawThreadMember } from "../types/channels.js";
 import type RESTManager from "../rest/RESTManager.js";
+import QueryBuilder from "../util/QueryBuilder";
 
 /** Various methods for interacting with guilds. */
 export default class Guilds {
@@ -86,10 +87,8 @@ export default class Guilds {
      * @param withCounts If the approximate number of members and online members should be included.
      */
     async get(guildID: string, withCounts?: boolean): Promise<object> {
-        const query = new URLSearchParams();
-        if (withCounts !== undefined) {
-            query.set("with_counts", withCounts.toString());
-        }
+        const query = new QueryBuilder();
+        query.setIfPresent("with_counts", withCounts);
         return this.#manager.authRequest<RawGuild>({
             method: "GET",
             path:   Routes.GUILD(guildID),

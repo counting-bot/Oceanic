@@ -14,6 +14,7 @@ import * as Routes from "../util/Routes.js";
 import Webhook from "../structures/Webhook.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type { Uncached } from "../types/shared.js";
+import QueryBuilder from "../util/QueryBuilder";
 
 /** Various methods for interacting with webhooks. */
 export default class Webhooks {
@@ -64,10 +65,8 @@ export default class Webhooks {
      * @param options The options for deleting the message.
      */
     async deleteMessage(webhookID: string, token: string, messageID: string, options?: DeleteWebhookMessageOptions): Promise<void> {
-        const query = new URLSearchParams();
-        if (options?.threadID !== undefined) {
-            query.set("thread_id", options.threadID);
-        }
+        const query = new QueryBuilder();
+        query.setIfPresent("thread_id", options?.threadID);
         await this.#manager.authRequest<null>({
             method: "DELETE",
             path:   Routes.WEBHOOK_MESSAGE(webhookID, token, messageID)
@@ -122,10 +121,8 @@ export default class Webhooks {
         if (options.files) {
             delete options.files;
         }
-        const query = new URLSearchParams();
-        if (options.threadID !== undefined) {
-            query.set("thread_id", options.threadID);
-        }
+        const query = new QueryBuilder();
+        query.setIfPresent("thread_id", options?.threadID);
         return this.#manager.authRequest<RawMessage>({
             method: "PATCH",
             path:   Routes.WEBHOOK_MESSAGE(webhookID, token, messageID),
@@ -173,13 +170,9 @@ export default class Webhooks {
         if (options.files) {
             delete options.files;
         }
-        const query = new URLSearchParams();
-        if (options.wait !== undefined) {
-            query.set("wait", options.wait.toString());
-        }
-        if (options.threadID !== undefined) {
-            query.set("thread_id", options.threadID);
-        }
+        const query = new QueryBuilder();
+        query.setIfPresent("wait", options.wait);
+        query.setIfPresent("thread_id", options.threadID);
         return this.#manager.authRequest<object>({
             method: "POST",
             path:   Routes.WEBHOOK(webhookID, token),
@@ -242,10 +235,8 @@ export default class Webhooks {
      * @param threadID The ID of the thread the message is in.
      */
     async getMessage(webhookID: string, token: string, messageID: string, threadID?: string): Promise<object> {
-        const query = new URLSearchParams();
-        if (threadID !== undefined) {
-            query.set("thread_id", threadID);
-        }
+        const query = new QueryBuilder();
+        query.setIfPresent("thread_id", threadID);
         return this.#manager.authRequest<RawMessage>({
             method: "GET",
             path:   Routes.WEBHOOK_MESSAGE(webhookID, token, messageID)

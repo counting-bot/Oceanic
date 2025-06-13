@@ -21,6 +21,7 @@ import type {
 } from "../types/channels.js";
 import * as Routes from "../util/Routes.js";
 import type RESTManager from "../rest/RESTManager.js";
+import QueryBuilder from "../util/QueryBuilder";
 
 /** Various methods for interacting with channels. */
 export default class Channels {

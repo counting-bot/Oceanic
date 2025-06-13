@@ -22,6 +22,7 @@ import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
 import type { RawOAuthUser } from "../types/users.js";
+import QueryBuilder from "../util/QueryBuilder";
 
 /** Various methods for interacting with oauth. */
 export default class OAuth {
@@ -149,19 +150,12 @@ export default class OAuth {
      * @param options The options for getting the current user's guilds.
      */
     async getCurrentGuilds(options?: GetCurrentGuildsOptions): Promise<Array<OAuthGuild>> {
-        const query = new URLSearchParams();
-        if (options?.after !== undefined) {
-            query.set("after", options.after);
-        }
-        if (options?.before !== undefined) {
-            query.set("before", options.before);
-        }
-        if (options?.limit !== undefined) {
-            query.set("limit", options.limit.toString());
-        }
-        if (options?.withCounts !== undefined) {
-            query.set("with_counts", options?.withCounts.toString());
-        }
+        const query = new QueryBuilder();
+        query.setIfPresent("after", options?.after);
+        query.setIfPresent("before", options?.before);
+        query.setIfPresent("limit", options?.limit);
+        query.setIfPresent("with_counts", options?.withCounts);
+
         return this.#manager.authRequest<Array<RawOAuthGuild>>({
             method: "GET",
             path:   Routes.OAUTH_GUILDS,
