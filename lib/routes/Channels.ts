@@ -58,6 +58,7 @@ export default class Channels {
      * @param options The options for creating the invite.
      */
     async createInvite(channelID: string, options: CreateInviteOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -84,6 +85,7 @@ export default class Channels {
      * @param options The options for creating the message.
      */
     async createMessage(channelID: string, options: CreateMessageOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -199,6 +201,7 @@ export default class Channels {
      * @param options The options for editing the message.
      */
     async editMessage(channelID: string, messageID: string, options: EditMessageOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -225,6 +228,7 @@ export default class Channels {
      * @param options The options for editing the permission overwrite.
      */
     async editPermission(channelID: string, overwriteID: string, options: EditPermissionOptions): Promise<void> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -258,6 +262,7 @@ export default class Channels {
      * @param options The options for getting the archived threads.
      */
     async getJoinedPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         return this.#manager.authRequest<object>({
             method: "GET",
             path:   Routes.CHANNEL_PRIVATE_ARCHIVED_THREADS(channelID),
@@ -286,6 +291,7 @@ export default class Channels {
      * @param options The options for getting the archived threads.
      */
     async getPrivateArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         return this.#manager.authRequest<RawArchivedThreads<RawPrivateThreadChannel>>({
             method: "GET",
             path:   Routes.CHANNEL_PRIVATE_ARCHIVED_THREADS(channelID),
@@ -302,6 +308,7 @@ export default class Channels {
      * @param options The options for getting the archived threads.
      */
     async getPublicArchivedThreads(channelID: string, options?: GetArchivedThreadsOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         return this.#manager.authRequest<RawArchivedThreads<RawPublicThreadChannel>>({
             method: "GET",
             path:   Routes.CHANNEL_PUBLIC_ARCHIVED_THREADS(channelID),
@@ -386,6 +393,7 @@ export default class Channels {
      * @param options The options for starting the thread.
      */
     async startThreadFromMessage(channelID: string, messageID: string, options: StartThreadFromMessageOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -408,6 +416,7 @@ export default class Channels {
      * @param options The options for starting the thread.
      */
     async startThreadInForum(channelID: string, options: StartThreadInForumOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -444,6 +453,7 @@ export default class Channels {
      * @param options The options for starting the thread.
      */
     async startThreadWithoutMessage(channelID: string, options: StartThreadWithoutMessageOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;

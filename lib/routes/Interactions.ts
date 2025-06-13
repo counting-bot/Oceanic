@@ -33,6 +33,7 @@ export default class Interactions {
      * @param options The options for creating the interaction response.
      */
     async createInteractionResponse(interactionID: string, interactionToken: string, options: InteractionResponse): Promise<void> {
+        options = this.#manager.client.util._freeze(options);
         let files: Array<File> | undefined;
         if ("data" in options && options.data && "files" in options.data) {
             files = options.data.files;

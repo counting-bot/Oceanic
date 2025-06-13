@@ -31,7 +31,7 @@ export default class ApplicationCommands {
      * @param options The commands.
      */
     async bulkEditGlobalCommands(applicationID: string, options: Array<CreateApplicationCommandOptions>): Promise<Array<object>> {
-        const opts = options as Array<CreateChatInputApplicationCommandOptions>;
+        const opts = this.#manager.client.util._freeze(options) as Array<CreateChatInputApplicationCommandOptions>;
         return this.#manager.authRequest<Array<object>>({
             method: "PUT",
             path:   Routes.APPLICATION_COMMANDS(applicationID),
@@ -56,7 +56,7 @@ export default class ApplicationCommands {
      * @param options The commands.
      */
     async bulkEditGuildCommands(applicationID: string, guildID: string, options: Array<CreateGuildApplicationCommandOptions>): Promise<Array<object>> {
-        const opts = options as Array<CreateChatInputApplicationCommandOptions>;
+        const opts = this.#manager.client.util._freeze(options) as Array<CreateChatInputApplicationCommandOptions>;
         return this.#manager.authRequest<Array<RawApplicationCommand>>({
             method: "PUT",
             path:   Routes.GUILD_APPLICATION_COMMANDS(applicationID, guildID),
@@ -81,7 +81,7 @@ export default class ApplicationCommands {
      * @param options The options for the command.
      */
     async createGlobalCommand<T extends CreateApplicationCommandOptions = CreateApplicationCommandOptions>(applicationID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
-        const opt = options as CreateChatInputApplicationCommandOptions;
+        const opt = this.#manager.client.util._freeze(options) as CreateChatInputApplicationCommandOptions;
         return this.#manager.authRequest({
             method: "POST",
             path:   Routes.APPLICATION_COMMANDS(applicationID),
@@ -106,7 +106,7 @@ export default class ApplicationCommands {
      * @param options The options for the command.
      */
     async createGuildCommand<T extends CreateGuildApplicationCommandOptions = CreateGuildApplicationCommandOptions>(applicationID: string, guildID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
-        const opt = options as CreateChatInputApplicationCommandOptions;
+        const opt = this.#manager.client.util._freeze(options) as CreateChatInputApplicationCommandOptions;
         return this.#manager.authRequest({
             method: "POST",
             path:   Routes.GUILD_APPLICATION_COMMANDS(applicationID, guildID),
@@ -156,7 +156,7 @@ export default class ApplicationCommands {
      * @param options The options for editing the command.
      */
     async editGlobalCommand<T extends EditApplicationCommandOptions = EditApplicationCommandOptions>(applicationID: string, commandID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
-        const opt = options as EditChatInputApplicationCommandOptions;
+        const opt = this.#manager.client.util._freeze(options) as EditChatInputApplicationCommandOptions;
         return this.#manager.authRequest({
             method: "PATCH",
             path:   Routes.APPLICATION_COMMAND(applicationID, commandID),
@@ -181,7 +181,7 @@ export default class ApplicationCommands {
      * @param options The options for editing the command.
      */
     async editGuildCommand<T extends EditGuildApplicationCommandOptions = EditGuildApplicationCommandOptions>(applicationID: string, guildID: string, commandID: string, options: T): Promise<ApplicationCommandOptionConversion<T>> {
-        const opt = options as EditChatInputApplicationCommandOptions;
+        const opt = this.#manager.client.util._freeze(options) as EditChatInputApplicationCommandOptions;
         return this.#manager.authRequest({
             method: "PATCH",
             path:   Routes.GUILD_APPLICATION_COMMAND(applicationID, guildID, commandID),
@@ -206,6 +206,7 @@ export default class ApplicationCommands {
      * @param options The options for editing the permissions.
      */
     async editGuildCommandPermissions(applicationID: string, guildID: string, commandID: string, options: EditApplicationCommandPermissionsOptions): Promise<RESTGuildApplicationCommandPermissions> {
+        options = this.#manager.client.util._freeze(options);
         return (options.accessToken ? this.#manager.request.bind(this.#manager) : this.#manager.authRequest.bind(this.#manager))({
             method: "PATCH",
             path:   Routes.GUILD_APPLICATION_COMMAND_PERMISSION(applicationID, guildID, commandID),
@@ -229,6 +230,7 @@ export default class ApplicationCommands {
      * @param options The options for getting the command.
      */
     async getGlobalCommand<T extends AnyApplicationCommand = AnyApplicationCommand>(applicationID: string, commandID: string, options?: GetApplicationCommandOptions): Promise<T> {
+        options = this.#manager.client.util._freeze(options);
         const query = new URLSearchParams();
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
@@ -247,6 +249,7 @@ export default class ApplicationCommands {
      * @param options The options for getting the command.
      */
     async getGlobalCommands(applicationID: string, options?: GetApplicationCommandOptions): Promise<Array<object>> {
+        options = this.#manager.client.util._freeze(options);
         const query = new URLSearchParams();
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
@@ -267,6 +270,7 @@ export default class ApplicationCommands {
      * @param options The options for getting the command.
      */
     async getGuildCommand<T extends AnyApplicationCommand = AnyApplicationCommand>(applicationID: string, guildID: string, commandID: string, options?: GetApplicationCommandOptions): Promise<T> {
+        options = this.#manager.client.util._freeze(options);
         const query = new URLSearchParams();
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());
@@ -286,6 +290,7 @@ export default class ApplicationCommands {
      * @param options The options for getting the command.
      */
     async getGuildCommands(applicationID: string, guildID: string, options?: GetApplicationCommandOptions): Promise<Array<object>> {
+        options = this.#manager.client.util._freeze(options);
         const query = new URLSearchParams();
         if (options?.withLocalizations !== undefined) {
             query.set("with_localizations", options.withLocalizations.toString());

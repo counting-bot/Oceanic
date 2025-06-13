@@ -26,6 +26,7 @@ export default class Guilds {
      * @param options The options for adding the member.
      */
     async addMember(guildID: string, userID: string, options: AddMemberOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         return this.#manager.authRequest<object>({
             method: "PUT",
             path:   Routes.GUILD_MEMBER(guildID, userID),
@@ -61,6 +62,7 @@ export default class Guilds {
      * @param options The options for creating the bon.
      */
     async createBan(guildID: string, userID: string, options?: CreateBanOptions): Promise<void> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options?.reason;
         if (options?.reason) {
             delete options.reason;

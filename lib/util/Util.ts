@@ -1,7 +1,9 @@
 /** @module Util */
 import type Client from "../Client";
+import { FrozenModificationError } from "./Errors";
 import type { AllowedMentions, RawAllowedMentions } from "../types/channels.js";
 import type { ApplicationCommandOptions, CombinedApplicationCommandOption, RawApplicationCommandOption } from "../types/application-commands.js";
+import { types } from "node:util";
 
 /** A general set of utilities. These are intentionally poorly documented, as they serve almost no usefulness to outside developers. */
 export default class Util {
@@ -80,6 +82,23 @@ export default class Util {
             required:                  opt.required,
             type:                      opt.type
         } as RawApplicationCommandOption;
+    }
+
+    /** @internal */
+    _freeze<T>(obj: T, detail?: string): T {
+        let message = "This is an error in the library and should be reported.";
+        if (detail) {
+            message += `Detail: ${detail}`;
+        }
+        if (typeof obj !== "object" || obj === null || types.isProxy(obj)) {
+            return obj;
+        }
+        return new Proxy(obj, {
+            set: (target, prop, value, receiver): boolean => {
+                this.#client.emit("error", new FrozenModificationError(message, prop));
+                return Reflect.set(target, prop, value, receiver);
+            }
+        });
     }
 }
 

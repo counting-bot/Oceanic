@@ -52,6 +52,7 @@ export default class OAuth {
      * @param options The options to for the client credentials grant.
      */
     async clientCredentialsGrant(options: ClientCredentialsTokenOptions): Promise<ClientCredentialsTokenResponse> {
+        options = this.#manager.client.util._freeze(options);
         const form = new FormData();
         form.append("grant_type", "client_credentials");
         form.append("scope", options.scopes.join(" "));
@@ -74,6 +75,7 @@ export default class OAuth {
      * @param options The options for exchanging the code.
      */
     async exchangeCode(options: ExchangeCodeOptions): Promise<ExchangeCodeResponse> {
+        options = this.#manager.client.util._freeze(options);
         const form = new FormData();
         form.append("client_id", options.clientID);
         form.append("client_secret", options.clientSecret);
@@ -189,6 +191,7 @@ export default class OAuth {
      * @param options The options for refreshing the token.
      */
     async refreshToken(options: RefreshTokenOptions): Promise<RefreshTokenResponse> {
+        options = this.#manager.client.util._freeze(options);
         const form = new FormData();
         form.append("client_id", options.clientID);
         form.append("client_secret", options.clientSecret);
@@ -213,6 +216,7 @@ export default class OAuth {
      * @param options The options for revoking the token.
      */
     async revokeToken(options: RevokeTokenOptions): Promise<void> {
+        options = this.#manager.client.util._freeze(options);
         const form = new FormData();
         form.append("client_id", options.clientID);
         form.append("client_secret", options.clientSecret);

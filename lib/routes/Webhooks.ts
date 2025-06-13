@@ -27,6 +27,7 @@ export default class Webhooks {
      * @param options The options to create the webhook with.
      */
     async create(channelID: string, options: CreateWebhookOptions): Promise<Webhook> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -91,6 +92,7 @@ export default class Webhooks {
      * @param options The options for editing the webhook.
      */
     async edit(webhookID: string, options: EditWebhookOptions): Promise<Webhook> {
+        options = this.#manager.client.util._freeze(options);
         const reason = options.reason;
         if (options.reason) {
             delete options.reason;
@@ -115,6 +117,7 @@ export default class Webhooks {
      * @param options The options for editing the message.
      */
     async editMessage(webhookID: string, token: string, messageID: string, options: EditWebhookMessageOptions): Promise<object> {
+        options = this.#manager.client.util._freeze(options);
         const files = options.files;
         if (options.files) {
             delete options.files;
@@ -145,6 +148,7 @@ export default class Webhooks {
      * @param options The options for editing the webhook.
      */
     async editToken(webhookID: string, token: string, options: EditWebhookTokenOptions): Promise<Webhook> {
+        options = this.#manager.client.util._freeze(options);
         return this.#manager.authRequest<RawWebhook>({
             method: "PATCH",
             path:   Routes.WEBHOOK(webhookID, token),
@@ -164,6 +168,7 @@ export default class Webhooks {
     async execute<T extends AnyTextChannelWithoutGroup | Uncached>(webhookID: string, token: string, options: ExecuteWebhookWaitOptions): Promise<object>;
     async execute(webhookID: string, token: string, options: ExecuteWebhookOptions): Promise<void>;
     async execute(webhookID: string, token: string, options: ExecuteWebhookOptions): Promise<object| void> {
+        options = this.#manager.client.util._freeze(options);
         const files = options.files;
         if (options.files) {
             delete options.files;
