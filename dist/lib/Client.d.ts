@@ -7,15 +7,15 @@ import Util from "./util/Util.js";
 import type { ClientEvents } from "./types/events.js";
 /** The primary class for interfacing with Discord. See {@link Events~ClientEvents | Client Events} for a list of events. */
 export default class Client<E extends ClientEvents = ClientEvents> extends TypedEmitter<E> {
-    channelGuildMap: Record<string, string>;
+    channelGuildMap: Map<string, string>;
     gatewayURL: string;
-    guildShardMap: Record<string, number>;
+    guildShardMap: Map<string, number>;
     options: ClientInstanceOptions;
     ready: boolean;
     rest: RESTManager;
     shards: ShardManager;
     startTime: number;
-    threadGuildMap: Record<string, string>;
+    threadGuildMap: Map<string, string>;
     util: Util;
     /**
      * @constructor

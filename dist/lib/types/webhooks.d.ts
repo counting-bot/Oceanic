@@ -57,6 +57,7 @@ export type ExecuteWebhookOptions = Pick<CreateMessageOptions, "content" | "tts"
     username?: string;
     /** If the created message should be returned. */
     wait?: boolean;
+    withComponents?: boolean;
 };
 export type ExecuteWebhookWaitOptions = Omit<ExecuteWebhookOptions, "wait">  & { wait: true; };
 
@@ -65,7 +66,7 @@ export interface GetWebhookMessageOptions {
     threadID?: string;
 }
 
-export type EditWebhookMessageOptions = Pick<ExecuteWebhookOptions, "content" | "embeds" | "allowedMentions" | "components" | "attachments" | "threadID" | "files">;
+export type EditWebhookMessageOptions = Pick<ExecuteWebhookOptions, "content" | "embeds" | "allowedMentions" | "components" | "attachments" | "threadID" | "files" | "flags">;
 
 export interface DeleteWebhookMessageOptions {
     /** The id of the thread the message is in. */

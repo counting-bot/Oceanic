@@ -9,5 +9,7 @@ export default class Util {
     formatAllowedMentions(allowed?: AllowedMentions): RawAllowedMentions;
     optionToParsed(option: RawApplicationCommandOption): ApplicationCommandOptions;
     optionToRaw(option: ApplicationCommandOptions): RawApplicationCommandOption;
+    /** @internal */
+    _freeze<T>(obj: T, detail?: string): T;
 }
 export declare function is<T>(input: unknown): input is T;
