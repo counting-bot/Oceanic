@@ -204,7 +204,8 @@ export default class RequestHandler {
                         route,
                         withAuth:     !!options.auth,
                         requestBody:  reqBody,
-                        responseBody: resBody
+                        responseBody: resBody,
+                        status: res.status
                     });
                     const headerNow = Date.parse(res.headers.get("date")!);
                     const now = Date.now();

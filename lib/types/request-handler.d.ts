@@ -39,6 +39,7 @@ export interface RawRequest {
     route: string;
     /** if the request used authorization */
     withAuth: boolean;
+    status: any;
 }
 
 export interface LatencyRef {
