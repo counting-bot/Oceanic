@@ -1,4 +1,4 @@
-import { FrozenModificationError } from "./Errors";
+import { FrozenModificationError } from "./Errors.js";
 import { types } from "node:util";
 /** A general set of utilities. These are intentionally poorly documented, as they serve almost no usefulness to outside developers. */
 export default class Util {

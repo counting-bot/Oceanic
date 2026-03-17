@@ -1,5 +1,5 @@
 import * as Routes from "../util/Routes.js";
-import QueryBuilder from "../util/QueryBuilder";
+import QueryBuilder from "../util/QueryBuilder.js";
 /** Various methods for interacting with guilds. */
 export default class Guilds {
     #manager;

@@ -2,7 +2,7 @@ import * as Routes from "../util/Routes.js";
 import Webhook from "../structures/Webhook.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
-import QueryBuilder from "../util/QueryBuilder";
+import QueryBuilder from "../util/QueryBuilder.js";
 /** Various methods for interacting with oauth. */
 export default class OAuth {
     #manager;

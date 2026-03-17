@@ -1,6 +1,6 @@
 import * as Routes from "../util/Routes.js";
 import Webhook from "../structures/Webhook.js";
-import QueryBuilder from "../util/QueryBuilder";
+import QueryBuilder from "../util/QueryBuilder.js";
 /** Various methods for interacting with webhooks. */
 export default class Webhooks {
     #manager;
