@@ -57,7 +57,7 @@
     "eslint-plugin-unicorn": "^64.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
     "tslib": "^2.8.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "undici-types": "^7.24.7",
     "ws": "^8.20.0"
   },
