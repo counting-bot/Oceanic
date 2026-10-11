@@ -72,7 +72,7 @@ export declare const APPLICATION_BRANCHES: (applicationID: string) => string;
 export declare const ACHIEVEMENT_ICON: (applicationID: string, achievementID: string, hash: string) => string;
 export declare const APPLICATION_ASSET: (applicationID: string, assetID: string) => string;
 export declare const APPLICATION_COVER: (applicationID: string, hash: string) => string;
-export declare const APPLICATION_ICON: (applicationID: string, hash: string) => string;
+export declare const APPLICATION_ICON: typeof APPLICATION_COVER;
 export declare const BANNER: (guildOrUserID: string, hash: string) => string;
 export declare const CUSTOM_EMOJI: (emojiID: string) => string;
 export declare const EMBED_AVATAR: (mod: number) => string;

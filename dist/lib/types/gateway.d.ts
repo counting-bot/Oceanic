@@ -2,6 +2,7 @@
 import type { RawUser } from "./users.js";
 import type { ActivityTypes, ChannelTypes, IntentNames } from "../Constants.js";
 import type { ClientOptions as WSClientOptions } from "ws";
+import type { SessionStore } from "./session-store.js";
 
 export type ReconnectDelayFunction = (lastDelay: number, attempts: number) => number;
 interface GatewayOptions {
@@ -97,6 +98,18 @@ interface GatewayOptions {
      * @defaultValue based on `firstShardID` & `lastShardID`
      */
     shardIDs?: Array<number>;
+    /**
+     * How often, in milliseconds, live shard state (sequence numbers) is flushed to the session store.
+     * A crash can lose at most this much sequence progress, which Discord replays on resume.
+     * @defaultValue 2000
+     */
+    sessionFlushInterval?: number;
+    /**
+     * A store used to persist gateway sessions so a restarted process can RESUME instead of re-IDENTIFYing.
+     * Oceanic ships no implementation; supply your own (see {@link Types/SessionStore~SessionStore | SessionStore}).
+     * @defaultValue none (sessions are not persisted)
+     */
+    sessionStore?: SessionStore;
     /** The options to pass to constructed websockets. */
     ws?: WSClientOptions;
 }
@@ -107,6 +120,8 @@ export interface ShardManagerInstanceOptions extends Required<Pick<GatewayOption
     intents: number;
     maxShards: number;
     presence: Required<UpdatePresenceOptions>;
+    sessionFlushInterval: number;
+    sessionStore: SessionStore | null;
 }
 
 export interface GetGatewayResponse {
