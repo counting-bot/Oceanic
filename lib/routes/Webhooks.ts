@@ -14,7 +14,7 @@ import * as Routes from "../util/Routes.js";
 import Webhook from "../structures/Webhook.js";
 import type RESTManager from "../rest/RESTManager.js";
 import type { Uncached } from "../types/shared.js";
-import QueryBuilder from "../util/QueryBuilder";
+import QueryBuilder from "../util/QueryBuilder.js";
 
 /** Various methods for interacting with webhooks. */
 export default class Webhooks {

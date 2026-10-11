@@ -1,6 +1,6 @@
 /** @module Util */
 import type Client from "../Client";
-import { FrozenModificationError } from "./Errors";
+import { FrozenModificationError } from "./Errors.js";
 import type { AllowedMentions, RawAllowedMentions } from "../types/channels.js";
 import type { ApplicationCommandOptions, CombinedApplicationCommandOption, RawApplicationCommandOption } from "../types/application-commands.js";
 import { types } from "node:util";

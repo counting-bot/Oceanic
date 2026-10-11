@@ -22,7 +22,7 @@ import type RESTManager from "../rest/RESTManager.js";
 import OAuthHelper from "../rest/OAuthHelper.js";
 import OAuthGuild from "../structures/OAuthGuild.js";
 import type { RawOAuthUser } from "../types/users.js";
-import QueryBuilder from "../util/QueryBuilder";
+import QueryBuilder from "../util/QueryBuilder.js";
 
 /** Various methods for interacting with oauth. */
 export default class OAuth {

@@ -9,7 +9,7 @@ import type {
 import * as Routes from "../util/Routes.js";
 import type { RawGuildChannel, RawThreadChannel, RawThreadMember } from "../types/channels.js";
 import type RESTManager from "../rest/RESTManager.js";
-import QueryBuilder from "../util/QueryBuilder";
+import QueryBuilder from "../util/QueryBuilder.js";
 
 /** Various methods for interacting with guilds. */
 export default class Guilds {
