@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist/lib",
+    "rootDir": "./lib",
     "lib": [
       "ESNext"
     ],
@@ -15,7 +16,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
     "ignoreDeprecations": "5.0",
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,

@@ -114,6 +114,9 @@ export default class Client<E extends ClientEvents = ClientEvents> extends Typed
             }
         }
 
+        // Must be ready before spawn(): shards restore their stored session synchronously when created.
+        await this.shards.initSessions();
+
         for (const id of this.shards.options.shardIDs) {
             this.shards.spawn(id);
         }

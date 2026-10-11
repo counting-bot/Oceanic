@@ -9,6 +9,7 @@ export * from "./interactions.js";
 export * from "./json.js";
 export * from "./oauth.js";
 export * from "./request-handler.js";
+export * from "./session-store.js";
 export * from "./shared.js";
 export * from "./users.js";
 export * from "./webhooks.js";
