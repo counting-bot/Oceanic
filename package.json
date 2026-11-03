@@ -54,7 +54,7 @@
     "eslint-plugin-jsdoc": "^65.1.0",
     "eslint-plugin-json": "^5.0.0",
     "eslint-plugin-prefer-arrow": "^1.2.3",
-    "eslint-plugin-unicorn": "^77.0.0",
+    "eslint-plugin-unicorn": "^79.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
     "tslib": "^2.8.1",
     "typescript": "^7.0.2",
